@@ -37,10 +37,11 @@ class StorageDialog(QDialog):
     :pyattr:`result_info` to obtain session parameters.
     """
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent=None, initial_directory: str = "") -> None:
         super().__init__(parent)
         self.setWindowTitle("存储设置")
         self.setMinimumWidth(380)
+        self._initial_directory = initial_directory
 
         self.result_info: dict | None = None
 
@@ -67,6 +68,8 @@ class StorageDialog(QDialog):
         self._edit_directory = QLineEdit()
         self._edit_directory.setPlaceholderText("选择存储目录...")
         self._edit_directory.setReadOnly(True)
+        if initial_directory:
+            self._edit_directory.setText(initial_directory)
         dir_layout.addWidget(self._edit_directory, 1)
 
         from PySide6.QtWidgets import QPushButton
@@ -92,7 +95,11 @@ class StorageDialog(QDialog):
         layout.addWidget(self._button_box)
 
     def _browse_directory(self) -> None:
-        directory = QFileDialog.getExistingDirectory(self, "选择存储目录")
+        directory = QFileDialog.getExistingDirectory(
+            self,
+            "选择存储目录",
+            self._edit_directory.text().strip() or self._initial_directory,
+        )
         if directory:
             self._edit_directory.setText(directory)
 

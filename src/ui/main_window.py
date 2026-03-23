@@ -25,6 +25,7 @@ from src.ui.widgets.optical_cal_panel import OpticalCalPanel
 from src.ui.widgets.storage_dialog import StorageDialog
 from src.ui.widgets.spectrum_graph import SpectrumGraphWidget
 from src.ui.widgets.replay_control import ReplayControlWidget
+from src.utils.config import AppConfig
 
 logger = logging.getLogger("gpy4.ui")
 
@@ -55,6 +56,7 @@ class MainWindow(QMainWindow):
         self._storage = StorageManager()
         self._acquisition = AcquisitionWorker(device)
         self._nuc = self._acquisition.nuc  # shared NUC instance
+        self._config = AppConfig()
 
         # Current state
         self._selected_x: int = 640
@@ -116,11 +118,6 @@ class MainWindow(QMainWindow):
         tb.addAction(self._act_stop)
 
         tb.addSeparator()
-
-        self._act_browse = QAction(
-            QIcon(os.path.join(icon_dir, "review.svg")), "查看记录", self)
-        self._act_browse.triggered.connect(self._on_browse_records)
-        tb.addAction(self._act_browse)
 
         self._act_playback = QAction(
             QIcon(os.path.join(icon_dir, "replay.svg")), "开始回放", self)
@@ -197,8 +194,10 @@ class MainWindow(QMainWindow):
         self._replay_control.play_clicked.connect(self._on_replay_play)
         self._replay_control.pause_clicked.connect(self._on_replay_pause)
         self._replay_control.stop_clicked.connect(self._on_replay_stop)
+        self._replay_control.close_clicked.connect(self._on_replay_close)
         self._replay_control.position_changed.connect(self._on_replay_position_changed)
         self._replay_control.speed_changed.connect(self._on_replay_speed_changed)
+        self._replay_control.loop_changed.connect(self._on_replay_loop_changed)
         image_layout.addWidget(self._replay_control)
 
         self._h_splitter_top.addWidget(image_container)
@@ -428,7 +427,10 @@ class MainWindow(QMainWindow):
 
     def _on_start_save(self) -> None:
         """Show storage dialog and start recording to disk."""
-        dlg = StorageDialog(self)
+        dlg = StorageDialog(
+            self,
+            initial_directory=self._config.get_str("storage.last_directory", ""),
+        )
         if dlg.exec() != StorageDialog.DialogCode.Accepted or dlg.result_info is None:
             return
 
@@ -441,6 +443,8 @@ class MainWindow(QMainWindow):
             self._storage.start_envi(directory, session_name, pixel_format)
         if info["save_raw"]:
             self._storage.start_raw(directory, session_name, pixel_format)
+
+        self._config.set("storage.last_directory", directory)
 
         # Let acquisition thread write every frame directly
         self._acquisition.storage = self._storage
@@ -459,13 +463,6 @@ class MainWindow(QMainWindow):
         self._status_storage.setText("存储: 停止")
         logger.info("Storage stopped")
 
-    def _on_browse_records(self) -> None:
-        """Open file browser for saved data."""
-        directory = QFileDialog.getExistingDirectory(self, "查看记录目录")
-        if directory:
-            import subprocess
-            subprocess.Popen(["explorer", directory])
-
     def _on_playback(self) -> None:
         """Start playback mode - load saved data file."""
         # Check if acquisition is running
@@ -482,11 +479,13 @@ class MainWindow(QMainWindow):
             else:
                 return
 
+        self._teardown_replay()
+
         # Open file dialog to select .dat file
         file_path, _ = QFileDialog.getOpenFileName(
             self,
             "选择数据文件",
-            "",
+            self._config.get_str("replay.last_directory", ""),
             "数据文件 (*.dat);;所有文件 (*.*)"
         )
 
@@ -519,10 +518,14 @@ class MainWindow(QMainWindow):
             self._replay_worker = None
             return
 
+        self._config.set("replay.last_directory", str(dat_path.parent))
+
         # Show replay control and start worker thread
         self._replay_control.setVisible(True)
         self._replay_control.set_range(self._replay_worker._total_frames)
+        self._replay_worker.set_loop_enabled(self._replay_control.is_loop_enabled())
         self._replay_worker.start()
+        self._replay_worker.stop_playback()
         self._replaying = True
 
         # Disable acquisition controls during replay
@@ -566,6 +569,7 @@ class MainWindow(QMainWindow):
 
     def _on_replay_finished(self) -> None:
         """Handle playback finished."""
+        self._replay_control.set_playing(False)
         logger.info("Replay finished")
 
     def _on_replay_error(self, error_msg: str) -> None:
@@ -577,28 +581,20 @@ class MainWindow(QMainWindow):
         """Resume playback."""
         if self._replay_worker:
             self._replay_worker.play()
+            self._replay_control.set_playing(True)
 
     def _on_replay_pause(self) -> None:
         """Pause playback."""
         if self._replay_worker:
             self._replay_worker.pause()
+            self._replay_control.set_playing(False)
 
     def _on_replay_stop(self) -> None:
-        """Stop playback and exit replay mode."""
+        """Stop playback and seek back to the start of the file."""
         if self._replay_worker:
-            self._replay_worker.stop()
-            self._replay_worker.wait()
-            self._replay_worker = None
-
-        self._replay_control.setVisible(False)
-        self._replay_control.reset()
-        self._replaying = False
-
-        # Re-enable acquisition controls
-        self._act_start.setEnabled(True)
-        self._act_start_save.setEnabled(True)
-
-        logger.info("Replay mode stopped")
+            self._replay_worker.stop_playback()
+            self._replay_control.set_playing(False)
+            logger.info("Replay playback stopped and reset to start")
 
     def _on_replay_position_changed(self, position: int) -> None:
         """Handle user dragging progress slider."""
@@ -609,6 +605,28 @@ class MainWindow(QMainWindow):
         """Handle speed rate change."""
         if self._replay_worker:
             self._replay_worker.set_speed_rate(speed)
+
+    def _on_replay_loop_changed(self, enabled: bool) -> None:
+        """Handle replay loop toggle."""
+        if self._replay_worker:
+            self._replay_worker.set_loop_enabled(enabled)
+
+    def _on_replay_close(self) -> None:
+        """Close replay mode and restore acquisition controls."""
+        self._teardown_replay()
+
+    def _teardown_replay(self) -> None:
+        """Close the current replay session and restore acquisition controls."""
+        if self._replay_worker:
+            self._replay_worker.shutdown()
+            self._replay_worker.wait()
+            self._replay_worker = None
+
+        self._replay_control.reset()
+        self._replay_control.setVisible(False)
+        self._replaying = False
+        self._act_start.setEnabled(True)
+        self._act_start_save.setEnabled(True)
 
     def _on_settings(self) -> None:
         """Placeholder for settings dialog."""
@@ -628,7 +646,7 @@ class MainWindow(QMainWindow):
         if self._running:
             self._on_stop()
         if self._replaying:
-            self._on_replay_stop()
+            self._teardown_replay()
         if self._storage.is_recording:
             self._acquisition.storage = None
             self._storage.stop()

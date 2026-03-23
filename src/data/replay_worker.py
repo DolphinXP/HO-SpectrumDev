@@ -49,6 +49,7 @@ class ReplayWorker(QThread):
         self._should_stop: bool = False
         self._speed_rate: float = 1.0
         self._frame_interval: float = 1.0 / 30.0  # Default 30 FPS
+        self._loop_enabled: bool = False
 
     def load_file(self, file_path: str) -> bool:
         """Load a saved data file (ENVI or raw).
@@ -169,13 +170,20 @@ class ReplayWorker(QThread):
         """Set playback speed rate (1.0 = normal, 2.0 = 2x, etc.)."""
         self._speed_rate = max(0.1, min(rate, 10.0))
 
+    def set_loop_enabled(self, enabled: bool) -> None:
+        """Enable or disable looping playback."""
+        self._loop_enabled = enabled
+
     def set_position(self, position: int) -> None:
         """Jump to a specific frame position."""
         if 0 <= position < self._total_frames:
             self._current_position = position
+            self._emit_current_frame()
 
     def play(self) -> None:
         """Start or resume playback."""
+        if self._current_position >= self._total_frames and self._total_frames > 0:
+            self._current_position = 0
         self._is_playing = True
         self._is_paused = False
 
@@ -183,12 +191,34 @@ class ReplayWorker(QThread):
         """Pause playback."""
         self._is_paused = True
 
-    def stop(self) -> None:
-        """Stop playback and reset to beginning."""
-        self._should_stop = True
+    def stop_playback(self) -> None:
+        """Stop playback and seek back to the first frame."""
         self._is_playing = False
         self._is_paused = False
         self._current_position = 0
+        self._emit_current_frame()
+
+    def shutdown(self) -> None:
+        """Terminate the replay thread."""
+        self._should_stop = True
+        self._is_playing = False
+        self._is_paused = False
+
+    def _emit_current_frame(self) -> None:
+        """Emit the currently selected frame and its position."""
+        if self._frames is None or self._total_frames <= 0:
+            self.progress_changed.emit(0, 0)
+            return
+
+        position = max(0, min(self._current_position, self._total_frames - 1))
+        frame = self._frames[position]
+        metadata = {
+            "frame_id": position,
+            "timestamp": time.time(),
+            **self._metadata,
+        }
+        self.frame_ready.emit(frame, metadata)
+        self.progress_changed.emit(position, self._total_frames)
 
     def run(self) -> None:
         """Main playback loop."""
@@ -198,19 +228,15 @@ class ReplayWorker(QThread):
                 continue
 
             if self._current_position >= self._total_frames:
+                if self._loop_enabled and self._total_frames > 0:
+                    self._current_position = 0
+                    continue
                 self.playback_finished.emit()
                 self._is_playing = False
                 continue
 
             # Emit current frame
-            frame = self._frames[self._current_position]
-            metadata = {
-                "frame_id": self._current_position,
-                "timestamp": time.time(),
-                **self._metadata,
-            }
-            self.frame_ready.emit(frame, metadata)
-            self.progress_changed.emit(self._current_position, self._total_frames)
+            self._emit_current_frame()
 
             # Advance position
             self._current_position += 1
