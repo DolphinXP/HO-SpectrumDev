@@ -60,6 +60,7 @@ class SpectrumGraphWidget(QWidget):
         self._step_mode = step_mode
         self._x_data: np.ndarray = np.array([])
         self._y_data: np.ndarray = np.array([])
+        self._auto_fit_pending = True
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -193,6 +194,9 @@ class SpectrumGraphWidget(QWidget):
         self._y_data = y_data
         plot_x = self._build_step_edges(x_data) if self._step_mode else x_data
         self._curve.setData(plot_x, y_data)
+        if self._auto_fit_pending and len(x_data) > 0 and len(y_data) > 0:
+            self.fit_to_view()
+            self._auto_fit_pending = False
 
     def fit_to_view(self) -> None:
         """Fit the current curve into view, matching the built-in auto-range."""
@@ -244,6 +248,7 @@ class SpectrumGraphWidget(QWidget):
         self._curve.setData([], [])
         self._x_data = np.array([])
         self._y_data = np.array([])
+        self._auto_fit_pending = True
 
     @property
     def plot_widget(self) -> pg.PlotWidget:
