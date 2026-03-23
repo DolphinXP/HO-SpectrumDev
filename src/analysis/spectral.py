@@ -61,7 +61,7 @@ class SpectralAnalyzer:
         col_hi = min(cols, x + half_width + 1)  # exclusive upper bound
 
         indices = np.arange(col_lo, col_hi, dtype=np.int32)
-        values = frame[y, col_lo:col_hi].copy()
+        values = frame[y, col_lo:col_hi]
 
         logger.debug(
             "near_spatial: y=%d, x=%d, window=[%d, %d), %d pixels",
@@ -107,7 +107,7 @@ class SpectralAnalyzer:
         row_hi = min(rows, y + half_width + 1)  # exclusive upper bound
 
         indices = np.arange(row_lo, row_hi, dtype=np.int32)
-        values = frame[row_lo:row_hi, x].copy()
+        values = frame[row_lo:row_hi, x]
 
         logger.debug(
             "near_spectral: x=%d, y=%d, window=[%d, %d), %d bands",
@@ -148,7 +148,7 @@ class SpectralAnalyzer:
             raise IndexError(f"Row index y={y} out of range [0, {rows})")
 
         indices = np.arange(cols, dtype=np.int32)
-        values = frame[y, :].copy()
+        values = frame[y, :]
 
         logger.debug("full_spatial: y=%d, %d pixels", y, cols)
         return indices, values
@@ -182,7 +182,7 @@ class SpectralAnalyzer:
             raise IndexError(f"Column index x={x} out of range [0, {cols})")
 
         indices = np.arange(rows, dtype=np.int32)
-        values = frame[:, x].copy()
+        values = frame[:, x]
 
         logger.debug("full_spectral: x=%d, %d bands", x, rows)
         return indices, values

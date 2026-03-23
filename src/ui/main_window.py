@@ -350,18 +350,22 @@ class MainWindow(QMainWindow):
         self._bottom_container.setVisible(checked)
 
     def _update_spectral_plots(self, frame: np.ndarray, x: int, y: int) -> None:
-        """Update the four spectrum graph widgets."""
-        xs, vs = self._spectral.near_spatial(frame, x, y)
-        self._graph_near_spatial.update_plot(xs, vs)
+        """Update the four spectrum graph widgets (only if visible)."""
+        if self._graph_near_spatial.isVisible():
+            xs, vs = self._spectral.near_spatial(frame, x, y)
+            self._graph_near_spatial.update_plot(xs, vs)
 
-        xs2, vs2 = self._spectral.near_spectral(frame, x, y)
-        self._graph_near_spectral.update_plot(xs2, vs2)
+        if self._graph_near_spectral.isVisible():
+            xs2, vs2 = self._spectral.near_spectral(frame, x, y)
+            self._graph_near_spectral.update_plot(xs2, vs2)
 
-        xs3, vs3 = self._spectral.full_spatial(frame, y)
-        self._graph_full_spatial.update_plot(xs3, vs3)
+        if self._graph_full_spatial.isVisible():
+            xs3, vs3 = self._spectral.full_spatial(frame, y)
+            self._graph_full_spatial.update_plot(xs3, vs3)
 
-        xs4, vs4 = self._spectral.full_spectral(frame, x)
-        self._graph_full_spectral.update_plot(xs4, vs4)
+        if self._graph_full_spectral.isVisible():
+            xs4, vs4 = self._spectral.full_spectral(frame, x)
+            self._graph_full_spectral.update_plot(xs4, vs4)
 
     # --------------------------------------------------------------- toolbar actions
     def _on_start(self) -> None:

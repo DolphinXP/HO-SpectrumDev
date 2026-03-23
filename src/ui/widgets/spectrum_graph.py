@@ -110,8 +110,14 @@ class SpectrumGraphWidget(QWidget):
         self._plot.showGrid(x=True, y=True, alpha=0.3)
         self._plot.setBackground("w")
         self._plot.setYRange(0, dn_max, padding=0)
+        self._plot.enableAutoRange(axis='x', enable=False)
+        self._plot.enableAutoRange(axis='y', enable=False)
 
-        self._curve = self._plot.plot(pen=pg.mkPen(color="b", width=1.5))
+        self._curve = self._plot.plot(
+            pen=pg.mkPen(color="b", width=1.5),
+            clipToView=True,
+            autoDownsample=True,  # downsample only when many points
+        )
 
         # Crosshair: vertical tracking line + tracer dot
         self._vline = pg.InfiniteLine(
@@ -163,7 +169,16 @@ class SpectrumGraphWidget(QWidget):
     # -------------------------------------------------------------- public API
 
     def update_plot(self, x_data: np.ndarray, y_data: np.ndarray) -> None:
-        """Update the curve data."""
+        """Update the curve data. Skips repaint if widget is not exposed."""
+        if not self.isVisible():
+            return
+        # Update X range only when data extent changes
+        if len(x_data) > 0:
+            x_min, x_max = float(x_data[0]), float(x_data[-1])
+            if (len(self._x_data) == 0
+                    or x_min != float(self._x_data[0])
+                    or x_max != float(self._x_data[-1])):
+                self._plot.setXRange(x_min, x_max, padding=0.02)
         self._x_data = x_data
         self._y_data = y_data
         self._curve.setData(x_data, y_data)

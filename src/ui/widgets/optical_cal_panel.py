@@ -123,6 +123,17 @@ class OpticalCalPanel(QWidget):
         self._dn_table.verticalHeader().setDefaultSectionSize(24)
         dn_group.setMinimumHeight(150)
         dn_layout.addWidget(self._dn_table)
+
+        # Pre-create all 81 table items so we never allocate during updates
+        self._dn_items: list[list[QTableWidgetItem]] = []
+        for r in range(9):
+            row_items: list[QTableWidgetItem] = []
+            for c in range(9):
+                item = QTableWidgetItem("")
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self._dn_table.setItem(r, c, item)
+                row_items.append(item)
+            self._dn_items.append(row_items)
         main_layout.addWidget(dn_group)
 
         self.setMinimumWidth(300)
@@ -142,7 +153,11 @@ class OpticalCalPanel(QWidget):
         return self._x_spin.value(), self._y_spin.value()
 
     def update_dn_neighborhood(self, frame: np.ndarray, x: int, y: int) -> None:
-        """Populate the 9×9 DN table centered on (x, y)."""
+        """Populate the 9×9 DN table centered on (x, y).
+
+        Reuses pre-created QTableWidgetItems and suppresses repaints during
+        the batch update for much better performance.
+        """
         rows, cols = frame.shape
 
         # Update headers
@@ -151,20 +166,31 @@ class OpticalCalPanel(QWidget):
         self._dn_table.setVerticalHeaderLabels(row_labels)
         self._dn_table.setHorizontalHeaderLabels(col_labels)
 
+        # Suppress repaints while updating all 81 cells
+        self._dn_table.setUpdatesEnabled(False)
+
+        # Extract the 9×9 neighbourhood with numpy (clamp to frame bounds)
+        y0, y1 = y - 4, y + 5
+        x0, x1 = x - 4, x + 5
+        ry0 = max(0, y0)
+        ry1 = min(rows, y1)
+        rx0 = max(0, x0)
+        rx1 = min(cols, x1)
+
         for r in range(9):
+            dy = y0 + r
             for c in range(9):
-                dy = y - 4 + r
-                dx = x - 4 + c
-                if 0 <= dy < rows and 0 <= dx < cols:
-                    val = str(int(frame[dy, dx]))
+                dx = x0 + c
+                item = self._dn_items[r][c]
+                if ry0 <= dy < ry1 and rx0 <= dx < rx1:
+                    item.setText(str(int(frame[dy, dx])))
                 else:
-                    val = "-"
-                item = QTableWidgetItem(val)
-                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                # Highlight center cell
-                if r == 4 and c == 4:
-                    item.setBackground(Qt.GlobalColor.yellow)
-                self._dn_table.setItem(r, c, item)
+                    item.setText("-")
+
+        # Highlight center cell (set once, clear others only on first call)
+        self._dn_items[4][4].setBackground(Qt.GlobalColor.yellow)
+
+        self._dn_table.setUpdatesEnabled(True)
 
     def update_mtf(self, result: dict | None) -> None:
         """Update MTF cross display from MTFCalculator result."""
