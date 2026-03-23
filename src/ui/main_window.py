@@ -68,6 +68,7 @@ class MainWindow(QMainWindow):
         self._current_frame: np.ndarray | None = None
         self._running: bool = False
         self._replaying: bool = False
+        self._line_scan_active: bool = False
 
         # Replay worker
         self._replay_worker: ReplayWorker | None = None
@@ -399,7 +400,7 @@ class MainWindow(QMainWindow):
         if frame.dtype == np.float32:
             display_frame = np.clip(frame, 0, 4095).astype(np.uint16)
 
-        if self._act_mode_line.isChecked():
+        if self._line_scan_active:
             lines = self._acquisition.pull_line_scan_data()
             if lines:
                 self._line_scan_display.append_lines(lines)
@@ -465,6 +466,7 @@ class MainWindow(QMainWindow):
     def _apply_display_mode(self) -> None:
         """Activate exactly one display pipeline and disable the inactive one."""
         is_line_scan = self._act_mode_line.isChecked()
+        self._line_scan_active = is_line_scan
         if is_line_scan:
             self._image_display.hide()
             self._display_stack.setCurrentWidget(self._line_scan_display)
@@ -472,6 +474,8 @@ class MainWindow(QMainWindow):
             self._line_scan_display._emit_config()
         else:
             self._acquisition.set_line_scan_mode(False)
+            self._acquisition.pull_line_scan_data()
+            self._line_scan_display.clear_display()
             self._line_scan_display.hide()
             self._display_stack.setCurrentWidget(self._image_display)
             self._image_display.show()

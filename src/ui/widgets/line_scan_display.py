@@ -141,11 +141,6 @@ class LineScanDisplayWidget(QWidget):
     def showEvent(self, event):
         super().showEvent(event)
         self._emit_config()
-        
-    def hideEvent(self, event):
-        super().hideEvent(event)
-        # Disable line scan extraction to save performance when hidden
-        self.config_changed.emit(False, [])
 
     def _on_mode_toggled(self, button, checked):
         is_rgb = self._radio_rgb.isChecked()
@@ -180,7 +175,12 @@ class LineScanDisplayWidget(QWidget):
         self._line_count = 0
         self._write_index = 0
         self._render_pending = False
+        self._render_timer.stop()
         self._image_view.clear()
+
+    def clear_display(self) -> None:
+        """Clear buffered waterfall data and stop pending renders."""
+        self._reset_buffer()
 
     def append_lines(self, lines_list: list[np.ndarray]):
         """Append a list of lines. 

@@ -28,7 +28,7 @@ logger = logging.getLogger("gpy4.acquisition")
 
 # Rolling window size for FPS / throughput averaging
 _FPS_WINDOW = 30
-_MAX_PENDING_LINE_SCAN_BATCHES = 128
+_MAX_PENDING_LINE_SCAN_BATCHES = 10000
 
 
 class AcquisitionWorker(QThread):
