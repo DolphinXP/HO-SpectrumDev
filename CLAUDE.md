@@ -69,6 +69,7 @@ gpy4/
 │   │       ├── dn_table_widget.py   # Per-pixel DN value grid (DN tab)
 │   │       ├── device_control_panel.py # 设备控制 right-panel (start/stop, exposure, gain)
 │   │       ├── stats_panel.py       # 数据统计 right-panel table
+│   │       ├── nuc_panel.py         # 非均匀性校正 right-panel control
 │   │       ├── aux_data_panel.py    # 辅助数据 right-panel table
 │   │       ├── optical_cal_panel.py # 光校 bottom-left (MTF, pixel coords, DN neighborhood)
 │   │       └── spectrum_graph.py    # Reusable pyqtgraph plot (×4 instances)
@@ -132,6 +133,7 @@ gpy4/
 
 - **Toolbar (主工具栏)**: Provides playback, storage, calibration toggle, settings, etc. Start/Stop controls have been moved to the Device Control Panel.
 - **Device Control Panel (设备控制)**: Top of right panel. Start/Stop acquisition, set exposure (µs), gain (dB), pixel format. Shows read-only device specs (resolution, sensor, ADC, max FPS, status).
+- **NUC Panel (非均匀性校正)**: Right-side panel for loading A/B calibration files and toggling per-pixel linear correction.
 - **Image Display (图像显示)**: Driven by `ImageDisplayWidget`. Uses `pyqtgraph.ImageView`. Supports manual DN range (Levels) adjustment and mouse-driven zoom/pan.
 - **Stats & Aux (统计与辅助)**: Right-side panels showing real-time performance and frame-header metadata.
 - **Optical Calibration (光校控制)**: Left panel in the bottom area. Allows programmatic navigation to peak DN and displays MTF results.

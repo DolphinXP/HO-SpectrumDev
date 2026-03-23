@@ -75,6 +75,7 @@ class NUCProcessor:
     def __init__(self) -> None:
         self._a: np.ndarray | None = None
         self._b: np.ndarray | None = None
+        self.enabled: bool = False
 
     # ------------------------------------------------------------------
     # Public API
@@ -95,7 +96,7 @@ class NUCProcessor:
         ValueError
             If either file has the wrong shape.
         FileNotFoundError
-            If either path does not exist.
+            If either path does not eqxist.
         """
         a = _load_coefficients(a_path)
         b = _load_coefficients(b_path)
@@ -137,10 +138,10 @@ class NUCProcessor:
         -------
         np.ndarray
             Corrected frame, shape (1024, 1280), dtype float32.
-            If coefficients are not loaded the frame is returned as
+            If coefficients are not loaded or disabled, the frame is returned as
             ``frame.astype(np.float32)`` (identity).
         """
-        if not self.is_loaded():
+        if not self.enabled or not self.is_loaded():
             return frame.astype(np.float32, copy=False)
 
         logger.debug("Applying NUC correction")

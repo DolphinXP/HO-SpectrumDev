@@ -26,6 +26,8 @@ from src.ui.widgets.storage_dialog import StorageDialog
 from src.ui.widgets.spectrum_graph import SpectrumGraphWidget
 from src.ui.widgets.replay_control import ReplayControlWidget
 from src.ui.widgets.device_control_panel import DeviceControlPanel
+from src.ui.widgets.recording_indicator import RecordingIndicator
+from src.ui.widgets.nuc_panel import NucPanel
 from src.utils.config import AppConfig
 
 logger = logging.getLogger("gpy4.ui")
@@ -201,10 +203,12 @@ class MainWindow(QMainWindow):
         right_layout.setSpacing(6)
 
         self._device_control = DeviceControlPanel()
+        self._nuc_panel = NucPanel()
         self._stats_panel = StatsPanel()
         self._aux_panel = AuxDataPanel()
 
         right_layout.addWidget(self._device_control)
+        right_layout.addWidget(self._nuc_panel)
         right_layout.addWidget(self._stats_panel)
         right_layout.addWidget(self._aux_panel)
         right_layout.addStretch()
@@ -288,9 +292,11 @@ class MainWindow(QMainWindow):
         self.setStatusBar(sb)
         self._status_device = QLabel("设备: --")
         self._status_nuc = QLabel("NUC: 未加载")
+        self._recording_indicator = RecordingIndicator(diameter=10)
         self._status_storage = QLabel("存储: 停止")
         sb.addWidget(self._status_device)
         sb.addPermanentWidget(self._status_nuc)
+        sb.addPermanentWidget(self._recording_indicator)
         sb.addPermanentWidget(self._status_storage)
 
         device_name = self._device.__class__.__name__
@@ -313,6 +319,16 @@ class MainWindow(QMainWindow):
         self._device_control.gain_changed.connect(self._on_gain_changed)
         self._device_control.pixel_format_changed.connect(
             self._on_pixel_format_changed)
+
+        # NUC panel
+        self._nuc_panel.nuc_changed.connect(self._on_nuc_changed)
+        # Restore NUC config
+        a = self._config.get_str("nuc.a_path", "")
+        b = self._config.get_str("nuc.b_path", "")
+        en = self._config.get_bool("nuc.enabled", False)
+        if a and b:
+            self._nuc_panel.set_config(a, b, en)
+            self._on_nuc_changed(a, b, en)
 
         # Spectrum graph coordinate spinboxes
         self._graph_near_spatial.coordinate_changed.connect(
@@ -470,6 +486,45 @@ class MainWindow(QMainWindow):
         self._device.set_pixel_format(fmt)
         logger.info("Pixel format set to %s", fmt)
 
+    def _on_nuc_changed(self, a_path: str, b_path: str, enabled: bool) -> None:
+        """Handle NUC parameter changes from the NUCPanel."""
+        try:
+            # Only reload if files changed or not loaded
+            current_a = self._config.get_str("nuc.a_path")
+            current_b = self._config.get_str("nuc.b_path")
+            
+            if a_path and b_path:
+                if (a_path != current_a or b_path != current_b or not self._nuc.is_loaded()):
+                    self._nuc.load(a_path, b_path)
+                    self._config.set("nuc.a_path", a_path)
+                    self._config.set("nuc.b_path", b_path)
+
+            self._nuc.enabled = enabled
+            self._config.set("nuc.enabled", enabled)
+            
+            # Update UI
+            loaded = self._nuc.is_loaded()
+            self._nuc_panel.set_nuc_status(loaded)
+            
+            if loaded and enabled:
+                self._status_nuc.setText("NUC: 启用")
+                self._status_nuc.setStyleSheet("color: #27ae60; font-weight: bold;")
+            elif loaded:
+                self._status_nuc.setText("NUC: 已加载")
+                self._status_nuc.setStyleSheet("color: #2980b9; font-weight: bold;")
+            else:
+                self._status_nuc.setText("NUC: 未加载")
+                self._status_nuc.setStyleSheet("color: #e74c3c; font-weight: bold;")
+                
+            logger.info("NUC state changed: loaded=%s, enabled=%s", loaded, enabled)
+            
+        except Exception as e:
+            logger.error("Failed to load NUC: %s", e)
+            QMessageBox.critical(self, "NUC 错误", f"加载 NUC 数据失败: {e}")
+            self._nuc.unload()
+            self._status_nuc.setText("NUC: 错误")
+            self._status_nuc.setStyleSheet("color: #e74c3c; font-weight: bold;")
+
     def _on_start_save(self) -> None:
         """Show storage dialog and start recording to disk."""
         dlg = StorageDialog(
@@ -498,6 +553,7 @@ class MainWindow(QMainWindow):
         self._act_start_save.setEnabled(False)
         self._act_stop_save.setEnabled(True)
         self._status_storage.setText("存储: 录制中")
+        self._recording_indicator.start()
         logger.info("Storage started: %s/%s", directory, session_name)
 
     def _on_stop_save(self) -> None:
@@ -507,6 +563,7 @@ class MainWindow(QMainWindow):
         self._act_start_save.setEnabled(True)
         self._act_stop_save.setEnabled(False)
         self._status_storage.setText("存储: 停止")
+        self._recording_indicator.stop()
         logger.info("Storage stopped")
 
     def _on_playback(self) -> None:
@@ -687,8 +744,9 @@ class MainWindow(QMainWindow):
             "相机型号: MER3-138-136G3M-P-SWIR\n"
             "传感器: Sony IMX990\n"
             "分辨率: 1280×1024\n"
-            "\n\n"
-            "Copyright © 2026 XL@HO All rights reserved"
+            "\n"
+            "Copyright © 2026 XL@HO\n"
+            "All rights reserved"
         )
 
     def closeEvent(self, event) -> None:
