@@ -8,6 +8,7 @@ Modeled after the reference LineChart widget with:
 
 import numpy as np
 import pyqtgraph as pg
+from pyqtgraph.exporters import ImageExporter
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel,
@@ -263,5 +264,5 @@ class SpectrumGraphWidget(QWidget):
         path, _ = QFileDialog.getSaveFileName(
             self, "保存图片", "", "PNG (*.png);;All Files (*)")
         if path:
-            exporter = pg.exporters.ImageExporter(self._plot.plotItem)
+            exporter = ImageExporter(self._plot.plotItem)
             exporter.export(path)
