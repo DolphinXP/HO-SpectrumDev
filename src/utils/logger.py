@@ -10,7 +10,7 @@ def setup_logging(debug: bool = False) -> None:
     """Configure rotating file + console logging.
 
     Args:
-        debug: If True, console level is DEBUG; otherwise INFO.
+        debug: If True, all levels are DEBUG; otherwise INFO.
     """
     log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))), "logs")
@@ -22,13 +22,13 @@ def setup_logging(debug: bool = False) -> None:
 
     # Root logger
     root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
+    root.setLevel(logging.DEBUG if debug else logging.INFO)
 
-    # Rotating file handler — DEBUG level, 10MB × 5 backups
+    # Rotating file handler — DEBUG (or INFO if not debug), 10MB × 5 backups
     file_handler = RotatingFileHandler(
         log_file, maxBytes=10 * 1024 * 1024, backupCount=5, encoding="utf-8"
     )
-    file_handler.setLevel(logging.DEBUG)
+    file_handler.setLevel(logging.DEBUG if debug else logging.INFO)
     file_handler.setFormatter(formatter)
     root.addHandler(file_handler)
 

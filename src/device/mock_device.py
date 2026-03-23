@@ -31,7 +31,8 @@ class MockDevice(DeviceInterface):
         self._base_pattern = row_grad + col_grad
 
     def initialize(self) -> bool:
-        logger.info("MockDevice initialized (1024×1280, %s)", self._pixel_format)
+        logger.info("MockDevice initialized (1024×1280, %s)",
+                    self._pixel_format)
         return True
 
     def start(self) -> None:
@@ -85,13 +86,20 @@ class MockDevice(DeviceInterface):
         frame = np.clip(self._base_pattern + noise, 0,
                         255 if dtype == np.uint8 else 4095).astype(dtype)
 
-        # Add a bright spot that moves — helps verify live display
+        # Add a bright spot that moves vertically — helps verify live display
         cy = (self._frame_id * 3) % rows
         cx = cols // 2
         y_lo, y_hi = max(0, cy - 5), min(rows, cy + 5)
         x_lo, x_hi = max(0, cx - 5), min(cols, cx + 5)
         max_val = 255 if dtype == np.uint8 else 4095
         frame[y_lo:y_hi, x_lo:x_hi] = max_val
+
+        # Add a bright spot that moves horizontally (left to right)
+        cx2 = (self._frame_id * 3) % cols
+        cy2 = rows // 2
+        y_lo2, y_hi2 = max(0, cy2 - 5), min(rows, cy2 + 5)
+        x_lo2, x_hi2 = max(0, cx2 - 5), min(cols, cx2 + 5)
+        frame[y_lo2:y_hi2, x_lo2:x_hi2] = max_val
 
         metadata = {
             "frame_id": self._frame_id,
