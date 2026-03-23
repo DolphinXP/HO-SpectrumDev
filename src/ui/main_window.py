@@ -27,6 +27,7 @@ from src.ui.widgets.spectrum_graph import SpectrumGraphWidget
 from src.ui.widgets.replay_control import ReplayControlWidget
 from src.ui.widgets.device_control_panel import DeviceControlPanel
 from src.ui.widgets.recording_indicator import RecordingIndicator
+from src.ui.widgets.line_scan_display import LineScanDisplayWidget
 from src.ui.widgets.nuc_panel import NucPanel
 from src.utils.config import AppConfig
 
@@ -111,6 +112,25 @@ class MainWindow(QMainWindow):
 
         # Start/Stop buttons are now in DeviceControlPanel (right panel)
 
+        # Modes toggle (exclusive)
+        from PySide6.QtGui import QActionGroup
+        act_group = QActionGroup(self)
+
+        self._act_mode_area = QAction(QIcon(os.path.join(icon_dir, "full-area.svg")), "面阵", self)
+        self._act_mode_area.setCheckable(True)
+        self._act_mode_area.setChecked(True)
+        self._act_mode_area.toggled.connect(self._on_mode_toggled)
+        act_group.addAction(self._act_mode_area)
+        tb.addAction(self._act_mode_area)
+
+        self._act_mode_line = QAction(QIcon(os.path.join(icon_dir, "line-scan.svg")), "线扫", self)
+        self._act_mode_line.setCheckable(True)
+        self._act_mode_line.toggled.connect(self._on_mode_toggled)
+        act_group.addAction(self._act_mode_line)
+        tb.addAction(self._act_mode_line)
+
+        tb.addSeparator()
+
         self._act_playback = QAction(
             QIcon(os.path.join(icon_dir, "replay.svg")), "开始回放", self)
         self._act_playback.triggered.connect(self._on_playback)
@@ -177,8 +197,19 @@ class MainWindow(QMainWindow):
         image_layout.setContentsMargins(0, 0, 0, 0)
         image_layout.setSpacing(0)
 
+        from PySide6.QtWidgets import QStackedWidget
+        self._display_stack = QStackedWidget()
+        
         self._image_display = ImageDisplayWidget()
-        image_layout.addWidget(self._image_display)
+        self._line_scan_display = LineScanDisplayWidget()
+        self._line_scan_display.config_changed.connect(
+            lambda en, idxs: self._acquisition.set_line_scan_mode(en and self._act_mode_line.isChecked(), idxs)
+        )
+        
+        self._display_stack.addWidget(self._image_display)
+        self._display_stack.addWidget(self._line_scan_display)
+        
+        image_layout.addWidget(self._display_stack)
 
         # Replay control (initially hidden)
         self._replay_control = ReplayControlWidget()
@@ -363,13 +394,20 @@ class MainWindow(QMainWindow):
         frame, metadata = result
         self._current_frame = frame
 
-        # Prepare display frame
+        # Fetch line scan data regardless (to prevent buffer bloat)
+        lines = self._acquisition.pull_line_scan_data()
+        # Prepare display frame for area scan mode & stats
         display_frame = frame
         if frame.dtype == np.float32:
             display_frame = np.clip(frame, 0, 4095).astype(np.uint16)
 
-        # Image display update (lightweight — texture upload)
-        self._image_display.update_image(display_frame)
+        if self._act_mode_line.isChecked():
+            if lines:
+                self._line_scan_display.append_lines(lines)
+            # still might want to process MTF and spectral using the last frame, but we don't display frame
+        else:
+            # Image display update (lightweight — texture upload)
+            self._image_display.update_image(display_frame)
 
         # Aux data labels (lightweight)
         self._aux_panel.update_metadata(metadata)
@@ -422,6 +460,16 @@ class MainWindow(QMainWindow):
         self._on_pixel_selected(x, y)
         logger.info("Max DN located at X=%d, Y=%d, DN=%d",
                     x, y, int(frame[y, x]))
+
+    def _on_mode_toggled(self, checked: bool) -> None:
+        """Switch between area array (面阵) and line scan (线扫)."""
+        is_line_scan = self._act_mode_line.isChecked()
+        if is_line_scan:
+            self._display_stack.setCurrentWidget(self._line_scan_display)
+            self._line_scan_display._emit_config()  # update acquisition
+        else:
+            self._display_stack.setCurrentWidget(self._image_display)
+            self._acquisition.set_line_scan_mode(False)
 
     def _on_optical_cal_toggled(self, checked: bool) -> None:
         """Show/hide the bottom optical calibration panel."""
@@ -647,8 +695,19 @@ class MainWindow(QMainWindow):
         if frame.dtype == np.float32:
             display_frame = np.clip(frame, 0, 4095).astype(np.uint16)
 
-        # Update image display
-        self._image_display.update_image(display_frame)
+        if self._act_mode_line.isChecked():
+            # Apply same line scan logic directly for replay frames (happens on main thread)
+            _, indices = self._line_scan_display.get_current_config()
+            max_y = frame.shape[0] - 1
+            valid_indices = [min(max(0, y), max_y) for y in indices]
+            try:
+                line_data = frame[valid_indices, :].copy()
+                self._line_scan_display.append_lines([line_data])
+            except IndexError:
+                pass
+        else:
+            # Update image display
+            self._image_display.update_image(display_frame)
 
         # Update aux data
         self._aux_panel.update_metadata(metadata)

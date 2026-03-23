@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import logging
 import time
+import threading
 from collections import deque
 
 import numpy as np
@@ -74,6 +75,12 @@ class AcquisitionWorker(QThread):
         # Optional storage manager — when set, every frame is written
         self._storage: StorageManager | None = None
 
+        # Line scan configuration & buffering
+        self._line_scan_enabled: bool = False
+        self._line_scan_indices: list[int] = [512]
+        self._line_scan_queue: deque[np.ndarray] = deque()
+        self._line_scan_lock = threading.Lock()
+
     # ------------------------------------------------------------------
     # NUC access
     # ------------------------------------------------------------------
@@ -92,6 +99,21 @@ class AcquisitionWorker(QThread):
     def storage(self, mgr: StorageManager | None) -> None:
         self._storage = mgr
 
+    def set_line_scan_mode(self, enabled: bool, indices: list[int] | None = None) -> None:
+        """Configure the line scan extraction mode."""
+        with self._line_scan_lock:
+            self._line_scan_enabled = enabled
+            if indices is not None:
+                self._line_scan_indices = indices
+            self._line_scan_queue.clear()
+
+    def pull_line_scan_data(self) -> list[np.ndarray]:
+        """Pull all accumulated line data since the last call."""
+        with self._line_scan_lock:
+            data = list(self._line_scan_queue)
+            self._line_scan_queue.clear()
+            return data
+
     # ------------------------------------------------------------------
     # QThread lifecycle
     # ------------------------------------------------------------------
@@ -106,6 +128,8 @@ class AcquisitionWorker(QThread):
         self._last_stats_time = 0.0
         self._timestamps.clear()
         self._byte_sizes.clear()
+        with self._line_scan_lock:
+            self._line_scan_queue.clear()
 
         # Connect device signal to our slot (queued across threads)
         self._device.frame_acquired.connect(
@@ -156,6 +180,16 @@ class AcquisitionWorker(QThread):
 
         # Apply NUC
         processed = self._nuc.apply(frame)
+
+        # Line scan extraction
+        if self._line_scan_enabled:
+            # Safely grab config and append copy of lines
+            with self._line_scan_lock:
+                indices = self._line_scan_indices
+                max_y = processed.shape[0] - 1
+                valid_indices = [min(max(0, y), max_y) for y in indices]
+                line_data = processed[valid_indices, :]
+                self._line_scan_queue.append(line_data.copy())
 
         # Write to storage (every frame, no drops except physical)
         storage = self._storage
