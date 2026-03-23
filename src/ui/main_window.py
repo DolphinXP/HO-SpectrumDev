@@ -25,6 +25,7 @@ from src.ui.widgets.optical_cal_panel import OpticalCalPanel
 from src.ui.widgets.storage_dialog import StorageDialog
 from src.ui.widgets.spectrum_graph import SpectrumGraphWidget
 from src.ui.widgets.replay_control import ReplayControlWidget
+from src.ui.widgets.device_control_panel import DeviceControlPanel
 from src.utils.config import AppConfig
 
 logger = logging.getLogger("gpy4.ui")
@@ -45,7 +46,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self, device: DeviceInterface, parent=None) -> None:
         super().__init__(parent)
-        self.setWindowTitle("地检软件 — 高光谱相机地面测试")
+        self.setWindowTitle("高光谱相机控制软件")
         self.resize(1600, 900)
 
         self._device = device
@@ -106,18 +107,7 @@ class MainWindow(QMainWindow):
         icon_dir = os.path.join(os.path.dirname(
             __file__), "..", "..", "assets", "images")
 
-        self._act_start = QAction(
-            QIcon(os.path.join(icon_dir, "play.svg")), "开始", self)
-        self._act_start.triggered.connect(self._on_start)
-        tb.addAction(self._act_start)
-
-        self._act_stop = QAction(
-            QIcon(os.path.join(icon_dir, "stop.svg")), "停止", self)
-        self._act_stop.setEnabled(False)
-        self._act_stop.triggered.connect(self._on_stop)
-        tb.addAction(self._act_stop)
-
-        tb.addSeparator()
+        # Start/Stop buttons are now in DeviceControlPanel (right panel)
 
         self._act_playback = QAction(
             QIcon(os.path.join(icon_dir, "replay.svg")), "开始回放", self)
@@ -195,23 +185,41 @@ class MainWindow(QMainWindow):
         self._replay_control.pause_clicked.connect(self._on_replay_pause)
         self._replay_control.stop_clicked.connect(self._on_replay_stop)
         self._replay_control.close_clicked.connect(self._on_replay_close)
-        self._replay_control.position_changed.connect(self._on_replay_position_changed)
-        self._replay_control.speed_changed.connect(self._on_replay_speed_changed)
+        self._replay_control.position_changed.connect(
+            self._on_replay_position_changed)
+        self._replay_control.speed_changed.connect(
+            self._on_replay_speed_changed)
         self._replay_control.loop_changed.connect(self._on_replay_loop_changed)
         image_layout.addWidget(self._replay_control)
 
         self._h_splitter_top.addWidget(image_container)
 
-        # Right: stats + aux panels stacked vertically
-        right_panel = QWidget()
-        right_layout = QVBoxLayout(right_panel)
-        right_layout.setContentsMargins(0, 0, 0, 0)
+        # Right: device control + stats + aux panels in a scroll area
+        right_inner = QWidget()
+        right_layout = QVBoxLayout(right_inner)
+        right_layout.setContentsMargins(4, 4, 4, 4)
+        right_layout.setSpacing(6)
+
+        self._device_control = DeviceControlPanel()
         self._stats_panel = StatsPanel()
         self._aux_panel = AuxDataPanel()
+
+        right_layout.addWidget(self._device_control)
         right_layout.addWidget(self._stats_panel)
         right_layout.addWidget(self._aux_panel)
         right_layout.addStretch()
-        self._h_splitter_top.addWidget(right_panel)
+
+        # Wrap in scroll area for vertical overflow
+        right_scroll = QScrollArea()
+        right_scroll.setWidgetResizable(True)
+        right_scroll.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        right_scroll.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        right_scroll.setWidget(right_inner)
+        right_scroll.setMinimumWidth(260)
+
+        self._h_splitter_top.addWidget(right_scroll)
 
         self._h_splitter_top.setSizes([1200, 300])
 
@@ -294,6 +302,16 @@ class MainWindow(QMainWindow):
 
         # Image display
         self._image_display.pixel_clicked.connect(self._on_pixel_selected)
+
+        # Device control panel
+        self._device_control.sync_from_device(self._device)
+        self._device_control.start_requested.connect(self._on_start)
+        self._device_control.stop_requested.connect(self._on_stop)
+        self._device_control.exposure_changed.connect(
+            self._on_exposure_changed)
+        self._device_control.gain_changed.connect(self._on_gain_changed)
+        self._device_control.pixel_format_changed.connect(
+            self._on_pixel_format_changed)
 
         # Spectrum graph coordinate spinboxes
         self._graph_near_spatial.coordinate_changed.connect(
@@ -417,8 +435,7 @@ class MainWindow(QMainWindow):
         self._acquisition.start()
         self._refresh_timer.start(_UI_REFRESH_MS)
         self._running = True
-        self._act_start.setEnabled(False)
-        self._act_stop.setEnabled(True)
+        self._device_control.set_running(True)
         logger.info("Acquisition started")
 
     def _on_stop(self) -> None:
@@ -427,15 +444,33 @@ class MainWindow(QMainWindow):
         self._acquisition.stop()
         self._device.stop()
         self._running = False
-        self._act_start.setEnabled(True)
-        self._act_stop.setEnabled(False)
+        self._device_control.set_running(False)
         logger.info("Acquisition stopped")
+
+    def _on_exposure_changed(self, value: float) -> None:
+        """Apply exposure change to device."""
+        self._device.set_exposure(value)
+        logger.info("Exposure set to %.1f µs", value)
+
+    def _on_gain_changed(self, value: float) -> None:
+        """Apply gain change to device."""
+        self._device.set_gain(value)
+        logger.info("Gain set to %.1f dB", value)
+
+    def _on_pixel_format_changed(self, fmt: str) -> None:
+        """Apply pixel format change to device (only when stopped)."""
+        if self._running:
+            logger.warning("Cannot change pixel format while running")
+            return
+        self._device.set_pixel_format(fmt)
+        logger.info("Pixel format set to %s", fmt)
 
     def _on_start_save(self) -> None:
         """Show storage dialog and start recording to disk."""
         dlg = StorageDialog(
             self,
-            initial_directory=self._config.get_str("storage.last_directory", ""),
+            initial_directory=self._config.get_str(
+                "storage.last_directory", ""),
         )
         if dlg.exec() != StorageDialog.DialogCode.Accepted or dlg.result_info is None:
             return
@@ -529,13 +564,14 @@ class MainWindow(QMainWindow):
         # Show replay control and start worker thread
         self._replay_control.setVisible(True)
         self._replay_control.set_range(self._replay_worker._total_frames)
-        self._replay_worker.set_loop_enabled(self._replay_control.is_loop_enabled())
+        self._replay_worker.set_loop_enabled(
+            self._replay_control.is_loop_enabled())
         self._replay_worker.start()
         self._replay_worker.stop_playback()
         self._replaying = True
 
         # Disable acquisition controls during replay
-        self._act_start.setEnabled(False)
+        self._device_control.set_replaying(True)
         self._act_start_save.setEnabled(False)
 
         logger.info("Replay mode started: %s", file_path)
@@ -631,7 +667,8 @@ class MainWindow(QMainWindow):
         self._replay_control.reset()
         self._replay_control.setVisible(False)
         self._replaying = False
-        self._act_start.setEnabled(True)
+        self._device_control.set_replaying(False)
+        self._device_control.set_running(False)
         self._act_start_save.setEnabled(True)
 
     def _on_settings(self) -> None:
@@ -641,10 +678,12 @@ class MainWindow(QMainWindow):
     def _on_about(self) -> None:
         QMessageBox.about(
             self, "关于",
-            "地检软件 — 高光谱相机地面测试应用\n\n"
+            "高光谱相机控制软件\n\n"
             "相机型号: MER3-138-136G3M-P-SWIR\n"
             "传感器: Sony IMX990\n"
             "分辨率: 1280×1024\n"
+            "\n\n"
+            "Copyright © 2026 XL@HO All rights reserved"
         )
 
     def closeEvent(self, event) -> None:

@@ -1,4 +1,4 @@
-# Hyperspectral Camera Ground Testing Application (地检软件)
+# Hyperspectral Camera Testing Application (高光谱相机控制软件)
 
 ## Project Overview
 
@@ -67,6 +67,7 @@ gpy4/
 │   │   └── widgets/
 │   │       ├── image_display.py     # Image view with toolbar (图像/DN/光校 tabs)
 │   │       ├── dn_table_widget.py   # Per-pixel DN value grid (DN tab)
+│   │       ├── device_control_panel.py # 设备控制 right-panel (start/stop, exposure, gain)
 │   │       ├── stats_panel.py       # 数据统计 right-panel table
 │   │       ├── aux_data_panel.py    # 辅助数据 right-panel table
 │   │       ├── optical_cal_panel.py # 光校 bottom-left (MTF, pixel coords, DN neighborhood)
@@ -103,14 +104,18 @@ gpy4/
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ Toolbar: 开始 | 停止 | 查看记录 | 开始回放 | 开始存储 | 停止存储 | 光校 | 设置 | 关于 | Exit │
+│ Toolbar: 开始回放 | 开始存储 | 停止存储 | 光校 | 设置 | 关于 | Exit                    │
 ├───────────────────────────────────────────────┬─────────────────────────────┤
-│  Image Display Widget (Left)                  │  Right Panels (Stack)       │
-│  Button Bar: 保存图片 | 重置缩放               │  1. 数据统计 (StatsPanel)   │
-│  Level Control: [min] - [max] [应用] [原始]   │     (FPS, MiB/s, 丢帧, 队列)│
-│  Info Bar: X:__ Y:__ DN:__ Zoom:__            ├─────────────────────────────┤
-│                                               │  2. 辅助数据 (AuxDataPanel) │
-│  [Image Plot Area]                            │     (FrameID, Exposure, ...)│
+│  Image Display Widget (Left)                  │  Right Panels (Scroll Area)  │
+│  Button Bar: 保存图片 | 重置缩放               │  1. 设备控制 (DeviceControl) │
+│  Level Control: [min] - [max] [应用] [原始]   │     (开始/停止, 曝光, 增益,  │
+│  Info Bar: X:__ Y:__ DN:__ Zoom:__            │      像素格式, 设备信息)      │
+│                                               ├─────────────────────────────┤
+│                                               │  2. 数据统计 (StatsPanel)   │
+│                                               │     (FPS, MiB/s, 丢帧, 队列)│
+│  [Image Plot Area]                            ├─────────────────────────────┤
+│                                               │  3. 辅助数据 (AuxDataPanel) │
+│                                               │     (FrameID, Exposure, ...)│
 ├─────────────────┬─────────────────────────────┴─────────────────────────────┤
 │ 光校 Panel      │  Spectral/Spatial Graphs (Scroll Area)                    │
 │ (Bottom-Left)   │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
@@ -125,7 +130,8 @@ gpy4/
 
 ### UI Features
 
-- **Toolbar (主工具栏)**: Provides primary state control (start/stop/save). The "光校" button toggles the visibility of the entire bottom section.
+- **Toolbar (主工具栏)**: Provides playback, storage, calibration toggle, settings, etc. Start/Stop controls have been moved to the Device Control Panel.
+- **Device Control Panel (设备控制)**: Top of right panel. Start/Stop acquisition, set exposure (µs), gain (dB), pixel format. Shows read-only device specs (resolution, sensor, ADC, max FPS, status).
 - **Image Display (图像显示)**: Driven by `ImageDisplayWidget`. Uses `pyqtgraph.ImageView`. Supports manual DN range (Levels) adjustment and mouse-driven zoom/pan.
 - **Stats & Aux (统计与辅助)**: Right-side panels showing real-time performance and frame-header metadata.
 - **Optical Calibration (光校控制)**: Left panel in the bottom area. Allows programmatic navigation to peak DN and displays MTF results.
