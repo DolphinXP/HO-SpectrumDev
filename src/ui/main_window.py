@@ -90,38 +90,45 @@ class MainWindow(QMainWindow):
     def _build_toolbar(self) -> None:
         tb = QToolBar("主工具栏")
         tb.setMovable(False)
-        tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
         tb.setIconSize(QSize(20, 20))
         self.addToolBar(tb)
 
-        icon_dir = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "images")
+        icon_dir = os.path.join(os.path.dirname(
+            __file__), "..", "..", "assets", "images")
 
-        self._act_start = QAction(QIcon(os.path.join(icon_dir, "play.svg")), "开始", self)
+        self._act_start = QAction(
+            QIcon(os.path.join(icon_dir, "play.svg")), "开始", self)
         self._act_start.triggered.connect(self._on_start)
         tb.addAction(self._act_start)
 
-        self._act_stop = QAction(QIcon(os.path.join(icon_dir, "stop.svg")), "停止", self)
+        self._act_stop = QAction(
+            QIcon(os.path.join(icon_dir, "stop.svg")), "停止", self)
         self._act_stop.setEnabled(False)
         self._act_stop.triggered.connect(self._on_stop)
         tb.addAction(self._act_stop)
 
         tb.addSeparator()
 
-        self._act_browse = QAction(QIcon(os.path.join(icon_dir, "review.svg")), "查看记录", self)
+        self._act_browse = QAction(
+            QIcon(os.path.join(icon_dir, "review.svg")), "查看记录", self)
         self._act_browse.triggered.connect(self._on_browse_records)
         tb.addAction(self._act_browse)
 
-        self._act_playback = QAction(QIcon(os.path.join(icon_dir, "replay.svg")), "开始回放", self)
+        self._act_playback = QAction(
+            QIcon(os.path.join(icon_dir, "replay.svg")), "开始回放", self)
         self._act_playback.triggered.connect(self._on_playback)
         tb.addAction(self._act_playback)
 
         tb.addSeparator()
 
-        self._act_start_save = QAction(QIcon(os.path.join(icon_dir, "save.svg")), "开始存储", self)
+        self._act_start_save = QAction(
+            QIcon(os.path.join(icon_dir, "save.svg")), "开始存储", self)
         self._act_start_save.triggered.connect(self._on_start_save)
         tb.addAction(self._act_start_save)
 
-        self._act_stop_save = QAction(QIcon(os.path.join(icon_dir, "stop-save.svg")), "停止存储", self)
+        self._act_stop_save = QAction(
+            QIcon(os.path.join(icon_dir, "stop-save.svg")), "停止存储", self)
         self._act_stop_save.setEnabled(False)
         self._act_stop_save.triggered.connect(self._on_stop_save)
         tb.addAction(self._act_stop_save)
@@ -129,7 +136,8 @@ class MainWindow(QMainWindow):
         tb.addSeparator()
 
         # 光校 toggle — show/hide optical calibration bottom panel
-        self._act_optical_cal = QAction(QIcon(os.path.join(icon_dir, "calibration.svg")), "光校", self)
+        self._act_optical_cal = QAction(
+            QIcon(os.path.join(icon_dir, "calibration.svg")), "光校", self)
         self._act_optical_cal.setCheckable(True)
         self._act_optical_cal.setChecked(True)
         self._act_optical_cal.toggled.connect(self._on_optical_cal_toggled)
@@ -137,15 +145,18 @@ class MainWindow(QMainWindow):
 
         tb.addSeparator()
 
-        self._act_settings = QAction(QIcon(os.path.join(icon_dir, "setting.svg")), "设置", self)
+        self._act_settings = QAction(
+            QIcon(os.path.join(icon_dir, "setting.svg")), "设置", self)
         self._act_settings.triggered.connect(self._on_settings)
         tb.addAction(self._act_settings)
 
-        self._act_about = QAction(QIcon(os.path.join(icon_dir, "about.svg")), "关于", self)
+        self._act_about = QAction(
+            QIcon(os.path.join(icon_dir, "about.svg")), "关于", self)
         self._act_about.triggered.connect(self._on_about)
         tb.addAction(self._act_about)
 
-        self._act_exit = QAction(QIcon(os.path.join(icon_dir, "exit.svg")), "Exit", self)
+        self._act_exit = QAction(
+            QIcon(os.path.join(icon_dir, "exit.svg")), "Exit", self)
         self._act_exit.triggered.connect(self.close)
         tb.addAction(self._act_exit)
 
@@ -254,8 +265,10 @@ class MainWindow(QMainWindow):
         self._image_display.pixel_clicked.connect(self._on_pixel_selected)
 
         # Spectrum graph coordinate spinboxes
-        self._graph_near_spatial.coordinate_changed.connect(self._on_pixel_selected)
-        self._graph_near_spectral.coordinate_changed.connect(self._on_pixel_selected)
+        self._graph_near_spatial.coordinate_changed.connect(
+            self._on_pixel_selected)
+        self._graph_near_spectral.coordinate_changed.connect(
+            self._on_pixel_selected)
         self._graph_full_spatial.coordinate_changed.connect(
             lambda x, y: self._on_pixel_selected(self._selected_x, y))
         self._graph_full_spectral.coordinate_changed.connect(
@@ -264,8 +277,10 @@ class MainWindow(QMainWindow):
         # Optical calibration panel
         self._optical_cal_panel.pixel_changed.connect(self._on_pixel_selected)
         self._optical_cal_panel.locate_max_dn.connect(self._on_locate_max_dn)
-        self._optical_cal_panel.avg_count_changed.connect(self._mtf.set_avg_count)
-        self._optical_cal_panel.black_level_changed.connect(self._mtf.set_black_level)
+        self._optical_cal_panel.avg_count_changed.connect(
+            self._mtf.set_avg_count)
+        self._optical_cal_panel.black_level_changed.connect(
+            self._mtf.set_black_level)
 
     # --------------------------------------------------------------- frame polling
     def _poll_frame(self) -> None:
@@ -343,7 +358,8 @@ class MainWindow(QMainWindow):
         idx = np.unravel_index(np.argmax(frame), frame.shape)
         y, x = int(idx[0]), int(idx[1])
         self._on_pixel_selected(x, y)
-        logger.info("Max DN located at X=%d, Y=%d, DN=%d", x, y, int(frame[y, x]))
+        logger.info("Max DN located at X=%d, Y=%d, DN=%d",
+                    x, y, int(frame[y, x]))
 
     def _on_optical_cal_toggled(self, checked: bool) -> None:
         """Show/hide the bottom optical calibration panel."""

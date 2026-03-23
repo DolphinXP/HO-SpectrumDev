@@ -1,37 +1,3 @@
-/* gpy4 — Light/Neutral Theme */
-
-QMainWindow {
-    background-color: #f0f0f0;
-}
-
-QToolBar {
-    background-color: #e8e8e8;
-    border-bottom: 1px solid #ccc;
-    spacing: 4px;
-    padding: 2px;
-}
-
-QToolBar QToolButton {
-    background-color: #ddd;
-    border: 1px solid #bbb;
-    border-radius: 3px;
-    padding: 4px 8px;
-    font-size: 13px;
-}
-
-QToolBar QToolButton:hover {
-    background-color: #c8dff0;
-    border-color: #88b;
-}
-
-QToolBar QToolButton:pressed {
-    background-color: #a0c0e0;
-}
-
-QToolBar QToolButton:checked {
-    background-color: #b0d0f0;
-    border-color: #68a;
-}
 
 QSplitter::handle {
     background-color: #ccc;

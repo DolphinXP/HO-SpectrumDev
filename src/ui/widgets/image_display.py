@@ -9,7 +9,7 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QAction, QCursor, QPixmap
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QToolBar, QLabel,
-    QFileDialog,
+    QFileDialog, QPushButton,
 )
 
 logger = logging.getLogger("gpy4.ui")
@@ -31,19 +31,21 @@ class ImageDisplayWidget(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        # --- Sub-toolbar ---
-        self._toolbar = QToolBar()
-        self._toolbar.setMovable(False)
+        # --- Button bar (replaces toolbar) ---
+        button_layout = QHBoxLayout()
+        button_layout.setContentsMargins(4, 4, 4, 4)
+        button_layout.setSpacing(4)
 
-        save_action = QAction("保存图片", self)
-        save_action.triggered.connect(self._save_image)
-        self._toolbar.addAction(save_action)
+        self._save_button = QPushButton("保存图片")
+        self._save_button.clicked.connect(self._save_image)
+        button_layout.addWidget(self._save_button)
 
-        reset_action = QAction("重置缩放", self)
-        reset_action.triggered.connect(self._reset_zoom)
-        self._toolbar.addAction(reset_action)
+        self._reset_button = QPushButton("重置缩放")
+        self._reset_button.clicked.connect(self._reset_zoom)
+        button_layout.addWidget(self._reset_button)
 
-        layout.addWidget(self._toolbar)
+        button_layout.addStretch()
+        layout.addLayout(button_layout)
 
         # --- Cursor info bar ---
         self._cursor_label = QLabel("X: -- Y: -- DN: --")
@@ -107,7 +109,7 @@ class ImageDisplayWidget(QWidget):
         if 0 <= x < cols and 0 <= y < rows:
             self.pixel_clicked.emit(x, y)
             logger.debug("Pixel clicked: X=%d, Y=%d, DN=%d",
-                        x, y, int(self._current_frame[y, x]))
+                         x, y, int(self._current_frame[y, x]))
 
     def _save_image(self) -> None:
         """Save current frame as PNG."""
