@@ -24,6 +24,12 @@ class MockDevice(DeviceInterface):
         self._timer = QTimer(self)
         self._timer.timeout.connect(self._generate_frame)
 
+        # Pre-compute base gradient pattern (1024×1280) to avoid recalculating each frame
+        rows, cols = 1024, 1280
+        row_grad = np.linspace(0, 200, rows, dtype=np.float32)[:, np.newaxis]
+        col_grad = np.linspace(0, 50, cols, dtype=np.float32)[np.newaxis, :]
+        self._base_pattern = row_grad + col_grad
+
     def initialize(self) -> bool:
         logger.info("MockDevice initialized (1024×1280, %s)", self._pixel_format)
         return True
@@ -31,7 +37,7 @@ class MockDevice(DeviceInterface):
     def start(self) -> None:
         self._running = True
         self._frame_id = 0
-        self._timer.start(33)  # ~30 fps
+        self._timer.start(14)  # ~70 fps (14ms interval)
         logger.info("MockDevice acquisition started")
 
     def stop(self) -> None:
@@ -72,12 +78,11 @@ class MockDevice(DeviceInterface):
         rows, cols = 1024, 1280
         dtype = np.uint8 if self._pixel_format == "Mono8" else np.uint16
 
-        # Gradient with noise — simulates spectral bands
-        row_grad = np.linspace(0, 200, rows, dtype=np.float32)[:, np.newaxis]
-        col_grad = np.linspace(0, 50, cols, dtype=np.float32)[np.newaxis, :]
+        # Generate noise (only part that changes each frame)
         noise = np.random.randint(0, 10, (rows, cols), dtype=np.int16)
 
-        frame = np.clip(row_grad + col_grad + noise, 0,
+        # Combine pre-computed gradient with noise
+        frame = np.clip(self._base_pattern + noise, 0,
                         255 if dtype == np.uint8 else 4095).astype(dtype)
 
         # Add a bright spot that moves — helps verify live display

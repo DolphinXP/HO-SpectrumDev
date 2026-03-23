@@ -2,13 +2,14 @@
 
 import logging
 import os
+import time
 
 import numpy as np
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QMainWindow, QToolBar, QSplitter, QWidget, QVBoxLayout, QLabel,
-    QHBoxLayout, QStatusBar, QMessageBox, QFileDialog,
+    QHBoxLayout, QStatusBar, QMessageBox, QFileDialog, QScrollArea,
 )
 
 from src.device.device_interface import DeviceInterface
@@ -19,10 +20,20 @@ from src.analysis.spectral import SpectralAnalyzer
 from src.ui.widgets.image_display import ImageDisplayWidget
 from src.ui.widgets.stats_panel import StatsPanel
 from src.ui.widgets.aux_data_panel import AuxDataPanel
-from src.ui.widgets.control_panel import ControlPanel
+from src.ui.widgets.optical_cal_panel import OpticalCalPanel
 from src.ui.widgets.spectrum_graph import SpectrumGraphWidget
 
 logger = logging.getLogger("gpy4.ui")
+
+# UI refresh interval (ms).  The QTimer fires at this rate and picks up
+# whatever frame the acquisition thread last wrote into the ping-pong
+# buffer.  33 ms ≈ 30 Hz — fast enough for smooth display, light enough
+# to leave the event loop responsive for user input.
+_UI_REFRESH_MS = 33
+
+# Heavy analysis (MTF / spectral plots / DN neighborhood) runs at a
+# lower cadence to avoid saturating the main thread.
+_HEAVY_UPDATE_INTERVAL = 0.10  # seconds → ~10 Hz
 
 
 class MainWindow(QMainWindow):
@@ -48,6 +59,9 @@ class MainWindow(QMainWindow):
         self._current_frame: np.ndarray | None = None
         self._running: bool = False
 
+        # Throttle control for heavy UI updates
+        self._last_heavy_update: float = 0.0
+
         # Load stylesheet
         self._load_stylesheet()
 
@@ -58,6 +72,11 @@ class MainWindow(QMainWindow):
 
         # Wire signals
         self._wire_signals()
+
+        # --- UI refresh timer (ping-pong consumer) ---
+        self._refresh_timer = QTimer(self)
+        self._refresh_timer.setTimerType(Qt.TimerType.PreciseTimer)
+        self._refresh_timer.timeout.connect(self._poll_frame)
 
         logger.info("MainWindow initialized")
 
@@ -105,6 +124,15 @@ class MainWindow(QMainWindow):
 
         tb.addSeparator()
 
+        # 光校 toggle — show/hide optical calibration bottom panel
+        self._act_optical_cal = QAction("光校", self)
+        self._act_optical_cal.setCheckable(True)
+        self._act_optical_cal.setChecked(True)
+        self._act_optical_cal.toggled.connect(self._on_optical_cal_toggled)
+        tb.addAction(self._act_optical_cal)
+
+        tb.addSeparator()
+
         self._act_settings = QAction("设置", self)
         self._act_settings.triggered.connect(self._on_settings)
         tb.addAction(self._act_settings)
@@ -132,7 +160,7 @@ class MainWindow(QMainWindow):
         self._h_splitter_top = QSplitter(Qt.Orientation.Horizontal)
         self._v_splitter.addWidget(self._h_splitter_top)
 
-        # Left: Image display (handles image/DN/OC tab switching internally)
+        # Left: Image display
         self._image_display = ImageDisplayWidget()
         self._h_splitter_top.addWidget(self._image_display)
 
@@ -149,19 +177,31 @@ class MainWindow(QMainWindow):
 
         self._h_splitter_top.setSizes([1200, 300])
 
-        # ---- BOTTOM HALF: control panel + spectrum graphs ----
-        self._h_splitter_bottom = QSplitter(Qt.Orientation.Horizontal)
-        self._v_splitter.addWidget(self._h_splitter_bottom)
+        # ---- BOTTOM HALF: optical cal panel + spectrum graphs ----
+        self._bottom_container = QWidget()
+        bottom_container_layout = QHBoxLayout(self._bottom_container)
+        bottom_container_layout.setContentsMargins(0, 0, 0, 0)
+        bottom_container_layout.setSpacing(0)
 
-        # Bottom-left: 光校 control panel
-        self._control_panel = ControlPanel()
-        self._h_splitter_bottom.addWidget(self._control_panel)
+        # Bottom-left: 光校 optical calibration panel
+        self._optical_cal_panel = OpticalCalPanel()
+        self._optical_cal_panel.setMinimumWidth(300)
+        self._optical_cal_panel.setMinimumHeight(250)
+        bottom_container_layout.addWidget(self._optical_cal_panel)
 
-        # Bottom-right: 3 spectrum graphs
-        graphs_widget = QWidget()
-        graphs_layout = QHBoxLayout(graphs_widget)
-        graphs_layout.setContentsMargins(0, 0, 0, 0)
+        # Scrollable area for the 4 spectrum graphs
+        charts_scroll = QScrollArea()
+        charts_scroll.setWidgetResizable(True)
+        charts_scroll.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        charts_scroll.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
+        charts_widget = QWidget()
+        charts_layout = QHBoxLayout(charts_widget)
+        charts_layout.setContentsMargins(0, 0, 0, 0)
+
+        # 4 spectrum graphs
         self._graph_near_spatial = SpectrumGraphWidget(
             title="临近空间维(行)", x_label="空间像素", y_label="DN",
             orientation="horizontal", show_x=True, show_y=True)
@@ -171,13 +211,20 @@ class MainWindow(QMainWindow):
         self._graph_full_spatial = SpectrumGraphWidget(
             title="全域空间维(行)", x_label="空间像素", y_label="DN",
             orientation="horizontal", show_x=False, show_y=True)
+        self._graph_full_spectral = SpectrumGraphWidget(
+            title="全域光谱维(列)", x_label="光谱通道", y_label="DN",
+            orientation="vertical", show_x=True, show_y=False)
 
-        graphs_layout.addWidget(self._graph_near_spatial)
-        graphs_layout.addWidget(self._graph_near_spectral)
-        graphs_layout.addWidget(self._graph_full_spatial)
-        self._h_splitter_bottom.addWidget(graphs_widget)
+        for g in (self._graph_near_spatial, self._graph_near_spectral,
+                  self._graph_full_spatial, self._graph_full_spectral):
+            g.setMinimumWidth(280)
+            g.setMinimumHeight(220)
+            charts_layout.addWidget(g)
 
-        self._h_splitter_bottom.setSizes([350, 1150])
+        charts_scroll.setWidget(charts_widget)
+        bottom_container_layout.addWidget(charts_scroll, 1)
+
+        self._v_splitter.addWidget(self._bottom_container)
         self._v_splitter.setSizes([550, 350])
 
     # --------------------------------------------------------------- statusbar
@@ -196,8 +243,7 @@ class MainWindow(QMainWindow):
 
     # --------------------------------------------------------------- signals
     def _wire_signals(self) -> None:
-        # Acquisition → UI
-        self._acquisition.frame_ready.connect(self._on_frame_ready)
+        # Stats signal (already throttled to ~4 Hz in acquisition worker)
         self._acquisition.stats_updated.connect(self._on_stats_updated)
 
         # Image display
@@ -208,43 +254,60 @@ class MainWindow(QMainWindow):
         self._graph_near_spectral.coordinate_changed.connect(self._on_pixel_selected)
         self._graph_full_spatial.coordinate_changed.connect(
             lambda x, y: self._on_pixel_selected(self._selected_x, y))
+        self._graph_full_spectral.coordinate_changed.connect(
+            lambda x, y: self._on_pixel_selected(x, self._selected_y))
 
-        # Control panel
-        self._control_panel.pixel_changed.connect(self._on_pixel_selected)
-        self._control_panel.locate_max_dn.connect(self._on_locate_max_dn)
-        self._control_panel.avg_count_changed.connect(self._mtf.set_avg_count)
-        self._control_panel.black_level_changed.connect(self._mtf.set_black_level)
+        # Optical calibration panel
+        self._optical_cal_panel.pixel_changed.connect(self._on_pixel_selected)
+        self._optical_cal_panel.locate_max_dn.connect(self._on_locate_max_dn)
+        self._optical_cal_panel.avg_count_changed.connect(self._mtf.set_avg_count)
+        self._optical_cal_panel.black_level_changed.connect(self._mtf.set_black_level)
 
-    # --------------------------------------------------------------- slots
-    def _on_frame_ready(self, frame: np.ndarray, metadata: dict) -> None:
-        """Handle processed frame from acquisition worker."""
+    # --------------------------------------------------------------- frame polling
+    def _poll_frame(self) -> None:
+        """Called by QTimer — pull the latest frame from the ping-pong buffer.
+
+        This is the *only* path that delivers frames to the UI.  Because
+        it runs inside the main-thread timer, it naturally yields to user
+        input events between ticks, keeping the UI responsive.
+        """
+        result = self._acquisition.frame_buffer.pong()
+        if result is None:
+            return  # no new frame since last poll
+
+        frame, metadata = result
         self._current_frame = frame
 
-        # Update image display
+        # Prepare display frame
         display_frame = frame
         if frame.dtype == np.float32:
-            # NUC output is float32, convert for display
             display_frame = np.clip(frame, 0, 4095).astype(np.uint16)
+
+        # Image display update (lightweight — texture upload)
         self._image_display.update_image(display_frame)
 
-        # Update aux data
+        # Aux data labels (lightweight)
         self._aux_panel.update_metadata(metadata)
-
-        # Update MTF
-        x, y = self._selected_x, self._selected_y
-        mtf_result = self._mtf.update(frame, x, y)
-        self._control_panel.update_mtf(mtf_result)
-
-        # Update DN neighborhood
-        self._control_panel.update_dn_neighborhood(display_frame, x, y)
-
-        # Update spectral profiles
-        self._update_spectral_plots(display_frame, x, y)
 
         # Write to storage if recording
         if self._storage.is_recording:
             self._storage.write_frame(frame, metadata)
 
+        # Throttle heavy UI updates (MTF, DN neighborhood, spectral plots)
+        now = time.perf_counter()
+        if now - self._last_heavy_update < _HEAVY_UPDATE_INTERVAL:
+            return
+        self._last_heavy_update = now
+
+        x, y = self._selected_x, self._selected_y
+
+        if self._bottom_container.isVisible():
+            mtf_result = self._mtf.update(frame, x, y)
+            self._optical_cal_panel.update_mtf(mtf_result)
+            self._optical_cal_panel.update_dn_neighborhood(display_frame, x, y)
+            self._update_spectral_plots(display_frame, x, y)
+
+    # --------------------------------------------------------------- slots
     def _on_stats_updated(self, stats: dict) -> None:
         self._stats_panel.update_stats(stats)
 
@@ -252,10 +315,11 @@ class MainWindow(QMainWindow):
         """Handle pixel selection from any source."""
         self._selected_x = x
         self._selected_y = y
-        self._control_panel.set_pixel(x, y)
+        self._optical_cal_panel.set_pixel(x, y)
         self._graph_near_spatial.set_position(x, y)
         self._graph_near_spectral.set_position(x, y)
         self._graph_full_spatial.set_position(x, y)
+        self._graph_full_spectral.set_position(x, y)
         self._mtf.reset()  # Reset MTF accumulator on pixel change
 
         if self._current_frame is not None:
@@ -263,7 +327,7 @@ class MainWindow(QMainWindow):
             if frame.dtype == np.float32:
                 frame = np.clip(frame, 0, 4095).astype(np.uint16)
             self._update_spectral_plots(frame, x, y)
-            self._control_panel.update_dn_neighborhood(frame, x, y)
+            self._optical_cal_panel.update_dn_neighborhood(frame, x, y)
 
     def _on_locate_max_dn(self) -> None:
         """Find and navigate to the pixel with maximum DN."""
@@ -277,25 +341,30 @@ class MainWindow(QMainWindow):
         self._on_pixel_selected(x, y)
         logger.info("Max DN located at X=%d, Y=%d, DN=%d", x, y, int(frame[y, x]))
 
+    def _on_optical_cal_toggled(self, checked: bool) -> None:
+        """Show/hide the bottom optical calibration panel."""
+        self._bottom_container.setVisible(checked)
+
     def _update_spectral_plots(self, frame: np.ndarray, x: int, y: int) -> None:
-        """Update the three spectrum graph widgets."""
-        # Near spatial: ±10 pixels along the row
+        """Update the four spectrum graph widgets."""
         xs, vs = self._spectral.near_spatial(frame, x, y)
         self._graph_near_spatial.update_plot(xs, vs)
 
-        # Near spectral: ±10 bands along the column
         xs2, vs2 = self._spectral.near_spectral(frame, x, y)
         self._graph_near_spectral.update_plot(xs2, vs2)
 
-        # Full spatial: entire row
         xs3, vs3 = self._spectral.full_spatial(frame, y)
         self._graph_full_spatial.update_plot(xs3, vs3)
+
+        xs4, vs4 = self._spectral.full_spectral(frame, x)
+        self._graph_full_spectral.update_plot(xs4, vs4)
 
     # --------------------------------------------------------------- toolbar actions
     def _on_start(self) -> None:
         """Start acquisition."""
         self._device.start()
         self._acquisition.start()
+        self._refresh_timer.start(_UI_REFRESH_MS)
         self._running = True
         self._act_start.setEnabled(False)
         self._act_stop.setEnabled(True)
@@ -303,6 +372,7 @@ class MainWindow(QMainWindow):
 
     def _on_stop(self) -> None:
         """Stop acquisition."""
+        self._refresh_timer.stop()
         self._acquisition.stop()
         self._device.stop()
         self._running = False

@@ -62,7 +62,7 @@ The 光校 control panel shows a 9×9 QTableWidget of DN values centered at `(x,
 - Out-of-bounds cells show `"-"`
 - dnCenter = `frame[y, x]`, dnAbove = `frame[y-1, x]`, etc. (read from table row/col 4±1)
 
-## Display in UI (control_panel.py)
+## Display in UI (optical_cal_panel.py)
 
 MTF values shown as cross pattern of QLabel/QLineEdit:
 

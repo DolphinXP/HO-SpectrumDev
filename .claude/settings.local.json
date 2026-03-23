@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "Bash(C:/miniconda3/envs/gpy4/python.exe main.py --mock --debug)",
+      "Bash(C:/miniconda3/envs/gpy4/python.exe -c \":*)",
+      "Bash(C:/miniconda3/envs/gpy4/python.exe -m pytest tests/ -v)"
     ]
   }
 }

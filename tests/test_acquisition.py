@@ -20,22 +20,22 @@ def app():
 
 class TestAcquisitionWorker:
     def test_frame_flow(self, app, qtbot):
-        """Verify frames flow from device through worker."""
+        """Verify frames flow from device through worker into ping-pong buffer."""
         dev = MockDevice()
         dev.initialize()
         worker = AcquisitionWorker(dev)
 
-        received = []
-        worker.frame_ready.connect(lambda f, m: received.append((f, m)))
-
         dev.start()
         worker.start()
         qtbot.wait(300)
+
+        # Poll the ping-pong buffer — at least one frame should be available
+        result = worker.frame_buffer.pong()
         worker.stop()
         dev.stop()
 
-        assert len(received) > 0
-        frame, meta = received[0]
+        assert result is not None
+        frame, meta = result
         assert isinstance(frame, np.ndarray)
         assert frame.shape == (1024, 1280)
 
@@ -50,7 +50,7 @@ class TestAcquisitionWorker:
 
         dev.start()
         worker.start()
-        qtbot.wait(300)
+        qtbot.wait(500)
         worker.stop()
         dev.stop()
 
@@ -68,15 +68,15 @@ class TestAcquisitionWorker:
 
         assert not worker.nuc.is_loaded()
 
-        received = []
-        worker.frame_ready.connect(lambda f, m: received.append(f))
-
         dev.start()
         worker.start()
         qtbot.wait(200)
+
+        result = worker.frame_buffer.pong()
         worker.stop()
         dev.stop()
 
-        assert len(received) > 0
+        assert result is not None
+        frame, _ = result
         # NUC not loaded → frame is float32 (identity transform)
-        assert received[0].dtype == np.float32
+        assert frame.dtype == np.float32

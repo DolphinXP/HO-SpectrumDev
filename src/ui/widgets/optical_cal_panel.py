@@ -1,4 +1,4 @@
-"""Control panel (光校) — MTF display, pixel coordinates, DN neighborhood."""
+"""Optical calibration panel (光校) — MTF display, pixel coordinates, DN neighborhood."""
 
 import logging
 import math
@@ -14,14 +14,14 @@ from PySide6.QtWidgets import (
 logger = logging.getLogger("gpy4.ui")
 
 
-class ControlPanel(QWidget):
+class OpticalCalPanel(QWidget):
     """Bottom-left 光校 panel with MTF display and DN neighborhood table.
 
     Contains:
     - 列(X) / 行(Y) spinboxes for pixel coordinate selection
     - 定位最大DN button
-    - MTF cross display (above/below/left/right/mean)
-    - Black level spinbox, averaging count combo
+    - MTF cross display (above/below/left/right) with bordered boxes
+    - Mean value, black level spinbox, averaging count combo
     - 9×9 DN neighborhood table
     """
 
@@ -58,52 +58,60 @@ class ControlPanel(QWidget):
         coord_layout.addStretch()
         main_layout.addLayout(coord_layout)
 
-        # --- MTF settings row ---
+        # --- MTF group (cross display + mean + settings) ---
+        mtf_group = QGroupBox("MTF")
+        mtf_main = QVBoxLayout(mtf_group)
+        mtf_main.setSpacing(6)
+
+        # Bordered value labels in cross layout
+        mtf_grid = QGridLayout()
+        mtf_grid.setSpacing(4)
+
+        border_style = (
+            "border: 1px solid #999; padding: 2px 8px; min-width: 40px;"
+            " font-size: 14px; background: white;"
+        )
+        self._mtf_above = QLabel("0")
+        self._mtf_below = QLabel("0")
+        self._mtf_left = QLabel("0")
+        self._mtf_right = QLabel("0")
+
+        for lbl in (self._mtf_above, self._mtf_below,
+                    self._mtf_left, self._mtf_right):
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            lbl.setStyleSheet(border_style)
+
+        #          [above]
+        # [left]           [right]
+        #          [below]
+        mtf_grid.addWidget(self._mtf_above, 0, 1, Qt.AlignmentFlag.AlignCenter)
+        mtf_grid.addWidget(self._mtf_left, 1, 0, Qt.AlignmentFlag.AlignCenter)
+        mtf_grid.addWidget(self._mtf_right, 1, 2, Qt.AlignmentFlag.AlignCenter)
+        mtf_grid.addWidget(self._mtf_below, 2, 1, Qt.AlignmentFlag.AlignCenter)
+        mtf_main.addLayout(mtf_grid)
+
+        # Mean value
+        self._mtf_mean_label = QLabel("均值: 0")
+        mtf_main.addWidget(self._mtf_mean_label)
+
+        # Settings row (combo + black level) inside MTF group
         mtf_settings = QHBoxLayout()
-        mtf_settings.addWidget(QLabel("黑电平:"))
+        self._avg_combo = QComboBox()
+        self._avg_combo.addItems(["每1帧计算", "每5帧计算", "每10帧计算"])
+        self._avg_combo.currentIndexChanged.connect(self._on_avg_changed)
+        mtf_settings.addWidget(self._avg_combo)
+
+        mtf_settings.addWidget(QLabel("暗电平:"))
         self._bl_spin = QDoubleSpinBox()
         self._bl_spin.setRange(0, 4095)
         self._bl_spin.setDecimals(1)
         self._bl_spin.setValue(0.0)
         self._bl_spin.valueChanged.connect(self.black_level_changed.emit)
         mtf_settings.addWidget(self._bl_spin)
-
-        mtf_settings.addWidget(QLabel("帧平均:"))
-        self._avg_combo = QComboBox()
-        self._avg_combo.addItems(["每1帧计算", "每5帧计算", "每10帧计算"])
-        self._avg_combo.currentIndexChanged.connect(self._on_avg_changed)
-        mtf_settings.addWidget(self._avg_combo)
         mtf_settings.addStretch()
-        main_layout.addLayout(mtf_settings)
+        mtf_main.addLayout(mtf_settings)
 
-        # --- MTF cross display ---
-        mtf_group = QGroupBox("MTF")
-        mtf_grid = QGridLayout(mtf_group)
-        mtf_grid.setSpacing(2)
-
-        self._mtf_above = QLabel("--")
-        self._mtf_below = QLabel("--")
-        self._mtf_left = QLabel("--")
-        self._mtf_right = QLabel("--")
-        self._mtf_mean = QLabel("--")
-
-        for lbl in (self._mtf_above, self._mtf_below, self._mtf_left,
-                    self._mtf_right, self._mtf_mean):
-            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            lbl.setStyleSheet("font-weight: bold; font-size: 14px;")
-
-        #       [above]
-        # [left] [mean] [right]
-        #       [below]
-        mtf_grid.addWidget(QLabel("上:"), 0, 1, Qt.AlignmentFlag.AlignCenter)
-        mtf_grid.addWidget(self._mtf_above, 0, 2, Qt.AlignmentFlag.AlignCenter)
-        mtf_grid.addWidget(QLabel("左:"), 1, 0, Qt.AlignmentFlag.AlignCenter)
-        mtf_grid.addWidget(self._mtf_left, 1, 1, Qt.AlignmentFlag.AlignCenter)
-        mtf_grid.addWidget(self._mtf_mean, 1, 2, Qt.AlignmentFlag.AlignCenter)
-        mtf_grid.addWidget(self._mtf_right, 1, 3, Qt.AlignmentFlag.AlignCenter)
-        mtf_grid.addWidget(QLabel("均值"), 1, 4, Qt.AlignmentFlag.AlignCenter)
-        mtf_grid.addWidget(QLabel("下:"), 2, 1, Qt.AlignmentFlag.AlignCenter)
-        mtf_grid.addWidget(self._mtf_below, 2, 2, Qt.AlignmentFlag.AlignCenter)
+        mtf_group.setMinimumHeight(150)
         main_layout.addWidget(mtf_group)
 
         # --- 9×9 DN Neighborhood Table ---
@@ -113,9 +121,12 @@ class ControlPanel(QWidget):
         self._dn_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self._dn_table.horizontalHeader().setDefaultSectionSize(48)
         self._dn_table.verticalHeader().setDefaultSectionSize(24)
+        dn_group.setMinimumHeight(150)
         dn_layout.addWidget(self._dn_table)
         main_layout.addWidget(dn_group)
 
+        self.setMinimumWidth(300)
+        self.setMinimumHeight(250)
         main_layout.addStretch()
 
     def set_pixel(self, x: int, y: int) -> None:
@@ -169,7 +180,8 @@ class ControlPanel(QWidget):
         self._mtf_below.setText(fmt(result.get("below", float("nan"))))
         self._mtf_left.setText(fmt(result.get("left", float("nan"))))
         self._mtf_right.setText(fmt(result.get("right", float("nan"))))
-        self._mtf_mean.setText(fmt(result.get("mean", float("nan"))))
+        mean_val = result.get("mean", float("nan"))
+        self._mtf_mean_label.setText(f"均值: {fmt(mean_val)}")
 
     def _on_coord_changed(self) -> None:
         self.pixel_changed.emit(self._x_spin.value(), self._y_spin.value())

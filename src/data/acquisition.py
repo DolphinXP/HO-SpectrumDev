@@ -1,8 +1,12 @@
 """Acquisition worker thread.
 
 Receives raw frames from a :class:`DeviceInterface`, applies optional NUC
-correction, computes live statistics, and re-emits the processed frame for
-downstream consumers (UI, storage).
+correction, computes live statistics, and delivers processed frames via a
+:class:`FramePingPong` double buffer.
+
+The ping-pong pattern ensures the UI thread is never flooded with queued
+frame signals.  The UI polls via QTimer at its own pace; if it can't keep
+up, intermediate frames are silently dropped instead of queueing.
 """
 
 from __future__ import annotations
@@ -14,6 +18,7 @@ from collections import deque
 import numpy as np
 from PySide6.QtCore import QObject, QThread, Signal, Slot
 
+from src.data.frame_ping_pong import FramePingPong
 from src.data.nuc import NUCProcessor
 from src.device.device_interface import DeviceInterface
 
@@ -26,18 +31,19 @@ _FPS_WINDOW = 30
 class AcquisitionWorker(QThread):
     """QThread that sits between a camera device and the rest of the app.
 
+    Attributes
+    ----------
+    frame_buffer : FramePingPong
+        Shared double buffer.  The worker ``ping()``s processed frames
+        into it; the UI ``pong()``s them out at its own refresh rate.
+
     Signals
     -------
-    frame_ready : Signal(np.ndarray, dict)
-        Emitted after optional NUC processing with the corrected frame
-        (float32 if NUC is loaded, otherwise original dtype) and
-        metadata dict.
     stats_updated : Signal(dict)
         Periodic statistics: ``fps``, ``frame_count``, ``dropped_count``,
-        ``mbps``.
+        ``mbps``, ``display_dropped``.
     """
 
-    frame_ready = Signal(np.ndarray, dict)
     stats_updated = Signal(dict)
 
     def __init__(
@@ -49,13 +55,20 @@ class AcquisitionWorker(QThread):
         self._device = device
         self._nuc = NUCProcessor()
 
+        # Ping-pong double buffer — shared with UI
+        self.frame_buffer = FramePingPong()
+
         # Statistics bookkeeping
         self._frame_count: int = 0
         self._dropped_count: int = 0
+        self._display_dropped: int = 0
         self._last_frame_id: int = -1
         self._timestamps: deque[float] = deque(maxlen=_FPS_WINDOW)
         self._byte_sizes: deque[int] = deque(maxlen=_FPS_WINDOW)
         self._running: bool = False
+
+        # Throttle stats signal to ~4 Hz
+        self._last_stats_time: float = 0.0
 
     # ------------------------------------------------------------------
     # NUC access
@@ -71,16 +84,13 @@ class AcquisitionWorker(QThread):
     # ------------------------------------------------------------------
 
     def run(self) -> None:
-        """Start the thread event loop.
-
-        Frame processing happens in :meth:`_on_frame_acquired` which is
-        invoked via the signal/slot connection.  The thread's event loop
-        must be running for queued connections to be dispatched.
-        """
+        """Start the thread event loop."""
         self._running = True
         self._frame_count = 0
         self._dropped_count = 0
+        self._display_dropped = 0
         self._last_frame_id = -1
+        self._last_stats_time = 0.0
         self._timestamps.clear()
         self._byte_sizes.clear()
 
@@ -101,9 +111,10 @@ class AcquisitionWorker(QThread):
         self.quit()
         self.wait()
         logger.info(
-            "Acquisition worker stopped: %d frames, %d dropped",
+            "Acquisition worker stopped: %d frames, %d dropped, %d display-dropped",
             self._frame_count,
             self._dropped_count,
+            self._display_dropped,
         )
 
     # ------------------------------------------------------------------
@@ -138,12 +149,16 @@ class AcquisitionWorker(QThread):
         self._timestamps.append(now)
         self._byte_sizes.append(frame_bytes)
 
-        # Compute rolling statistics
-        stats = self._compute_stats()
+        # Write to ping-pong buffer — if UI hasn't consumed the last
+        # frame yet, this frame is dropped (back-pressure).
+        if not self.frame_buffer.ping(processed, metadata):
+            self._display_dropped += 1
 
-        # Emit signals
-        self.frame_ready.emit(processed, metadata)
-        self.stats_updated.emit(stats)
+        # Throttle stats signal to ~4 Hz to avoid event queue pressure
+        if now - self._last_stats_time >= 0.25:
+            self._last_stats_time = now
+            stats = self._compute_stats()
+            self.stats_updated.emit(stats)
 
     # ------------------------------------------------------------------
     # Statistics
@@ -168,5 +183,6 @@ class AcquisitionWorker(QThread):
             "fps": round(fps, 1),
             "frame_count": self._frame_count,
             "dropped_count": self._dropped_count,
+            "display_dropped": self._display_dropped,
             "mbps": round(mbps, 2),
         }

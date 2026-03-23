@@ -54,7 +54,7 @@ class MyAnalysis:
 1. Create `src/analysis/my_analysis.py` using template above
 2. Instantiate in `main_window.py`: `self.my_analysis = MyAnalysis()`
 3. Call in the appropriate slot (e.g., `_on_pixel_selected(x, y)`)
-4. Display results in the relevant UI widget (control_panel or new panel)
+4. Display results in the relevant UI widget (optical_cal_panel or new panel)
 5. Add settings to `src/utils/config.py` if configurable
 6. Write test in `tests/test_my_analysis.py` using synthetic frame data
 

@@ -69,8 +69,8 @@ gpy4/
 │   │       ├── dn_table_widget.py   # Per-pixel DN value grid (DN tab)
 │   │       ├── stats_panel.py       # 数据统计 right-panel table
 │   │       ├── aux_data_panel.py    # 辅助数据 right-panel table
-│   │       ├── control_panel.py     # 光校 bottom-left (MTF, pixel coords, DN neighborhood)
-│   │       └── spectrum_graph.py    # Reusable pyqtgraph plot (×3 instances)
+│   │       ├── optical_cal_panel.py # 光校 bottom-left (MTF, pixel coords, DN neighborhood)
+│   │       └── spectrum_graph.py    # Reusable pyqtgraph plot (×4 instances)
 │   └── utils/
 │       ├── config.py                # QSettings persistence
 │       └── logger.py                # Logging configuration
