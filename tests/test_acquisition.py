@@ -61,7 +61,7 @@ class TestAcquisitionWorker:
         assert stats["frame_count"] > 0
 
     def test_nuc_identity(self, app, qtbot):
-        """Without NUC loaded, frames should pass through as float32."""
+        """Without NUC loaded, frames should pass through without conversion."""
         dev = MockDevice()
         dev.initialize()
         worker = AcquisitionWorker(dev)
@@ -78,5 +78,5 @@ class TestAcquisitionWorker:
 
         assert result is not None
         frame, _ = result
-        # NUC not loaded → frame is float32 (identity transform)
-        assert frame.dtype == np.float32
+        # NUC not loaded → frame keeps the original camera dtype
+        assert frame.dtype == np.uint8

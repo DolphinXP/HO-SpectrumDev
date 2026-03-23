@@ -68,8 +68,9 @@ class NUCProcessor:
     """Per-pixel non-uniformity correction.
 
     When coefficients are loaded, :meth:`apply` computes
-    ``A * frame + B`` element-wise.  When no coefficients are loaded the
-    frame is simply cast to float32 (identity transform).
+    ``A * frame + B`` element-wise.  When no coefficients are loaded or
+    NUC is disabled, the original frame is returned unchanged so the
+    acquisition path avoids a full-frame copy on every image.
     """
 
     def __init__(self) -> None:
@@ -138,11 +139,12 @@ class NUCProcessor:
         -------
         np.ndarray
             Corrected frame, shape (1024, 1280), dtype float32.
-            If coefficients are not loaded or disabled, the frame is returned as
-            ``frame.astype(np.float32)`` (identity).
+            If coefficients are not loaded or disabled, the original frame is
+            returned unchanged.
         """
         if not self.enabled or not self.is_loaded():
-            return frame.astype(np.float32, copy=False)
+            return frame
 
         logger.debug("Applying NUC correction")
-        return self._a * frame.astype(np.float32) + self._b  # type: ignore[union-attr]
+        frame_f32 = frame.astype(np.float32, copy=False)
+        return self._a * frame_f32 + self._b  # type: ignore[union-attr]

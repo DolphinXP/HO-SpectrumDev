@@ -37,7 +37,7 @@ logger = logging.getLogger("gpy4.ui")
 # whatever frame the acquisition thread last wrote into the ping-pong
 # buffer.  33 ms ≈ 30 Hz — fast enough for smooth display, light enough
 # to leave the event loop responsive for user input.
-_UI_REFRESH_MS = 33
+_UI_REFRESH_MS = 16
 
 # Heavy analysis (MTF / spectral plots / DN neighborhood) runs at a
 # lower cadence to avoid saturating the main thread.

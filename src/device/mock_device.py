@@ -21,7 +21,7 @@ class MockDevice(DeviceInterface):
         self._pixel_format: str = "Mono8"
         self._running: bool = False
         self._frame_id: int = 0
-        self._target_interval_s: float = 1.0 / 72.0
+        self._target_interval_s: float = 1.0 / 120.0
         self._state_lock = threading.Lock()
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
