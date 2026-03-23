@@ -1,10 +1,10 @@
 """Mock camera device for development and testing."""
 
 import logging
+import threading
 import time
 
 import numpy as np
-from PySide6.QtCore import QTimer
 
 from src.device.device_interface import DeviceInterface
 
@@ -21,8 +21,10 @@ class MockDevice(DeviceInterface):
         self._pixel_format: str = "Mono8"
         self._running: bool = False
         self._frame_id: int = 0
-        self._timer = QTimer(self)
-        self._timer.timeout.connect(self._generate_frame)
+        self._target_interval_s: float = 1.0 / 72.0
+        self._state_lock = threading.Lock()
+        self._stop_event = threading.Event()
+        self._thread: threading.Thread | None = None
 
         # Pre-compute base gradient pattern (1024×1280) to avoid recalculating each frame
         rows, cols = 1024, 1280
@@ -77,14 +79,31 @@ class MockDevice(DeviceInterface):
         return True
 
     def start(self) -> None:
-        self._running = True
-        self._frame_id = 0
-        self._timer.start(14)  # ~70 fps (14ms interval)
+        if self._thread is not None and self._thread.is_alive():
+            return
+
+        with self._state_lock:
+            self._running = True
+            self._frame_id = 0
+
+        self._stop_event.clear()
+        self._thread = threading.Thread(
+            target=self._run_loop,
+            name="MockDeviceThread",
+            daemon=True,
+        )
+        self._thread.start()
         logger.info("MockDevice acquisition started")
 
     def stop(self) -> None:
-        self._running = False
-        self._timer.stop()
+        with self._state_lock:
+            self._running = False
+
+        self._stop_event.set()
+        thread = self._thread
+        self._thread = None
+        if thread is not None and thread.is_alive():
+            thread.join(timeout=1.0)
         logger.info("MockDevice acquisition stopped")
 
     def close(self) -> None:
@@ -92,46 +111,72 @@ class MockDevice(DeviceInterface):
         logger.info("MockDevice closed")
 
     def set_exposure(self, us: float) -> None:
-        self._exposure_us = us
+        with self._state_lock:
+            self._exposure_us = us
         logger.info("MockDevice exposure set to %.1f µs", us)
 
     def set_gain(self, db: float) -> None:
-        self._gain_db = db
+        with self._state_lock:
+            self._gain_db = db
         logger.info("MockDevice gain set to %.1f dB", db)
 
     def set_pixel_format(self, fmt: str) -> None:
-        self._pixel_format = fmt
+        with self._state_lock:
+            self._pixel_format = fmt
         logger.info("MockDevice pixel format set to %s", fmt)
 
     def get_frame_shape(self) -> tuple[int, int]:
         return (1024, 1280)
 
     def get_exposure(self) -> float:
-        return self._exposure_us
+        with self._state_lock:
+            return self._exposure_us
 
     def get_gain(self) -> float:
-        return self._gain_db
+        with self._state_lock:
+            return self._gain_db
 
     def get_pixel_format(self) -> str:
-        return self._pixel_format
+        with self._state_lock:
+            return self._pixel_format
+
+    def _run_loop(self) -> None:
+        next_deadline = time.perf_counter()
+        while not self._stop_event.is_set():
+            self._generate_frame()
+            next_deadline += self._target_interval_s
+            sleep_s = next_deadline - time.perf_counter()
+            if sleep_s > 0:
+                self._stop_event.wait(sleep_s)
+            else:
+                next_deadline = time.perf_counter()
 
     def _generate_frame(self) -> None:
         """Generate a synthetic frame and emit frame_acquired."""
         rows, cols = 1024, 1280
-        dtype = np.uint8 if self._pixel_format == "Mono8" else np.uint16
+        with self._state_lock:
+            if not self._running:
+                return
+            exposure_us = self._exposure_us
+            gain_db = self._gain_db
+            pixel_format = self._pixel_format
+            frame_id = self._frame_id
+            self._frame_id += 1
+
+        dtype = np.uint8 if pixel_format == "Mono8" else np.uint16
         max_val = 255 if dtype == np.uint8 else 4095
 
         # Simulate exposure effect: linear scale relative to default 10000 µs
-        exposure_factor = self._exposure_us / 10000.0
+        exposure_factor = exposure_us / 10000.0
 
         # Simulate gain effect: standard dB amplification (0 dB=1x, 6 dB≈2x, 24 dB≈15.8x)
-        gain_factor = 10.0 ** (self._gain_db / 20.0)
+        gain_factor = 10.0 ** (gain_db / 20.0)
 
         # Generate noise (only part that changes each frame)
         noise = np.random.randint(0, 10, (rows, cols), dtype=np.int16)
 
         # Generate line-scan dynamic patterns from pre-rendered 2D object image
-        t = self._frame_id
+        t = frame_id
         y_idx = t % 1000 # Map frame time to the 1000-height 2D pattern
         
         pattern_r = self._obj_r[y_idx, :]
@@ -159,14 +204,12 @@ class MockDevice(DeviceInterface):
         frame[y_lo2:y_hi2, x_lo2:x_hi2] = max_val
 
         metadata = {
-            "frame_id": self._frame_id,
+            "frame_id": frame_id,
             "timestamp": time.time(),
-            "pixel_format": self._pixel_format,
-            "exposure_us": self._exposure_us,
-            "gain_db": self._gain_db,
+            "pixel_format": pixel_format,
+            "exposure_us": exposure_us,
+            "gain_db": gain_db,
             "width": cols,
             "height": rows,
         }
-
-        self._frame_id += 1
         self.frame_acquired.emit(frame, metadata)

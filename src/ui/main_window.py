@@ -500,8 +500,8 @@ class MainWindow(QMainWindow):
     # --------------------------------------------------------------- toolbar actions
     def _on_start(self) -> None:
         """Start acquisition."""
-        self._device.start()
         self._acquisition.start()
+        self._device.start()
         self._refresh_timer.start(_UI_REFRESH_MS)
         self._running = True
         self._device_control.set_running(True)

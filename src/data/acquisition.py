@@ -28,6 +28,7 @@ logger = logging.getLogger("gpy4.acquisition")
 
 # Rolling window size for FPS / throughput averaging
 _FPS_WINDOW = 30
+_MAX_PENDING_LINE_SCAN_BATCHES = 128
 
 
 class AcquisitionWorker(QThread):
@@ -190,6 +191,8 @@ class AcquisitionWorker(QThread):
                 valid_indices = [min(max(0, y), max_y) for y in indices]
                 line_data = processed[valid_indices, :]
                 self._line_scan_queue.append(line_data.copy())
+                while len(self._line_scan_queue) > _MAX_PENDING_LINE_SCAN_BATCHES:
+                    self._line_scan_queue.popleft()
 
         # Write to storage (every frame, no drops except physical)
         storage = self._storage

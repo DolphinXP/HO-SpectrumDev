@@ -1,18 +1,20 @@
 """Line scan (waterfall) image display widget."""
 
 import logging
-from typing import Literal
+import time
 
 import numpy as np
 import pyqtgraph as pg
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QAction, QCursor
+from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSpinBox,
-    QPushButton, QFileDialog, QRadioButton, QButtonGroup, QGroupBox
+    QPushButton, QFileDialog, QRadioButton, QButtonGroup
 )
 
 logger = logging.getLogger("gpy4.ui")
+
+_LINE_SCAN_RENDER_INTERVAL_MS = 66
+_INTERACTION_DEFER_SECONDS = 0.18
 
 
 class _ImageViewBox(pg.ViewBox):
@@ -119,9 +121,20 @@ class LineScanDisplayWidget(QWidget):
 
         # Buffer fields
         self._buffer: np.ndarray | None = None
+        self._display_buffer: np.ndarray | None = None
         self._line_count = 0
         self._max_lines = 1000
         self._channels = 1
+        self._write_index = 0
+        self._render_pending = False
+        self._interaction_until = 0.0
+
+        self._render_timer = QTimer(self)
+        self._render_timer.setSingleShot(True)
+        self._render_timer.timeout.connect(self._flush_display)
+
+        view_box = self._image_view.getView()
+        view_box.sigRangeChanged.connect(self._mark_interacting)
         
         self._on_mode_toggled(None, False)
         
@@ -163,7 +176,10 @@ class LineScanDisplayWidget(QWidget):
 
     def _reset_buffer(self):
         self._buffer = None
+        self._display_buffer = None
         self._line_count = 0
+        self._write_index = 0
+        self._render_pending = False
         self._image_view.clear()
 
     def append_lines(self, lines_list: list[np.ndarray]):
@@ -184,9 +200,12 @@ class LineScanDisplayWidget(QWidget):
         if self._buffer is None or self._buffer.shape[1] != w:
             if c == 1:
                 self._buffer = np.zeros((h, w), dtype=lines_list[0].dtype)
+                self._display_buffer = np.zeros((h, w), dtype=lines_list[0].dtype)
             else:
                 self._buffer = np.zeros((h, w, 3), dtype=lines_list[0].dtype)
+                self._display_buffer = np.zeros((h, w, 3), dtype=lines_list[0].dtype)
             self._line_count = 0
+            self._write_index = 0
 
         # Stack incoming list of lines
         if c == 1:
@@ -201,35 +220,62 @@ class LineScanDisplayWidget(QWidget):
             new_lines = new_lines[-h:]
 
         n = new_lines.shape[0]
-        
-        # Roll buffer and insert new lines at the bottom (index -n:)
-        self._buffer = np.roll(self._buffer, -n, axis=0)
-        self._buffer[-n:] = new_lines
-        
+
+        end = self._write_index + n
+        if end <= h:
+            self._buffer[self._write_index:end] = new_lines
+        else:
+            split = h - self._write_index
+            self._buffer[self._write_index:] = new_lines[:split]
+            self._buffer[:end - h] = new_lines[split:]
+
+        self._write_index = end % h
         self._line_count = min(self._line_count + n, h)
-        
+        self._schedule_render()
+
+    def _schedule_render(self):
+        self._render_pending = True
+        if not self._render_timer.isActive():
+            self._render_timer.start(_LINE_SCAN_RENDER_INTERVAL_MS)
+
+    def _mark_interacting(self, *args):
+        self._interaction_until = time.perf_counter() + _INTERACTION_DEFER_SECONDS
+
+    def _flush_display(self):
+        if not self._render_pending:
+            return
+
+        if time.perf_counter() < self._interaction_until:
+            self._render_timer.start(_LINE_SCAN_RENDER_INTERVAL_MS)
+            return
+
+        self._render_pending = False
         self._update_display()
 
     def _update_display(self):
-        if self._buffer is None:
+        if self._buffer is None or self._display_buffer is None:
             return
-            
-        # Optional: we can display only initialized portion or full buffer.
-        # Usually full buffer is cleaner for waterfall, starting empty and filling up.
-        display_data = self._buffer
-        
-        # Determine valid valid range
+
+        display_data = self._display_buffer
+        display_data[...] = 0
+
+        if self._line_count == 0:
+            pass
+        elif self._line_count < self._max_lines:
+            display_data[-self._line_count:] = self._buffer[:self._line_count]
+        elif self._write_index == 0:
+            display_data[...] = self._buffer
+        else:
+            tail_len = self._max_lines - self._write_index
+            display_data[:tail_len] = self._buffer[self._write_index:]
+            display_data[tail_len:] = self._buffer[:self._write_index]
+
         if display_data.dtype in (np.float32, np.float64):
-            # Probably pyqtgraph can auto scale, or convert
             display_data = np.clip(display_data, 0, 4095).astype(np.uint16)
-            
-        # Pyqtgraph expects data in shape (cols, rows, channels) or (cols, rows)
+
         if display_data.ndim == 2:
             self._image_view.setImage(display_data.T, autoLevels=False, autoRange=False)
         else:
-            # (rows, cols, c) -> (cols, rows, c)
-            # Pyqtgraph RGB images MUST be (W, H, 3) or (W, H, 4) with max byte values.
-            # Convert UI level to 8-bit for RGB display
             img_8bit = (display_data.astype(np.float32) / 4095.0 * 255).astype(np.uint8)
             img_8bit = np.transpose(img_8bit, (1, 0, 2))
             self._image_view.setImage(img_8bit, autoRange=False)
