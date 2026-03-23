@@ -219,10 +219,12 @@ class MainWindow(QMainWindow):
         # 4 spectrum graphs
         self._graph_near_spatial = SpectrumGraphWidget(
             title="临近空间维(行)", x_label="空间像素", y_label="DN",
-            orientation="horizontal", show_x=True, show_y=True)
+            orientation="horizontal", show_x=True, show_y=True,
+            step_mode=True)
         self._graph_near_spectral = SpectrumGraphWidget(
             title="临近光谱维(列)", x_label="光谱通道", y_label="DN",
-            orientation="vertical", show_x=True, show_y=True)
+            orientation="vertical", show_x=True, show_y=True,
+            step_mode=True)
         self._graph_full_spatial = SpectrumGraphWidget(
             title="全域空间维(行)", x_label="空间像素", y_label="DN",
             orientation="horizontal", show_x=False, show_y=True)
@@ -232,7 +234,7 @@ class MainWindow(QMainWindow):
 
         for g in (self._graph_near_spatial, self._graph_near_spectral,
                   self._graph_full_spatial, self._graph_full_spectral):
-            g.setMinimumWidth(280)
+            g.setMinimumWidth(560)
             g.setMinimumHeight(220)
             charts_layout.addWidget(g)
 

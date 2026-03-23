@@ -51,11 +51,13 @@ class SpectrumGraphWidget(QWidget):
         x_range: tuple[int, int] = (0, 1279),
         y_range: tuple[int, int] = (0, 1023),
         dn_max: int = 4095,
+        step_mode: bool = False,
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
         self._orientation = orientation
         self._dn_max = dn_max
+        self._step_mode = step_mode
         self._x_data: np.ndarray = np.array([])
         self._y_data: np.ndarray = np.array([])
 
@@ -69,13 +71,6 @@ class SpectrumGraphWidget(QWidget):
         top_bar.setSpacing(4)
 
         top_bar.addWidget(QLabel(f"<b>{title}</b>"))
-
-        save_btn = QToolButton()
-        save_btn.setText("保存图片")
-        save_btn.setToolButtonStyle(
-            Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        save_btn.clicked.connect(self._save_image)
-        top_bar.addWidget(save_btn)
 
         # X coordinate spinbox (always created, optionally hidden)
         self._x_label = QLabel("列(X)")
@@ -102,6 +97,19 @@ class SpectrumGraphWidget(QWidget):
             self._y_spin.hide()
 
         top_bar.addStretch()
+
+        fit_btn = QToolButton()
+        fit_btn.setText("适应视图")
+        fit_btn.clicked.connect(self.fit_to_view)
+        top_bar.addWidget(fit_btn)
+
+        save_btn = QToolButton()
+        save_btn.setText("保存图片")
+        save_btn.setToolButtonStyle(
+            Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        save_btn.clicked.connect(self._save_image)
+        top_bar.addWidget(save_btn)
+
         layout.addLayout(top_bar)
 
         # --- Chart ---
@@ -118,6 +126,7 @@ class SpectrumGraphWidget(QWidget):
             pen=pg.mkPen(color="b", width=1.5),
             clipToView=True,
             autoDownsample=True,  # downsample only when many points
+            stepMode="center" if self._step_mode else None,
         )
 
         # Crosshair: vertical tracking line + tracer dot
@@ -182,7 +191,44 @@ class SpectrumGraphWidget(QWidget):
                 self._plot.setXRange(x_min, x_max, padding=0.02)
         self._x_data = x_data
         self._y_data = y_data
-        self._curve.setData(x_data, y_data)
+        plot_x = self._build_step_edges(x_data) if self._step_mode else x_data
+        self._curve.setData(plot_x, y_data)
+
+    def fit_to_view(self) -> None:
+        """Fit the current curve into view, matching the built-in auto-range."""
+        if len(self._x_data) == 0 or len(self._y_data) == 0:
+            return
+
+        x_min = float(np.min(self._x_data))
+        x_max = float(np.max(self._x_data))
+        y_min = float(np.min(self._y_data))
+        y_max = float(np.max(self._y_data))
+
+        if x_min == x_max:
+            x_min -= 0.5
+            x_max += 0.5
+        if y_min == y_max:
+            y_min -= 0.5
+            y_max += 0.5
+
+        x_pad = (x_max - x_min) * 0.02
+        y_pad = (y_max - y_min) * 0.05
+
+        self._plot.setXRange(x_min - x_pad, x_max + x_pad, padding=0)
+        self._plot.setYRange(y_min - y_pad, y_max + y_pad, padding=0)
+
+        low = max(0, int(np.floor(y_min - y_pad)))
+        high = min(self._dn_max, int(np.ceil(y_max + y_pad)))
+        if low >= high:
+            low = max(0, int(np.floor(y_min)))
+            high = min(self._dn_max, max(low + 1, int(np.ceil(y_max))))
+
+        self._y_range_low.blockSignals(True)
+        self._y_range_high.blockSignals(True)
+        self._y_range_low.setValue(low)
+        self._y_range_high.setValue(high)
+        self._y_range_low.blockSignals(False)
+        self._y_range_high.blockSignals(False)
 
     def set_position(self, x: int, y: int) -> None:
         """Set coordinate spinboxes without emitting signal."""
@@ -266,3 +312,17 @@ class SpectrumGraphWidget(QWidget):
         if path:
             exporter = ImageExporter(self._plot.plotItem)
             exporter.export(path)
+
+    def _build_step_edges(self, x_data: np.ndarray) -> np.ndarray:
+        """Convert sample-center x positions into step edges for pyqtgraph."""
+        if len(x_data) == 0:
+            return x_data
+        if len(x_data) == 1:
+            x0 = float(x_data[0])
+            return np.array([x0 - 0.5, x0 + 0.5], dtype=float)
+
+        x_float = np.asarray(x_data, dtype=float)
+        midpoints = (x_float[:-1] + x_float[1:]) / 2.0
+        left_edge = x_float[0] - (midpoints[0] - x_float[0])
+        right_edge = x_float[-1] + (x_float[-1] - midpoints[-1])
+        return np.concatenate(([left_edge], midpoints, [right_edge]))
