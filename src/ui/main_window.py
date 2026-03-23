@@ -9,12 +9,13 @@ from PySide6.QtCore import Qt, QTimer, QSize
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QMainWindow, QToolBar, QSplitter, QWidget, QVBoxLayout, QLabel,
-    QHBoxLayout, QStatusBar, QMessageBox, QScrollArea,
+    QHBoxLayout, QStatusBar, QMessageBox, QScrollArea, QFileDialog,
 )
 
 from src.device.device_interface import DeviceInterface
 from src.data.acquisition import AcquisitionWorker
 from src.data.storage import StorageManager
+from src.data.replay_worker import ReplayWorker
 from src.analysis.mtf import MTFCalculator
 from src.analysis.spectral import SpectralAnalyzer
 from src.ui.widgets.image_display import ImageDisplayWidget
@@ -23,6 +24,7 @@ from src.ui.widgets.aux_data_panel import AuxDataPanel
 from src.ui.widgets.optical_cal_panel import OpticalCalPanel
 from src.ui.widgets.storage_dialog import StorageDialog
 from src.ui.widgets.spectrum_graph import SpectrumGraphWidget
+from src.ui.widgets.replay_control import ReplayControlWidget
 
 logger = logging.getLogger("gpy4.ui")
 
@@ -59,6 +61,10 @@ class MainWindow(QMainWindow):
         self._selected_y: int = 512
         self._current_frame: np.ndarray | None = None
         self._running: bool = False
+        self._replaying: bool = False
+
+        # Replay worker
+        self._replay_worker: ReplayWorker | None = None
 
         # Throttle control for heavy UI updates
         self._last_heavy_update: float = 0.0
@@ -176,9 +182,26 @@ class MainWindow(QMainWindow):
         self._h_splitter_top = QSplitter(Qt.Orientation.Horizontal)
         self._v_splitter.addWidget(self._h_splitter_top)
 
-        # Left: Image display
+        # Left: Image display with replay control
+        image_container = QWidget()
+        image_layout = QVBoxLayout(image_container)
+        image_layout.setContentsMargins(0, 0, 0, 0)
+        image_layout.setSpacing(0)
+
         self._image_display = ImageDisplayWidget()
-        self._h_splitter_top.addWidget(self._image_display)
+        image_layout.addWidget(self._image_display)
+
+        # Replay control (initially hidden)
+        self._replay_control = ReplayControlWidget()
+        self._replay_control.setVisible(False)
+        self._replay_control.play_clicked.connect(self._on_replay_play)
+        self._replay_control.pause_clicked.connect(self._on_replay_pause)
+        self._replay_control.stop_clicked.connect(self._on_replay_stop)
+        self._replay_control.position_changed.connect(self._on_replay_position_changed)
+        self._replay_control.speed_changed.connect(self._on_replay_speed_changed)
+        image_layout.addWidget(self._replay_control)
+
+        self._h_splitter_top.addWidget(image_container)
 
         # Right: stats + aux panels stacked vertically
         right_panel = QWidget()
@@ -444,8 +467,148 @@ class MainWindow(QMainWindow):
             subprocess.Popen(["explorer", directory])
 
     def _on_playback(self) -> None:
-        """Placeholder for playback functionality."""
-        QMessageBox.information(self, "回放", "回放功能尚未实现")
+        """Start playback mode - load saved data file."""
+        # Check if acquisition is running
+        if self._running:
+            reply = QMessageBox.question(
+                self,
+                "确认",
+                "回放需要停止当前采集。是否继续？",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No
+            )
+            if reply == QMessageBox.StandardButton.Yes:
+                self._on_stop()
+            else:
+                return
+
+        # Open file dialog to select .dat file
+        file_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "选择数据文件",
+            "",
+            "数据文件 (*.dat);;所有文件 (*.*)"
+        )
+
+        if not file_path:
+            return
+
+        # Validate that .hdr or .json exists
+        from pathlib import Path
+        dat_path = Path(file_path)
+        hdr_path = dat_path.with_suffix(".hdr")
+        json_path = dat_path.with_suffix(".json")
+
+        if not hdr_path.exists() and not json_path.exists():
+            QMessageBox.warning(
+                self,
+                "文件错误",
+                "缺少配套文件：需要 .hdr 或 .json 文件"
+            )
+            return
+
+        # Create and start replay worker
+        self._replay_worker = ReplayWorker()
+        self._replay_worker.frame_ready.connect(self._on_replay_frame)
+        self._replay_worker.progress_changed.connect(self._on_replay_progress)
+        self._replay_worker.playback_finished.connect(self._on_replay_finished)
+        self._replay_worker.error_occurred.connect(self._on_replay_error)
+
+        # Load file
+        if not self._replay_worker.load_file(file_path):
+            self._replay_worker = None
+            return
+
+        # Show replay control and start worker thread
+        self._replay_control.setVisible(True)
+        self._replay_control.set_range(self._replay_worker._total_frames)
+        self._replay_worker.start()
+        self._replaying = True
+
+        # Disable acquisition controls during replay
+        self._act_start.setEnabled(False)
+        self._act_start_save.setEnabled(False)
+
+        logger.info("Replay mode started: %s", file_path)
+
+    def _on_replay_frame(self, frame: np.ndarray, metadata: dict) -> None:
+        """Handle frame from replay worker."""
+        self._current_frame = frame
+
+        # Prepare display frame
+        display_frame = frame
+        if frame.dtype == np.float32:
+            display_frame = np.clip(frame, 0, 4095).astype(np.uint16)
+
+        # Update image display
+        self._image_display.update_image(display_frame)
+
+        # Update aux data
+        self._aux_panel.update_metadata(metadata)
+
+        # Throttle heavy UI updates
+        now = time.perf_counter()
+        if now - self._last_heavy_update < _HEAVY_UPDATE_INTERVAL:
+            return
+        self._last_heavy_update = now
+
+        x, y = self._selected_x, self._selected_y
+
+        if self._bottom_container.isVisible():
+            mtf_result = self._mtf.update(frame, x, y)
+            self._optical_cal_panel.update_mtf(mtf_result)
+            self._optical_cal_panel.update_dn_neighborhood(display_frame, x, y)
+            self._update_spectral_plots(display_frame, x, y)
+
+    def _on_replay_progress(self, current: int, total: int) -> None:
+        """Update replay progress bar."""
+        self._replay_control.set_position(current, total)
+
+    def _on_replay_finished(self) -> None:
+        """Handle playback finished."""
+        logger.info("Replay finished")
+
+    def _on_replay_error(self, error_msg: str) -> None:
+        """Handle replay error."""
+        QMessageBox.critical(self, "回放错误", error_msg)
+        self._on_replay_stop()
+
+    def _on_replay_play(self) -> None:
+        """Resume playback."""
+        if self._replay_worker:
+            self._replay_worker.play()
+
+    def _on_replay_pause(self) -> None:
+        """Pause playback."""
+        if self._replay_worker:
+            self._replay_worker.pause()
+
+    def _on_replay_stop(self) -> None:
+        """Stop playback and exit replay mode."""
+        if self._replay_worker:
+            self._replay_worker.stop()
+            self._replay_worker.wait()
+            self._replay_worker = None
+
+        self._replay_control.setVisible(False)
+        self._replay_control.reset()
+        self._replaying = False
+
+        # Re-enable acquisition controls
+        self._act_start.setEnabled(True)
+        self._act_start_save.setEnabled(True)
+
+        logger.info("Replay mode stopped")
+
+    def _on_replay_position_changed(self, position: int) -> None:
+        """Handle user dragging progress slider."""
+        if self._replay_worker:
+            self._replay_worker.set_position(position)
+
+    def _on_replay_speed_changed(self, speed: float) -> None:
+        """Handle speed rate change."""
+        if self._replay_worker:
+            self._replay_worker.set_speed_rate(speed)
 
     def _on_settings(self) -> None:
         """Placeholder for settings dialog."""
@@ -464,6 +627,8 @@ class MainWindow(QMainWindow):
         """Clean up on window close."""
         if self._running:
             self._on_stop()
+        if self._replaying:
+            self._on_replay_stop()
         if self._storage.is_recording:
             self._acquisition.storage = None
             self._storage.stop()
