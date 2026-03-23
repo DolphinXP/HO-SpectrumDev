@@ -30,6 +30,47 @@ class MockDevice(DeviceInterface):
         col_grad = np.linspace(0, 50, cols, dtype=np.float32)[np.newaxis, :]
         self._base_pattern = row_grad + col_grad
 
+        # Pre-compute spectral weights for generating line-scan patterns
+        y_coords = np.arange(rows, dtype=np.float32)[:, np.newaxis]
+        self._weight_r = np.exp(-((y_coords - 512) ** 2) / (2 * 50**2)) 
+        self._weight_g = np.exp(-((y_coords - 400) ** 2) / (2 * 50**2))
+        self._weight_b = np.exp(-((y_coords - 600) ** 2) / (2 * 50**2))
+        
+        # I've mapped R->512, G->400, B->600 matching default UI values.
+
+        # Pre-render a 2D object for the line scan
+        from PySide6.QtGui import QImage, QPainter, QColor, QFont, QPen, QBrush
+        from PySide6.QtCore import Qt
+        
+        img = QImage(cols, 1000, QImage.Format.Format_RGB32)
+        img.fill(Qt.GlobalColor.black)
+        
+        p = QPainter(img)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        
+        # Draw Square (Red)
+        p.setPen(QPen(QColor(255, 0, 0), 10))
+        p.drawRect(150, 150, 300, 300)
+        
+        # Draw Circle (Green)
+        p.setPen(QPen(QColor(0, 255, 0), 10))
+        p.drawEllipse(750, 150, 300, 300)
+        
+        # Draw Text (Blue)
+        p.setPen(QPen(QColor(0, 50, 255), 5))
+        font = QFont("Arial", 90)
+        font.setBold(True)
+        p.setFont(font)
+        p.drawText(150, 800, "Hello, world!")
+        p.end()
+        
+        # Convert QImage (Format_RGB32 is BGRA in memory) to numpy array
+        ptr = img.bits()
+        arr = np.array(ptr).reshape((1000, cols, 4))
+        self._obj_b = arr[:, :, 0].astype(np.float32)
+        self._obj_g = arr[:, :, 1].astype(np.float32)
+        self._obj_r = arr[:, :, 2].astype(np.float32)
+
     def initialize(self) -> bool:
         logger.info("MockDevice initialized (1024×1280, %s)",
                     self._pixel_format)
@@ -89,19 +130,29 @@ class MockDevice(DeviceInterface):
         # Generate noise (only part that changes each frame)
         noise = np.random.randint(0, 10, (rows, cols), dtype=np.int16)
 
-        # Combine gradient + noise, then apply exposure & gain scaling
-        raw = (self._base_pattern + noise) * exposure_factor * gain_factor
+        # Generate line-scan dynamic patterns from pre-rendered 2D object image
+        t = self._frame_id
+        y_idx = t % 1000 # Map frame time to the 1000-height 2D pattern
+        
+        pattern_r = self._obj_r[y_idx, :]
+        pattern_g = self._obj_g[y_idx, :]
+        pattern_b = self._obj_b[y_idx, :]
+        
+        # Combine patterns with their spectral weights and add them onto base pattern
+        moving_obj = (self._weight_r * pattern_r) + (self._weight_g * pattern_g) + (self._weight_b * pattern_b)
+
+        # Combine gradient + noise + moving object, then apply exposure & gain scaling
+        raw = (self._base_pattern + moving_obj + noise) * exposure_factor * gain_factor
         frame = np.clip(raw, 0, max_val).astype(dtype)
 
-        # Add a bright spot that moves vertically — helps verify live display
-        cy = (self._frame_id * 3) % rows
+        # Moving bright spots — helps verify live area display
+        cy = (t * 3) % rows
         cx = cols // 2
         y_lo, y_hi = max(0, cy - 5), min(rows, cy + 5)
         x_lo, x_hi = max(0, cx - 5), min(cols, cx + 5)
         frame[y_lo:y_hi, x_lo:x_hi] = max_val
 
-        # Add a bright spot that moves horizontally (left to right)
-        cx2 = (self._frame_id * 3) % cols
+        cx2 = (t * 3) % cols
         cy2 = rows // 2
         y_lo2, y_hi2 = max(0, cy2 - 5), min(rows, cy2 + 5)
         x_lo2, x_hi2 = max(0, cx2 - 5), min(cols, cx2 + 5)
