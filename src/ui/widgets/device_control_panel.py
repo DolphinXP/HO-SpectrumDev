@@ -52,30 +52,12 @@ class DeviceControlPanel(QWidget):
         acq_layout.setSpacing(8)
 
         self._btn_start = QPushButton("▶  开始采集")
-        self._btn_start.setObjectName("btnDeviceStart")
-        self._btn_start.setMinimumHeight(36)
-        self._btn_start.setStyleSheet(
-            "QPushButton#btnDeviceStart {"
-            "  background-color: #27ae60; color: white; font-weight: bold;"
-            "  border-radius: 4px; font-size: 13px;"
-            "}"
-            "QPushButton#btnDeviceStart:hover { background-color: #2ecc71; }"
-            "QPushButton#btnDeviceStart:disabled { background-color: #95a5a6; }"
-        )
+        self._btn_start.setProperty("class", "btn-green")
         self._btn_start.clicked.connect(self._on_start_clicked)
 
         self._btn_stop = QPushButton("■  停止采集")
-        self._btn_stop.setObjectName("btnDeviceStop")
-        self._btn_stop.setMinimumHeight(36)
+        self._btn_stop.setProperty("class", "btn-red")
         self._btn_stop.setEnabled(False)
-        self._btn_stop.setStyleSheet(
-            "QPushButton#btnDeviceStop {"
-            "  background-color: #e74c3c; color: white; font-weight: bold;"
-            "  border-radius: 4px; font-size: 13px;"
-            "}"
-            "QPushButton#btnDeviceStop:hover { background-color: #c0392b; }"
-            "QPushButton#btnDeviceStop:disabled { background-color: #95a5a6; }"
-        )
         self._btn_stop.clicked.connect(self._on_stop_clicked)
 
         acq_layout.addWidget(self._btn_start)
@@ -135,7 +117,7 @@ class DeviceControlPanel(QWidget):
         lbl_res = QLabel("分辨率:")
         lbl_res.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._lbl_resolution = QLabel("1280 × 1024")
-        self._lbl_resolution.setStyleSheet("font-weight: bold;")
+        self._lbl_resolution.setProperty("class", "value")
         param_layout.addWidget(lbl_res, row, 0)
         param_layout.addWidget(self._lbl_resolution, row, 1)
         row += 1
@@ -144,7 +126,7 @@ class DeviceControlPanel(QWidget):
         lbl_sensor = QLabel("传感器:")
         lbl_sensor.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._lbl_sensor = QLabel("Sony IMX990")
-        self._lbl_sensor.setStyleSheet("font-weight: bold;")
+        self._lbl_sensor.setProperty("class", "value")
         param_layout.addWidget(lbl_sensor, row, 0)
         param_layout.addWidget(self._lbl_sensor, row, 1)
         row += 1
@@ -153,7 +135,7 @@ class DeviceControlPanel(QWidget):
         lbl_adc = QLabel("ADC 位深:")
         lbl_adc.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._lbl_adc = QLabel("8-bit")
-        self._lbl_adc.setStyleSheet("font-weight: bold;")
+        self._lbl_adc.setProperty("class", "value")
         param_layout.addWidget(lbl_adc, row, 0)
         param_layout.addWidget(self._lbl_adc, row, 1)
         row += 1
@@ -162,7 +144,7 @@ class DeviceControlPanel(QWidget):
         lbl_fps = QLabel("最大帧率:")
         lbl_fps.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._lbl_max_fps = QLabel("72.4 fps")
-        self._lbl_max_fps.setStyleSheet("font-weight: bold;")
+        self._lbl_max_fps.setProperty("class", "value")
         param_layout.addWidget(lbl_fps, row, 0)
         param_layout.addWidget(self._lbl_max_fps, row, 1)
         row += 1
@@ -171,9 +153,7 @@ class DeviceControlPanel(QWidget):
         lbl_status = QLabel("设备状态:")
         lbl_status.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._lbl_status = QLabel("已停止")
-        self._lbl_status.setStyleSheet(
-            "font-weight: bold; color: #e74c3c;"
-        )
+        self._lbl_status.setProperty("class", "status-stopped")
         param_layout.addWidget(lbl_status, row, 0)
         param_layout.addWidget(self._lbl_status, row, 1)
 
@@ -211,10 +191,13 @@ class DeviceControlPanel(QWidget):
 
         if running:
             self._lbl_status.setText("运行中")
-            self._lbl_status.setStyleSheet("font-weight: bold; color: #27ae60;")
+            self._lbl_status.setProperty("class", "status-running")
         else:
             self._lbl_status.setText("已停止")
-            self._lbl_status.setStyleSheet("font-weight: bold; color: #e74c3c;")
+            self._lbl_status.setProperty("class", "status-stopped")
+        # Force style refresh after property change
+        self._lbl_status.style().unpolish(self._lbl_status)
+        self._lbl_status.style().polish(self._lbl_status)
 
     def set_replaying(self, replaying: bool) -> None:
         """Disable controls during replay mode."""

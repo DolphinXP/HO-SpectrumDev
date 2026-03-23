@@ -50,6 +50,7 @@ class ReplayControlWidget(QWidget):
         # Play/Pause button
         self._btn_play = QPushButton("播放")
         self._btn_play.setFixedWidth(80)
+        self._btn_play.setProperty("class", "btn-green")
         self._btn_play.setIcon(QIcon(os.path.join(self._icon_dir, "play.svg")))
         self._btn_play.clicked.connect(self._on_play_pause)
         layout.addWidget(self._btn_play)
@@ -57,6 +58,7 @@ class ReplayControlWidget(QWidget):
         # Stop button
         self._btn_stop = QPushButton("停止")
         self._btn_stop.setFixedWidth(80)
+        self._btn_stop.setProperty("class", "btn-red")
         self._btn_stop.setIcon(QIcon(os.path.join(self._icon_dir, "stop.svg")))
         self._btn_stop.clicked.connect(self._on_stop)
         layout.addWidget(self._btn_stop)

@@ -222,6 +222,7 @@ class MainWindow(QMainWindow):
         self._h_splitter_top.addWidget(right_scroll)
 
         self._h_splitter_top.setSizes([1200, 300])
+        self._h_splitter_top.setCollapsible(1, False)  # prevent right panel collapse
 
         # ---- BOTTOM HALF: optical cal panel + spectrum graphs ----
         self._bottom_container = QWidget()
@@ -409,6 +410,10 @@ class MainWindow(QMainWindow):
     def _on_optical_cal_toggled(self, checked: bool) -> None:
         """Show/hide the bottom optical calibration panel."""
         self._bottom_container.setVisible(checked)
+        if checked:
+            # Restore default vertical splitter sizes so the bottom panel
+            # reappears at a usable height even if the user had collapsed it.
+            self._v_splitter.setSizes([550, 350])
 
     def _update_spectral_plots(self, frame: np.ndarray, x: int, y: int) -> None:
         """Update the four spectrum graph widgets (only if visible)."""

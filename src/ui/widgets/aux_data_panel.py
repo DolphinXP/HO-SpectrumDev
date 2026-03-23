@@ -26,7 +26,7 @@ class AuxDataPanel(QGroupBox):
             lbl.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             val = QLabel("--")
             val.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-            val.setStyleSheet("font-weight: bold;")
+            val.setProperty("class", "value")
             layout.addWidget(lbl, row, 0)
             layout.addWidget(val, row, 1)
             setattr(self, attr, val)

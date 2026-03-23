@@ -78,20 +78,26 @@ class MockDevice(DeviceInterface):
         """Generate a synthetic frame and emit frame_acquired."""
         rows, cols = 1024, 1280
         dtype = np.uint8 if self._pixel_format == "Mono8" else np.uint16
+        max_val = 255 if dtype == np.uint8 else 4095
+
+        # Simulate exposure effect: linear scale relative to default 10000 µs
+        exposure_factor = self._exposure_us / 10000.0
+
+        # Simulate gain effect: standard dB amplification (0 dB=1x, 6 dB≈2x, 24 dB≈15.8x)
+        gain_factor = 10.0 ** (self._gain_db / 20.0)
 
         # Generate noise (only part that changes each frame)
         noise = np.random.randint(0, 10, (rows, cols), dtype=np.int16)
 
-        # Combine pre-computed gradient with noise
-        frame = np.clip(self._base_pattern + noise, 0,
-                        255 if dtype == np.uint8 else 4095).astype(dtype)
+        # Combine gradient + noise, then apply exposure & gain scaling
+        raw = (self._base_pattern + noise) * exposure_factor * gain_factor
+        frame = np.clip(raw, 0, max_val).astype(dtype)
 
         # Add a bright spot that moves vertically — helps verify live display
         cy = (self._frame_id * 3) % rows
         cx = cols // 2
         y_lo, y_hi = max(0, cy - 5), min(rows, cy + 5)
         x_lo, x_hi = max(0, cx - 5), min(cols, cx + 5)
-        max_val = 255 if dtype == np.uint8 else 4095
         frame[y_lo:y_hi, x_lo:x_hi] = max_val
 
         # Add a bright spot that moves horizontally (left to right)
