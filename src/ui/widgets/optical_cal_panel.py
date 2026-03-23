@@ -8,7 +8,7 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox,
     QLabel, QSpinBox, QDoubleSpinBox, QComboBox, QPushButton,
-    QTableWidget, QTableWidgetItem,
+    QTableWidget, QTableWidgetItem, QSizePolicy,
 )
 
 logger = logging.getLogger("gpy4.ui")
@@ -35,6 +35,7 @@ class OpticalCalPanel(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(4, 4, 4, 4)
         main_layout.setSpacing(4)
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
         # --- Pixel coordinate row ---
         coord_layout = QHBoxLayout()
@@ -42,6 +43,7 @@ class OpticalCalPanel(QWidget):
         self._x_spin = QSpinBox()
         self._x_spin.setRange(0, 1279)
         self._x_spin.setValue(640)
+        self._x_spin.setFixedWidth(92)
         self._x_spin.valueChanged.connect(self._on_coord_changed)
         coord_layout.addWidget(self._x_spin)
 
@@ -49,10 +51,12 @@ class OpticalCalPanel(QWidget):
         self._y_spin = QSpinBox()
         self._y_spin.setRange(0, 1023)
         self._y_spin.setValue(512)
+        self._y_spin.setFixedWidth(92)
         self._y_spin.valueChanged.connect(self._on_coord_changed)
         coord_layout.addWidget(self._y_spin)
 
         self._max_btn = QPushButton("定位最大DN")
+        self._max_btn.setFixedSize(100, 30)
         self._max_btn.clicked.connect(self.locate_max_dn.emit)
         coord_layout.addWidget(self._max_btn)
         coord_layout.addStretch()
@@ -90,14 +94,15 @@ class OpticalCalPanel(QWidget):
         mtf_grid.addWidget(self._mtf_below, 2, 1, Qt.AlignmentFlag.AlignCenter)
         mtf_main.addLayout(mtf_grid)
 
-        # Mean value
-        self._mtf_mean_label = QLabel("均值: 0")
-        mtf_main.addWidget(self._mtf_mean_label)
-
-        # Settings row (combo + black level) inside MTF group
+        # Settings row (mean + combo + black level) inside MTF group
         mtf_settings = QHBoxLayout()
+        self._mtf_mean_label = QLabel("均值: 0")
+        self._mtf_mean_label.setFixedWidth(80)
+        mtf_settings.addWidget(self._mtf_mean_label)
+
         self._avg_combo = QComboBox()
         self._avg_combo.addItems(["每1帧计算", "每5帧计算", "每10帧计算"])
+        self._avg_combo.setFixedWidth(100)
         self._avg_combo.currentIndexChanged.connect(self._on_avg_changed)
         mtf_settings.addWidget(self._avg_combo)
 
@@ -106,6 +111,7 @@ class OpticalCalPanel(QWidget):
         self._bl_spin.setRange(0, 4095)
         self._bl_spin.setDecimals(1)
         self._bl_spin.setValue(0.0)
+        self._bl_spin.setFixedWidth(96)
         self._bl_spin.valueChanged.connect(self.black_level_changed.emit)
         mtf_settings.addWidget(self._bl_spin)
         mtf_settings.addStretch()
@@ -121,6 +127,7 @@ class OpticalCalPanel(QWidget):
         self._dn_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self._dn_table.horizontalHeader().setDefaultSectionSize(48)
         self._dn_table.verticalHeader().setDefaultSectionSize(24)
+        self._dn_table.setFixedSize(360, 256)
         dn_group.setMinimumHeight(150)
         dn_layout.addWidget(self._dn_table)
 
@@ -136,8 +143,9 @@ class OpticalCalPanel(QWidget):
             self._dn_items.append(row_items)
         main_layout.addWidget(dn_group)
 
-        self.setMinimumWidth(300)
-        self.setMinimumHeight(250)
+        mtf_group.setFixedSize(380, 150)
+        dn_group.setFixedSize(380, 288)
+        self.setFixedSize(400, 480)
         main_layout.addStretch()
 
     def set_pixel(self, x: int, y: int) -> None:

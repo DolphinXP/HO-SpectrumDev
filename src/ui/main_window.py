@@ -223,9 +223,15 @@ class MainWindow(QMainWindow):
 
         # Bottom-left: 光校 optical calibration panel
         self._optical_cal_panel = OpticalCalPanel()
-        self._optical_cal_panel.setMinimumWidth(300)
-        self._optical_cal_panel.setMinimumHeight(250)
-        bottom_container_layout.addWidget(self._optical_cal_panel)
+        self._optical_cal_scroll = QScrollArea()
+        self._optical_cal_scroll.setWidgetResizable(False)
+        self._optical_cal_scroll.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self._optical_cal_scroll.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self._optical_cal_scroll.setWidget(self._optical_cal_panel)
+        self._optical_cal_scroll.setMinimumSize(300, 250)
+        bottom_container_layout.addWidget(self._optical_cal_scroll)
 
         # Scrollable area for the 4 spectrum graphs
         charts_scroll = QScrollArea()
