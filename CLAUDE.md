@@ -209,19 +209,25 @@ Four directions (above/below/left/right), averaged over 1/5/10 frames. → `src/
 - Change: emit raw Mono numpy array (not RGB QImage), implement `DeviceInterface` ABC
 - Trigger mode: software trigger by default (matches existing example)
 
+## Environment
+
+- Conda: `C:\miniconda3`, environment name: `gpy4`
+- Python: `C:\miniconda3\envs\gpy4\python.exe` (Python 3.10)
+- Always use the full path to the conda Python for running scripts and tests
+- Activate: `conda activate gpy4` (or use full path directly)
+
 ## Running
 
 ```bash
-pip install -r requirements.txt
-python main.py             # real camera
-python main.py --mock      # simulated device
-python main.py --debug     # verbose console logging
+C:\miniconda3\envs\gpy4\python.exe main.py             # real camera
+C:\miniconda3\envs\gpy4\python.exe main.py --mock      # simulated device
+C:\miniconda3\envs\gpy4\python.exe main.py --debug     # verbose console logging
 ```
 
 ## Testing
 
 ```bash
-pytest tests/ -v
+C:\miniconda3\envs\gpy4\python.exe -m pytest tests/ -v
 ```
 
 All tests use `MockDevice` — no hardware required.

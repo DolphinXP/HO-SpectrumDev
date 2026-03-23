@@ -1,0 +1,112 @@
+/* gpy4 — Light/Neutral Theme */
+
+QMainWindow {
+    background-color: #f0f0f0;
+}
+
+QToolBar {
+    background-color: #e8e8e8;
+    border-bottom: 1px solid #ccc;
+    spacing: 4px;
+    padding: 2px;
+}
+
+QToolBar QToolButton {
+    background-color: #ddd;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 13px;
+}
+
+QToolBar QToolButton:hover {
+    background-color: #c8dff0;
+    border-color: #88b;
+}
+
+QToolBar QToolButton:pressed {
+    background-color: #a0c0e0;
+}
+
+QToolBar QToolButton:checked {
+    background-color: #b0d0f0;
+    border-color: #68a;
+}
+
+QSplitter::handle {
+    background-color: #ccc;
+}
+
+QSplitter::handle:horizontal {
+    width: 3px;
+}
+
+QSplitter::handle:vertical {
+    height: 3px;
+}
+
+QTableWidget {
+    background-color: #fff;
+    gridline-color: #ddd;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 12px;
+}
+
+QTableWidget::item {
+    padding: 2px 4px;
+}
+
+QTableWidget QHeaderView::section {
+    background-color: #e8e8e8;
+    border: 1px solid #ccc;
+    padding: 2px 4px;
+    font-size: 11px;
+}
+
+QGroupBox {
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 8px;
+    padding-top: 8px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 8px;
+    padding: 0 4px;
+}
+
+QLabel {
+    font-size: 13px;
+}
+
+QSpinBox, QDoubleSpinBox, QComboBox {
+    background-color: #fff;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 2px 4px;
+    font-size: 13px;
+}
+
+QStatusBar {
+    background-color: #e0e0e0;
+    border-top: 1px solid #ccc;
+    font-size: 12px;
+}
+
+QPushButton {
+    background-color: #e0e0e0;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 4px 12px;
+    font-size: 13px;
+}
+
+QPushButton:hover {
+    background-color: #c8dff0;
+}
+
+QPushButton:pressed {
+    background-color: #a0c0e0;
+}

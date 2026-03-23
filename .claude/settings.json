@@ -4,7 +4,9 @@
       "WebSearch",
       "Read(//c/Users/X/.claude/**)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(C:/miniconda3/envs/gpy4/python.exe main.py --mock)",
+      "Read(//e/LS/LS-DAVC/**)"
     ],
     "additionalDirectories": [
       "e:\\HO\\gpy4\\.claude"
