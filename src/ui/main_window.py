@@ -5,8 +5,8 @@ import os
 import time
 
 import numpy as np
-from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QAction
+from PySide6.QtCore import Qt, QTimer, QSize
+from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QMainWindow, QToolBar, QSplitter, QWidget, QVBoxLayout, QLabel,
     QHBoxLayout, QStatusBar, QMessageBox, QFileDialog, QScrollArea,
@@ -90,34 +90,38 @@ class MainWindow(QMainWindow):
     def _build_toolbar(self) -> None:
         tb = QToolBar("主工具栏")
         tb.setMovable(False)
+        tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        tb.setIconSize(QSize(20, 20))
         self.addToolBar(tb)
 
-        self._act_start = QAction("开始", self)
+        icon_dir = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "images")
+
+        self._act_start = QAction(QIcon(os.path.join(icon_dir, "play.svg")), "开始", self)
         self._act_start.triggered.connect(self._on_start)
         tb.addAction(self._act_start)
 
-        self._act_stop = QAction("停止", self)
+        self._act_stop = QAction(QIcon(os.path.join(icon_dir, "stop.svg")), "停止", self)
         self._act_stop.setEnabled(False)
         self._act_stop.triggered.connect(self._on_stop)
         tb.addAction(self._act_stop)
 
         tb.addSeparator()
 
-        self._act_browse = QAction("查看记录", self)
+        self._act_browse = QAction(QIcon(os.path.join(icon_dir, "review.svg")), "查看记录", self)
         self._act_browse.triggered.connect(self._on_browse_records)
         tb.addAction(self._act_browse)
 
-        self._act_playback = QAction("开始回放", self)
+        self._act_playback = QAction(QIcon(os.path.join(icon_dir, "replay.svg")), "开始回放", self)
         self._act_playback.triggered.connect(self._on_playback)
         tb.addAction(self._act_playback)
 
         tb.addSeparator()
 
-        self._act_start_save = QAction("开始存储", self)
+        self._act_start_save = QAction(QIcon(os.path.join(icon_dir, "save.svg")), "开始存储", self)
         self._act_start_save.triggered.connect(self._on_start_save)
         tb.addAction(self._act_start_save)
 
-        self._act_stop_save = QAction("停止存储", self)
+        self._act_stop_save = QAction(QIcon(os.path.join(icon_dir, "stop-save.svg")), "停止存储", self)
         self._act_stop_save.setEnabled(False)
         self._act_stop_save.triggered.connect(self._on_stop_save)
         tb.addAction(self._act_stop_save)
@@ -125,7 +129,7 @@ class MainWindow(QMainWindow):
         tb.addSeparator()
 
         # 光校 toggle — show/hide optical calibration bottom panel
-        self._act_optical_cal = QAction("光校", self)
+        self._act_optical_cal = QAction(QIcon(os.path.join(icon_dir, "calibration.svg")), "光校", self)
         self._act_optical_cal.setCheckable(True)
         self._act_optical_cal.setChecked(True)
         self._act_optical_cal.toggled.connect(self._on_optical_cal_toggled)
@@ -133,15 +137,15 @@ class MainWindow(QMainWindow):
 
         tb.addSeparator()
 
-        self._act_settings = QAction("设置", self)
+        self._act_settings = QAction(QIcon(os.path.join(icon_dir, "setting.svg")), "设置", self)
         self._act_settings.triggered.connect(self._on_settings)
         tb.addAction(self._act_settings)
 
-        self._act_about = QAction("关于", self)
+        self._act_about = QAction(QIcon(os.path.join(icon_dir, "about.svg")), "关于", self)
         self._act_about.triggered.connect(self._on_about)
         tb.addAction(self._act_about)
 
-        self._act_exit = QAction("Exit", self)
+        self._act_exit = QAction(QIcon(os.path.join(icon_dir, "exit.svg")), "Exit", self)
         self._act_exit.triggered.connect(self.close)
         tb.addAction(self._act_exit)
 

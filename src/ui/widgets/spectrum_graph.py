@@ -36,7 +36,8 @@ class SpectrumGraphWidget(QWidget):
         Default Y-axis upper bound (255 for Mono8, 4095 for Mono10/12).
     """
 
-    coordinate_changed = Signal(int, int)  # x, y emitted when user changes spinbox
+    # x, y emitted when user changes spinbox
+    coordinate_changed = Signal(int, int)
 
     def __init__(
         self,
@@ -70,7 +71,8 @@ class SpectrumGraphWidget(QWidget):
 
         save_btn = QToolButton()
         save_btn.setText("保存图片")
-        save_btn.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        save_btn.setToolButtonStyle(
+            Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         save_btn.clicked.connect(self._save_image)
         top_bar.addWidget(save_btn)
 
@@ -156,6 +158,7 @@ class SpectrumGraphWidget(QWidget):
 
         bottom_bar.addStretch()
         layout.addLayout(bottom_bar)
+        self.setMinimumWidth(500)
 
     # -------------------------------------------------------------- public API
 
@@ -187,7 +190,8 @@ class SpectrumGraphWidget(QWidget):
     # ----------------------------------------------------------- internal slots
 
     def _on_coord_changed(self) -> None:
-        self.coordinate_changed.emit(self._x_spin.value(), self._y_spin.value())
+        self.coordinate_changed.emit(
+            self._x_spin.value(), self._y_spin.value())
 
     def _on_mouse_moved(self, pos) -> None:
         vb = self._plot.getViewBox()
@@ -203,7 +207,8 @@ class SpectrumGraphWidget(QWidget):
         mx = mouse_point.x()
 
         # Find nearest data point
-        idx = int(np.clip(np.searchsorted(self._x_data, mx), 0, len(self._x_data) - 1))
+        idx = int(np.clip(np.searchsorted(
+            self._x_data, mx), 0, len(self._x_data) - 1))
         if idx > 0 and abs(self._x_data[idx - 1] - mx) < abs(self._x_data[idx] - mx):
             idx -= 1
 
