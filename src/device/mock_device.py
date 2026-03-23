@@ -10,6 +10,12 @@ from src.device.device_interface import DeviceInterface
 
 logger = logging.getLogger("gpy4.device")
 
+_ROWS = 1024
+_COLS = 1280
+_LINE_SCAN_R = 512
+_LINE_SCAN_G = 400
+_LINE_SCAN_B = 600
+
 
 class MockDevice(DeviceInterface):
     """Simulated hyperspectral camera generating synthetic frames."""
@@ -25,23 +31,17 @@ class MockDevice(DeviceInterface):
         self._state_lock = threading.Lock()
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
+        self._template_dirty: bool = True
+        self._template_frame: np.ndarray | None = None
 
         # Pre-compute base gradient pattern (1024×1280) to avoid recalculating each frame
-        rows, cols = 1024, 1280
+        rows, cols = _ROWS, _COLS
         row_grad = np.linspace(0, 200, rows, dtype=np.float32)[:, np.newaxis]
         col_grad = np.linspace(0, 50, cols, dtype=np.float32)[np.newaxis, :]
         self._base_pattern = row_grad + col_grad
 
-        # Pre-compute spectral weights for generating line-scan patterns
-        y_coords = np.arange(rows, dtype=np.float32)[:, np.newaxis]
-        self._weight_r = np.exp(-((y_coords - 512) ** 2) / (2 * 50**2)) 
-        self._weight_g = np.exp(-((y_coords - 400) ** 2) / (2 * 50**2))
-        self._weight_b = np.exp(-((y_coords - 600) ** 2) / (2 * 50**2))
-        
-        # I've mapped R->512, G->400, B->600 matching default UI values.
-
         # Pre-render a 2D object for the line scan
-        from PySide6.QtGui import QImage, QPainter, QColor, QFont, QPen, QBrush
+        from PySide6.QtGui import QImage, QPainter, QColor, QFont, QPen
         from PySide6.QtCore import Qt
         
         img = QImage(cols, 1000, QImage.Format.Format_RGB32)
@@ -113,16 +113,19 @@ class MockDevice(DeviceInterface):
     def set_exposure(self, us: float) -> None:
         with self._state_lock:
             self._exposure_us = us
+            self._template_dirty = True
         logger.info("MockDevice exposure set to %.1f µs", us)
 
     def set_gain(self, db: float) -> None:
         with self._state_lock:
             self._gain_db = db
+            self._template_dirty = True
         logger.info("MockDevice gain set to %.1f dB", db)
 
     def set_pixel_format(self, fmt: str) -> None:
         with self._state_lock:
             self._pixel_format = fmt
+            self._template_dirty = True
         logger.info("MockDevice pixel format set to %s", fmt)
 
     def get_frame_shape(self) -> tuple[int, int]:
@@ -153,7 +156,7 @@ class MockDevice(DeviceInterface):
 
     def _generate_frame(self) -> None:
         """Generate a synthetic frame and emit frame_acquired."""
-        rows, cols = 1024, 1280
+        rows, cols = _ROWS, _COLS
         with self._state_lock:
             if not self._running:
                 return
@@ -162,33 +165,34 @@ class MockDevice(DeviceInterface):
             pixel_format = self._pixel_format
             frame_id = self._frame_id
             self._frame_id += 1
+            if self._template_dirty or self._template_frame is None:
+                self._template_frame = self._build_template(
+                    pixel_format,
+                    exposure_us,
+                    gain_db,
+                )
+                self._template_dirty = False
+            template = self._template_frame
 
         dtype = np.uint8 if pixel_format == "Mono8" else np.uint16
         max_val = 255 if dtype == np.uint8 else 4095
+        frame = template.copy()
 
-        # Simulate exposure effect: linear scale relative to default 10000 µs
-        exposure_factor = exposure_us / 10000.0
-
-        # Simulate gain effect: standard dB amplification (0 dB=1x, 6 dB≈2x, 24 dB≈15.8x)
-        gain_factor = 10.0 ** (gain_db / 20.0)
-
-        # Generate noise (only part that changes each frame)
-        noise = np.random.randint(0, 10, (rows, cols), dtype=np.int16)
-
-        # Generate line-scan dynamic patterns from pre-rendered 2D object image
         t = frame_id
-        y_idx = t % 1000 # Map frame time to the 1000-height 2D pattern
-        
-        pattern_r = self._obj_r[y_idx, :]
-        pattern_g = self._obj_g[y_idx, :]
-        pattern_b = self._obj_b[y_idx, :]
-        
-        # Combine patterns with their spectral weights and add them onto base pattern
-        moving_obj = (self._weight_r * pattern_r) + (self._weight_g * pattern_g) + (self._weight_b * pattern_b)
+        y_idx = t % self._obj_r.shape[0]
+        line_scale = max(1.0, max_val / 255.0)
+        self._overlay_line_pattern(frame, _LINE_SCAN_R, self._obj_r[y_idx], line_scale, max_val)
+        self._overlay_line_pattern(frame, _LINE_SCAN_G, self._obj_g[y_idx], line_scale, max_val)
+        self._overlay_line_pattern(frame, _LINE_SCAN_B, self._obj_b[y_idx], line_scale, max_val)
 
-        # Combine gradient + noise + moving object, then apply exposure & gain scaling
-        raw = (self._base_pattern + moving_obj + noise) * exposure_factor * gain_factor
-        frame = np.clip(raw, 0, max_val).astype(dtype)
+        # A lightweight flicker stripe makes motion obvious in both display modes.
+        stripe_x = (t * 11) % cols
+        stripe_value = max_val // 3
+        frame[:, stripe_x:stripe_x + 2] = np.clip(
+            frame[:, stripe_x:stripe_x + 2].astype(np.int32) + stripe_value,
+            0,
+            max_val,
+        ).astype(dtype, copy=False)
 
         # Moving bright spots — helps verify live area display
         cy = (t * 3) % rows
@@ -213,3 +217,32 @@ class MockDevice(DeviceInterface):
             "height": rows,
         }
         self.frame_acquired.emit(frame, metadata)
+
+    def _build_template(
+        self,
+        pixel_format: str,
+        exposure_us: float,
+        gain_db: float,
+    ) -> np.ndarray:
+        dtype = np.uint8 if pixel_format == "Mono8" else np.uint16
+        max_val = 255 if dtype == np.uint8 else 4095
+        exposure_factor = exposure_us / 10000.0
+        gain_factor = 10.0 ** (gain_db / 20.0)
+        scale = exposure_factor * gain_factor
+
+        template = np.clip(self._base_pattern * scale, 0, max_val).astype(dtype)
+        return template
+
+    @staticmethod
+    def _overlay_line_pattern(
+        frame: np.ndarray,
+        center_row: int,
+        pattern: np.ndarray,
+        scale: float,
+        max_val: int,
+    ) -> None:
+        pattern_scaled = np.clip(pattern * scale, 0, max_val).astype(frame.dtype, copy=False)
+        row_lo = max(0, center_row - 1)
+        row_hi = min(frame.shape[0], center_row + 2)
+        for row in range(row_lo, row_hi):
+            frame[row, :] = np.maximum(frame[row, :], pattern_scaled)

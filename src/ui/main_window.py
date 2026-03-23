@@ -91,6 +91,7 @@ class MainWindow(QMainWindow):
         self._refresh_timer.setTimerType(Qt.TimerType.PreciseTimer)
         self._refresh_timer.timeout.connect(self._poll_frame)
 
+        self._apply_display_mode()
         logger.info("MainWindow initialized")
 
     def _load_stylesheet(self) -> None:
@@ -393,20 +394,16 @@ class MainWindow(QMainWindow):
 
         frame, metadata = result
         self._current_frame = frame
-
-        # Fetch line scan data regardless (to prevent buffer bloat)
-        lines = self._acquisition.pull_line_scan_data()
         # Prepare display frame for area scan mode & stats
         display_frame = frame
         if frame.dtype == np.float32:
             display_frame = np.clip(frame, 0, 4095).astype(np.uint16)
 
         if self._act_mode_line.isChecked():
+            lines = self._acquisition.pull_line_scan_data()
             if lines:
                 self._line_scan_display.append_lines(lines)
-            # still might want to process MTF and spectral using the last frame, but we don't display frame
         else:
-            # Image display update (lightweight — texture upload)
             self._image_display.update_image(display_frame)
 
         # Aux data labels (lightweight)
@@ -463,13 +460,21 @@ class MainWindow(QMainWindow):
 
     def _on_mode_toggled(self, checked: bool) -> None:
         """Switch between area array (面阵) and line scan (线扫)."""
+        self._apply_display_mode()
+
+    def _apply_display_mode(self) -> None:
+        """Activate exactly one display pipeline and disable the inactive one."""
         is_line_scan = self._act_mode_line.isChecked()
         if is_line_scan:
+            self._image_display.hide()
             self._display_stack.setCurrentWidget(self._line_scan_display)
-            self._line_scan_display._emit_config()  # update acquisition
+            self._line_scan_display.show()
+            self._line_scan_display._emit_config()
         else:
-            self._display_stack.setCurrentWidget(self._image_display)
             self._acquisition.set_line_scan_mode(False)
+            self._line_scan_display.hide()
+            self._display_stack.setCurrentWidget(self._image_display)
+            self._image_display.show()
 
     def _on_optical_cal_toggled(self, checked: bool) -> None:
         """Show/hide the bottom optical calibration panel."""
