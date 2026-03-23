@@ -9,7 +9,7 @@ from PySide6.QtCore import Qt, QTimer, QSize
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QMainWindow, QToolBar, QSplitter, QWidget, QVBoxLayout, QLabel,
-    QHBoxLayout, QStatusBar, QMessageBox, QFileDialog, QScrollArea,
+    QHBoxLayout, QStatusBar, QMessageBox, QScrollArea,
 )
 
 from src.device.device_interface import DeviceInterface
@@ -21,6 +21,7 @@ from src.ui.widgets.image_display import ImageDisplayWidget
 from src.ui.widgets.stats_panel import StatsPanel
 from src.ui.widgets.aux_data_panel import AuxDataPanel
 from src.ui.widgets.optical_cal_panel import OpticalCalPanel
+from src.ui.widgets.storage_dialog import StorageDialog
 from src.ui.widgets.spectrum_graph import SpectrumGraphWidget
 
 logger = logging.getLogger("gpy4.ui")
@@ -310,10 +311,6 @@ class MainWindow(QMainWindow):
         # Aux data labels (lightweight)
         self._aux_panel.update_metadata(metadata)
 
-        # Write to storage if recording
-        if self._storage.is_recording:
-            self._storage.write_frame(frame, metadata)
-
         # Throttle heavy UI updates (MTF, DN neighborhood, spectral plots)
         now = time.perf_counter()
         if now - self._last_heavy_update < _HEAVY_UPDATE_INTERVAL:
@@ -407,19 +404,32 @@ class MainWindow(QMainWindow):
         logger.info("Acquisition stopped")
 
     def _on_start_save(self) -> None:
-        """Start recording to disk."""
-        directory = QFileDialog.getExistingDirectory(self, "选择存储目录")
-        if not directory:
+        """Show storage dialog and start recording to disk."""
+        dlg = StorageDialog(self)
+        if dlg.exec() != StorageDialog.DialogCode.Accepted or dlg.result_info is None:
             return
+
+        info = dlg.result_info
+        directory = info["directory"]
+        session_name = info["session_name"]
         pixel_format = self._device.get_pixel_format()
-        self._storage.start_envi(directory, "session", pixel_format)
+
+        if info["save_envi"]:
+            self._storage.start_envi(directory, session_name, pixel_format)
+        if info["save_raw"]:
+            self._storage.start_raw(directory, session_name, pixel_format)
+
+        # Let acquisition thread write every frame directly
+        self._acquisition.storage = self._storage
+
         self._act_start_save.setEnabled(False)
         self._act_stop_save.setEnabled(True)
         self._status_storage.setText("存储: 录制中")
-        logger.info("Storage started: %s", directory)
+        logger.info("Storage started: %s/%s", directory, session_name)
 
     def _on_stop_save(self) -> None:
         """Stop recording."""
+        self._acquisition.storage = None
         self._storage.stop()
         self._act_start_save.setEnabled(True)
         self._act_stop_save.setEnabled(False)
@@ -455,6 +465,7 @@ class MainWindow(QMainWindow):
         if self._running:
             self._on_stop()
         if self._storage.is_recording:
+            self._acquisition.storage = None
             self._storage.stop()
         self._device.close()
         logger.info("Application closing")

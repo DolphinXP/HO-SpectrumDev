@@ -82,18 +82,17 @@ class TestEnviWriter:
         hdr_text = Path(base + ".hdr").read_text()
         assert "lines = 1" in hdr_text
 
-    def test_wavelengths_in_header(self, tmp_path):
-        """Verify custom wavelengths appear in header."""
+    def test_header_omits_wavelengths(self, tmp_path):
+        """Verify wavelength information is not written to the header."""
         base = str(tmp_path / "wl_test")
-        wl = np.linspace(900, 1700, 1024)
 
         writer = EnviWriter()
-        writer.open(base, "Mono8", wavelengths=wl)
+        writer.open(base, "Mono8")
         writer.close()
 
         hdr_text = Path(base + ".hdr").read_text()
-        assert "wavelength = {" in hdr_text
-        assert "wavelength units = nm" in hdr_text
+        assert "wavelength = {" not in hdr_text
+        assert "wavelength units = nm" not in hdr_text
 
     def test_wrong_frame_shape_raises(self, tmp_path):
         """Writing a frame with wrong shape should raise ValueError."""

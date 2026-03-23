@@ -4,7 +4,11 @@
       "WebSearch",
       "Bash(C:/miniconda3/envs/gpy4/python.exe main.py --mock --debug)",
       "Bash(C:/miniconda3/envs/gpy4/python.exe -c \":*)",
-      "Bash(C:/miniconda3/envs/gpy4/python.exe -m pytest tests/ -v)"
+      "Bash(C:/miniconda3/envs/gpy4/python.exe -m pytest tests/ -v)",
+      "Bash(C:/miniconda3/envs/gpy4/python.exe -c \"from src.ui.widgets.storage_dialog import StorageDialog; print\\(''StorageDialog OK''\\)\")",
+      "Bash(C:/miniconda3/envs/gpy4/python.exe -c \"from src.data.acquisition import AcquisitionWorker; print\\(''AcquisitionWorker OK''\\)\")",
+      "Bash(C:/miniconda3/envs/gpy4/python.exe -c \"from src.data.storage import StorageManager; print\\(''StorageManager OK''\\)\")",
+      "Bash(C:/miniconda3/envs/gpy4/python.exe -c \"from src.ui.main_window import MainWindow; print\\(''MainWindow OK''\\)\")"
     ]
   }
 }

@@ -1,6 +1,6 @@
-"""Raw binary frame writer with JSON sidecar metadata.
+"""Raw frame writer with JSON sidecar metadata.
 
-Writes concatenated raw numpy frames to a ``.raw`` file and produces a
+Writes concatenated raw numpy frames to a ``.dat`` file and produces a
 ``.json`` sidecar on :meth:`close` containing frame count, dimensions,
 pixel format, and other acquisition parameters.
 """
@@ -44,8 +44,8 @@ class RawWriter:
     """
 
     def __init__(self) -> None:
-        self._raw_file: BinaryIO | None = None
-        self._raw_path: Path | None = None
+        self._data_file: BinaryIO | None = None
+        self._data_path: Path | None = None
         self._json_path: Path | None = None
         self._pixel_format: str = ""
         self._np_dtype: np.dtype = np.dtype(np.uint8)
@@ -54,6 +54,7 @@ class RawWriter:
         self._bytes_written: int = 0
         self._width: int = 0
         self._height: int = 0
+        self._write_binary: bool = True
 
     # ------------------------------------------------------------------
     # Context manager
@@ -81,7 +82,7 @@ class RawWriter:
 
     @property
     def bytes_written(self) -> int:
-        """Total bytes written to the ``.raw`` file."""
+        """Total bytes written to the binary data file."""
         return self._bytes_written
 
     # ------------------------------------------------------------------
@@ -93,21 +94,28 @@ class RawWriter:
         path: str,
         pixel_format: str,
         metadata: dict | None = None,
+        data_extension: str = ".dat",
+        write_binary: bool = True,
     ) -> None:
-        """Open the raw file pair for writing.
+        """Open the raw data/JSON file pair for writing.
 
         Parameters
         ----------
         path : str
-            Base path **without** extension.  ``.raw`` and ``.json``
+            Base path **without** extension.  ``.dat`` and ``.json``
             are appended automatically.
         pixel_format : str
             One of ``"Mono8"``, ``"Mono10"``, ``"Mono12"``.
         metadata : dict | None
             Optional metadata forwarded to the JSON sidecar
             (``exposure_us``, ``gain_db``, ``fps``, etc.).
+        data_extension : str
+            Extension for the binary frame stream.
+        write_binary : bool
+            When ``False``, only the JSON sidecar is produced. This is used
+            when another writer already owns the shared binary ``.dat`` file.
         """
-        if self._raw_file is not None:
+        if self._data_file is not None:
             raise RuntimeError("RawWriter is already open; call close() first")
 
         if pixel_format not in _DTYPE_MAP:
@@ -120,20 +128,25 @@ class RawWriter:
         self._bytes_written = 0
         self._width = 0
         self._height = 0
+        self._write_binary = write_binary
 
         base = Path(path)
         base.parent.mkdir(parents=True, exist_ok=True)
-        self._raw_path = base.with_suffix(".raw")
+        self._data_path = base.with_suffix(data_extension)
         self._json_path = base.with_suffix(".json")
 
-        self._raw_file = open(self._raw_path, "wb")  # noqa: SIM115
+        if self._write_binary:
+            self._data_file = open(self._data_path, "wb")  # noqa: SIM115
 
         logger.info(
-            "Raw writer opened: %s (format=%s)", self._raw_path, pixel_format
+            "Raw writer opened: %s (format=%s, write_binary=%s)",
+            self._data_path,
+            pixel_format,
+            self._write_binary,
         )
 
     def write_frame(self, frame: np.ndarray) -> None:
-        """Append one frame to the ``.raw`` file.
+        """Append one frame to the binary data file.
 
         Parameters
         ----------
@@ -141,7 +154,9 @@ class RawWriter:
             Camera frame (typically shape ``(1024, 1280)``).  Cast to
             the target dtype before writing.
         """
-        if self._raw_file is None:
+        if not self._write_binary and self._json_path is None:
+            raise RuntimeError("RawWriter is not open")
+        if self._write_binary and self._data_file is None:
             raise RuntimeError("RawWriter is not open")
 
         # Record dimensions from first frame
@@ -149,19 +164,21 @@ class RawWriter:
             self._height, self._width = frame.shape[:2]
 
         data = frame.astype(self._np_dtype, copy=False).tobytes()
-        self._raw_file.write(data)
+        if self._write_binary:
+            self._data_file.write(data)
         self._frame_count += 1
-        self._bytes_written += len(data)
+        if self._write_binary:
+            self._bytes_written += len(data)
 
     def close(self) -> None:
-        """Flush the ``.raw`` file and write the JSON sidecar."""
-        if self._raw_file is not None:
-            self._raw_file.flush()
-            self._raw_file.close()
-            self._raw_file = None
+        """Flush the binary data file and write the JSON sidecar."""
+        if self._data_file is not None:
+            self._data_file.flush()
+            self._data_file.close()
+            self._data_file = None
             logger.info(
-                "Raw file closed: %s (%d frames, %d bytes)",
-                self._raw_path,
+                "Raw data file closed: %s (%d frames, %d bytes)",
+                self._data_path,
                 self._frame_count,
                 self._bytes_written,
             )
@@ -173,6 +190,7 @@ class RawWriter:
                 "height": self._height,
                 "pixel_format": self._pixel_format,
                 "dtype": str(self._np_dtype),
+                "data_file": self._data_path.name if self._data_path is not None else None,
                 "exposure_us": self._metadata.get("exposure_us"),
                 "gain_db": self._metadata.get("gain_db"),
                 "fps": self._metadata.get("fps"),
@@ -182,5 +200,5 @@ class RawWriter:
                 encoding="utf-8",
             )
             logger.info("JSON sidecar written: %s", self._json_path)
-            self._raw_path = None
+            self._data_path = None
             self._json_path = None

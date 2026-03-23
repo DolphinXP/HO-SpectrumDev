@@ -20,24 +20,24 @@ logger = logging.getLogger("gpy4.storage")
 
 
 def _session_path(directory: str, session_name: str) -> str:
-    """Build a base file path: ``<directory>/<session_name>_YYYYMMDD_HHMMSS``."""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    name = f"{session_name}_{timestamp}" if session_name else timestamp
-    return str(Path(directory) / name)
+    """Build a base file path: ``<directory>/<session_name>``."""
+    return str(Path(directory) / session_name) if session_name else str(
+        Path(directory) / datetime.now().strftime("%Y%m%d_%H%M%S")
+    )
 
 
 class StorageManager:
     """High-level recording manager.
 
-    Supports two independent recording modes that may run concurrently:
+    Supports ENVI and raw metadata recording modes:
 
     * **ENVI** — hyperspectral cube (BIL ``.hdr`` + ``.dat``)
-    * **Raw** — concatenated binary frames (``.raw`` + ``.json`` sidecar)
+    * **Raw** — concatenated binary frames (``.dat`` + ``.json`` sidecar)
 
     Usage::
 
         mgr = StorageManager()
-        mgr.start_envi("data/", "calibration", "Mono12", wavelengths=wl)
+        mgr.start_envi("data/", "calibration", "Mono12")
         mgr.start_raw("data/", "calibration", "Mono12", metadata={...})
         for frame, meta in acquisition:
             mgr.write_frame(frame, meta)
@@ -76,7 +76,6 @@ class StorageManager:
         directory: str,
         session_name: str,
         pixel_format: str,
-        wavelengths: np.ndarray | None = None,
         metadata: dict | None = None,
     ) -> None:
         """Open an ENVI writer for a new recording session.
@@ -89,8 +88,6 @@ class StorageManager:
             Human-readable session prefix.
         pixel_format : str
             ``"Mono8"``, ``"Mono10"``, or ``"Mono12"``.
-        wavelengths : np.ndarray | None
-            1024-element wavelength array (nm).
         metadata : dict | None
             Optional metadata (``exposure_us``, ``gain_db``, etc.).
         """
@@ -100,7 +97,7 @@ class StorageManager:
 
         path = _session_path(directory, session_name)
         writer = EnviWriter()
-        writer.open(path, pixel_format, wavelengths=wavelengths, metadata=metadata)
+        writer.open(path, pixel_format, metadata=metadata)
         self._envi_writer = writer
         logger.info("ENVI recording started: %s", path)
 
@@ -130,7 +127,14 @@ class StorageManager:
 
         path = _session_path(directory, session_name)
         writer = RawWriter()
-        writer.open(path, pixel_format, metadata=metadata)
+        write_binary = self._envi_writer is None
+        writer.open(
+            path,
+            pixel_format,
+            metadata=metadata,
+            data_extension=".dat",
+            write_binary=write_binary,
+        )
         self._raw_writer = writer
         logger.info("Raw recording started: %s", path)
 

@@ -102,37 +102,34 @@ gpy4/
 ## UI Layout
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│ Toolbar: 开始|停止|查看记录|开始回放|开始存储|停止存储|设置|关于|Exit  │
-├──────────────────────────────────────────┬──────────────────────────┤
-│  Image Display Widget                    │  数据统计/数据判读 Panel  │
-│  Sub-toolbar: 图像|DN|光校|保存图片|       │  (FPS, MBps, buffers)   │
-│              重置缩放|三标尺|框选|拉伸     │                          │
-│  X:__ Y:__ DN:__ (cursor display)        ├──────────────────────────┤
-│                                          │  辅助数据 Panel          │
-│  [图像 tab] → false-color image          │  (frame header fields)   │
-│  [DN tab]  → per-pixel DN value grid     │                          │
-├────────────────┬──────────────────────────┴──────────────────────────┤
-│  光校 Panel    │  临近空间维(行) │  临近光谱维(列) │  全域空间维(行)  │
-│  列(X)/行(Y)   │  Graph 1       │  Graph 2       │  Graph 3         │
-│  定位最大DN    │  ±10px spatial │  ±10px spectral│  full 1280px     │
-│  MTF display   │  profile       │  profile       │  profile         │
-│  DN neighborhood                                                     │
-│  table                                                               │
-└──────────────────────────────────────────────────────────────────────┘
-│ Status bar: device name + connection status + driver version         │
-└──────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Toolbar: 开始 | 停止 | 查看记录 | 开始回放 | 开始存储 | 停止存储 | 光校 | 设置 | 关于 | Exit │
+├───────────────────────────────────────────────┬─────────────────────────────┤
+│  Image Display Widget (Left)                  │  Right Panels (Stack)       │
+│  Button Bar: 保存图片 | 重置缩放               │  1. 数据统计 (StatsPanel)   │
+│  Level Control: [min] - [max] [应用] [原始]   │     (FPS, MiB/s, 丢帧, 队列)│
+│  Info Bar: X:__ Y:__ DN:__ Zoom:__            ├─────────────────────────────┤
+│                                               │  2. 辅助数据 (AuxDataPanel) │
+│  [Image Plot Area]                            │     (FrameID, Exposure, ...)│
+├─────────────────┬─────────────────────────────┴─────────────────────────────┤
+│ 光校 Panel      │  Spectral/Spatial Graphs (Scroll Area)                    │
+│ (Bottom-Left)   │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│ X / Y Inputs    │  │ 临近空间 │ │ 临近光谱 │ │ 全域空间 │ │ 全域光谱 │      │
+│ 定位最大DN      │  │ (行)     │ │ (列)     │ │ (行)     │ │ (列)     │      │
+│ MTF Results     │  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
+│ DN Neighborhood │                                                           │
+└─────────────────┴───────────────────────────────────────────────────────────┘
+│ Status bar: 设备: -- Connection | NUC: Status | 存储: Status                │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## DN Tab (Per-Pixel Value Grid)
+### UI Features
 
-Activated by clicking "DN" in the image sub-toolbar. Displays a QTableWidget:
-- Column headers = spectral band indices (0 … 1023)
-- Row headers = spatial pixel indices (0 … 1279)
-- Cell content = integer DN value for that pixel
-- Cell background color-coded (dark=low DN, bright=high DN)
-- Updates at ~5 FPS (throttled for table rendering performance)
-- Clicking a cell selects that pixel, updates X/Y and graphs
+- **Toolbar (主工具栏)**: Provides primary state control (start/stop/save). The "光校" button toggles the visibility of the entire bottom section.
+- **Image Display (图像显示)**: Driven by `ImageDisplayWidget`. Uses `pyqtgraph.ImageView`. Supports manual DN range (Levels) adjustment and mouse-driven zoom/pan.
+- **Stats & Aux (统计与辅助)**: Right-side panels showing real-time performance and frame-header metadata.
+- **Optical Calibration (光校控制)**: Left panel in the bottom area. Allows programmatic navigation to peak DN and displays MTF results.
+- **Spectrum Graphs (光谱/空间曲线)**: Four synchronized charts showing profiles across spectral and spatial dimensions.
 
 ## Data Save Modes
 

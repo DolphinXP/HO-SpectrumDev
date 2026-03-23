@@ -20,6 +20,7 @@ from PySide6.QtCore import QObject, QThread, Signal, Slot
 
 from src.data.frame_ping_pong import FramePingPong
 from src.data.nuc import NUCProcessor
+from src.data.storage import StorageManager
 from src.device.device_interface import DeviceInterface
 
 logger = logging.getLogger("gpy4.acquisition")
@@ -70,6 +71,9 @@ class AcquisitionWorker(QThread):
         # Throttle stats signal to ~4 Hz
         self._last_stats_time: float = 0.0
 
+        # Optional storage manager — when set, every frame is written
+        self._storage: StorageManager | None = None
+
     # ------------------------------------------------------------------
     # NUC access
     # ------------------------------------------------------------------
@@ -78,6 +82,15 @@ class AcquisitionWorker(QThread):
     def nuc(self) -> NUCProcessor:
         """Access the NUC processor to load / unload coefficients."""
         return self._nuc
+
+    @property
+    def storage(self) -> StorageManager | None:
+        """The active storage manager, or ``None``."""
+        return self._storage
+
+    @storage.setter
+    def storage(self, mgr: StorageManager | None) -> None:
+        self._storage = mgr
 
     # ------------------------------------------------------------------
     # QThread lifecycle
@@ -143,6 +156,14 @@ class AcquisitionWorker(QThread):
 
         # Apply NUC
         processed = self._nuc.apply(frame)
+
+        # Write to storage (every frame, no drops except physical)
+        storage = self._storage
+        if storage is not None and storage.is_recording:
+            try:
+                storage.write_frame(processed, metadata)
+            except Exception:
+                logger.exception("Error writing frame to storage")
 
         self._frame_count += 1
         frame_bytes = frame.nbytes

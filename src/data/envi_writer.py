@@ -1,10 +1,10 @@
 """ENVI BIL file writer for hyperspectral push-broom data.
 
 Produces a file pair (``.hdr`` ASCII header + ``.dat`` raw binary) using
-Band-Interleaved-by-Line (BIL) interleave.  Each call to
-:meth:`write_line` appends one camera frame (1024 bands x 1280 spatial
-samples) to the ``.dat`` file.  On :meth:`close` the header is rewritten
-with the final line count.
+Band-Interleaved-by-Line (BIL) interleave. Each call to :meth:`write_line`
+appends one camera frame (1024 bands x 1280 spatial samples) to the
+``.dat`` file. On :meth:`close` the header is rewritten with the final
+line count.
 """
 
 from __future__ import annotations
@@ -31,32 +31,13 @@ _ENVI_DTYPE_MAP: dict[str, tuple[int, np.dtype]] = {
     "Mono12": (12, np.dtype(np.uint16)),
 }
 
-_DEFAULT_WAVELENGTHS = np.linspace(900.0, 1700.0, _BANDS)
-
-
-def _format_wavelength_list(wavelengths: np.ndarray) -> str:
-    """Return ENVI ``wavelength = { ... }`` value string."""
-    parts: list[str] = []
-    line: list[str] = []
-    for w in wavelengths:
-        token = f"{w:.4f}"
-        line.append(token)
-        # Wrap at ~78 chars for readability
-        if len(", ".join(line)) > 72:
-            parts.append(", ".join(line))
-            line = []
-    if line:
-        parts.append(", ".join(line))
-    return ",\n ".join(parts)
-
-
 class EnviWriter:
     """Write hyperspectral data in ENVI BIL format.
 
     Usage::
 
         writer = EnviWriter()
-        writer.open("session_001", pixel_format="Mono12", wavelengths=wl)
+        writer.open("session_001", pixel_format="Mono12")
         for frame, meta in frames:
             writer.write_line(frame)
         writer.close()
@@ -76,7 +57,6 @@ class EnviWriter:
         self._pixel_format: str = ""
         self._envi_dtype_code: int = 1
         self._np_dtype: np.dtype = np.dtype(np.uint8)
-        self._wavelengths: np.ndarray = _DEFAULT_WAVELENGTHS.copy()
         self._metadata: dict = {}
         self._lines_written: int = 0
         self._bytes_written: int = 0
@@ -119,7 +99,6 @@ class EnviWriter:
         self,
         path: str,
         pixel_format: str,
-        wavelengths: np.ndarray | None = None,
         metadata: dict | None = None,
     ) -> None:
         """Open the ENVI file pair for writing.
@@ -131,9 +110,6 @@ class EnviWriter:
             appended automatically.
         pixel_format : str
             One of ``"Mono8"``, ``"Mono10"``, ``"Mono12"``.
-        wavelengths : np.ndarray | None
-            1-D array of 1024 wavelengths in nm.  Falls back to
-            ``np.linspace(900, 1700, 1024)`` if *None*.
         metadata : dict | None
             Optional extra metadata (``exposure_us``, ``gain_db``, etc.).
         """
@@ -145,16 +121,6 @@ class EnviWriter:
 
         self._pixel_format = pixel_format
         self._envi_dtype_code, self._np_dtype = _ENVI_DTYPE_MAP[pixel_format]
-
-        if wavelengths is not None:
-            if wavelengths.shape != (_BANDS,):
-                raise ValueError(
-                    f"wavelengths must have shape ({_BANDS},), "
-                    f"got {wavelengths.shape}"
-                )
-            self._wavelengths = wavelengths.astype(np.float64, copy=False)
-        else:
-            self._wavelengths = _DEFAULT_WAVELENGTHS.copy()
 
         self._metadata = metadata or {}
         self._lines_written = 0
@@ -240,7 +206,6 @@ class EnviWriter:
         assert self._hdr_path is not None
         assert self._open_time is not None
 
-        wl_str = _format_wavelength_list(self._wavelengths)
         date_str = self._open_time.strftime("%Y-%m-%d")
         time_str = self._open_time.strftime("%H:%M:%S")
 
@@ -261,8 +226,6 @@ class EnviWriter:
         buf.write(f"data type = {self._envi_dtype_code}\n")
         buf.write("interleave = bil\n")
         buf.write("byte order = 0\n")
-        buf.write("wavelength units = nm\n")
-        buf.write(f"wavelength = {{\n {wl_str}}}\n")
         buf.write(f"acquisition date = {date_str}\n")
         buf.write(f"acquisition time = {time_str}\n")
         if exposure_us != "":
