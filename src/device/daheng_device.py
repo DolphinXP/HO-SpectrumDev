@@ -24,8 +24,8 @@ DxValidBit = None
 def _ensure_sdk():
     global gx, GxPixelFormatEntry, DxValidBit
     if gx is None:
-        import gxipy as _gx
-        from gxipy.gxidef import GxPixelFormatEntry as _pf, DxValidBit as _vb
+        from src.device import gxipy as _gx
+        from src.device.gxipy.gxidef import GxPixelFormatEntry as _pf, DxValidBit as _vb
         gx = _gx
         GxPixelFormatEntry = _pf
         DxValidBit = _vb
@@ -81,12 +81,15 @@ class DahengDevice(DeviceInterface):
             self._data_stream = self._camera.data_stream[0]
 
             # Set exposure
-            self._remote_feature.get_float_feature("ExposureTime").set(self._exposure_us)
+            self._remote_feature.get_float_feature(
+                "ExposureTime").set(self._exposure_us)
 
             # Software trigger mode
             self._remote_feature.get_enum_feature("TriggerMode").set("On")
-            self._remote_feature.get_enum_feature("TriggerSource").set("Software")
-            self._trigger_cmd = self._remote_feature.get_command_feature("TriggerSoftware")
+            self._remote_feature.get_enum_feature(
+                "TriggerSource").set("Software")
+            self._trigger_cmd = self._remote_feature.get_command_feature(
+                "TriggerSoftware")
 
             logger.info("DahengDevice initialized: SN=%s", self._sn)
             return True

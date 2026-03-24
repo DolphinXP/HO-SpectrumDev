@@ -32,7 +32,7 @@ A Python/PySide6 desktop application for controlling a Daheng Imaging MER3-138-1
 
 **Line-scan axes**: 1280 = spatial pixels (across slit), 1024 = spectral bands per line
 
-**SDK**: Daheng Galaxy SDK — `gxipy` Python package (located in `daheng-example/gxipy/`)
+**SDK**: Daheng Galaxy SDK — `gxipy` Python package (located in `device/gxipy/`)
 
 ## Project Structure
 
@@ -42,12 +42,10 @@ gpy4/
 ├── requirements.txt
 ├── CLAUDE.md
 ├── logs/                            # Rotating log files (auto-created)
-├── daheng-example/
-│   ├── daheng_camera.py             # Reference implementation (DO NOT MODIFY)
-│   └── gxipy/                       # Daheng SDK Python bindings
 ├── src/
 │   ├── __init__.py
 │   ├── device/
+│   │   ├── gxipy/                   # Daheng SDK Python bindings
 │   │   ├── device_interface.py      # Abstract base class (DeviceInterface)
 │   │   ├── mock_device.py           # Simulated device for dev/testing
 │   │   ├── daheng_device.py         # Real Daheng camera wrapper
