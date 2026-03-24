@@ -140,6 +140,12 @@ class MainWindow(QMainWindow):
         self._act_playback.triggered.connect(self._on_playback)
         tb.addAction(self._act_playback)
 
+        self._act_stop_playback = QAction(
+            QIcon(os.path.join(icon_dir, "stop.svg")), "停止回放", self)
+        self._act_stop_playback.setEnabled(False)
+        self._act_stop_playback.triggered.connect(self._teardown_replay)
+        tb.addAction(self._act_stop_playback)
+
         tb.addSeparator()
 
         self._act_start_save = QAction(
@@ -701,6 +707,7 @@ class MainWindow(QMainWindow):
         # Disable acquisition controls during replay
         self._device_control.set_replaying(True)
         self._act_start_save.setEnabled(False)
+        self._act_stop_playback.setEnabled(True)
 
         logger.info("Replay mode started: %s", file_path)
 
@@ -809,6 +816,7 @@ class MainWindow(QMainWindow):
         self._device_control.set_replaying(False)
         self._device_control.set_running(False)
         self._act_start_save.setEnabled(True)
+        self._act_stop_playback.setEnabled(False)
 
     def _on_settings(self) -> None:
         """Placeholder for settings dialog."""
