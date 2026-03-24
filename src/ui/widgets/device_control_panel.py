@@ -210,23 +210,19 @@ class DeviceControlPanel(QWidget):
     # ── Public API ─────────────────────────────────────────────────
 
     def sync_from_device(self, device) -> None:
-        """Read current device values and populate the controls."""
-        self._spin_exposure.blockSignals(True)
-        self._spin_exposure.setValue(device.get_exposure())
-        self._spin_exposure.blockSignals(False)
+        """Read current device values and populate the controls.
 
-        self._spin_gain.blockSignals(True)
-        self._spin_gain.setValue(device.get_gain())
-        self._spin_gain.blockSignals(False)
-
-        self._combo_pixel_format.blockSignals(True)
-        self._combo_pixel_format.setCurrentText(device.get_pixel_format())
-        self._combo_pixel_format.blockSignals(False)
-
+        Note: This method only updates read-only device info fields.
+        User-configurable settings (exposure, gain, pixel format) are
+        loaded from QSettings in _load_settings() and should not be
+        overwritten by device defaults.
+        """
+        # Update read-only device info only
         shape = device.get_frame_shape()
         self._lbl_resolution.setText(f"{shape[1]} × {shape[0]}")
 
-        self._update_adc_label(device.get_pixel_format())
+        # Update ADC label based on current pixel format (from saved settings)
+        self._update_adc_label(self._combo_pixel_format.currentText())
 
     def set_running(self, running: bool) -> None:
         """Update UI state to reflect acquisition running/stopped."""
