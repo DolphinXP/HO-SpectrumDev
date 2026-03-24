@@ -24,7 +24,7 @@ class MockDevice(DeviceInterface):
         super().__init__(parent)
         self._exposure_us: float = 10000.0
         self._gain_db: float = 0.0
-        self._pixel_format: str = "Mono10"
+        self._pixel_format: str = "Mono12"
         self._running: bool = False
         self._frame_id: int = 0
         self._target_interval_s: float = 1.0 / 120.0
