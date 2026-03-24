@@ -5,6 +5,8 @@ Uses software trigger mode by default.
 """
 
 import logging
+import os
+import sys
 import time
 from ctypes import addressof, c_ubyte
 
@@ -24,8 +26,12 @@ DxValidBit = None
 def _ensure_sdk():
     global gx, GxPixelFormatEntry, DxValidBit
     if gx is None:
-        from src.device import gxipy as _gx
-        from src.device.gxipy.gxidef import GxPixelFormatEntry as _pf, DxValidBit as _vb
+        device_dir = os.path.dirname(__file__)
+        if device_dir not in sys.path:
+            sys.path.insert(0, device_dir)
+
+        import gxipy as _gx
+        from gxipy.gxidef import GxPixelFormatEntry as _pf, DxValidBit as _vb
         gx = _gx
         GxPixelFormatEntry = _pf
         DxValidBit = _vb
@@ -64,14 +70,17 @@ class DahengDevice(DeviceInterface):
         self._pixel_format: str = "Mono8"
         self._running: bool = False
         self._frame_id_counter: int = 0
+        self._last_error: str = ""
 
     def initialize(self) -> bool:
         try:
+            self._last_error = ""
             # Auto-detect if no serial number given
             if not self._sn:
                 dev_num, dev_info_list = self._device_manager.update_all_device_list()
                 if dev_num == 0:
-                    logger.error("No Daheng cameras found")
+                    self._last_error = "No Daheng cameras found"
+                    logger.error(self._last_error)
                     return False
                 self._sn = dev_info_list[0].get("sn", "")
                 logger.info("Auto-detected camera SN: %s", self._sn)
@@ -95,8 +104,13 @@ class DahengDevice(DeviceInterface):
             return True
 
         except Exception as e:
+            self._last_error = str(e)
             logger.error("DahengDevice initialization failed: %s", e)
             return False
+
+    @property
+    def last_error(self) -> str:
+        return self._last_error
 
     def start(self) -> None:
         if self._camera is None:

@@ -21,7 +21,7 @@ def main() -> None:
     logger = logging.getLogger("gpy4")
     logger.info("Starting gpy4 (mock=%s, debug=%s)", args.mock, args.debug)
 
-    from PySide6.QtWidgets import QApplication
+    from PySide6.QtWidgets import QApplication, QMessageBox
     app = QApplication(sys.argv)
     app.setApplicationName("gpy4")
     app.setOrganizationName("gpy4")
@@ -34,13 +34,24 @@ def main() -> None:
         try:
             from src.device.daheng_device import DahengDevice
             device = DahengDevice()
-        except ImportError:
-            logger.warning("Daheng SDK not available, falling back to MockDevice")
+        except ImportError as e:
+            logger.warning(
+                "Daheng SDK import failed (%s), falling back to MockDevice", e
+            )
             from src.device.mock_device import MockDevice
             device = MockDevice()
 
     if not device.initialize():
         logger.error("Device initialization failed")
+        error_detail = getattr(device, "last_error", "")
+        message = "Failed to initialize the camera device."
+        if error_detail:
+            message = f"{message}\n\nReason: {error_detail}"
+        QMessageBox.critical(
+            None,
+            "Device Initialization Failed",
+            message,
+        )
         sys.exit(1)
 
     # Create and show main window
