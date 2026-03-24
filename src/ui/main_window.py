@@ -51,6 +51,8 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("高光谱相机控制软件")
         self.resize(1600, 900)
+        _ico = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "app.ico")
+        self.setWindowIcon(QIcon(_ico))
 
         self._device = device
 

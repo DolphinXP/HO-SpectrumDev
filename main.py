@@ -24,9 +24,12 @@ def main() -> None:
     logger.info("Starting specdev (mock=%s, debug=%s)", args.mock, args.debug)
 
     from PySide6.QtWidgets import QApplication, QMessageBox
+    from PySide6.QtGui import QIcon
     app = QApplication(sys.argv)
     app.setApplicationName("specdev")
     app.setOrganizationName("specdev")
+    _ico = os.path.join(os.path.dirname(__file__), "assets", "app.ico")
+    app.setWindowIcon(QIcon(_ico))
 
     # Create device
     if args.mock:
