@@ -13,7 +13,7 @@ import logging
 
 import numpy as np
 
-logger = logging.getLogger("gpy4.analysis")
+logger = logging.getLogger("specdev.analysis")
 
 
 class SpectralAnalyzer:

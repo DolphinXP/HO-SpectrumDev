@@ -24,7 +24,7 @@ from src.data.nuc import NUCProcessor
 from src.data.storage import StorageManager
 from src.device.device_interface import DeviceInterface
 
-logger = logging.getLogger("gpy4.acquisition")
+logger = logging.getLogger("specdev.acquisition")
 
 # Rolling window size for FPS / throughput averaging
 _FPS_WINDOW = 30

@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QTableWidget, QTableWidgetItem, QSizePolicy,
 )
 
-logger = logging.getLogger("gpy4.ui")
+logger = logging.getLogger("specdev.ui")
 
 
 class OpticalCalPanel(QWidget):

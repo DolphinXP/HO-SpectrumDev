@@ -15,7 +15,7 @@ from typing import BinaryIO
 
 import numpy as np
 
-logger = logging.getLogger("gpy4.storage")
+logger = logging.getLogger("specdev.storage")
 
 _DTYPE_MAP: dict[str, str] = {
     "Mono8": "uint8",

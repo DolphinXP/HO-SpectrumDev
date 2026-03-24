@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QPushButton, QFileDialog, QRadioButton, QButtonGroup
 )
 
-logger = logging.getLogger("gpy4.ui")
+logger = logging.getLogger("specdev.ui")
 
 _LINE_SCAN_RENDER_INTERVAL_MS = 66
 _INTERACTION_DEFER_SECONDS = 0.18
@@ -37,7 +37,7 @@ class LineScanDisplayWidget(QWidget):
 
     # Emitted when config changes so AcquisitionWorker can be updated
     config_changed = Signal(bool, list)  # enabled, [y_indices...]
-    
+
     pixel_clicked = Signal(int, int)
 
     def __init__(self, parent: QWidget | None = None) -> None:
@@ -59,7 +59,7 @@ class LineScanDisplayWidget(QWidget):
         self._mode_group.addButton(self._radio_single, 1)
         self._mode_group.addButton(self._radio_rgb, 3)
         self._mode_group.buttonToggled.connect(self._on_mode_toggled)
-        
+
         mode_box = QHBoxLayout()
         mode_box.addWidget(self._radio_single)
         mode_box.addWidget(self._radio_rgb)
@@ -70,12 +70,12 @@ class LineScanDisplayWidget(QWidget):
         self._spin_r = QSpinBox()
         self._spin_r.setRange(0, 2048)
         self._spin_r.setValue(512)
-        
+
         self._lbl_g = QLabel("G行:")
         self._spin_g = QSpinBox()
         self._spin_g.setRange(0, 2048)
         self._spin_g.setValue(400)
-        
+
         self._lbl_b = QLabel("B行:")
         self._spin_b = QSpinBox()
         self._spin_b.setRange(0, 2048)
@@ -101,7 +101,7 @@ class LineScanDisplayWidget(QWidget):
         ctrl_layout.addWidget(self._spin_lines)
 
         ctrl_layout.addStretch()
-        
+
         self._btn_save = QPushButton("保存图片")
         self._btn_save.clicked.connect(self._save_image)
         ctrl_layout.addWidget(self._btn_save)
@@ -135,9 +135,9 @@ class LineScanDisplayWidget(QWidget):
 
         view_box = self._image_view.getView()
         view_box.sigRangeChanged.connect(self._mark_interacting)
-        
+
         self._on_mode_toggled(None, False)
-        
+
     def showEvent(self, event):
         super().showEvent(event)
         self._emit_config()
@@ -188,22 +188,24 @@ class LineScanDisplayWidget(QWidget):
         """
         if not lines_list:
             return
-            
+
         c, w = lines_list[0].shape
-        
+
         if c != self._channels:
             # Drop incoming lines if channel config doesn't match yet
             return
 
         h = self._max_lines
-        
+
         if self._buffer is None or self._buffer.shape[1] != w:
             if c == 1:
                 self._buffer = np.zeros((h, w), dtype=lines_list[0].dtype)
-                self._display_buffer = np.zeros((h, w), dtype=lines_list[0].dtype)
+                self._display_buffer = np.zeros(
+                    (h, w), dtype=lines_list[0].dtype)
             else:
                 self._buffer = np.zeros((h, w, 3), dtype=lines_list[0].dtype)
-                self._display_buffer = np.zeros((h, w, 3), dtype=lines_list[0].dtype)
+                self._display_buffer = np.zeros(
+                    (h, w, 3), dtype=lines_list[0].dtype)
             self._line_count = 0
             self._write_index = 0
 
@@ -274,9 +276,11 @@ class LineScanDisplayWidget(QWidget):
             display_data = np.clip(display_data, 0, 4095).astype(np.uint16)
 
         if display_data.ndim == 2:
-            self._image_view.setImage(display_data.T, autoLevels=False, autoRange=False)
+            self._image_view.setImage(
+                display_data.T, autoLevels=False, autoRange=False)
         else:
-            img_8bit = (display_data.astype(np.float32) / 4095.0 * 255).astype(np.uint8)
+            img_8bit = (display_data.astype(np.float32) /
+                        4095.0 * 255).astype(np.uint8)
             img_8bit = np.transpose(img_8bit, (1, 0, 2))
             self._image_view.setImage(img_8bit, autoRange=False)
 
@@ -293,14 +297,18 @@ class LineScanDisplayWidget(QWidget):
             frame = self._buffer
             if frame.ndim == 3:
                 # RGB
-                img_8bit = (frame.astype(np.float32) / 4095.0 * 255).astype(np.uint8)
+                img_8bit = (frame.astype(np.float32) /
+                            4095.0 * 255).astype(np.uint8)
                 h, w, c = img_8bit.shape
-                qimg = QImage(img_8bit.data, w, h, w * c, QImage.Format.Format_RGB888)
+                qimg = QImage(img_8bit.data, w, h, w * c,
+                              QImage.Format.Format_RGB888)
                 qimg.save(path)
             else:
                 # Grayscale
-                img_8bit = (frame.astype(np.float32) / 4095.0 * 255).astype(np.uint8)
+                img_8bit = (frame.astype(np.float32) /
+                            4095.0 * 255).astype(np.uint8)
                 h, w = img_8bit.shape
-                qimg = QImage(img_8bit.data, w, h, w, QImage.Format.Format_Grayscale8)
+                qimg = QImage(img_8bit.data, w, h, w,
+                              QImage.Format.Format_Grayscale8)
                 qimg.save(path)
             logger.info("Line scan image saved to %s", path)

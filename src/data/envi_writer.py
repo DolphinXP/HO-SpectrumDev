@@ -18,7 +18,7 @@ from typing import BinaryIO
 
 import numpy as np
 
-logger = logging.getLogger("gpy4.storage")
+logger = logging.getLogger("specdev.storage")
 
 # Sensor geometry
 _BANDS = 1024
@@ -30,6 +30,7 @@ _ENVI_DTYPE_MAP: dict[str, tuple[int, np.dtype]] = {
     "Mono10": (12, np.dtype(np.uint16)),
     "Mono12": (12, np.dtype(np.uint16)),
 }
+
 
 class EnviWriter:
     """Write hyperspectral data in ENVI BIL format.
@@ -114,7 +115,8 @@ class EnviWriter:
             Optional extra metadata (``exposure_us``, ``gain_db``, etc.).
         """
         if self._dat_file is not None:
-            raise RuntimeError("EnviWriter is already open; call close() first")
+            raise RuntimeError(
+                "EnviWriter is already open; call close() first")
 
         if pixel_format not in _ENVI_DTYPE_MAP:
             raise ValueError(f"Unsupported pixel format: {pixel_format}")
@@ -215,7 +217,7 @@ class EnviWriter:
         buf = io.StringIO()
         buf.write("ENVI\n")
         buf.write(
-            f"description = {{gpy4 hyperspectral acquisition "
+            f"description = {{specdev hyperspectral acquisition "
             f"{date_str} {time_str}}}\n"
         )
         buf.write(f"samples = {_SAMPLES}\n")

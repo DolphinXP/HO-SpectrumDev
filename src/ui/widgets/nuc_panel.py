@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLineEdit, QCheckBox, QWidget, QFileDialog
 )
 
-logger = logging.getLogger("gpy4.ui")
+logger = logging.getLogger("specdev.ui")
 
 
 class NucPanel(QGroupBox):
@@ -37,7 +37,7 @@ class NucPanel(QGroupBox):
         self._edit_a.setReadOnly(True)
         self._edit_a.setPlaceholderText("未选择 A 文件...")
         layout.addWidget(self._edit_a, 0, 1)
-        
+
         btn_browse_a = QPushButton("浏览...")
         btn_browse_a.setFixedWidth(60)
         btn_browse_a.clicked.connect(self._on_browse_a)
@@ -60,7 +60,7 @@ class NucPanel(QGroupBox):
         self._chk_enabled = QCheckBox("启用校正")
         self._chk_enabled.toggled.connect(self._on_toggled)
         lower_layout.addWidget(self._chk_enabled)
-        
+
         self._btn_load = QPushButton("加载")
         self._btn_load.setFixedWidth(80)
         self._btn_load.setProperty("class", "btn-green")

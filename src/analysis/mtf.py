@@ -18,7 +18,7 @@ from typing import Final
 
 import numpy as np
 
-logger = logging.getLogger("gpy4.analysis")
+logger = logging.getLogger("specdev.analysis")
 
 _VALID_AVG_COUNTS: Final[frozenset[int]] = frozenset({1, 5, 10})
 _PI_OVER_4: Final[float] = math.pi / 4.0
@@ -70,14 +70,16 @@ class MTFCalculator:
                 f"avg_count must be one of {sorted(_VALID_AVG_COUNTS)}, got {n}"
             )
         if n != self._avg_count:
-            logger.debug("MTF avg_count changed %d -> %d, resetting", self._avg_count, n)
+            logger.debug(
+                "MTF avg_count changed %d -> %d, resetting", self._avg_count, n)
             self._avg_count = n
             self.reset()
 
     def set_black_level(self, level: float) -> None:
         """Set the noise-floor black level subtracted before MTF computation."""
         if level != self._black_level:
-            logger.debug("MTF black_level changed %.1f -> %.1f", self._black_level, level)
+            logger.debug("MTF black_level changed %.1f -> %.1f",
+                         self._black_level, level)
             self._black_level = level
 
     # ------------------------------------------------------------------
@@ -131,14 +133,16 @@ class MTFCalculator:
             Out-of-bounds directions are ``NaN``.
         """
         if frame.ndim != 2:
-            logger.warning("MTF update received non-2D frame (shape=%s), ignoring", frame.shape)
+            logger.warning(
+                "MTF update received non-2D frame (shape=%s), ignoring", frame.shape)
             return None
 
         rows, cols = frame.shape
 
         # Validate coordinates
         if not (0 <= y < rows and 0 <= x < cols):
-            logger.warning("MTF pixel (%d, %d) out of frame bounds (%d, %d)", x, y, cols, rows)
+            logger.warning(
+                "MTF pixel (%d, %d) out of frame bounds (%d, %d)", x, y, cols, rows)
             return None
 
         # Reset if pixel position changed
@@ -167,7 +171,8 @@ class MTFCalculator:
         for direction, ny, nx, valid in neighbours:
             if valid:
                 dn_neighbor = float(frame[ny, nx])
-                mtf_val = self._mtf_single(dn_center, dn_neighbor, self._black_level)
+                mtf_val = self._mtf_single(
+                    dn_center, dn_neighbor, self._black_level)
                 if not math.isnan(mtf_val):
                     self._accum[direction] += mtf_val
                     self._valid_counts[direction] += 1

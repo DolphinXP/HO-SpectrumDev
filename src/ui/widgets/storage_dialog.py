@@ -23,7 +23,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-logger = logging.getLogger("gpy4.ui")
+logger = logging.getLogger("specdev.ui")
 
 # Defaults
 _DEFAULT_EXP_NAME = "exp"

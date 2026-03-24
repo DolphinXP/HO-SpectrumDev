@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 from PySide6.QtCore import QThread, Signal
 
-logger = logging.getLogger("gpy4.replay")
+logger = logging.getLogger("specdev.replay")
 
 
 class ReplayWorker(QThread):
@@ -123,7 +123,8 @@ class ReplayWorker(QThread):
             "pixel_format": "Mono8" if data_type == 1 else "Mono12",
         }
 
-        logger.info("ENVI file loaded: %d frames, %dx%d", lines, samples, bands)
+        logger.info("ENVI file loaded: %d frames, %dx%d",
+                    lines, samples, bands)
         return True
 
     def _load_raw(self, dat_path: Path, json_path: Path) -> bool:
@@ -155,7 +156,8 @@ class ReplayWorker(QThread):
             "pixel_format": sidecar.get("pixel_format", "Mono12"),
         }
 
-        logger.info("Raw file loaded: %d frames, %dx%d", frame_count, width, height)
+        logger.info("Raw file loaded: %d frames, %dx%d",
+                    frame_count, width, height)
         return True
 
     @staticmethod

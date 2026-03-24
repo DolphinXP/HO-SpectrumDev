@@ -37,7 +37,7 @@ A Python/PySide6 desktop application for controlling a Daheng Imaging MER3-138-1
 ## Project Structure
 
 ```
-gpy4/
+specdev/
 ├── main.py                          # Entry point (--mock, --debug flags)
 ├── requirements.txt
 ├── CLAUDE.md
@@ -90,7 +90,7 @@ gpy4/
 - **Frame format**: numpy arrays shape `(1024, 1280)` — rows=spectral bands, cols=spatial pixels; uint8 (Mono8) or uint16 (Mono10/12)
 - **Storage**: two independent modes — ENVI BIL for hyperspectral cubes, raw binary for frame sequences
 - **Device abstraction**: `DeviceInterface` ABC — swap mock ↔ real SDK without touching UI
-- **Logging**: named loggers per module (`gpy4.device`, `gpy4.acquisition`, etc.), rotating file + console
+- **Logging**: named loggers per module (`specdev.device`, `specdev.acquisition`, etc.), rotating file + console
 
 ## Device Data Model
 
@@ -167,7 +167,7 @@ Binary: concatenated raw numpy frames, one after another.
 - File: `logs/app_YYYYMMDD.log` — DEBUG level, rotating 10MB × 5 backups
 - Console: INFO level (DEBUG if `--debug` flag)
 - Format: `%(asctime)s [%(levelname)s] %(name)s: %(message)s`
-- Named loggers: `gpy4.device`, `gpy4.acquisition`, `gpy4.storage`, `gpy4.ui`, `gpy4.analysis`
+- Named loggers: `specdev.device`, `specdev.acquisition`, `specdev.storage`, `specdev.ui`, `specdev.analysis`
 - Log all: device events, parameter changes, frame drops, file open/close, write stats, analysis results
 
 ## Analysis Modules
@@ -200,7 +200,7 @@ Four directions (above/below/left/right), averaged over 1/5/10 frames. → `src/
 - Python 3.10+, type hints on all public methods
 - PySide6 signals as class attributes: `frame_acquired = Signal(np.ndarray, dict)`
 - No direct UI calls from worker threads — always use signals
-- Config: `QSettings("gpy4", "HyperspectralApp")`, keys in `snake_case`
+- Config: `QSettings("specdev", "HyperspectralApp")`, keys in `snake_case`
 - pyqtgraph `PlotWidget` embedded in layouts (not standalone windows)
 - `daheng-example/` is reference only — do not modify those files
 
@@ -214,23 +214,23 @@ Four directions (above/below/left/right), averaged over 1/5/10 frames. → `src/
 
 ## Environment
 
-- Conda: `C:\miniconda3`, environment name: `gpy4`
-- Python: `C:\miniconda3\envs\gpy4\python.exe` (Python 3.10)
+- Conda: `C:\miniconda3`, environment name: `specdev`
+- Python: `C:\miniconda3\envs\specdev\python.exe` (Python 3.10)
 - Always use the full path to the conda Python for running scripts and tests
-- Activate: `conda activate gpy4` (or use full path directly)
+- Activate: `conda activate specdev` (or use full path directly)
 
 ## Running
 
 ```bash
-C:\miniconda3\envs\gpy4\python.exe main.py             # real camera
-C:\miniconda3\envs\gpy4\python.exe main.py --mock      # simulated device
-C:\miniconda3\envs\gpy4\python.exe main.py --debug     # verbose console logging
+C:\miniconda3\envs\specdev\python.exe main.py             # real camera
+C:\miniconda3\envs\specdev\python.exe main.py --mock      # simulated device
+C:\miniconda3\envs\specdev\python.exe main.py --debug     # verbose console logging
 ```
 
 ## Testing
 
 ```bash
-C:\miniconda3\envs\gpy4\python.exe -m pytest tests/ -v
+C:\miniconda3\envs\specdev\python.exe -m pytest tests/ -v
 ```
 
 All tests use `MockDevice` — no hardware required.

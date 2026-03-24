@@ -7,7 +7,7 @@ class AppConfig:
     """Thin wrapper around QSettings for persistent configuration."""
 
     def __init__(self) -> None:
-        self._settings = QSettings("gpy4", "HyperspectralApp")
+        self._settings = QSettings("specdev", "HyperspectralApp")
 
     def get(self, key: str, default=None):
         """Get a config value by snake_case key."""

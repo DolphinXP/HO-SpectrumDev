@@ -8,7 +8,7 @@ import numpy as np
 
 from src.device.device_interface import DeviceInterface
 
-logger = logging.getLogger("gpy4.device")
+logger = logging.getLogger("specdev.device")
 
 _ROWS = 1024
 _COLS = 1280
@@ -43,21 +43,21 @@ class MockDevice(DeviceInterface):
         # Pre-render a 2D object for the line scan
         from PySide6.QtGui import QImage, QPainter, QColor, QFont, QPen
         from PySide6.QtCore import Qt
-        
+
         img = QImage(cols, 1000, QImage.Format.Format_RGB32)
         img.fill(Qt.GlobalColor.black)
-        
+
         p = QPainter(img)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
-        
+
         # Draw Square (Red)
         p.setPen(QPen(QColor(255, 0, 0), 10))
         p.drawRect(150, 150, 300, 300)
-        
+
         # Draw Circle (Green)
         p.setPen(QPen(QColor(0, 255, 0), 10))
         p.drawEllipse(750, 150, 300, 300)
-        
+
         # Draw Text (Blue)
         p.setPen(QPen(QColor(0, 50, 255), 5))
         font = QFont("Arial", 90)
@@ -65,7 +65,7 @@ class MockDevice(DeviceInterface):
         p.setFont(font)
         p.drawText(150, 800, "Hello, world!")
         p.end()
-        
+
         # Convert QImage (Format_RGB32 is BGRA in memory) to numpy array
         ptr = img.bits()
         arr = np.array(ptr).reshape((1000, cols, 4))
@@ -181,9 +181,12 @@ class MockDevice(DeviceInterface):
         t = frame_id
         y_idx = t % self._obj_r.shape[0]
         line_scale = max(1.0, max_val / 255.0)
-        self._overlay_line_pattern(frame, _LINE_SCAN_R, self._obj_r[y_idx], line_scale, max_val)
-        self._overlay_line_pattern(frame, _LINE_SCAN_G, self._obj_g[y_idx], line_scale, max_val)
-        self._overlay_line_pattern(frame, _LINE_SCAN_B, self._obj_b[y_idx], line_scale, max_val)
+        self._overlay_line_pattern(
+            frame, _LINE_SCAN_R, self._obj_r[y_idx], line_scale, max_val)
+        self._overlay_line_pattern(
+            frame, _LINE_SCAN_G, self._obj_g[y_idx], line_scale, max_val)
+        self._overlay_line_pattern(
+            frame, _LINE_SCAN_B, self._obj_b[y_idx], line_scale, max_val)
 
         # A lightweight flicker stripe makes motion obvious in both display modes.
         stripe_x = (t * 11) % cols
@@ -230,7 +233,8 @@ class MockDevice(DeviceInterface):
         gain_factor = 10.0 ** (gain_db / 20.0)
         scale = exposure_factor * gain_factor
 
-        template = np.clip(self._base_pattern * scale, 0, max_val).astype(dtype)
+        template = np.clip(self._base_pattern * scale,
+                           0, max_val).astype(dtype)
         return template
 
     @staticmethod
@@ -241,7 +245,8 @@ class MockDevice(DeviceInterface):
         scale: float,
         max_val: int,
     ) -> None:
-        pattern_scaled = np.clip(pattern * scale, 0, max_val).astype(frame.dtype, copy=False)
+        pattern_scaled = np.clip(
+            pattern * scale, 0, max_val).astype(frame.dtype, copy=False)
         row_lo = max(0, center_row - 1)
         row_hi = min(frame.shape[0], center_row + 2)
         for row in range(row_lo, row_hi):

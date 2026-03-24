@@ -1,4 +1,4 @@
-"""Logging configuration for gpy4."""
+"""Logging configuration for specdev."""
 
 import logging
 import os

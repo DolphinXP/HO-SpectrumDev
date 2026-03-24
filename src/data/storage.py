@@ -16,7 +16,7 @@ import numpy as np
 from src.data.envi_writer import EnviWriter
 from src.data.raw_writer import RawWriter
 
-logger = logging.getLogger("gpy4.storage")
+logger = logging.getLogger("specdev.storage")
 
 
 def _session_path(directory: str, session_name: str) -> str:
@@ -92,7 +92,8 @@ class StorageManager:
             Optional metadata (``exposure_us``, ``gain_db``, etc.).
         """
         if self._envi_writer is not None:
-            logger.warning("ENVI writer already active; closing previous session")
+            logger.warning(
+                "ENVI writer already active; closing previous session")
             self._envi_writer.close()
 
         path = _session_path(directory, session_name)
@@ -122,7 +123,8 @@ class StorageManager:
             Optional metadata forwarded to the JSON sidecar.
         """
         if self._raw_writer is not None:
-            logger.warning("Raw writer already active; closing previous session")
+            logger.warning(
+                "Raw writer already active; closing previous session")
             self._raw_writer.close()
 
         path = _session_path(directory, session_name)

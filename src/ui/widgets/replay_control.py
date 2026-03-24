@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QWidget, QHBoxLayout, QSlider, QPushButton, QComboBox, QLabel, QCheckBox
 )
 
-logger = logging.getLogger("gpy4.ui")
+logger = logging.getLogger("specdev.ui")
 
 
 class ReplayControlWidget(QWidget):

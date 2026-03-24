@@ -15,7 +15,7 @@ from PySide6.QtCore import QObject
 
 from src.device.device_interface import DeviceInterface
 
-logger = logging.getLogger("gpy4.device")
+logger = logging.getLogger("specdev.device")
 
 # Lazy imports for gxipy — only available when SDK is installed
 gx = None

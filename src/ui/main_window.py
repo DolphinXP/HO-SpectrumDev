@@ -31,7 +31,7 @@ from src.ui.widgets.line_scan_display import LineScanDisplayWidget
 from src.ui.widgets.nuc_panel import NucPanel
 from src.utils.config import AppConfig
 
-logger = logging.getLogger("gpy4.ui")
+logger = logging.getLogger("specdev.ui")
 
 # UI refresh interval (ms).  The QTimer fires at this rate and picks up
 # whatever frame the acquisition thread last wrote into the ping-pong

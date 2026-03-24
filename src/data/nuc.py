@@ -11,7 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
-logger = logging.getLogger("gpy4.acquisition")
+logger = logging.getLogger("specdev.acquisition")
 
 _EXPECTED_SHAPE = (1024, 1280)
 

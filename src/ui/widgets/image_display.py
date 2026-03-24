@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
     QFileDialog, QPushButton, QSpinBox,
 )
 
-logger = logging.getLogger("gpy4.ui")
+logger = logging.getLogger("specdev.ui")
 
 
 class _ImageViewBox(pg.ViewBox):
@@ -105,7 +105,8 @@ class ImageDisplayWidget(QWidget):
         button_layout.addWidget(self._apply_levels_button)
 
         self._original_levels_button = QPushButton("原始范围")
-        self._original_levels_button.clicked.connect(self._reset_levels_to_original)
+        self._original_levels_button.clicked.connect(
+            self._reset_levels_to_original)
         button_layout.addWidget(self._original_levels_button)
 
         # Set cross cursor on the image view
@@ -144,7 +145,8 @@ class ImageDisplayWidget(QWidget):
             self._cursor_label.setText(
                 f"X: {x}  Y: {y}  DN: {dn}  Zoom: {self._get_zoom_text()}")
         else:
-            self._cursor_label.setText(f"X: -- Y: -- DN: --  Zoom: {self._get_zoom_text()}")
+            self._cursor_label.setText(
+                f"X: -- Y: -- DN: --  Zoom: {self._get_zoom_text()}")
 
     def _on_mouse_clicked(self, event) -> None:
         """Emit pixel_clicked on left click."""
@@ -194,7 +196,8 @@ class ImageDisplayWidget(QWidget):
         self._level_low = low
         self._level_high = high
         if self._current_frame is not None:
-            self._image_view.setLevels(min=self._level_low, max=self._level_high)
+            self._image_view.setLevels(
+                min=self._level_low, max=self._level_high)
 
     def _reset_levels_to_original(self) -> None:
         """Reset display DN range to the full original dtype range."""
@@ -205,7 +208,8 @@ class ImageDisplayWidget(QWidget):
         self._level_low_spin.setValue(self._level_low)
         self._level_high_spin.setValue(self._level_high)
         if self._current_frame is not None:
-            self._image_view.setLevels(min=self._level_low, max=self._level_high)
+            self._image_view.setLevels(
+                min=self._level_low, max=self._level_high)
 
     def get_current_frame(self) -> np.ndarray | None:
         return self._current_frame
@@ -215,9 +219,11 @@ class ImageDisplayWidget(QWidget):
         current = self._cursor_label.text()
         if "Zoom:" in current:
             prefix = current.split("Zoom:")[0].rstrip()
-            self._cursor_label.setText(f"{prefix}  Zoom: {self._get_zoom_text()}")
+            self._cursor_label.setText(
+                f"{prefix}  Zoom: {self._get_zoom_text()}")
         else:
-            self._cursor_label.setText(f"X: -- Y: -- DN: --  Zoom: {self._get_zoom_text()}")
+            self._cursor_label.setText(
+                f"X: -- Y: -- DN: --  Zoom: {self._get_zoom_text()}")
 
     def _get_zoom_text(self) -> str:
         """Return the current horizontal zoom ratio relative to full-frame view."""
