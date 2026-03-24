@@ -1,3 +1,6 @@
+* {
+    font-family: "Microsoft YaHei", "Segoe UI", "Arial", sans-serif;
+}
 
 QSplitter::handle {
     background-color: #ccc;
@@ -80,52 +83,6 @@ QPushButton:pressed {
 /* ---- Value labels (stats, aux, device info panels) ---- */
 QLabel[class="value"] {
     font-weight: bold;
-}
-
-/* ---- Green action buttons (start acquisition, replay play) ---- */
-QPushButton[class="btn-green"] {
-    background-color: #27ae60;
-    color: white;
-    font-weight: bold;
-    border-radius: 4px;
-    font-size: 13px;
-    min-height: 24px;
-}
-
-QPushButton[class="btn-green"]:hover {
-    background-color: #2ecc71;
-}
-
-QPushButton[class="btn-green"]:pressed {
-    background-color: #1e8449;
-}
-
-QPushButton[class="btn-green"]:disabled {
-    background-color: #95a5a6;
-    color: #ddd;
-}
-
-/* ---- Red action buttons (stop acquisition, replay stop) ---- */
-QPushButton[class="btn-red"] {
-    background-color: #e74c3c;
-    color: white;
-    font-weight: bold;
-    border-radius: 4px;
-    font-size: 13px;
-    min-height: 24px;
-}
-
-QPushButton[class="btn-red"]:hover {
-    background-color: #c0392b;
-}
-
-QPushButton[class="btn-red"]:pressed {
-    background-color: #a93226;
-}
-
-QPushButton[class="btn-red"]:disabled {
-    background-color: #95a5a6;
-    color: #ddd;
 }
 
 /* ---- Device status labels ---- */

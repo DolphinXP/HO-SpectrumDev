@@ -52,11 +52,9 @@ class DeviceControlPanel(QWidget):
         acq_layout.setSpacing(8)
 
         self._btn_start = QPushButton("▶  开始采集")
-        self._btn_start.setProperty("class", "btn-green")
         self._btn_start.clicked.connect(self._on_start_clicked)
 
         self._btn_stop = QPushButton("■  停止采集")
-        self._btn_stop.setProperty("class", "btn-red")
         self._btn_stop.setEnabled(False)
         self._btn_stop.clicked.connect(self._on_stop_clicked)
 

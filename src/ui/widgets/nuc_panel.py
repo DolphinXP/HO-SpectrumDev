@@ -63,7 +63,6 @@ class NucPanel(QGroupBox):
 
         self._btn_load = QPushButton("加载")
         self._btn_load.setFixedWidth(80)
-        self._btn_load.setProperty("class", "btn-green")
         self._btn_load.clicked.connect(self._on_load_clicked)
         lower_layout.addStretch()
         lower_layout.addWidget(self._btn_load)
