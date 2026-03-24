@@ -85,6 +85,17 @@ class StorageDialog(QDialog):
         layout.addWidget(self._chk_raw)
         layout.addWidget(self._chk_envi)
 
+        warning = QLabel(
+            "提示：保存高光谱数据时磁盘写入压力较大，建议将存储目录放在 SSD 上。"
+            "如果磁盘速度不足，系统会为保证程序响应而丢弃部分保存帧。"
+        )
+        warning.setWordWrap(True)
+        warning.setStyleSheet(
+            "color: #b35a00; background-color: #fff4db; "
+            "border: 1px solid #f0c36d; border-radius: 4px; padding: 8px;"
+        )
+        layout.addWidget(warning)
+
         # --- Buttons ---
         self._button_box = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok

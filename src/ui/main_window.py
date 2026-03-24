@@ -541,6 +541,8 @@ class MainWindow(QMainWindow):
 
     def _on_stop(self) -> None:
         """Stop acquisition."""
+        if self._storage.is_recording:
+            self._on_stop_save()
         self._refresh_timer.stop()
         self._acquisition.stop()
         self._device.stop()

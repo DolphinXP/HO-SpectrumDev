@@ -8,6 +8,8 @@ currently active.
 from __future__ import annotations
 
 import logging
+import queue
+import threading
 from datetime import datetime
 from pathlib import Path
 
@@ -44,9 +46,18 @@ class StorageManager:
         mgr.stop()
     """
 
-    def __init__(self) -> None:
+    def __init__(self, max_pending_frames: int = 32) -> None:
         self._envi_writer: EnviWriter | None = None
         self._raw_writer: RawWriter | None = None
+        self._max_pending_frames = max_pending_frames
+        self._write_queue: queue.Queue[np.ndarray | object] = queue.Queue(
+            maxsize=max_pending_frames
+        )
+        self._writer_thread: threading.Thread | None = None
+        self._writer_error: BaseException | None = None
+        self._stop_sentinel = object()
+        self._dropped_frames: int = 0
+        self._drop_warning_emitted: bool = False
 
     # ------------------------------------------------------------------
     # Properties
@@ -66,6 +77,11 @@ class StorageManager:
     def raw_writer(self) -> RawWriter | None:
         """The active raw writer, or ``None``."""
         return self._raw_writer
+
+    @property
+    def dropped_frames(self) -> int:
+        """Number of frames discarded because the async queue was full."""
+        return self._dropped_frames
 
     # ------------------------------------------------------------------
     # Start / stop
@@ -100,6 +116,7 @@ class StorageManager:
         writer = EnviWriter()
         writer.open(path, pixel_format, metadata=metadata)
         self._envi_writer = writer
+        self._ensure_writer_thread()
         logger.info("ENVI recording started: %s", path)
 
     def start_raw(
@@ -138,6 +155,7 @@ class StorageManager:
             write_binary=write_binary,
         )
         self._raw_writer = writer
+        self._ensure_writer_thread()
         logger.info("Raw recording started: %s", path)
 
     def write_frame(self, frame: np.ndarray, metadata: dict | None = None) -> None:
@@ -151,20 +169,25 @@ class StorageManager:
             Frame metadata (currently unused by writers but reserved for
             future per-frame sidecar data).
         """
-        if self._envi_writer is not None:
-            try:
-                self._envi_writer.write_line(frame)
-            except Exception:
-                logger.exception("Error writing ENVI line")
-
-        if self._raw_writer is not None:
-            try:
-                self._raw_writer.write_frame(frame)
-            except Exception:
-                logger.exception("Error writing raw frame")
+        if not self.is_recording:
+            return
+        self._raise_writer_error()
+        try:
+            self._write_queue.put_nowait(frame.copy())
+        except queue.Full:
+            self._dropped_frames += 1
+            if not self._drop_warning_emitted:
+                logger.warning(
+                    "Storage queue is full (%d frames); dropping frames to cap memory usage",
+                    self._max_pending_frames,
+                )
+                self._drop_warning_emitted = True
 
     def stop(self) -> None:
         """Close all active writers and finalise files."""
+        self._stop_writer_thread()
+        self._raise_writer_error()
+
         if self._envi_writer is not None:
             try:
                 self._envi_writer.close()
@@ -179,4 +202,69 @@ class StorageManager:
                 logger.exception("Error closing raw writer")
             self._raw_writer = None
 
+        if self._dropped_frames > 0:
+            logger.warning(
+                "Storage manager dropped %d frame(s) because the writer queue was full",
+                self._dropped_frames,
+            )
+
         logger.info("Storage manager stopped; all writers closed")
+
+    # ------------------------------------------------------------------
+    # Internal
+    # ------------------------------------------------------------------
+
+    def _ensure_writer_thread(self) -> None:
+        if self._writer_thread is not None and self._writer_thread.is_alive():
+            return
+
+        self._writer_error = None
+        self._dropped_frames = 0
+        self._drop_warning_emitted = False
+        self._writer_thread = threading.Thread(
+            target=self._writer_loop,
+            name="StorageWriter",
+            daemon=True,
+        )
+        self._writer_thread.start()
+
+    def _stop_writer_thread(self) -> None:
+        thread = self._writer_thread
+        if thread is None:
+            return
+
+        while thread.is_alive():
+            try:
+                self._write_queue.put(self._stop_sentinel, timeout=0.1)
+                break
+            except queue.Full:
+                continue
+        thread.join()
+        self._writer_thread = None
+
+    def _writer_loop(self) -> None:
+        while True:
+            frame = self._write_queue.get()
+            if frame is self._stop_sentinel:
+                break
+
+            try:
+                self._write_frame_sync(frame)
+            except Exception as exc:  # pragma: no cover - surfaced to caller
+                self._writer_error = exc
+                logger.exception("Error writing frame to storage")
+                break
+
+    def _write_frame_sync(self, frame: np.ndarray) -> None:
+        if self._envi_writer is not None:
+            self._envi_writer.write_line(frame)
+
+        if self._raw_writer is not None:
+            self._raw_writer.write_frame(frame)
+
+    def _raise_writer_error(self) -> None:
+        if self._writer_error is None:
+            return
+        err = self._writer_error
+        self._writer_error = None
+        raise RuntimeError("Background storage writer failed") from err

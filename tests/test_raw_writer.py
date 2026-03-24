@@ -78,3 +78,30 @@ class TestStorageManager:
         sidecar = json.loads(json_path.read_text(encoding="utf-8"))
         assert sidecar["frame_count"] == 1
         assert sidecar["data_file"] == "session.dat"
+
+    def test_async_storage_drains_and_copies_frames(self, tmp_path):
+        """Queued storage should finish on stop and preserve frame contents."""
+        mgr = StorageManager()
+        frame = np.full((1024, 1280), 7, dtype=np.uint16)
+
+        mgr.start_raw(str(tmp_path), "queued", "Mono12")
+        mgr.write_frame(frame)
+        frame.fill(99)
+        mgr.stop()
+
+        dat_path = tmp_path / "queued.dat"
+        stored = np.fromfile(dat_path, dtype=np.uint16).reshape(1024, 1280)
+        assert np.all(stored == 7)
+
+    def test_bounded_storage_queue_drops_frames_instead_of_growing(self, tmp_path):
+        """A full queue should cap memory usage and report dropped frames."""
+        mgr = StorageManager(max_pending_frames=1)
+        frame = np.full((1024, 1280), 3, dtype=np.uint16)
+
+        mgr.start_raw(str(tmp_path), "bounded", "Mono12")
+        mgr.write_frame(frame)
+        for _ in range(8):
+            mgr.write_frame(frame)
+        mgr.stop()
+
+        assert mgr.dropped_frames > 0
