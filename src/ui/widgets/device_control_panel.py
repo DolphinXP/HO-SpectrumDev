@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
 )
 from PySide6.QtGui import QIcon
+from src.utils.config import AppConfig
 
 logger = logging.getLogger("specdev.ui")
 
@@ -40,6 +41,8 @@ class DeviceControlPanel(QWidget):
         super().__init__(parent)
         self._running = False
         self._build_ui()
+        self._config = AppConfig()
+        self._load_settings()
 
     def _build_ui(self) -> None:
         outer = QVBoxLayout(self)
@@ -75,9 +78,11 @@ class DeviceControlPanel(QWidget):
         lbl_exp.setAlignment(Qt.AlignmentFlag.AlignRight |
                              Qt.AlignmentFlag.AlignVCenter)
         self._spin_exposure = QDoubleSpinBox()
+        # CLAUDE.md: Min: 3µs–100µs (step 1µs); Standard: 13µs–1s (step 1 line period)
+        # Using 1 µs step for full range to support both modes
         self._spin_exposure.setRange(3.0, 1_000_000.0)  # 3 µs – 1 s
         self._spin_exposure.setDecimals(1)
-        self._spin_exposure.setSingleStep(100.0)
+        self._spin_exposure.setSingleStep(1.0)  # 1 µs step per CLAUDE.md
         self._spin_exposure.setValue(10000.0)
         self._spin_exposure.setSuffix(" µs")
         self._spin_exposure.setKeyboardTracking(False)
@@ -166,6 +171,42 @@ class DeviceControlPanel(QWidget):
 
         outer.addWidget(param_group)
 
+    # ── Settings persistence ───────────────────────────────────────
+
+    def _load_settings(self) -> None:
+        """Load saved settings from QSettings and apply to controls."""
+        # Load exposure (default 10000 µs)
+        exposure = self._config.get_float("exposure_us", 10000.0)
+        self._spin_exposure.blockSignals(True)
+        self._spin_exposure.setValue(exposure)
+        self._spin_exposure.blockSignals(False)
+
+        # Load gain (default 0.0 dB)
+        gain = self._config.get_float("gain_db", 0.0)
+        self._spin_gain.blockSignals(True)
+        self._spin_gain.setValue(gain)
+        self._spin_gain.blockSignals(False)
+
+        # Load pixel format (default Mono8)
+        pixel_format = self._config.get_str("pixel_format", "Mono8")
+        self._combo_pixel_format.blockSignals(True)
+        self._combo_pixel_format.setCurrentText(pixel_format)
+        self._combo_pixel_format.blockSignals(False)
+        self._update_adc_label(pixel_format)
+
+        logger.debug("Loaded settings: exposure=%.1f µs, gain=%.1f dB, format=%s",
+                     exposure, gain, pixel_format)
+
+    def _save_settings(self) -> None:
+        """Save current settings to QSettings."""
+        self._config.set("exposure_us", self._spin_exposure.value())
+        self._config.set("gain_db", self._spin_gain.value())
+        self._config.set(
+            "pixel_format", self._combo_pixel_format.currentText())
+        logger.debug("Saved settings: exposure=%.1f µs, gain=%.1f dB, format=%s",
+                     self._spin_exposure.value(), self._spin_gain.value(),
+                     self._combo_pixel_format.currentText())
+
     # ── Public API ─────────────────────────────────────────────────
 
     def sync_from_device(self, device) -> None:
@@ -224,15 +265,18 @@ class DeviceControlPanel(QWidget):
 
     def _on_exposure_changed(self, value: float) -> None:
         self.exposure_changed.emit(value)
+        self._save_settings()
         logger.debug("Exposure control changed to %.1f µs", value)
 
     def _on_gain_changed(self, value: float) -> None:
         self.gain_changed.emit(value)
+        self._save_settings()
         logger.debug("Gain control changed to %.1f dB", value)
 
     def _on_pixel_format_changed(self, fmt: str) -> None:
         self._update_adc_label(fmt)
         self.pixel_format_changed.emit(fmt)
+        self._save_settings()
         logger.debug("Pixel format control changed to %s", fmt)
 
     def _update_adc_label(self, fmt: str) -> None:
