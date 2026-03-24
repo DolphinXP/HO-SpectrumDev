@@ -10,7 +10,8 @@
       "Bash(C:/miniconda3/envs/gpy4/python.exe -c \"from src.data.storage import StorageManager; print\\(''StorageManager OK''\\)\")",
       "Bash(C:/miniconda3/envs/gpy4/python.exe -c \"from src.ui.main_window import MainWindow; print\\(''MainWindow OK''\\)\")",
       "Bash(C:/miniconda3/envs/gpy4/python.exe -m py_compile src/data/replay_worker.py src/ui/widgets/replay_control.py src/ui/main_window.py)",
-      "Bash(C:/miniconda3/envs/gpy4/python.exe -m py_compile src/ui/widgets/line_scan_display.py)"
+      "Bash(C:/miniconda3/envs/gpy4/python.exe -m py_compile src/ui/widgets/line_scan_display.py)",
+      "Read(//c/Program Files/Daheng Imaging/GalaxySDK/Development/Samples/Python/**)"
     ]
   }
 }

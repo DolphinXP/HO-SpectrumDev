@@ -89,16 +89,23 @@ class DahengDevice(DeviceInterface):
             self._remote_feature = self._camera.get_remote_device_feature_control()
             self._data_stream = self._camera.data_stream[0]
 
+            # Set payload size for GigE cameras (critical for proper data transfer)
+            try:
+                payload_size = self._remote_feature.get_int_feature("PayloadSize").get()
+                logger.info("Payload size: %d bytes", payload_size)
+            except Exception as e:
+                logger.warning("Could not read PayloadSize (may not be GigE camera): %s", e)
+
             # Set exposure
-            self._remote_feature.get_float_feature(
-                "ExposureTime").set(self._exposure_us)
+            self._remote_feature.get_float_feature("ExposureTime").set(self._exposure_us)
+
+            # Set gain
+            self._remote_feature.get_float_feature("Gain").set(self._gain_db)
 
             # Software trigger mode
             self._remote_feature.get_enum_feature("TriggerMode").set("On")
-            self._remote_feature.get_enum_feature(
-                "TriggerSource").set("Software")
-            self._trigger_cmd = self._remote_feature.get_command_feature(
-                "TriggerSoftware")
+            self._remote_feature.get_enum_feature("TriggerSource").set("Software")
+            self._trigger_cmd = self._remote_feature.get_command_feature("TriggerSoftware")
 
             logger.info("DahengDevice initialized: SN=%s", self._sn)
             return True
@@ -178,7 +185,14 @@ class DahengDevice(DeviceInterface):
                 logger.error("Failed to set pixel format: %s", e)
 
     def get_frame_shape(self) -> tuple[int, int]:
-        return (1024, 1280)
+        if self._remote_feature:
+            try:
+                width = self._remote_feature.get_int_feature("Width").get()
+                height = self._remote_feature.get_int_feature("Height").get()
+                return (height, width)
+            except Exception:
+                pass
+        return (1024, 1280)  # Default for MER3-138-136G3M-P-SWIR
 
     def get_exposure(self) -> float:
         return self._exposure_us
@@ -195,30 +209,47 @@ class DahengDevice(DeviceInterface):
             return
 
         try:
-            numpy_array = raw_image.get_numpy_array()
-            if numpy_array is None:
-                logger.warning("Failed to get numpy array from raw_image")
+            # Check frame status
+            if raw_image.get_status() != 0:
+                logger.warning("Frame status error: %d", raw_image.get_status())
+                if self._running and self._trigger_cmd:
+                    self._trigger_cmd.send_command()
                 return
 
-            # Ensure shape is (1024, 1280) — raw mono frame
-            # The SDK returns the array in the native pixel shape
-            frame = numpy_array.reshape(1024, 1280)
-
-            # Determine dtype based on pixel format
+            # Get actual dimensions from frame
+            height = raw_image.get_height()
+            width = raw_image.get_width()
             pixel_format = raw_image.get_pixel_format()
-            if pixel_format in (GxPixelFormatEntry.MONO10, GxPixelFormatEntry.MONO12):
-                frame = frame.astype(np.uint16)
+
+            # Handle different pixel formats
+            if pixel_format in (GxPixelFormatEntry.MONO8, GxPixelFormatEntry.R8,
+                               GxPixelFormatEntry.B8, GxPixelFormatEntry.G8):
+                # Direct numpy array for 8-bit formats
+                numpy_array = raw_image.get_numpy_array()
+                if numpy_array is None:
+                    logger.warning("Failed to get numpy array from raw_image")
+                    if self._running and self._trigger_cmd:
+                        self._trigger_cmd.send_command()
+                    return
+                frame = numpy_array.reshape(height, width).astype(np.uint8)
             else:
-                frame = frame.astype(np.uint8)
+                # For 10/12-bit formats, get raw data and reshape
+                numpy_array = raw_image.get_numpy_array()
+                if numpy_array is None:
+                    logger.warning("Failed to get numpy array for 10/12-bit format")
+                    if self._running and self._trigger_cmd:
+                        self._trigger_cmd.send_command()
+                    return
+                frame = numpy_array.reshape(height, width).astype(np.uint16)
 
             metadata = {
-                "frame_id": self._frame_id_counter,
+                "frame_id": raw_image.get_frame_id(),
                 "timestamp": time.time(),
                 "pixel_format": self._pixel_format,
                 "exposure_us": self._exposure_us,
                 "gain_db": self._gain_db,
-                "width": 1280,
-                "height": 1024,
+                "width": width,
+                "height": height,
             }
             self._frame_id_counter += 1
 
@@ -230,3 +261,5 @@ class DahengDevice(DeviceInterface):
 
         except Exception as e:
             logger.error("Capture callback error: %s", e)
+            if self._running and self._trigger_cmd:
+                self._trigger_cmd.send_command()
