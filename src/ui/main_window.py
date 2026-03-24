@@ -118,14 +118,16 @@ class MainWindow(QMainWindow):
         from PySide6.QtGui import QActionGroup
         act_group = QActionGroup(self)
 
-        self._act_mode_area = QAction(QIcon(os.path.join(icon_dir, "full-area.svg")), "面阵", self)
+        self._act_mode_area = QAction(
+            QIcon(os.path.join(icon_dir, "full-area.svg")), "面阵", self)
         self._act_mode_area.setCheckable(True)
         self._act_mode_area.setChecked(True)
         self._act_mode_area.toggled.connect(self._on_mode_toggled)
         act_group.addAction(self._act_mode_area)
         tb.addAction(self._act_mode_area)
 
-        self._act_mode_line = QAction(QIcon(os.path.join(icon_dir, "line-scan.svg")), "线扫", self)
+        self._act_mode_line = QAction(
+            QIcon(os.path.join(icon_dir, "line-scan.svg")), "线扫", self)
         self._act_mode_line.setCheckable(True)
         self._act_mode_line.toggled.connect(self._on_mode_toggled)
         act_group.addAction(self._act_mode_line)
@@ -201,16 +203,17 @@ class MainWindow(QMainWindow):
 
         from PySide6.QtWidgets import QStackedWidget
         self._display_stack = QStackedWidget()
-        
+
         self._image_display = ImageDisplayWidget()
         self._line_scan_display = LineScanDisplayWidget()
         self._line_scan_display.config_changed.connect(
-            lambda en, idxs: self._acquisition.set_line_scan_mode(en and self._act_mode_line.isChecked(), idxs)
+            lambda en, idxs: self._acquisition.set_line_scan_mode(
+                en and self._act_mode_line.isChecked(), idxs)
         )
-        
+
         self._display_stack.addWidget(self._image_display)
         self._display_stack.addWidget(self._line_scan_display)
-        
+
         image_layout.addWidget(self._display_stack)
 
         # Replay control (initially hidden)
@@ -259,7 +262,8 @@ class MainWindow(QMainWindow):
         self._h_splitter_top.addWidget(right_scroll)
 
         self._h_splitter_top.setSizes([1200, 300])
-        self._h_splitter_top.setCollapsible(1, False)  # prevent right panel collapse
+        self._h_splitter_top.setCollapsible(
+            1, False)  # prevent right panel collapse
 
         # ---- BOTTOM HALF: optical cal panel + spectrum graphs ----
         self._bottom_container = QWidget()
@@ -549,7 +553,7 @@ class MainWindow(QMainWindow):
             # Only reload if files changed or not loaded
             current_a = self._config.get_str("nuc.a_path")
             current_b = self._config.get_str("nuc.b_path")
-            
+
             if a_path and b_path:
                 if (a_path != current_a or b_path != current_b or not self._nuc.is_loaded()):
                     self._nuc.load(a_path, b_path)
@@ -558,29 +562,34 @@ class MainWindow(QMainWindow):
 
             self._nuc.enabled = enabled
             self._config.set("nuc.enabled", enabled)
-            
+
             # Update UI
             loaded = self._nuc.is_loaded()
             self._nuc_panel.set_nuc_status(loaded)
-            
+
             if loaded and enabled:
                 self._status_nuc.setText("NUC: 启用")
-                self._status_nuc.setStyleSheet("color: #27ae60; font-weight: bold;")
+                self._status_nuc.setStyleSheet(
+                    "color: #27ae60; font-weight: bold;")
             elif loaded:
                 self._status_nuc.setText("NUC: 已加载")
-                self._status_nuc.setStyleSheet("color: #2980b9; font-weight: bold;")
+                self._status_nuc.setStyleSheet(
+                    "color: #2980b9; font-weight: bold;")
             else:
                 self._status_nuc.setText("NUC: 未加载")
-                self._status_nuc.setStyleSheet("color: #e74c3c; font-weight: bold;")
-                
-            logger.info("NUC state changed: loaded=%s, enabled=%s", loaded, enabled)
-            
+                self._status_nuc.setStyleSheet(
+                    "color: #e74c3c; font-weight: bold;")
+
+            logger.info("NUC state changed: loaded=%s, enabled=%s",
+                        loaded, enabled)
+
         except Exception as e:
             logger.error("Failed to load NUC: %s", e)
             QMessageBox.critical(self, "NUC 错误", f"加载 NUC 数据失败: {e}")
             self._nuc.unload()
             self._status_nuc.setText("NUC: 错误")
-            self._status_nuc.setStyleSheet("color: #e74c3c; font-weight: bold;")
+            self._status_nuc.setStyleSheet(
+                "color: #e74c3c; font-weight: bold;")
 
     def _on_start_save(self) -> None:
         """Show storage dialog and start recording to disk."""
@@ -819,6 +828,17 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event) -> None:
         """Clean up on window close."""
+        reply = QMessageBox.question(
+            self,
+            "确认退出",
+            "确定要退出程序吗？",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+        if reply == QMessageBox.StandardButton.No:
+            event.ignore()
+            return
+
         if self._running:
             self._on_stop()
         if self._replaying:
