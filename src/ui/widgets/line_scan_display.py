@@ -124,6 +124,7 @@ class LineScanDisplayWidget(QWidget):
         self._display_buffer: np.ndarray | None = None
         self._line_count = 0
         self._max_lines = 1000
+        self._max_dn = 4095  # Default, will be updated based on pixel format
         self._channels = 1
         self._write_index = 0
         self._render_pending = False
@@ -273,19 +274,28 @@ class LineScanDisplayWidget(QWidget):
             display_data[tail_len:] = self._buffer[:self._write_index]
 
         if display_data.dtype in (np.float32, np.float64):
-            display_data = np.clip(display_data, 0, 4095).astype(np.uint16)
+            display_data = np.clip(
+                display_data, 0, self._max_dn).astype(np.uint16)
 
         if display_data.ndim == 2:
             self._image_view.setImage(
                 display_data.T, autoLevels=False, autoRange=False)
         else:
             img_8bit = (display_data.astype(np.float32) /
-                        4095.0 * 255).astype(np.uint8)
+                        self._max_dn * 255).astype(np.uint8)
             img_8bit = np.transpose(img_8bit, (1, 0, 2))
             self._image_view.setImage(img_8bit, autoRange=False)
 
     def _reset_zoom(self):
         self._image_view.autoRange()
+
+    def set_max_dn(self, max_dn: int) -> None:
+        """Update the maximum DN value for display scaling.
+
+        Args:
+            max_dn: The maximum DN value (e.g., 255 for Mono8, 1023 for Mono10, 4095 for Mono12)
+        """
+        self._max_dn = max_dn
 
     def _save_image(self):
         if self._buffer is None:
@@ -298,7 +308,7 @@ class LineScanDisplayWidget(QWidget):
             if frame.ndim == 3:
                 # RGB
                 img_8bit = (frame.astype(np.float32) /
-                            4095.0 * 255).astype(np.uint8)
+                            self._max_dn * 255).astype(np.uint8)
                 h, w, c = img_8bit.shape
                 qimg = QImage(img_8bit.data, w, h, w * c,
                               QImage.Format.Format_RGB888)
@@ -306,7 +316,7 @@ class LineScanDisplayWidget(QWidget):
             else:
                 # Grayscale
                 img_8bit = (frame.astype(np.float32) /
-                            4095.0 * 255).astype(np.uint8)
+                            self._max_dn * 255).astype(np.uint8)
                 h, w = img_8bit.shape
                 qimg = QImage(img_8bit.data, w, h, w,
                               QImage.Format.Format_Grayscale8)

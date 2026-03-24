@@ -112,12 +112,14 @@ class ImageDisplayWidget(QWidget):
         # Set cross cursor on the image view
         self._image_view.getView().setCursor(Qt.CursorShape.CrossCursor)
 
-    def update_image(self, frame: np.ndarray) -> None:
+    def update_image(self, frame: np.ndarray, metadata: dict | None = None) -> None:
         """Display a new frame. frame shape: (1024, 1280)."""
         self._current_frame = frame
         self._frame_shape = frame.shape
 
-        max_val = 255 if frame.dtype == np.uint8 else 4095
+        # Calculate max value based on pixel format from metadata
+        pixel_format = metadata.get("pixel_format") if metadata else None
+        max_val = self._get_max_value_from_format(pixel_format, frame.dtype)
         if max_val != self._level_max:
             self._level_max = max_val
             self._reset_levels_to_original()
@@ -130,6 +132,25 @@ class ImageDisplayWidget(QWidget):
             autoHistogramRange=False,
         )
         self._update_zoom_label()
+
+    @staticmethod
+    def _get_max_value_from_format(pixel_format: str | None, dtype: np.dtype) -> int:
+        """Get max value based on pixel format or dtype.
+
+        Args:
+            pixel_format: The pixel format string (e.g., "Mono8", "Mono10", "Mono12", "Mono16")
+            dtype: The numpy dtype of the frame
+
+        Returns:
+            The maximum value for the pixel format
+        """
+        if pixel_format:
+            # Extract bit depth from pixel format string
+            bits = int(pixel_format[4:])  # Extract number after "Mono"
+            return (1 << bits) - 1  # 2^bits - 1
+        else:
+            # Fallback to dtype-based detection
+            return 255 if dtype == np.uint8 else 4095
 
     def _on_mouse_moved(self, pos) -> None:
         """Update cursor info on mouse move."""

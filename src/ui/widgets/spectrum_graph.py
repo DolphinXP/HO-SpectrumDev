@@ -311,6 +311,20 @@ class SpectrumGraphWidget(QWidget):
         self._y_range_high.blockSignals(False)
         self._plot.setYRange(0, self._dn_max, padding=0)
 
+    def set_dn_max(self, dn_max: int) -> None:
+        """Update the maximum DN value for Y-axis range.
+
+        Args:
+            dn_max: The maximum DN value (e.g., 255 for Mono8, 1023 for Mono10, 4095 for Mono12)
+        """
+        if dn_max == self._dn_max:
+            return
+
+        self._dn_max = dn_max
+        self._y_range_low.setRange(0, dn_max)
+        self._y_range_high.setRange(0, dn_max)
+        self._plot.setYRange(0, dn_max, padding=0)
+
     def _save_image(self) -> None:
         path, _ = QFileDialog.getSaveFileName(
             self, "保存图片", "", "PNG (*.png);;All Files (*)")

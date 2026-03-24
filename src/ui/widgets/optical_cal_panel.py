@@ -217,6 +217,14 @@ class OpticalCalPanel(QWidget):
         mean_val = result.get("mean", float("nan"))
         self._mtf_mean_label.setText(f"均值: {fmt(mean_val)}")
 
+    def set_max_dn(self, max_dn: int) -> None:
+        """Update the maximum DN value for black level spinbox.
+
+        Args:
+            max_dn: The maximum DN value (e.g., 255 for Mono8, 1023 for Mono10, 4095 for Mono12)
+        """
+        self._bl_spin.setRange(0, max_dn)
+
     def _on_coord_changed(self) -> None:
         self.pixel_changed.emit(self._x_spin.value(), self._y_spin.value())
 

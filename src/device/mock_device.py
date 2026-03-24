@@ -24,7 +24,7 @@ class MockDevice(DeviceInterface):
         super().__init__(parent)
         self._exposure_us: float = 10000.0
         self._gain_db: float = 0.0
-        self._pixel_format: str = "Mono8"
+        self._pixel_format: str = "Mono10"
         self._running: bool = False
         self._frame_id: int = 0
         self._target_interval_s: float = 1.0 / 120.0
@@ -174,8 +174,7 @@ class MockDevice(DeviceInterface):
                 self._template_dirty = False
             template = self._template_frame
 
-        dtype = np.uint8 if pixel_format == "Mono8" else np.uint16
-        max_val = 255 if dtype == np.uint8 else 4095
+        dtype, max_val = self._get_dtype_and_max_value(pixel_format)
         frame = template.copy()
 
         t = frame_id
@@ -221,19 +220,42 @@ class MockDevice(DeviceInterface):
         }
         self.frame_acquired.emit(frame, metadata)
 
+    @staticmethod
+    def _get_dtype_and_max_value(pixel_format: str) -> tuple[type, int]:
+        """Get numpy dtype and max value based on pixel format.
+
+        Args:
+            pixel_format: The pixel format string (e.g., "Mono8", "Mono10", "Mono12", "Mono16")
+
+        Returns:
+            A tuple of (numpy_dtype, max_value) where max_value is 2^bits - 1
+        """
+        # Extract the bit depth from the pixel format string
+        # Format is "Mono{bits}" where bits is 8, 10, 12, or 16
+        bits = int(pixel_format[4:])  # Extract number after "Mono"
+        max_val = (1 << bits) - 1  # 2^bits - 1
+
+        # Mono8 uses uint8, all others use uint16
+        dtype = np.uint8 if bits == 8 else np.uint16
+
+        return dtype, max_val
+
     def _build_template(
         self,
         pixel_format: str,
         exposure_us: float,
         gain_db: float,
     ) -> np.ndarray:
-        dtype = np.uint8 if pixel_format == "Mono8" else np.uint16
-        max_val = 255 if dtype == np.uint8 else 4095
+        dtype, max_val = self._get_dtype_and_max_value(pixel_format)
         exposure_factor = exposure_us / 10000.0
         gain_factor = 10.0 ** (gain_db / 20.0)
         scale = exposure_factor * gain_factor
 
-        template = np.clip(self._base_pattern * scale,
+        # Normalize base pattern to [0, 1] range, then scale to [0, max_val]
+        # This ensures the full pixel format range is used
+        base_max = np.max(self._base_pattern)
+        normalized_pattern = self._base_pattern / base_max
+        template = np.clip(normalized_pattern * max_val * scale,
                            0, max_val).astype(dtype)
         return template
 

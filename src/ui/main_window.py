@@ -51,7 +51,8 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("高光谱相机控制软件")
         self.resize(1600, 900)
-        _ico = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "app.ico")
+        _ico = os.path.join(os.path.dirname(__file__),
+                            "..", "..", "assets", "app.ico")
         self.setWindowIcon(QIcon(_ico))
 
         self._device = device
@@ -85,6 +86,10 @@ class MainWindow(QMainWindow):
         self._build_toolbar()
         self._build_central()
         self._build_statusbar()
+
+        # Initialize widgets with current pixel format
+        initial_fmt = self._device.get_pixel_format()
+        self._update_widgets_for_pixel_format(initial_fmt)
 
         # Wire signals
         self._wire_signals()
@@ -410,14 +415,16 @@ class MainWindow(QMainWindow):
         # Prepare display frame for area scan mode & stats
         display_frame = frame
         if frame.dtype == np.float32:
-            display_frame = np.clip(frame, 0, 4095).astype(np.uint16)
+            max_dn = self._get_max_dn_from_format(
+                metadata.get("pixel_format", "Mono12"))
+            display_frame = np.clip(frame, 0, max_dn).astype(np.uint16)
 
         if self._line_scan_active:
             lines = self._acquisition.pull_line_scan_data()
             if lines:
                 self._line_scan_display.append_lines(lines)
         else:
-            self._image_display.update_image(display_frame)
+            self._image_display.update_image(display_frame, metadata)
 
         # Aux data labels (lightweight)
         self._aux_panel.update_metadata(metadata)
@@ -454,7 +461,9 @@ class MainWindow(QMainWindow):
         if self._current_frame is not None:
             frame = self._current_frame
             if frame.dtype == np.float32:
-                frame = np.clip(frame, 0, 4095).astype(np.uint16)
+                pixel_format = self._device.get_pixel_format()
+                max_dn = self._get_max_dn_from_format(pixel_format)
+                frame = np.clip(frame, 0, max_dn).astype(np.uint16)
             self._update_spectral_plots(frame, x, y)
             self._optical_cal_panel.update_dn_neighborhood(frame, x, y)
 
@@ -464,7 +473,9 @@ class MainWindow(QMainWindow):
             return
         frame = self._current_frame
         if frame.dtype == np.float32:
-            frame = np.clip(frame, 0, 4095).astype(np.uint16)
+            pixel_format = self._device.get_pixel_format()
+            max_dn = self._get_max_dn_from_format(pixel_format)
+            frame = np.clip(frame, 0, max_dn).astype(np.uint16)
         idx = np.unravel_index(np.argmax(frame), frame.shape)
         y, x = int(idx[0]), int(idx[1])
         self._on_pixel_selected(x, y)
@@ -553,7 +564,46 @@ class MainWindow(QMainWindow):
             logger.warning("Cannot change pixel format while running")
             return
         self._device.set_pixel_format(fmt)
+        self._update_widgets_for_pixel_format(fmt)
         logger.info("Pixel format set to %s", fmt)
+
+    def _update_widgets_for_pixel_format(self, fmt: str) -> None:
+        """Update all widgets' max DN values based on pixel format.
+
+        Args:
+            fmt: The pixel format string (e.g., "Mono8", "Mono10", "Mono12")
+        """
+        # Calculate max value from pixel format
+        bits = int(fmt[4:])  # Extract number after "Mono"
+        max_dn = (1 << bits) - 1  # 2^bits - 1
+
+        # Update spectrum graphs
+        self._graph_near_spatial.set_dn_max(max_dn)
+        self._graph_near_spectral.set_dn_max(max_dn)
+        self._graph_full_spatial.set_dn_max(max_dn)
+        self._graph_full_spectral.set_dn_max(max_dn)
+
+        # Update optical calibration panel
+        self._optical_cal_panel.set_max_dn(max_dn)
+
+        # Update line scan display
+        self._line_scan_display.set_max_dn(max_dn)
+
+        logger.debug(
+            "Updated widgets for pixel format %s: max_dn=%d", fmt, max_dn)
+
+    @staticmethod
+    def _get_max_dn_from_format(fmt: str) -> int:
+        """Get max DN value from pixel format.
+
+        Args:
+            fmt: The pixel format string (e.g., "Mono8", "Mono10", "Mono12")
+
+        Returns:
+            The maximum DN value (2^bits - 1)
+        """
+        bits = int(fmt[4:])  # Extract number after "Mono"
+        return (1 << bits) - 1  # 2^bits - 1
 
     def _on_nuc_changed(self, a_path: str, b_path: str, enabled: bool) -> None:
         """Handle NUC parameter changes from the NUCPanel."""
@@ -720,7 +770,9 @@ class MainWindow(QMainWindow):
         # Prepare display frame
         display_frame = frame
         if frame.dtype == np.float32:
-            display_frame = np.clip(frame, 0, 4095).astype(np.uint16)
+            max_dn = self._get_max_dn_from_format(
+                metadata.get("pixel_format", "Mono12"))
+            display_frame = np.clip(frame, 0, max_dn).astype(np.uint16)
 
         if self._act_mode_line.isChecked():
             # Apply same line scan logic directly for replay frames (happens on main thread)
@@ -734,7 +786,7 @@ class MainWindow(QMainWindow):
                 pass
         else:
             # Update image display
-            self._image_display.update_image(display_frame)
+            self._image_display.update_image(display_frame, metadata)
 
         # Update aux data
         self._aux_panel.update_metadata(metadata)
