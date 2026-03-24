@@ -12,8 +12,14 @@ def setup_logging(debug: bool = False) -> None:
     Args:
         debug: If True, all levels are DEBUG; otherwise INFO.
     """
-    log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__)))), "logs")
+    # Check for APP_LOG_DIR environment variable (set by runtime hook for frozen executable)
+    log_dir_env = os.environ.get('APP_LOG_DIR')
+    if log_dir_env:
+        log_dir = log_dir_env
+    else:
+        # Fallback to original behavior for development
+        log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__)))), "logs")
     os.makedirs(log_dir, exist_ok=True)
 
     log_file = os.path.join(log_dir, f"app_{datetime.now():%Y%m%d}.log")
