@@ -6,11 +6,22 @@ import time
 
 import numpy as np
 from PySide6.QtCore import Qt, QTimer, QSize
-from PySide6.QtGui import QAction, QIcon
+from PySide6.QtGui import QAction, QIcon, QPixmap, QPainter, QColor
 from PySide6.QtWidgets import (
-    QMainWindow, QToolBar, QSplitter, QWidget, QVBoxLayout, QLabel,
-    QHBoxLayout, QStatusBar, QMessageBox, QScrollArea, QFileDialog,
+    QMainWindow,
+    QToolBar,
+    QSplitter,
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QHBoxLayout,
+    QStatusBar,
+    QMessageBox,
+    QScrollArea,
+    QFileDialog,
 )
+from PySide6.QtSvg import QSvgRenderer
+from PySide6.QtSvg import QSvgRenderer
 
 from src.device.device_interface import DeviceInterface
 from src.data.acquisition import AcquisitionWorker
@@ -33,6 +44,58 @@ from src.utils.config import AppConfig
 
 logger = logging.getLogger("specdev.ui")
 
+_ICON_COLOR = QColor(224, 224, 224)  # #e0e0e0 — light color for dark toolbar
+_ICON_COLOR_CHECKED = QColor(
+    30, 30, 46
+)  # #1e1e2e — dark color for checked/highlighted state
+
+
+def _make_pixmap(svg_path: str, color: QColor, size: QSize) -> QPixmap:
+    renderer = QSvgRenderer(svg_path)
+    if size.isEmpty():
+        size = renderer.defaultSize()
+        if size.isEmpty():
+            size = QSize(24, 24)
+    pixmap = QPixmap(size)
+    pixmap.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(pixmap)
+    renderer.render(painter)
+    painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
+    painter.fillRect(pixmap.rect(), color)
+    painter.end()
+    return pixmap
+
+
+def _icon(name: str) -> QIcon:
+    """Load an SVG icon and tint it — light for normal, dark for checked/selected."""
+    path = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "images", name)
+    icon = QIcon()
+    # Normal state (unchecked) — light icon
+    icon.addPixmap(
+        _make_pixmap(path, _ICON_COLOR, QSize()), QIcon.Mode.Normal, QIcon.State.Off
+    )
+    icon.addPixmap(
+        _make_pixmap(path, _ICON_COLOR, QSize()), QIcon.Mode.Active, QIcon.State.Off
+    )
+    # Checked state — dark icon (for when button is highlighted/checked with blue bg)
+    icon.addPixmap(
+        _make_pixmap(path, _ICON_COLOR_CHECKED, QSize()),
+        QIcon.Mode.Normal,
+        QIcon.State.On,
+    )
+    icon.addPixmap(
+        _make_pixmap(path, _ICON_COLOR_CHECKED, QSize()),
+        QIcon.Mode.Active,
+        QIcon.State.On,
+    )
+    icon.addPixmap(
+        _make_pixmap(path, _ICON_COLOR_CHECKED, QSize()),
+        QIcon.Mode.Selected,
+        QIcon.State.On,
+    )
+    return icon
+
+
 # UI refresh interval (ms).  The QTimer fires at this rate and picks up
 # whatever frame the acquisition thread last wrote into the ping-pong
 # buffer.  33 ms ≈ 30 Hz — fast enough for smooth display, light enough
@@ -51,8 +114,7 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("高光谱相机控制软件")
         self.resize(1600, 900)
-        _ico = os.path.join(os.path.dirname(__file__),
-                            "..", "..", "assets", "app.ico")
+        _ico = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "app.ico")
         self.setWindowIcon(QIcon(_ico))
 
         self._device = device
@@ -116,25 +178,21 @@ class MainWindow(QMainWindow):
         tb.setIconSize(QSize(20, 20))
         self.addToolBar(tb)
 
-        icon_dir = os.path.join(os.path.dirname(
-            __file__), "..", "..", "assets", "images")
-
         # Start/Stop buttons are now in DeviceControlPanel (right panel)
 
         # Modes toggle (exclusive)
         from PySide6.QtGui import QActionGroup
+
         act_group = QActionGroup(self)
 
-        self._act_mode_area = QAction(
-            QIcon(os.path.join(icon_dir, "full-area.svg")), "面阵", self)
+        self._act_mode_area = QAction(_icon("full-area.svg"), "面阵", self)
         self._act_mode_area.setCheckable(True)
         self._act_mode_area.setChecked(True)
         self._act_mode_area.toggled.connect(self._on_mode_toggled)
         act_group.addAction(self._act_mode_area)
         tb.addAction(self._act_mode_area)
 
-        self._act_mode_line = QAction(
-            QIcon(os.path.join(icon_dir, "line-scan.svg")), "线扫", self)
+        self._act_mode_line = QAction(_icon("line-scan.svg"), "线扫", self)
         self._act_mode_line.setCheckable(True)
         self._act_mode_line.toggled.connect(self._on_mode_toggled)
         act_group.addAction(self._act_mode_line)
@@ -142,26 +200,22 @@ class MainWindow(QMainWindow):
 
         tb.addSeparator()
 
-        self._act_playback = QAction(
-            QIcon(os.path.join(icon_dir, "replay.svg")), "开始回放", self)
+        self._act_playback = QAction(_icon("replay.svg"), "开始回放", self)
         self._act_playback.triggered.connect(self._on_playback)
         tb.addAction(self._act_playback)
 
-        self._act_stop_playback = QAction(
-            QIcon(os.path.join(icon_dir, "stop.svg")), "停止回放", self)
+        self._act_stop_playback = QAction(_icon("stop.svg"), "停止回放", self)
         self._act_stop_playback.setEnabled(False)
         self._act_stop_playback.triggered.connect(self._teardown_replay)
         tb.addAction(self._act_stop_playback)
 
         tb.addSeparator()
 
-        self._act_start_save = QAction(
-            QIcon(os.path.join(icon_dir, "save.svg")), "开始存储", self)
+        self._act_start_save = QAction(_icon("save.svg"), "开始存储", self)
         self._act_start_save.triggered.connect(self._on_start_save)
         tb.addAction(self._act_start_save)
 
-        self._act_stop_save = QAction(
-            QIcon(os.path.join(icon_dir, "stop-save.svg")), "停止存储", self)
+        self._act_stop_save = QAction(_icon("stop-save.svg"), "停止存储", self)
         self._act_stop_save.setEnabled(False)
         self._act_stop_save.triggered.connect(self._on_stop_save)
         tb.addAction(self._act_stop_save)
@@ -169,8 +223,7 @@ class MainWindow(QMainWindow):
         tb.addSeparator()
 
         # 光校 toggle — show/hide optical calibration bottom panel
-        self._act_optical_cal = QAction(
-            QIcon(os.path.join(icon_dir, "calibration.svg")), "光校", self)
+        self._act_optical_cal = QAction(_icon("calibration.svg"), "光校", self)
         self._act_optical_cal.setCheckable(True)
         self._act_optical_cal.setChecked(True)
         self._act_optical_cal.toggled.connect(self._on_optical_cal_toggled)
@@ -178,18 +231,15 @@ class MainWindow(QMainWindow):
 
         tb.addSeparator()
 
-        self._act_settings = QAction(
-            QIcon(os.path.join(icon_dir, "setting.svg")), "设置", self)
+        self._act_settings = QAction(_icon("setting.svg"), "设置", self)
         self._act_settings.triggered.connect(self._on_settings)
         tb.addAction(self._act_settings)
 
-        self._act_about = QAction(
-            QIcon(os.path.join(icon_dir, "about.svg")), "关于", self)
+        self._act_about = QAction(_icon("about.svg"), "关于", self)
         self._act_about.triggered.connect(self._on_about)
         tb.addAction(self._act_about)
 
-        self._act_exit = QAction(
-            QIcon(os.path.join(icon_dir, "exit.svg")), "Exit", self)
+        self._act_exit = QAction(_icon("exit.svg"), "Exit", self)
         self._act_exit.triggered.connect(self.close)
         tb.addAction(self._act_exit)
 
@@ -215,13 +265,15 @@ class MainWindow(QMainWindow):
         image_layout.setSpacing(0)
 
         from PySide6.QtWidgets import QStackedWidget
+
         self._display_stack = QStackedWidget()
 
         self._image_display = ImageDisplayWidget()
         self._line_scan_display = LineScanDisplayWidget()
         self._line_scan_display.config_changed.connect(
             lambda en, idxs: self._acquisition.set_line_scan_mode(
-                en and self._act_mode_line.isChecked(), idxs)
+                en and self._act_mode_line.isChecked(), idxs
+            )
         )
 
         self._display_stack.addWidget(self._image_display)
@@ -236,10 +288,8 @@ class MainWindow(QMainWindow):
         self._replay_control.pause_clicked.connect(self._on_replay_pause)
         self._replay_control.stop_clicked.connect(self._on_replay_stop)
         self._replay_control.close_clicked.connect(self._on_replay_close)
-        self._replay_control.position_changed.connect(
-            self._on_replay_position_changed)
-        self._replay_control.speed_changed.connect(
-            self._on_replay_speed_changed)
+        self._replay_control.position_changed.connect(self._on_replay_position_changed)
+        self._replay_control.speed_changed.connect(self._on_replay_speed_changed)
         self._replay_control.loop_changed.connect(self._on_replay_loop_changed)
         image_layout.addWidget(self._replay_control)
 
@@ -265,18 +315,15 @@ class MainWindow(QMainWindow):
         # Wrap in scroll area for vertical overflow
         right_scroll = QScrollArea()
         right_scroll.setWidgetResizable(True)
-        right_scroll.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        right_scroll.setVerticalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        right_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        right_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         right_scroll.setWidget(right_inner)
         right_scroll.setMinimumWidth(260)
 
         self._h_splitter_top.addWidget(right_scroll)
 
         self._h_splitter_top.setSizes([1200, 300])
-        self._h_splitter_top.setCollapsible(
-            1, False)  # prevent right panel collapse
+        self._h_splitter_top.setCollapsible(1, False)  # prevent right panel collapse
 
         # ---- BOTTOM HALF: optical cal panel + spectrum graphs ----
         self._bottom_container = QWidget()
@@ -289,9 +336,11 @@ class MainWindow(QMainWindow):
         self._optical_cal_scroll = QScrollArea()
         self._optical_cal_scroll.setWidgetResizable(False)
         self._optical_cal_scroll.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
         self._optical_cal_scroll.setVerticalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
         self._optical_cal_scroll.setWidget(self._optical_cal_panel)
         self._optical_cal_scroll.setMinimumSize(300, 250)
         bottom_container_layout.addWidget(self._optical_cal_scroll)
@@ -299,10 +348,8 @@ class MainWindow(QMainWindow):
         # Scrollable area for the 4 spectrum graphs
         charts_scroll = QScrollArea()
         charts_scroll.setWidgetResizable(True)
-        charts_scroll.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        charts_scroll.setVerticalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        charts_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        charts_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
         charts_widget = QWidget()
         charts_layout = QHBoxLayout(charts_widget)
@@ -310,22 +357,46 @@ class MainWindow(QMainWindow):
 
         # 4 spectrum graphs
         self._graph_near_spatial = SpectrumGraphWidget(
-            title="临近空间维(行)", x_label="空间像素", y_label="DN",
-            orientation="horizontal", show_x=True, show_y=True,
-            step_mode=True)
+            title="临近空间维(行)",
+            x_label="空间像素",
+            y_label="DN",
+            orientation="horizontal",
+            show_x=True,
+            show_y=True,
+            step_mode=True,
+        )
         self._graph_near_spectral = SpectrumGraphWidget(
-            title="临近光谱维(列)", x_label="光谱通道", y_label="DN",
-            orientation="vertical", show_x=True, show_y=True,
-            step_mode=True)
+            title="临近光谱维(列)",
+            x_label="光谱通道",
+            y_label="DN",
+            orientation="vertical",
+            show_x=True,
+            show_y=True,
+            step_mode=True,
+        )
         self._graph_full_spatial = SpectrumGraphWidget(
-            title="全域空间维(行)", x_label="空间像素", y_label="DN",
-            orientation="horizontal", show_x=False, show_y=True)
+            title="全域空间维(行)",
+            x_label="空间像素",
+            y_label="DN",
+            orientation="horizontal",
+            show_x=False,
+            show_y=True,
+        )
         self._graph_full_spectral = SpectrumGraphWidget(
-            title="全域光谱维(列)", x_label="光谱通道", y_label="DN",
-            orientation="vertical", show_x=True, show_y=False)
+            title="全域光谱维(列)",
+            x_label="光谱通道",
+            y_label="DN",
+            orientation="vertical",
+            show_x=True,
+            show_y=False,
+        )
 
-        for g in (self._graph_near_spatial, self._graph_near_spectral,
-                  self._graph_full_spatial, self._graph_full_spectral):
+        for g in (
+            self._graph_near_spatial,
+            self._graph_near_spectral,
+            self._graph_full_spatial,
+            self._graph_full_spectral,
+        ):
             g.setMinimumWidth(560)
             g.setMinimumHeight(220)
             charts_layout.addWidget(g)
@@ -364,11 +435,9 @@ class MainWindow(QMainWindow):
         self._device_control.sync_from_device(self._device)
         self._device_control.start_requested.connect(self._on_start)
         self._device_control.stop_requested.connect(self._on_stop)
-        self._device_control.exposure_changed.connect(
-            self._on_exposure_changed)
+        self._device_control.exposure_changed.connect(self._on_exposure_changed)
         self._device_control.gain_changed.connect(self._on_gain_changed)
-        self._device_control.pixel_format_changed.connect(
-            self._on_pixel_format_changed)
+        self._device_control.pixel_format_changed.connect(self._on_pixel_format_changed)
 
         # NUC panel
         self._nuc_panel.nuc_changed.connect(self._on_nuc_changed)
@@ -381,22 +450,20 @@ class MainWindow(QMainWindow):
             self._on_nuc_changed(a, b, en)
 
         # Spectrum graph coordinate spinboxes
-        self._graph_near_spatial.coordinate_changed.connect(
-            self._on_pixel_selected)
-        self._graph_near_spectral.coordinate_changed.connect(
-            self._on_pixel_selected)
+        self._graph_near_spatial.coordinate_changed.connect(self._on_pixel_selected)
+        self._graph_near_spectral.coordinate_changed.connect(self._on_pixel_selected)
         self._graph_full_spatial.coordinate_changed.connect(
-            lambda x, y: self._on_pixel_selected(self._selected_x, y))
+            lambda x, y: self._on_pixel_selected(self._selected_x, y)
+        )
         self._graph_full_spectral.coordinate_changed.connect(
-            lambda x, y: self._on_pixel_selected(x, self._selected_y))
+            lambda x, y: self._on_pixel_selected(x, self._selected_y)
+        )
 
         # Optical calibration panel
         self._optical_cal_panel.pixel_changed.connect(self._on_pixel_selected)
         self._optical_cal_panel.locate_max_dn.connect(self._on_locate_max_dn)
-        self._optical_cal_panel.avg_count_changed.connect(
-            self._mtf.set_avg_count)
-        self._optical_cal_panel.black_level_changed.connect(
-            self._mtf.set_black_level)
+        self._optical_cal_panel.avg_count_changed.connect(self._mtf.set_avg_count)
+        self._optical_cal_panel.black_level_changed.connect(self._mtf.set_black_level)
 
     # --------------------------------------------------------------- frame polling
     def _poll_frame(self) -> None:
@@ -416,7 +483,8 @@ class MainWindow(QMainWindow):
         display_frame = frame
         if frame.dtype == np.float32:
             max_dn = self._get_max_dn_from_format(
-                metadata.get("pixel_format", "Mono12"))
+                metadata.get("pixel_format", "Mono12")
+            )
             display_frame = np.clip(frame, 0, max_dn).astype(np.uint16)
 
         if self._line_scan_active:
@@ -479,8 +547,7 @@ class MainWindow(QMainWindow):
         idx = np.unravel_index(np.argmax(frame), frame.shape)
         y, x = int(idx[0]), int(idx[1])
         self._on_pixel_selected(x, y)
-        logger.info("Max DN located at X=%d, Y=%d, DN=%d",
-                    x, y, int(frame[y, x]))
+        logger.info("Max DN located at X=%d, Y=%d, DN=%d", x, y, int(frame[y, x]))
 
     def _on_mode_toggled(self, checked: bool) -> None:
         """Switch between area array (面阵) and line scan (线扫)."""
@@ -591,8 +658,7 @@ class MainWindow(QMainWindow):
         # Update line scan display
         self._line_scan_display.set_max_dn(max_dn)
 
-        logger.debug(
-            "Updated widgets for pixel format %s: max_dn=%d", fmt, max_dn)
+        logger.debug("Updated widgets for pixel format %s: max_dn=%d", fmt, max_dn)
 
     @staticmethod
     def _get_max_dn_from_format(fmt: str) -> int:
@@ -615,7 +681,11 @@ class MainWindow(QMainWindow):
             current_b = self._config.get_str("nuc.b_path")
 
             if a_path and b_path:
-                if (a_path != current_a or b_path != current_b or not self._nuc.is_loaded()):
+                if (
+                    a_path != current_a
+                    or b_path != current_b
+                    or not self._nuc.is_loaded()
+                ):
                     self._nuc.load(a_path, b_path)
                     self._config.set("nuc.a_path", a_path)
                     self._config.set("nuc.b_path", b_path)
@@ -629,34 +699,28 @@ class MainWindow(QMainWindow):
 
             if loaded and enabled:
                 self._status_nuc.setText("NUC: 启用")
-                self._status_nuc.setStyleSheet(
-                    "color: #27ae60; font-weight: bold;")
+                self._status_nuc.setStyleSheet("color: #27ae60; font-weight: bold;")
             elif loaded:
                 self._status_nuc.setText("NUC: 已加载")
-                self._status_nuc.setStyleSheet(
-                    "color: #2980b9; font-weight: bold;")
+                self._status_nuc.setStyleSheet("color: #2980b9; font-weight: bold;")
             else:
                 self._status_nuc.setText("NUC: 未加载")
-                self._status_nuc.setStyleSheet(
-                    "color: #e74c3c; font-weight: bold;")
+                self._status_nuc.setStyleSheet("color: #e74c3c; font-weight: bold;")
 
-            logger.info("NUC state changed: loaded=%s, enabled=%s",
-                        loaded, enabled)
+            logger.info("NUC state changed: loaded=%s, enabled=%s", loaded, enabled)
 
         except Exception as e:
             logger.error("Failed to load NUC: %s", e)
             QMessageBox.critical(self, "NUC 错误", f"加载 NUC 数据失败: {e}")
             self._nuc.unload()
             self._status_nuc.setText("NUC: 错误")
-            self._status_nuc.setStyleSheet(
-                "color: #e74c3c; font-weight: bold;")
+            self._status_nuc.setStyleSheet("color: #e74c3c; font-weight: bold;")
 
     def _on_start_save(self) -> None:
         """Show storage dialog and start recording to disk."""
         dlg = StorageDialog(
             self,
-            initial_directory=self._config.get_str(
-                "storage.last_directory", ""),
+            initial_directory=self._config.get_str("storage.last_directory", ""),
         )
         if dlg.exec() != StorageDialog.DialogCode.Accepted or dlg.result_info is None:
             return
@@ -701,7 +765,7 @@ class MainWindow(QMainWindow):
                 "确认",
                 "回放需要停止当前采集。是否继续？",
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                QMessageBox.StandardButton.No
+                QMessageBox.StandardButton.No,
             )
             if reply == QMessageBox.StandardButton.Yes:
                 self._on_stop()
@@ -715,7 +779,7 @@ class MainWindow(QMainWindow):
             self,
             "选择数据文件",
             self._config.get_str("replay.last_directory", ""),
-            "数据文件 (*.dat);;所有文件 (*.*)"
+            "数据文件 (*.dat);;所有文件 (*.*)",
         )
 
         if not file_path:
@@ -723,15 +787,14 @@ class MainWindow(QMainWindow):
 
         # Validate that .hdr or .json exists
         from pathlib import Path
+
         dat_path = Path(file_path)
         hdr_path = dat_path.with_suffix(".hdr")
         json_path = dat_path.with_suffix(".json")
 
         if not hdr_path.exists() and not json_path.exists():
             QMessageBox.warning(
-                self,
-                "文件错误",
-                "缺少配套文件：需要 .hdr 或 .json 文件"
+                self, "文件错误", "缺少配套文件：需要 .hdr 或 .json 文件"
             )
             return
 
@@ -752,8 +815,7 @@ class MainWindow(QMainWindow):
         # Show replay control and start worker thread
         self._replay_control.setVisible(True)
         self._replay_control.set_range(self._replay_worker._total_frames)
-        self._replay_worker.set_loop_enabled(
-            self._replay_control.is_loop_enabled())
+        self._replay_worker.set_loop_enabled(self._replay_control.is_loop_enabled())
         self._replay_worker.start()
         self._replay_worker.stop_playback()
         self._replaying = True
@@ -773,7 +835,8 @@ class MainWindow(QMainWindow):
         display_frame = frame
         if frame.dtype == np.float32:
             max_dn = self._get_max_dn_from_format(
-                metadata.get("pixel_format", "Mono12"))
+                metadata.get("pixel_format", "Mono12")
+            )
             display_frame = np.clip(frame, 0, max_dn).astype(np.uint16)
 
         if self._act_mode_line.isChecked():
@@ -880,14 +943,15 @@ class MainWindow(QMainWindow):
 
     def _on_about(self) -> None:
         QMessageBox.about(
-            self, "关于",
+            self,
+            "关于",
             "高光谱相机控制软件\n\n"
             "相机型号: MER3-138-136G3M-P-SWIR\n"
             "传感器: Sony IMX990\n"
             "分辨率: 1280×1024\n"
             "\n"
             "Copyright © 2026 XL@HO\n"
-            "All rights reserved"
+            "All rights reserved",
         )
 
     def closeEvent(self, event) -> None:
@@ -897,7 +961,7 @@ class MainWindow(QMainWindow):
             "确认退出",
             "确定要退出程序吗？",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.No
+            QMessageBox.StandardButton.No,
         )
         if reply == QMessageBox.StandardButton.No:
             event.ignore()

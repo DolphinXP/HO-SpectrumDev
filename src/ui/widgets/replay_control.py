@@ -2,13 +2,37 @@
 
 import logging
 import os
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt, Signal, QSize
+from PySide6.QtGui import QIcon, QPixmap, QPainter, QColor
+from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import (
-    QWidget, QHBoxLayout, QSlider, QPushButton, QComboBox, QLabel, QCheckBox
+    QWidget,
+    QHBoxLayout,
+    QSlider,
+    QPushButton,
+    QComboBox,
+    QLabel,
+    QCheckBox,
 )
 
 logger = logging.getLogger("specdev.ui")
+
+_ICON_COLOR = QColor(224, 224, 224)
+
+
+def _tinted_icon(svg_path: str, color: QColor = _ICON_COLOR) -> QIcon:
+    renderer = QSvgRenderer(svg_path)
+    size = renderer.defaultSize()
+    if size.isEmpty():
+        size = QSize(24, 24)
+    pixmap = QPixmap(size)
+    pixmap.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(pixmap)
+    renderer.render(painter)
+    painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
+    painter.fillRect(pixmap.rect(), color)
+    painter.end()
+    return QIcon(pixmap)
 
 
 class ReplayControlWidget(QWidget):
@@ -50,14 +74,14 @@ class ReplayControlWidget(QWidget):
         # Play/Pause button
         self._btn_play = QPushButton("播放")
         self._btn_play.setFixedWidth(80)
-        self._btn_play.setIcon(QIcon(os.path.join(self._icon_dir, "play.svg")))
+        self._btn_play.setIcon(_tinted_icon(os.path.join(self._icon_dir, "play.svg")))
         self._btn_play.clicked.connect(self._on_play_pause)
         layout.addWidget(self._btn_play)
 
         # Stop button
         self._btn_stop = QPushButton("停止")
         self._btn_stop.setFixedWidth(80)
-        self._btn_stop.setIcon(QIcon(os.path.join(self._icon_dir, "stop.svg")))
+        self._btn_stop.setIcon(_tinted_icon(os.path.join(self._icon_dir, "stop.svg")))
         self._btn_stop.clicked.connect(self._on_stop)
         layout.addWidget(self._btn_stop)
 
@@ -115,8 +139,7 @@ class ReplayControlWidget(QWidget):
 
     def _on_speed_changed(self, text: str) -> None:
         """Parse speed text and emit signal."""
-        speed_map = {"0.25x": 0.25, "0.5x": 0.5,
-                     "1x": 1.0, "2x": 2.0, "4x": 4.0}
+        speed_map = {"0.25x": 0.25, "0.5x": 0.5, "1x": 1.0, "2x": 2.0, "4x": 4.0}
         speed = speed_map.get(text, 1.0)
         self.speed_changed.emit(speed)
 
@@ -148,7 +171,7 @@ class ReplayControlWidget(QWidget):
         self._is_playing = playing
         self._btn_play.setText("暂停" if playing else "播放")
         icon_name = "pause.svg" if playing else "play.svg"
-        self._btn_play.setIcon(QIcon(os.path.join(self._icon_dir, icon_name)))
+        self._btn_play.setIcon(_tinted_icon(os.path.join(self._icon_dir, icon_name)))
 
     def is_loop_enabled(self) -> bool:
         """Return whether loop playback is enabled."""

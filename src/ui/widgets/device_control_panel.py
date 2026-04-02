@@ -4,8 +4,16 @@ import logging
 
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
-    QGroupBox, QLabel, QVBoxLayout, QHBoxLayout, QGridLayout,
-    QPushButton, QDoubleSpinBox, QComboBox, QWidget, QSpinBox,
+    QGroupBox,
+    QLabel,
+    QVBoxLayout,
+    QHBoxLayout,
+    QGridLayout,
+    QPushButton,
+    QDoubleSpinBox,
+    QComboBox,
+    QWidget,
+    QSpinBox,
     QSizePolicy,
 )
 from PySide6.QtGui import QIcon
@@ -55,9 +63,11 @@ class DeviceControlPanel(QWidget):
         acq_layout.setSpacing(8)
 
         self._btn_start = QPushButton("▶  开始采集")
+        self._btn_start.setProperty("class", "btn-primary")
         self._btn_start.clicked.connect(self._on_start_clicked)
 
         self._btn_stop = QPushButton("■  停止采集")
+        self._btn_stop.setProperty("class", "btn-danger")
         self._btn_stop.setEnabled(False)
         self._btn_stop.clicked.connect(self._on_stop_clicked)
 
@@ -75,8 +85,9 @@ class DeviceControlPanel(QWidget):
 
         # --- Exposure (µs) ---
         lbl_exp = QLabel("曝光时间 (µs):")
-        lbl_exp.setAlignment(Qt.AlignmentFlag.AlignRight |
-                             Qt.AlignmentFlag.AlignVCenter)
+        lbl_exp.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
         self._spin_exposure = QDoubleSpinBox()
         # CLAUDE.md: Min: 3µs–100µs (step 1µs); Standard: 13µs–1s (step 1 line period)
         # Using 1 µs step for full range to support both modes
@@ -93,8 +104,9 @@ class DeviceControlPanel(QWidget):
 
         # --- Gain (dB) ---
         lbl_gain = QLabel("增益 (dB):")
-        lbl_gain.setAlignment(Qt.AlignmentFlag.AlignRight |
-                              Qt.AlignmentFlag.AlignVCenter)
+        lbl_gain.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
         self._spin_gain = QDoubleSpinBox()
         self._spin_gain.setRange(0.0, 24.0)  # 0–24 dB
         self._spin_gain.setDecimals(1)
@@ -109,21 +121,22 @@ class DeviceControlPanel(QWidget):
 
         # --- Pixel Format ---
         lbl_pf = QLabel("像素格式:")
-        lbl_pf.setAlignment(Qt.AlignmentFlag.AlignRight |
-                            Qt.AlignmentFlag.AlignVCenter)
+        lbl_pf.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._combo_pixel_format = QComboBox()
         self._combo_pixel_format.addItems(["Mono8", "Mono10", "Mono12"])
         self._combo_pixel_format.setCurrentText("Mono8")
         self._combo_pixel_format.currentTextChanged.connect(
-            self._on_pixel_format_changed)
+            self._on_pixel_format_changed
+        )
         param_layout.addWidget(lbl_pf, row, 0)
         param_layout.addWidget(self._combo_pixel_format, row, 1)
         row += 1
 
         # --- Resolution (read-only) ---
         lbl_res = QLabel("分辨率:")
-        lbl_res.setAlignment(Qt.AlignmentFlag.AlignRight |
-                             Qt.AlignmentFlag.AlignVCenter)
+        lbl_res.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
         self._lbl_resolution = QLabel("1280 × 1024")
         self._lbl_resolution.setProperty("class", "value")
         param_layout.addWidget(lbl_res, row, 0)
@@ -133,7 +146,8 @@ class DeviceControlPanel(QWidget):
         # --- Sensor (read-only) ---
         lbl_sensor = QLabel("传感器:")
         lbl_sensor.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
         self._lbl_sensor = QLabel("Sony IMX990")
         self._lbl_sensor.setProperty("class", "value")
         param_layout.addWidget(lbl_sensor, row, 0)
@@ -142,8 +156,9 @@ class DeviceControlPanel(QWidget):
 
         # --- ADC Depth (read-only, follows pixel format) ---
         lbl_adc = QLabel("ADC 位深:")
-        lbl_adc.setAlignment(Qt.AlignmentFlag.AlignRight |
-                             Qt.AlignmentFlag.AlignVCenter)
+        lbl_adc.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
         self._lbl_adc = QLabel("8-bit")
         self._lbl_adc.setProperty("class", "value")
         param_layout.addWidget(lbl_adc, row, 0)
@@ -152,8 +167,9 @@ class DeviceControlPanel(QWidget):
 
         # --- Frame Rate (read-only, informational) ---
         lbl_fps = QLabel("最大帧率:")
-        lbl_fps.setAlignment(Qt.AlignmentFlag.AlignRight |
-                             Qt.AlignmentFlag.AlignVCenter)
+        lbl_fps.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
         self._lbl_max_fps = QLabel("72.4 fps")
         self._lbl_max_fps.setProperty("class", "value")
         param_layout.addWidget(lbl_fps, row, 0)
@@ -163,7 +179,8 @@ class DeviceControlPanel(QWidget):
         # --- Device Status ---
         lbl_status = QLabel("设备状态:")
         lbl_status.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
         self._lbl_status = QLabel("已停止")
         self._lbl_status.setProperty("class", "status-stopped")
         param_layout.addWidget(lbl_status, row, 0)
@@ -194,18 +211,24 @@ class DeviceControlPanel(QWidget):
         self._combo_pixel_format.blockSignals(False)
         self._update_adc_label(pixel_format)
 
-        logger.debug("Loaded settings: exposure=%.1f µs, gain=%.1f dB, format=%s",
-                     exposure, gain, pixel_format)
+        logger.debug(
+            "Loaded settings: exposure=%.1f µs, gain=%.1f dB, format=%s",
+            exposure,
+            gain,
+            pixel_format,
+        )
 
     def _save_settings(self) -> None:
         """Save current settings to QSettings."""
         self._config.set("exposure_us", self._spin_exposure.value())
         self._config.set("gain_db", self._spin_gain.value())
-        self._config.set(
-            "pixel_format", self._combo_pixel_format.currentText())
-        logger.debug("Saved settings: exposure=%.1f µs, gain=%.1f dB, format=%s",
-                     self._spin_exposure.value(), self._spin_gain.value(),
-                     self._combo_pixel_format.currentText())
+        self._config.set("pixel_format", self._combo_pixel_format.currentText())
+        logger.debug(
+            "Saved settings: exposure=%.1f µs, gain=%.1f dB, format=%s",
+            self._spin_exposure.value(),
+            self._spin_gain.value(),
+            self._combo_pixel_format.currentText(),
+        )
 
     # ── Public API ─────────────────────────────────────────────────
 
@@ -278,7 +301,6 @@ class DeviceControlPanel(QWidget):
     def _update_adc_label(self, fmt: str) -> None:
         """Update ADC depth and max FPS labels based on pixel format."""
         adc_map = {"Mono8": "8-bit", "Mono10": "10-bit", "Mono12": "12-bit"}
-        fps_map = {"Mono8": "135.54 fps",
-                   "Mono10": "72.4 fps", "Mono12": "72.4 fps"}
+        fps_map = {"Mono8": "135.54 fps", "Mono10": "72.4 fps", "Mono12": "72.4 fps"}
         self._lbl_adc.setText(adc_map.get(fmt, "?"))
         self._lbl_max_fps.setText(fps_map.get(fmt, "72.4 fps"))

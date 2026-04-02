@@ -5,10 +5,22 @@ import math
 
 import numpy as np
 from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QColor
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox,
-    QLabel, QSpinBox, QDoubleSpinBox, QComboBox, QPushButton,
-    QTableWidget, QTableWidgetItem, QSizePolicy,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QGridLayout,
+    QGroupBox,
+    QLabel,
+    QSpinBox,
+    QDoubleSpinBox,
+    QComboBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QSizePolicy,
 )
 
 logger = logging.getLogger("specdev.ui")
@@ -72,16 +84,16 @@ class OpticalCalPanel(QWidget):
         mtf_grid.setSpacing(4)
 
         border_style = (
-            "border: 1px solid #999; padding: 2px 8px; min-width: 40px;"
-            " font-size: 14px; background: white;"
+            "border: 1px solid #3a3a4a; padding: 2px 8px; min-width: 40px;"
+            " font-size: 14px; background: #1e1e2e; color: #e0e0e0;"
+            " font-family: 'Consolas', monospace; border-radius: 3px;"
         )
         self._mtf_above = QLabel("0")
         self._mtf_below = QLabel("0")
         self._mtf_left = QLabel("0")
         self._mtf_right = QLabel("0")
 
-        for lbl in (self._mtf_above, self._mtf_below,
-                    self._mtf_left, self._mtf_right):
+        for lbl in (self._mtf_above, self._mtf_below, self._mtf_left, self._mtf_right):
             lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lbl.setStyleSheet(border_style)
 
@@ -98,6 +110,9 @@ class OpticalCalPanel(QWidget):
         mtf_settings = QHBoxLayout()
         self._mtf_mean_label = QLabel("均值: 0")
         self._mtf_mean_label.setFixedWidth(80)
+        self._mtf_mean_label.setStyleSheet(
+            "font-family: 'Consolas', monospace; color: #e0e0e0;"
+        )
         mtf_settings.addWidget(self._mtf_mean_label)
 
         self._avg_combo = QComboBox()
@@ -196,7 +211,9 @@ class OpticalCalPanel(QWidget):
                     item.setText("-")
 
         # Highlight center cell (set once, clear others only on first call)
-        self._dn_items[4][4].setBackground(Qt.GlobalColor.yellow)
+        center_item = self._dn_items[4][4]
+        center_item.setBackground(Qt.GlobalColor.yellow)
+        center_item.setForeground(QColor(30, 30, 46))  # dark text on yellow bg
 
         self._dn_table.setUpdatesEnabled(True)
 
