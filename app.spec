@@ -24,12 +24,32 @@ a = Analysis(
 pyz = PYZ(a.pure, a.zipped_data,
           cipher=block_cipher)
 
+# Single-file build (onefile=True): bundle everything into one .exe
+# exe = EXE(
+#     pyz,
+#     a.scripts,
+#     a.binaries,
+#     a.zipfiles,
+#     a.datas,
+#     [],
+#     name='specdev-9h',
+#     debug=False,
+#     bootloader_ignore_signals=False,
+#     strip=False,
+#     upx=True,
+#     console=False,
+#     disable_windowed_traceback=False,
+#     target_arch=None,
+#     codesign_identity=None,
+#     entitlements_file=None,
+#     icon='assets/app.ico',
+#     onefile=True
+# )
+
+# Folder-based build (onedir): output a directory with exe + dependencies
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
     [],
     name='specdev-9h',
     debug=False,
@@ -42,5 +62,15 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon='assets/app.ico',
-    onefile=True
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='specdev-9h',
 )
