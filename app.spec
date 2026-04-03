@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 
 block_cipher = None
 
@@ -74,3 +75,8 @@ coll = COLLECT(
     upx_exclude=[],
     name='specdev-9h',
 )
+
+# Remove the stub exe that PyInstaller leaves in dist/ root
+_stub = os.path.join(DISTPATH, 'specdev-9h.exe')
+if os.path.exists(_stub):
+    os.remove(_stub)
