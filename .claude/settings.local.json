@@ -15,7 +15,10 @@
       "Bash(del \"e:\\\\HO\\\\specdev-9h\\\\build_cython.py\")",
       "Bash(C:\\\\miniconda3\\\\envs\\\\specdev\\\\python.exe build_cython.py)",
       "Bash(/c/miniconda3/envs/specdev/python.exe build_cython.py)",
-      "Bash(/c/miniconda3/envs/specdev/python.exe -m PyInstaller app.spec)"
+      "Bash(/c/miniconda3/envs/specdev/python.exe -m PyInstaller app.spec)",
+      "Bash(/c/miniconda3/envs/specdev/python.exe -m PyInstaller app.spec -y)",
+      "Bash(ls -lh dist/specdev-9h/*.pyd)",
+      "Bash(grep -E \"\\\\.\\(pyd|pyc\\)$\")"
     ]
   }
 }
