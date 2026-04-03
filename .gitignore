@@ -120,3 +120,8 @@ Thumbs.db
 *.bak
 
 logs/
+obf_*/
+
+# PyArmor + PyInstaller build artifacts
+dist/obfuscated/
+dist/final/
