@@ -1,0 +1,162 @@
+"Syncing uv environment..."
+Resolved 27 packages in 1ms
+Checked 23 packages in 1ms
+"Cleaning previous build artifacts..."
+The system cannot find the file specified.
+The system cannot find the file specified.
+"Run Cython build"
+���� 5 ��ģ��...
+
+Compiling src/data/acquisition.py because it changed.
+Compiling src/data/nuc.py because it changed.
+Compiling src/analysis/mtf.py because it changed.
+Compiling src/analysis/spectral.py because it changed.
+Compiling src/device/daheng_device.py because it changed.
+[1/5] Cythonizing src/analysis/mtf.py
+[2/5] Cythonizing src/analysis/spectral.py
+[3/5] Cythonizing src/data/acquisition.py
+[4/5] Cythonizing src/data/nuc.py
+[5/5] Cythonizing src/device/daheng_device.py
+running build_ext
+building 'src.data.acquisition' extension
+creating build\temp.win-amd64-cpython-310\Release\src\data
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -IC:\Temp\HO-SpectrumDev-main\.venv\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\Include "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" "-IC:\Program Files (x86)\Intel\Trace Analyzer and Collector\9.0.1.035\include" /Tcsrc/data/acquisition.c /Fobuild\temp.win-amd64-cpython-310\Release\src\data\acquisition.obj
+acquisition.c
+creating C:\Temp\HO-SpectrumDev-main\build\lib.win-amd64-cpython-310\src\data
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\link.exe" /nologo /INCREMENTAL:NO /LTCG /DLL /MANIFEST:EMBED,ID=2 /MANIFESTUAC:NO /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\PCbuild\amd64 "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64" "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\lib\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\lib\um\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\x64" /EXPORT:PyInit_acquisition build\temp.win-amd64-cpython-310\Release\src\data\acquisition.obj /OUT:build\lib.win-amd64-cpython-310\src\data\acquisition.cp310-win_amd64.pyd /IMPLIB:build\temp.win-amd64-cpython-310\Release\src\data\acquisition.cp310-win_amd64.lib
+  正在创建库 build\temp.win-amd64-cpython-310\Release\src\data\acquisition.cp310-win_amd64.lib 和对象 build\temp.win-amd64-cpython-310\Release\src\data\acquisition.cp310-win_amd64.exp
+正在生成代码
+已完成代码的生成
+building 'src.data.nuc' extension
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -IC:\Temp\HO-SpectrumDev-main\.venv\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\Include "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" "-IC:\Program Files (x86)\Intel\Trace Analyzer and Collector\9.0.1.035\include" /Tcsrc/data/nuc.c /Fobuild\temp.win-amd64-cpython-310\Release\src\data\nuc.obj
+nuc.c
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\link.exe" /nologo /INCREMENTAL:NO /LTCG /DLL /MANIFEST:EMBED,ID=2 /MANIFESTUAC:NO /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\PCbuild\amd64 "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64" "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\lib\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\lib\um\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\x64" /EXPORT:PyInit_nuc build\temp.win-amd64-cpython-310\Release\src\data\nuc.obj /OUT:build\lib.win-amd64-cpython-310\src\data\nuc.cp310-win_amd64.pyd /IMPLIB:build\temp.win-amd64-cpython-310\Release\src\data\nuc.cp310-win_amd64.lib
+  正在创建库 build\temp.win-amd64-cpython-310\Release\src\data\nuc.cp310-win_amd64.lib 和对象 build\temp.win-amd64-cpython-310\Release\src\data\nuc.cp310-win_amd64.exp
+正在生成代码
+已完成代码的生成
+building 'src.analysis.mtf' extension
+creating build\temp.win-amd64-cpython-310\Release\src\analysis
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -IC:\Temp\HO-SpectrumDev-main\.venv\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\Include "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" "-IC:\Program Files (x86)\Intel\Trace Analyzer and Collector\9.0.1.035\include" /Tcsrc/analysis/mtf.c /Fobuild\temp.win-amd64-cpython-310\Release\src\analysis\mtf.obj
+mtf.c
+creating C:\Temp\HO-SpectrumDev-main\build\lib.win-amd64-cpython-310\src\analysis
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\link.exe" /nologo /INCREMENTAL:NO /LTCG /DLL /MANIFEST:EMBED,ID=2 /MANIFESTUAC:NO /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\PCbuild\amd64 "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64" "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\lib\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\lib\um\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\x64" /EXPORT:PyInit_mtf build\temp.win-amd64-cpython-310\Release\src\analysis\mtf.obj /OUT:build\lib.win-amd64-cpython-310\src\analysis\mtf.cp310-win_amd64.pyd /IMPLIB:build\temp.win-amd64-cpython-310\Release\src\analysis\mtf.cp310-win_amd64.lib
+  正在创建库 build\temp.win-amd64-cpython-310\Release\src\analysis\mtf.cp310-win_amd64.lib 和对象 build\temp.win-amd64-cpython-310\Release\src\analysis\mtf.cp310-win_amd64.exp
+正在生成代码
+已完成代码的生成
+building 'src.analysis.spectral' extension
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -IC:\Temp\HO-SpectrumDev-main\.venv\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\Include "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" "-IC:\Program Files (x86)\Intel\Trace Analyzer and Collector\9.0.1.035\include" /Tcsrc/analysis/spectral.c /Fobuild\temp.win-amd64-cpython-310\Release\src\analysis\spectral.obj
+spectral.c
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\link.exe" /nologo /INCREMENTAL:NO /LTCG /DLL /MANIFEST:EMBED,ID=2 /MANIFESTUAC:NO /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\PCbuild\amd64 "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64" "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\lib\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\lib\um\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\x64" /EXPORT:PyInit_spectral build\temp.win-amd64-cpython-310\Release\src\analysis\spectral.obj /OUT:build\lib.win-amd64-cpython-310\src\analysis\spectral.cp310-win_amd64.pyd /IMPLIB:build\temp.win-amd64-cpython-310\Release\src\analysis\spectral.cp310-win_amd64.lib
+  正在创建库 build\temp.win-amd64-cpython-310\Release\src\analysis\spectral.cp310-win_amd64.lib 和对象 build\temp.win-amd64-cpython-310\Release\src\analysis\spectral.cp310-win_amd64.exp
+正在生成代码
+已完成代码的生成
+building 'src.device.daheng_device' extension
+creating build\temp.win-amd64-cpython-310\Release\src\device
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -IC:\Temp\HO-SpectrumDev-main\.venv\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\include -IC:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\Include "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\include" "-IC:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" "-IC:\Program Files (x86)\Intel\Trace Analyzer and Collector\9.0.1.035\include" /Tcsrc/device/daheng_device.c /Fobuild\temp.win-amd64-cpython-310\Release\src\device\daheng_device.obj
+daheng_device.c
+creating C:\Temp\HO-SpectrumDev-main\build\lib.win-amd64-cpython-310\src\device
+"C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\bin\HostX86\x64\link.exe" /nologo /INCREMENTAL:NO /LTCG /DLL /MANIFEST:EMBED,ID=2 /MANIFESTUAC:NO /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\libs /LIBPATH:C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none /LIBPATH:C:\Temp\HO-SpectrumDev-main\.venv\PCbuild\amd64 "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64" "/LIBPATH:C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.44.35207\lib\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\lib\um\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\x64" /EXPORT:PyInit_daheng_device build\temp.win-amd64-cpython-310\Release\src\device\daheng_device.obj /OUT:build\lib.win-amd64-cpython-310\src\device\daheng_device.cp310-win_amd64.pyd /IMPLIB:build\temp.win-amd64-cpython-310\Release\src\device\daheng_device.cp310-win_amd64.lib
+  正在创建库 build\temp.win-amd64-cpython-310\Release\src\device\daheng_device.cp310-win_amd64.lib 和对象 build\temp.win-amd64-cpython-310\Release\src\device\daheng_device.cp310-win_amd64.exp
+正在生成代码
+已完成代码的生成
+copying build\lib.win-amd64-cpython-310\src\data\acquisition.cp310-win_amd64.pyd -> src\src\data
+error: could not create 'src\src\data\acquisition.cp310-win_amd64.pyd': No such file or directory
+"Run PyInstaller build"
+365 INFO: PyInstaller: 6.21.0, contrib hooks: 2026.6
+365 INFO: Python: 3.10.20
+377 INFO: Platform: Windows-10-10.0.19045-SP0
+377 INFO: Python environment: C:\Temp\HO-SpectrumDev-main\.venv
+383 INFO: Module search paths (PYTHONPATH):
+['C:\\Temp\\HO-SpectrumDev-main',
+ 'C:\\Users\\Administrator\\AppData\\Roaming\\uv\\python\\cpython-3.10-windows-x86_64-none\\python310.zip',
+ 'C:\\Users\\Administrator\\AppData\\Roaming\\uv\\python\\cpython-3.10-windows-x86_64-none\\DLLs',
+ 'C:\\Users\\Administrator\\AppData\\Roaming\\uv\\python\\cpython-3.10-windows-x86_64-none\\lib',
+ 'C:\\Users\\Administrator\\AppData\\Roaming\\uv\\python\\cpython-3.10-windows-x86_64-none',
+ 'C:\\Temp\\HO-SpectrumDev-main\\.venv',
+ 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages',
+ 'C:\\Temp\\HO-SpectrumDev-main',
+ 'C:\\Temp\\HO-SpectrumDev-main\\src']
+676 INFO: Appending 'datas' from .spec
+679 INFO: checking Analysis
+679 INFO: Building Analysis because Analysis-00.toc is non existent
+679 INFO: Looking for Python shared library...
+679 INFO: Using Python shared library: C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\python310.dll
+679 INFO: Running Analysis Analysis-00.toc
+679 INFO: Target bytecode optimization level: 0
+679 INFO: Initializing module dependency graph...
+680 INFO: Initializing module graph hook caches...
+696 INFO: Analyzing modules for base_library.zip ...
+1205 INFO: Processing standard module hook 'hook-heapq.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+1248 INFO: Processing standard module hook 'hook-encodings.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+1608 INFO: Processing standard module hook 'hook-math.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+2008 INFO: Processing standard module hook 'hook-pickle.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+2861 INFO: Caching module dependency graph...
+2884 INFO: Analyzing C:\Temp\HO-SpectrumDev-main\main.py
+2972 INFO: Processing standard module hook 'hook-PySide6.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+3170 INFO: Processing standard module hook 'hook-shiboken6.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+3248 INFO: Processing standard module hook 'hook-PySide6.QtNetwork.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+4428 INFO: Processing standard module hook 'hook-PySide6.QtCore.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+6123 INFO: Processing standard module hook 'hook-PySide6.QtWidgets.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+7770 INFO: Processing standard module hook 'hook-PySide6.QtGui.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+21465 INFO: Processing standard module hook 'hook-numpy.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+21591 INFO: Processing standard module hook 'hook-platform.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+21664 INFO: Processing standard module hook 'hook-sysconfig.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+21993 INFO: Processing standard module hook 'hook-webbrowser.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+22433 INFO: Processing standard module hook 'hook-difflib.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+22516 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+22601 INFO: Processing standard module hook 'hook-xml.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+22749 INFO: Processing standard module hook 'hook-_ctypes.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+23276 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+23293 INFO: SetuptoolsInfo: initializing cached setuptools info...
+24778 INFO: Processing standard module hook 'hook-PySide6.QtSvg.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+25104 INFO: Processing standard module hook 'hook-pyqtgraph.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+827 WARNING: Failed to collect submodules for 'pyqtgraph.opengl' because importing 'pyqtgraph.opengl' raised: ModuleNotFoundError: No module named 'OpenGL'
+26484 INFO: hook-pyqtgraph: selected 'PySide6' as Qt bindings because hook for 'PySide6' has been run before.
+26537 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+26546 INFO: Processing standard module hook 'hook-PySide6.QtOpenGLWidgets.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+26863 INFO: Processing standard module hook 'hook-PySide6.QtTest.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+27545 INFO: Processing standard module hook 'hook-xml.dom.domreg.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+28137 INFO: Processing module hooks (post-graph stage)...
+29039 INFO: Processing standard module hook 'hook-PySide6.QtOpenGL.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+31042 INFO: Performing binary vs. data reclassification (256 entries)
+31180 INFO: Looking for ctypes DLLs
+31188 INFO: Analyzing run-time hooks ...
+31188 INFO: Including custom run-time hook 'runtime_hook_set_log_dir.py'
+31192 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+31197 INFO: Including run-time hook 'pyi_rth_pyqtgraph_multiprocess.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks'
+31199 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+31203 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+31206 INFO: Including run-time hook 'pyi_rth_pyside6.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+31209 INFO: Processing pre-find-module-path hook 'hook-_pyi_rth_utils.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+31215 INFO: Processing standard module hook 'hook-_pyi_rth_utils.py' from 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\PyInstaller\\hooks'
+31230 INFO: Creating base_library.zip...
+31240 INFO: Looking for dynamic libraries
+31940 INFO: Extra DLL search directories (AddDllDirectory): ['C:\\Temp\\HO-SpectrumDev-main\\.venv\\Lib\\site-packages\\shiboken6', 'C:\\Temp\\HO-SpectrumDev-main\\.venv\\lib\\site-packages\\numpy.libs']
+31940 INFO: Extra DLL search directories (PATH): ['C:\\Temp\\HO-SpectrumDev-main\\.venv\\Lib\\site-packages\\PySide6']
+33331 INFO: Warnings written to C:\Temp\HO-SpectrumDev-main\build\app\warn-app.txt
+33378 INFO: Graph cross-reference written to C:\Temp\HO-SpectrumDev-main\build\app\xref-app.html
+33419 INFO: checking PYZ
+33419 INFO: Building PYZ because PYZ-00.toc is non existent
+33419 INFO: Building PYZ (ZlibArchive) C:\Temp\HO-SpectrumDev-main\build\app\PYZ-00.pyz
+33720 INFO: Building PYZ (ZlibArchive) C:\Temp\HO-SpectrumDev-main\build\app\PYZ-00.pyz completed successfully.
+33734 INFO: checking PKG
+33734 INFO: Building PKG because PKG-00.toc is non existent
+33734 INFO: Building PKG (CArchive) specdev-9h.pkg
+33756 INFO: Building PKG (CArchive) specdev-9h.pkg completed successfully.
+33758 INFO: Bootloader C:\Temp\HO-SpectrumDev-main\.venv\lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+33758 INFO: checking EXE
+33758 INFO: Building EXE because EXE-00.toc is non existent
+33758 INFO: Building EXE from EXE-00.toc
+33758 INFO: Copying bootloader EXE to C:\Temp\HO-SpectrumDev-main\dist\specdev-9h.exe
+34031 INFO: Copying icon to EXE
+34172 INFO: Copying 0 resources to EXE
+34172 INFO: Embedding manifest in EXE
+34316 INFO: Appending PKG archive to EXE
+34319 INFO: Fixing EXE headers
+34367 INFO: Building EXE from EXE-00.toc completed successfully.
+34370 INFO: checking COLLECT
+34370 INFO: Building COLLECT because COLLECT-00.toc is non existent
+34370 INFO: Building COLLECT COLLECT-00.toc
+34781 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+34786 INFO: Build complete! The results are available in: C:\Temp\HO-SpectrumDev-main\dist
+"Build complete"

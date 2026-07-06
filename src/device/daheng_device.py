@@ -127,8 +127,11 @@ class DahengDevice(DeviceInterface):
         self._running = True
         self._frame_id_counter = 0
 
-        # Register capture callback — emits raw mono numpy array
-        self._data_stream.register_capture_callback(self._capture_callback)
+        # Register capture callback — emits raw mono numpy array.
+        # gxipy rejects bound methods (isinstance FunctionType check),
+        # so wrap in a lambda like the reference example does.
+        self._data_stream.register_capture_callback(
+            lambda raw_image: self._capture_callback(raw_image))
         self._camera.stream_on()
 
         # Initial trigger to start the chain

@@ -1,0 +1,27 @@
+[project]
+name = "specdev"
+version = "0.1.0"
+description = "Hyperspectral camera testing application for Daheng MER3-138-136G3M-P-SWIR (高光谱相机控制软件)"
+requires-python = ">=3.10"
+dependencies = [
+    "PySide6>=6.5",
+    "numpy>=1.24",
+    "pyqtgraph>=0.13",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0",
+    "pytest-qt>=4.2",
+    "pyinstaller>=6.10",
+    "Cython>=3.0",
+]
+
+[tool.uv]
+# Application run from the repo root (imports are `from src...`);
+# not an installable package.
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+qt_api = "pyside6"

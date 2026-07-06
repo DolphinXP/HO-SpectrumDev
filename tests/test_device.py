@@ -29,7 +29,7 @@ class TestMockDevice:
         dev = MockDevice()
         assert dev.get_exposure() == 10000.0
         assert dev.get_gain() == 0.0
-        assert dev.get_pixel_format() == "Mono8"
+        assert dev.get_pixel_format() == "Mono12"
 
     def test_set_exposure(self, app):
         dev = MockDevice()
@@ -49,6 +49,7 @@ class TestMockDevice:
     def test_frame_emission(self, app, qtbot):
         """Verify that frames are emitted after start()."""
         dev = MockDevice()
+        dev.set_pixel_format("Mono8")
         dev.initialize()
 
         received = []
@@ -93,6 +94,10 @@ class TestMockDevice:
 
         dev.start()
         dev.stop()
+
+        # Frames emitted from the mock thread before stop() are delivered
+        # as queued events — flush them before taking the baseline count.
+        qtbot.wait(50)
         count_at_stop = len(received)
 
         qtbot.wait(100)

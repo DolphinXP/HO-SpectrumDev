@@ -63,6 +63,7 @@ class TestAcquisitionWorker:
     def test_nuc_identity(self, app, qtbot):
         """Without NUC loaded, frames should pass through without conversion."""
         dev = MockDevice()
+        dev.set_pixel_format("Mono8")
         dev.initialize()
         worker = AcquisitionWorker(dev)
 

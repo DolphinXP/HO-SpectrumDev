@@ -214,23 +214,24 @@ Four directions (above/below/left/right), averaged over 1/5/10 frames. → `src/
 
 ## Environment
 
-- Conda: `C:\miniconda3`, environment name: `specdev`
-- Python: `C:\miniconda3\envs\specdev\python.exe` (Python 3.10)
-- Always use the full path to the conda Python for running scripts and tests
-- Activate: `conda activate specdev` (or use full path directly)
+- Managed with **uv** — `pyproject.toml` is the source of truth for dependencies
+- Python 3.10, pinned in `.python-version`; virtualenv in `.venv/` (created by `uv sync`)
+- Runtime deps in `[project.dependencies]`; pytest/pytest-qt/pyinstaller/Cython in the `dev` dependency group (installed by default with `uv sync`)
+- Setup from scratch: `uv sync` (downloads Python + deps, creates `.venv`)
+- Always run scripts and tests via `uv run` — never a bare `python`
 
 ## Running
 
 ```bash
-C:\miniconda3\envs\specdev\python.exe main.py             # real camera
-C:\miniconda3\envs\specdev\python.exe main.py --mock      # simulated device
-C:\miniconda3\envs\specdev\python.exe main.py --debug     # verbose console logging
+uv run python main.py             # real camera
+uv run python main.py --mock      # simulated device
+uv run python main.py --debug     # verbose console logging
 ```
 
 ## Testing
 
 ```bash
-C:\miniconda3\envs\specdev\python.exe -m pytest tests/ -v
+uv run pytest tests/ -v
 ```
 
 All tests use `MockDevice` — no hardware required.
