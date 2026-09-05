@@ -289,6 +289,15 @@ class LineScanDisplayWidget(QWidget):
     def _reset_zoom(self):
         self._image_view.autoRange()
 
+    def set_spectral_rows(self, rows: int) -> None:
+        """Constrain line-selection controls to the active spectral height."""
+        maximum = max(0, rows - 1)
+        for spin in (self._spin_r, self._spin_g, self._spin_b):
+            spin.blockSignals(True)
+            spin.setRange(0, maximum)
+            spin.blockSignals(False)
+        self._emit_config()
+
     def set_max_dn(self, max_dn: int) -> None:
         """Update the maximum DN value for display scaling.
 

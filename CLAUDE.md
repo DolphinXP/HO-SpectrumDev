@@ -87,14 +87,14 @@ specdev/
 - **UI framework**: PySide6 with QSplitter-based layout
 - **Plotting**: pyqtgraph (not matplotlib) — required for real-time performance at 72+ FPS
 - **Threading**: QThread + signals/slots; never call UI methods from worker threads
-- **Frame format**: numpy arrays shape `(1024, 1280)` — rows=spectral bands, cols=spatial pixels; uint8 (Mono8) or uint16 (Mono10/12)
+- **Frame format**: numpy arrays shape `(rows, cols)` — rows=spectral bands, cols=spatial pixels; `1×1=(1024,1280)`, `1×2=(512,1280)`, `2×1=(1024,640)`, `2×2=(512,640)`; uint16 for production Mono12.
 - **Storage**: two independent modes — ENVI BIL for hyperspectral cubes, raw binary for frame sequences
 - **Device abstraction**: `DeviceInterface` ABC — swap mock ↔ real SDK without touching UI
 - **Logging**: named loggers per module (`specdev.device`, `specdev.acquisition`, etc.), rotating file + console
 
 ## Device Data Model
 
-- Frame shape: `(1024, 1280)` numpy array, axis-0 = spectral bands (1024), axis-1 = spatial pixels (1280)
+- Frame shape: `(rows, cols)` numpy array; binning X halves spatial columns and binning Y halves spectral rows. The active camera `Width`/`Height` are authoritative.
 - Pixel format: Mono8 → uint8; Mono10/Mono12 → uint16
 - Wavelength axis: 1024-element float array (nm), loaded from calibration .csv file
 - Frame metadata dict: `{frame_id, timestamp, pixel_format, exposure_us, gain_db, width, height}`
@@ -130,7 +130,7 @@ specdev/
 ### UI Features
 
 - **Toolbar (主工具栏)**: Provides playback, storage, calibration toggle, settings, etc. Start/Stop controls have been moved to the Device Control Panel.
-- **Device Control Panel (设备控制)**: Top of right panel. Start/Stop acquisition, set exposure (µs), gain (dB), pixel format. Shows read-only device specs (resolution, sensor, ADC, max FPS, status).
+- **Device Control Panel (设备控制)**: Top of right panel. Start/Stop acquisition, set exposure (µs), gain (dB), and hardware binning (`1×1`, `1×2`, `2×1`, `2×2`). Binning is disabled while acquiring, recording, or replaying. Shows the active output resolution, sensor, ADC, max FPS, and status.
 - **NUC Panel (非均匀性校正)**: Right-side panel for loading A/B calibration files and toggling per-pixel linear correction.
 - **Image Display (图像显示)**: Driven by `ImageDisplayWidget`. Uses `pyqtgraph.ImageView`. Supports manual DN range (Levels) adjustment and mouse-driven zoom/pan.
 - **Stats & Aux (统计与辅助)**: Right-side panels showing real-time performance and frame-header metadata.
@@ -139,28 +139,45 @@ specdev/
 
 ## Data Save Modes
 
+### Hardware Binning
+
+The production path uses Daheng SDK hardware nodes `BinningHorizontal` (X/columns) and `BinningVertical` (Y/rows), not software downsampling. Supported modes and expected full-frame geometry are:
+
+| Binning (X×Y) | numpy shape `(rows, cols)` | Resolution (W×H) |
+|---|---:|---:|
+| 1×1 | `(1024, 1280)` | 1280×1024 |
+| 1×2 | `(512, 1280)` | 1280×512 |
+| 2×1 | `(1024, 640)` | 640×1024 |
+| 2×2 | `(512, 640)` | 640×512 |
+
+Read back `Width` and `Height` after applying a mode; they are authoritative when ROI or firmware settings are involved. Mock mode simulates the same output sizes by averaging native pixel blocks.
+
 ### ENVI BIL (hyperspectral cube)
-Files: `<session>_YYYYMMDD_HHMMSS.dat` + `.hdr`
+Files: `<session>_..._Bin<X>x<Y>_<W>x<H>.dat` + `.hdr`
 
 ```
 ENVI
-samples = 1280
+samples = <active width>
 lines = N              (accumulated push-broom lines)
-bands = 1024
+bands = <active height>
 data type = 1          (uint8) or 12 (uint16)
 interleave = bil
 byte order = 0
-wavelength units = nm
-wavelength = {w0, w1, ..., w1023}
+binning horizontal = <X>
+binning vertical = <Y>
+binning = <X>x<Y>
 ```
 
-Each line written as (1024, 1280) array in band-interleaved order.
+The writer locks its `(bands, samples)` geometry from recording metadata/first frame; a mode change requires stopping the current recording. Header and filename identify the binning result.
 
 ### Raw Binary
-Files: `<session>_YYYYMMDD_HHMMSS.raw` + `.json` sidecar
+Files: `<session>_..._Bin<X>x<Y>_<W>x<H>.dat` + `.json` sidecar
 
-JSON sidecar: `{frame_count, width, height, pixel_format, dtype, exposure_us, gain_db, fps}`
-Binary: concatenated raw numpy frames, one after another.
+JSON sidecar includes `{frame_count, width, height, pixel_format, dtype, exposure_us, gain_db, fps, binning_x, binning_y, binning, original_width, original_height}`. Binary data is concatenated binning-output frames.
+
+### NUC and Binning
+
+NUC is applied in software after SDK hardware binning, because the application receives only the binned frame. A/B coefficient arrays must match the active frame shape exactly; use separately calibrated files for each binning mode. If a previously loaded NUC shape does not match after binning changes, correction is skipped safely until matching coefficients are loaded.
 
 ## Logging
 
@@ -187,7 +204,7 @@ Detailed algorithm specs are in project skills (`.claude/commands/`):
 **MTF**: `MTF = ((dnCenter−BL) − (dnNeighbor−BL)) / ((dnCenter−BL) + (dnNeighbor−BL)) × π/4`
 Four directions (above/below/left/right), averaged over 1/5/10 frames. → `src/analysis/mtf.py`
 
-**NUC**: `output = A * raw_pixel + B` per pixel, A/B arrays shape (1024,1280). → `src/data/nuc.py`
+**NUC**: `output = A * raw_pixel + B` per pixel; A/B arrays must match the active hardware-binning output shape. → `src/data/nuc.py`
 
 **Spectral profiles**: near spatial ±10px, near spectral ±10 bands, full row, full column. → `src/analysis/spectral.py`
 

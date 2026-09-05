@@ -134,6 +134,7 @@ class MainWindow(QMainWindow):
         self._selected_x: int = 640
         self._selected_y: int = 512
         self._current_frame: np.ndarray | None = None
+        self._active_frame_shape: tuple[int, int] = device.get_frame_shape()
         self._running: bool = False
         self._replaying: bool = False
         self._line_scan_active: bool = False
@@ -158,6 +159,7 @@ class MainWindow(QMainWindow):
 
         # Wire signals
         self._wire_signals()
+        self._apply_frame_shape(self._device.get_frame_shape())
 
         # --- UI refresh timer (ping-pong consumer) ---
         self._refresh_timer = QTimer(self)
@@ -439,12 +441,14 @@ class MainWindow(QMainWindow):
         self._image_display.pixel_clicked.connect(self._on_pixel_selected)
 
         # Device control panel
-        self._device_control.sync_from_device(self._device)
+        self._device_control.sync_from_device(self._device, restore_saved_binning=True)
         self._device_control.start_requested.connect(self._on_start)
         self._device_control.stop_requested.connect(self._on_stop)
         self._device_control.exposure_changed.connect(self._on_exposure_changed)
         self._device_control.gain_changed.connect(self._on_gain_changed)
         self._device_control.pixel_format_changed.connect(self._on_pixel_format_changed)
+        self._device_control.binning_changed.connect(self._on_binning_changed)
+        self._on_binning_changed(*self._device_control.current_binning())
 
         # NUC panel
         self._nuc_panel.nuc_changed.connect(self._on_nuc_changed)
@@ -485,6 +489,9 @@ class MainWindow(QMainWindow):
             return  # no new frame since last poll
 
         frame, metadata = result
+        if frame.shape != self._active_frame_shape:
+            self._current_frame = None
+            self._apply_frame_shape(frame.shape)
         self._current_frame = frame
         # Prepare display frame for area scan mode & stats
         display_frame = frame
@@ -647,6 +654,62 @@ class MainWindow(QMainWindow):
         self._update_widgets_for_pixel_format(fmt)
         logger.info("Pixel format set to %s", fmt)
 
+    def _on_binning_changed(self, binning_x: int, binning_y: int) -> None:
+        """Apply a stopped-state hardware binning change and retarget all UI."""
+        if self._running or self._storage.is_recording:
+            logger.warning("Cannot change binning while acquiring or recording")
+            return
+
+        previous_shape = self._device.get_frame_shape()
+        previous_binning = self._device.get_binning()
+        try:
+            self._device.set_binning(binning_x, binning_y)
+            actual_binning = self._device.get_binning()
+            shape = self._device.get_frame_shape()
+        except Exception as exc:
+            logger.exception("Failed to set binning to %dx%d", binning_x, binning_y)
+            QMessageBox.critical(self, "Binning 设置失败", f"无法设置像元 Binning：{exc}")
+            self._device_control.sync_from_device(self._device)
+            self._device_control.persist_current_binning()
+            return
+
+        self._current_frame = None
+        self._apply_frame_shape(shape)
+        self._acquisition.frame_buffer.clear()
+        self._mtf.reset()
+        self._line_scan_display.clear_display()
+        if self._nuc.is_loaded():
+            logger.warning(
+                "NUC coefficients remain loaded after binning change; they are skipped "
+                "until their shape matches the new %s frame", shape,
+            )
+        logger.info(
+            "Binning changed %dx%d -> %dx%d; frame shape %s -> %s",
+            *previous_binning,
+            *actual_binning,
+            previous_shape,
+            shape,
+        )
+
+    def _apply_frame_shape(self, shape: tuple[int, int]) -> None:
+        """Update all coordinate-driven widgets for a binned output shape."""
+        rows, cols = shape
+        self._active_frame_shape = shape
+        self._device_control.update_frame_shape(shape)
+        self._optical_cal_panel.set_frame_shape(shape)
+        for graph in (
+            self._graph_near_spatial,
+            self._graph_near_spectral,
+            self._graph_full_spatial,
+            self._graph_full_spectral,
+        ):
+            graph.set_frame_shape(shape)
+        self._line_scan_display.set_spectral_rows(rows)
+
+        self._selected_x = min(max(0, self._selected_x), cols - 1)
+        self._selected_y = min(max(0, self._selected_y), rows - 1)
+        self._on_pixel_selected(self._selected_x, self._selected_y)
+
     def _update_widgets_for_pixel_format(self, fmt: str) -> None:
         """Update all widgets' max DN values based on pixel format.
 
@@ -697,7 +760,7 @@ class MainWindow(QMainWindow):
                     or b_path != current_b
                     or not self._nuc.is_loaded()
                 ):
-                    self._nuc.load(a_path, b_path)
+                    self._nuc.load(a_path, b_path, self._device.get_frame_shape())
                     self._config.set("nuc.a_path", a_path)
                     self._config.set("nuc.b_path", b_path)
 
@@ -727,6 +790,23 @@ class MainWindow(QMainWindow):
             self._status_nuc.setText("NUC: 错误")
             self._status_nuc.setStyleSheet("color: #e74c3c; font-weight: bold;")
 
+    def _recording_metadata(self, pixel_format: str) -> dict:
+        """Build immutable recording provenance for the active camera mode."""
+        rows, cols = self._device.get_frame_shape()
+        binning_x, binning_y = self._device.get_binning()
+        return {
+            "width": cols,
+            "height": rows,
+            "pixel_format": pixel_format,
+            "binning_x": binning_x,
+            "binning_y": binning_y,
+            "binning": f"{binning_x}x{binning_y}",
+            "original_width": 1280,
+            "original_height": 1024,
+            "exposure_us": self._device.get_exposure(),
+            "gain_db": self._device.get_gain(),
+        }
+
     def _on_start_save(self) -> None:
         """Show storage dialog and start recording to disk."""
         dlg = StorageDialog(
@@ -740,11 +820,14 @@ class MainWindow(QMainWindow):
         directory = info["directory"]
         session_name = info["session_name"]
         pixel_format = self._device.get_pixel_format()
+        metadata = self._recording_metadata(pixel_format)
+        suffix = f"Bin{metadata['binning']}_{metadata['width']}x{metadata['height']}"
+        session_name = f"{session_name}_{suffix}"
 
         if info["save_envi"]:
-            self._storage.start_envi(directory, session_name, pixel_format)
+            self._storage.start_envi(directory, session_name, pixel_format, metadata=metadata)
         if info["save_raw"]:
-            self._storage.start_raw(directory, session_name, pixel_format)
+            self._storage.start_raw(directory, session_name, pixel_format, metadata=metadata)
 
         self._config.set("storage.last_directory", directory)
 
@@ -840,6 +923,9 @@ class MainWindow(QMainWindow):
 
     def _on_replay_frame(self, frame: np.ndarray, metadata: dict) -> None:
         """Handle frame from replay worker."""
+        if frame.shape != self._active_frame_shape:
+            self._current_frame = None
+            self._apply_frame_shape(frame.shape)
         self._current_frame = frame
 
         # Prepare display frame
@@ -944,6 +1030,7 @@ class MainWindow(QMainWindow):
         self._replay_control.setVisible(False)
         self._replaying = False
         self._device_control.set_replaying(False)
+        self._apply_frame_shape(self._device.get_frame_shape())
         self._device_control.set_running(False)
         self._act_start_save.setEnabled(True)
         self._act_stop_playback.setEnabled(False)

@@ -243,6 +243,16 @@ class SpectrumGraphWidget(QWidget):
         self._x_spin.blockSignals(False)
         self._y_spin.blockSignals(False)
 
+    def set_frame_shape(self, shape: tuple[int, int]) -> None:
+        """Constrain coordinates to a frame with ``(rows, cols)`` shape."""
+        rows, cols = shape
+        self._x_spin.blockSignals(True)
+        self._y_spin.blockSignals(True)
+        self._x_spin.setRange(0, max(0, cols - 1))
+        self._y_spin.setRange(0, max(0, rows - 1))
+        self._x_spin.blockSignals(False)
+        self._y_spin.blockSignals(False)
+
     def clear_plot(self) -> None:
         """Clear the curve."""
         self._curve.setData([], [])

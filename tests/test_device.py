@@ -102,3 +102,38 @@ class TestMockDevice:
 
         qtbot.wait(100)
         assert len(received) == count_at_stop  # No new frames after stop
+
+    @pytest.mark.parametrize(
+        ("binning", "shape"),
+        [
+            ((1, 1), (1024, 1280)),
+            ((1, 2), (512, 1280)),
+            ((2, 1), (1024, 640)),
+            ((2, 2), (512, 640)),
+        ],
+    )
+    def test_binning_emits_expected_shape(self, app, qtbot, binning, shape):
+        """The mock mirrors hardware output geometry for every supported mode."""
+        dev = MockDevice()
+        dev.set_binning(*binning)
+        assert dev.get_binning() == binning
+        assert dev.get_frame_shape() == shape
+
+        received = []
+        dev.frame_acquired.connect(lambda frame, metadata: received.append((frame, metadata)))
+        dev.start()
+        qtbot.waitUntil(lambda: bool(received), timeout=1000)
+        dev.stop()
+
+        frame, metadata = received[0]
+        assert frame.shape == shape
+        assert metadata["width"] == shape[1]
+        assert metadata["height"] == shape[0]
+        assert metadata["binning"] == f"{binning[0]}x{binning[1]}"
+
+    def test_binning_change_while_running_is_rejected(self, app):
+        dev = MockDevice()
+        dev.start()
+        with pytest.raises(RuntimeError, match="binning"):
+            dev.set_binning(2, 2)
+        dev.stop()

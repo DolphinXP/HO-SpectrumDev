@@ -1,7 +1,8 @@
-"""Non-Uniformity Correction (NUC) processor.
+"""Non-uniformity correction (NUC) for camera frames.
 
-Applies per-pixel linear correction: ``output = A * raw + B`` where A and B
-are float32 coefficient arrays of shape (1024, 1280).
+Applies per-pixel linear correction: ``output = A * raw + B``. Coefficients
+are calibrated for one camera output geometry and therefore must match the
+active hardware-binning frame shape exactly.
 """
 
 from __future__ import annotations
@@ -11,30 +12,23 @@ from pathlib import Path
 
 import numpy as np
 
+from src.device.device_interface import SENSOR_FRAME_SHAPE, SUPPORTED_BINNING
+
 logger = logging.getLogger("specdev.acquisition")
 
-_EXPECTED_SHAPE = (1024, 1280)
+_SUPPORTED_SHAPES = tuple(
+    (SENSOR_FRAME_SHAPE[0] // by, SENSOR_FRAME_SHAPE[1] // bx)
+    for bx, by in SUPPORTED_BINNING
+)
 
 
-def _load_coefficients(path: str) -> np.ndarray:
-    """Load a coefficient array from *path*, auto-detecting format by extension.
+def _load_coefficients(path: str, expected_shape: tuple[int, int]) -> np.ndarray:
+    """Load one float32 coefficient array for *expected_shape*.
 
-    Supported formats:
-        .npy        -- numpy binary (``np.load``)
-        .csv        -- comma-separated, 1024 rows x 1280 cols
-        .bin / .raw -- flat float32 binary, row-major
-
-    Returns
-    -------
-    np.ndarray
-        Array of shape (1024, 1280), dtype float32.
-
-    Raises
-    ------
-    ValueError
-        If the loaded data cannot be reshaped to the expected shape.
-    FileNotFoundError
-        If *path* does not exist.
+    ``.npy`` and ``.csv`` retain their two-dimensional geometry and are
+    validated directly. Flat ``.bin``/``.raw`` coefficients are reshaped with
+    the active frame geometry, which disambiguates 1x2 and 2x1 files that
+    contain the same number of samples.
     """
     p = Path(path)
     if not p.is_file():
@@ -51,100 +45,80 @@ def _load_coefficients(path: str) -> np.ndarray:
         raise ValueError(f"Unsupported coefficient file extension: {ext}")
 
     arr = arr.astype(np.float32, copy=False)
-
-    if arr.shape != _EXPECTED_SHAPE:
+    if arr.shape != expected_shape:
         try:
-            arr = arr.reshape(_EXPECTED_SHAPE)
-        except ValueError:
+            arr = arr.reshape(expected_shape)
+        except ValueError as exc:
             raise ValueError(
-                f"Coefficient array from {path} has {arr.size} elements; "
-                f"expected {_EXPECTED_SHAPE[0] * _EXPECTED_SHAPE[1]}"
-            )
-
+                f"Coefficient array from {path} has shape {arr.shape} and {arr.size} samples; "
+                f"expected active-frame shape {expected_shape}"
+            ) from exc
     return arr
 
 
 class NUCProcessor:
-    """Per-pixel non-uniformity correction.
-
-    When coefficients are loaded, :meth:`apply` computes
-    ``A * frame + B`` element-wise.  When no coefficients are loaded or
-    NUC is disabled, the original frame is returned unchanged so the
-    acquisition path avoids a full-frame copy on every image.
-    """
+    """Per-pixel NUC coefficients tied to one active output frame geometry."""
 
     def __init__(self) -> None:
         self._a: np.ndarray | None = None
         self._b: np.ndarray | None = None
         self.enabled: bool = False
+        self._last_shape_warning: tuple[tuple[int, ...], tuple[int, ...]] | None = None
 
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
+    def load(
+        self,
+        a_path: str,
+        b_path: str,
+        expected_shape: tuple[int, int] = SENSOR_FRAME_SHAPE,
+    ) -> None:
+        """Load A/B coefficients calibrated for *expected_shape*.
 
-    def load(self, a_path: str, b_path: str) -> None:
-        """Load gain (A) and offset (B) coefficient files.
-
-        Parameters
-        ----------
-        a_path : str
-            Path to the gain coefficient file.
-        b_path : str
-            Path to the offset coefficient file.
-
-        Raises
-        ------
-        ValueError
-            If either file has the wrong shape.
-        FileNotFoundError
-            If either path does not eqxist.
+        ``expected_shape`` should be read from the camera after configuring
+        binning. Supported outputs are 1024x1280, 512x1280, 1024x640, and
+        512x640 (expressed internally as rows x columns).
         """
-        a = _load_coefficients(a_path)
-        b = _load_coefficients(b_path)
-
-        if a.shape != _EXPECTED_SHAPE:
+        expected_shape = tuple(int(v) for v in expected_shape)
+        if expected_shape not in _SUPPORTED_SHAPES:
             raise ValueError(
-                f"A coefficient shape {a.shape} != expected {_EXPECTED_SHAPE}"
-            )
-        if b.shape != _EXPECTED_SHAPE:
-            raise ValueError(
-                f"B coefficient shape {b.shape} != expected {_EXPECTED_SHAPE}"
+                f"Unsupported NUC frame shape {expected_shape}; "
+                f"supported shapes: {_SUPPORTED_SHAPES}"
             )
 
+        a = _load_coefficients(a_path, expected_shape)
+        b = _load_coefficients(b_path, expected_shape)
         self._a = a
         self._b = b
-        logger.info(
-            "NUC loaded: A=%s B=%s shape=%s", a_path, b_path, a.shape
-        )
+        self._last_shape_warning = None
+        logger.info("NUC loaded: A=%s B=%s shape=%s", a_path, b_path, a.shape)
 
     def unload(self) -> None:
         """Clear loaded coefficients."""
         self._a = None
         self._b = None
+        self._last_shape_warning = None
         logger.info("NUC coefficients unloaded")
 
     def is_loaded(self) -> bool:
-        """Return ``True`` if both A and B are loaded and shape-validated."""
         return self._a is not None and self._b is not None
 
     def apply(self, frame: np.ndarray) -> np.ndarray:
-        """Apply NUC correction to *frame*.
-
-        Parameters
-        ----------
-        frame : np.ndarray
-            Raw camera frame, shape (1024, 1280), dtype uint8 or uint16.
-
-        Returns
-        -------
-        np.ndarray
-            Corrected frame, shape (1024, 1280), dtype float32.
-            If coefficients are not loaded or disabled, the original frame is
-            returned unchanged.
-        """
+        """Apply correction only when coefficient and frame shapes match."""
         if not self.enabled or not self.is_loaded():
             return frame
 
-        logger.debug("Applying NUC correction")
+        coefficient_shape = self._a.shape  # type: ignore[union-attr]
+        if coefficient_shape != frame.shape:
+            warning_key = (coefficient_shape, frame.shape)
+            if warning_key != self._last_shape_warning:
+                logger.warning(
+                    "Skipping NUC: coefficient shape %s does not match frame shape %s; "
+                    "load coefficients calibrated for the active binning mode",
+                    coefficient_shape,
+                    frame.shape,
+                )
+                self._last_shape_warning = warning_key
+            return frame
+
+        self._last_shape_warning = None
         frame_f32 = frame.astype(np.float32, copy=False)
         return self._a * frame_f32 + self._b  # type: ignore[union-attr]

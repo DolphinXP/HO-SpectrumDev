@@ -6,7 +6,12 @@ import time
 
 import numpy as np
 
-from src.device.device_interface import DeviceInterface
+from src.device.device_interface import (
+    DeviceInterface,
+    SENSOR_FRAME_SHAPE,
+    SUPPORTED_BINNING,
+    validate_binning,
+)
 
 logger = logging.getLogger("specdev.device")
 
@@ -25,6 +30,7 @@ class MockDevice(DeviceInterface):
         self._exposure_us: float = 10000.0
         self._gain_db: float = 0.0
         self._pixel_format: str = "Mono12"
+        self._binning: tuple[int, int] = (1, 1)
         self._running: bool = False
         self._frame_id: int = 0
         self._target_interval_s: float = 1.0 / 120.0
@@ -74,8 +80,9 @@ class MockDevice(DeviceInterface):
         self._obj_r = arr[:, :, 2].astype(np.float32)
 
     def initialize(self) -> bool:
-        logger.info("MockDevice initialized (1024×1280, %s)",
-                    self._pixel_format)
+        rows, cols = self.get_frame_shape()
+        bx, by = self.get_binning()
+        logger.info("MockDevice initialized (%d×%d, %s, binning=%dx%d)", cols, rows, self._pixel_format, bx, by)
         return True
 
     def start(self) -> None:
@@ -128,8 +135,32 @@ class MockDevice(DeviceInterface):
             self._template_dirty = True
         logger.info("MockDevice pixel format set to %s", fmt)
 
+    def set_binning(self, x: int, y: int) -> None:
+        """Simulate camera hardware binning by averaging native pixel blocks.
+
+        The mock keeps its source scene at the full sensor resolution and
+        emits the same shape the physical camera would expose after binning.
+        Averaging is used deliberately to avoid changing the Mono12 DN range.
+        """
+        binning = validate_binning(x, y)
+        with self._state_lock:
+            if self._running:
+                raise RuntimeError("Cannot change mock camera binning while acquisition is running")
+            self._binning = binning
+        logger.info("MockDevice binning set to %dx%d", *binning)
+
+    def get_binning(self) -> tuple[int, int]:
+        with self._state_lock:
+            return self._binning
+
+    def get_supported_binning(self) -> tuple[tuple[int, int], ...]:
+        return SUPPORTED_BINNING
+
     def get_frame_shape(self) -> tuple[int, int]:
-        return (1024, 1280)
+        with self._state_lock:
+            bx, by = self._binning
+        rows, cols = SENSOR_FRAME_SHAPE
+        return (rows // by, cols // bx)
 
     def get_exposure(self) -> float:
         with self._state_lock:
@@ -163,6 +194,7 @@ class MockDevice(DeviceInterface):
             exposure_us = self._exposure_us
             gain_db = self._gain_db
             pixel_format = self._pixel_format
+            binning_x, binning_y = self._binning
             frame_id = self._frame_id
             self._frame_id += 1
             if self._template_dirty or self._template_frame is None:
@@ -209,6 +241,8 @@ class MockDevice(DeviceInterface):
         x_lo2, x_hi2 = max(0, cx2 - 5), min(cols, cx2 + 5)
         frame[y_lo2:y_hi2, x_lo2:x_hi2] = max_val
 
+        frame = self._apply_binning(frame, binning_x, binning_y)
+        rows, cols = frame.shape
         metadata = {
             "frame_id": frame_id,
             "timestamp": time.time(),
@@ -217,8 +251,32 @@ class MockDevice(DeviceInterface):
             "gain_db": gain_db,
             "width": cols,
             "height": rows,
+            "binning_x": binning_x,
+            "binning_y": binning_y,
+            "binning": f"{binning_x}x{binning_y}",
+            "original_width": _COLS,
+            "original_height": _ROWS,
         }
         self.frame_acquired.emit(frame, metadata)
+
+    @staticmethod
+    def _apply_binning(frame: np.ndarray, binning_x: int, binning_y: int) -> np.ndarray:
+        """Average full-resolution pixel blocks into a binned camera frame."""
+        if (binning_x, binning_y) == (1, 1):
+            return frame
+
+        rows, cols = frame.shape
+        reshaped = frame.reshape(
+            rows // binning_y,
+            binning_y,
+            cols // binning_x,
+            binning_x,
+        )
+        # Sum in uint32 to avoid overflow for Mono12, then round the average.
+        averaged = reshaped.astype(np.uint32).sum(axis=(1, 3))
+        divisor = binning_x * binning_y
+        averaged = (averaged + divisor // 2) // divisor
+        return averaged.astype(frame.dtype)
 
     @staticmethod
     def _get_dtype_and_max_value(pixel_format: str) -> tuple[type, int]:

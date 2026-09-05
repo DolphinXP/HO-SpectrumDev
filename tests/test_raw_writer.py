@@ -35,6 +35,33 @@ class TestRawWriter:
         assert sidecar["frame_count"] == 1
         assert sidecar["data_file"] == "raw_only.dat"
 
+    def test_binning_metadata_is_persisted(self, tmp_path):
+        base = str(tmp_path / "raw_binned")
+        frame = np.zeros((512, 640), dtype=np.uint16)
+        writer = RawWriter()
+        writer.open(
+            base,
+            "Mono12",
+            metadata={
+                "width": 640,
+                "height": 512,
+                "binning_x": 2,
+                "binning_y": 2,
+                "binning": "2x2",
+                "original_width": 1280,
+                "original_height": 1024,
+            },
+        )
+        writer.write_frame(frame)
+        writer.close()
+
+        sidecar = json.loads(Path(base + ".json").read_text(encoding="utf-8"))
+        assert sidecar["width"] == 640
+        assert sidecar["height"] == 512
+        assert sidecar["binning"] == "2x2"
+        assert sidecar["binning_x"] == 2
+        assert sidecar["binning_y"] == 2
+
     def test_metadata_only_mode_writes_json_without_duplicate_dat(self, tmp_path):
         """Metadata-only mode should skip binary output and still record JSON."""
         base = str(tmp_path / "meta_only")

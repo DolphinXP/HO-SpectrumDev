@@ -1,9 +1,4 @@
-"""Raw frame writer with JSON sidecar metadata.
-
-Writes concatenated raw numpy frames to a ``.dat`` file and produces a
-``.json`` sidecar on :meth:`close` containing frame count, dimensions,
-pixel format, and other acquisition parameters.
-"""
+"""Raw frame writer with JSON sidecar metadata."""
 
 from __future__ import annotations
 
@@ -25,23 +20,7 @@ _DTYPE_MAP: dict[str, str] = {
 
 
 class RawWriter:
-    """Write raw camera frames as a flat binary stream with JSON sidecar.
-
-    Usage::
-
-        writer = RawWriter()
-        writer.open("session_001", pixel_format="Mono12", metadata={...})
-        for frame in frames:
-            writer.write_frame(frame)
-        writer.close()
-
-    Or as a context manager::
-
-        with RawWriter() as w:
-            w.open(...)
-            for frame in frames:
-                w.write_frame(frame)
-    """
+    """Write same-shape camera frames as a binary stream with JSON metadata."""
 
     def __init__(self) -> None:
         self._data_file: BinaryIO | None = None
@@ -56,10 +35,6 @@ class RawWriter:
         self._height: int = 0
         self._write_binary: bool = True
 
-    # ------------------------------------------------------------------
-    # Context manager
-    # ------------------------------------------------------------------
-
     def __enter__(self) -> "RawWriter":
         return self
 
@@ -71,23 +46,13 @@ class RawWriter:
     ) -> None:
         self.close()
 
-    # ------------------------------------------------------------------
-    # Properties
-    # ------------------------------------------------------------------
-
     @property
     def frame_count(self) -> int:
-        """Number of frames written so far."""
         return self._frame_count
 
     @property
     def bytes_written(self) -> int:
-        """Total bytes written to the binary data file."""
         return self._bytes_written
-
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
 
     def open(
         self,
@@ -97,91 +62,61 @@ class RawWriter:
         data_extension: str = ".dat",
         write_binary: bool = True,
     ) -> None:
-        """Open the raw data/JSON file pair for writing.
-
-        Parameters
-        ----------
-        path : str
-            Base path **without** extension.  ``.dat`` and ``.json``
-            are appended automatically.
-        pixel_format : str
-            One of ``"Mono8"``, ``"Mono10"``, ``"Mono12"``.
-        metadata : dict | None
-            Optional metadata forwarded to the JSON sidecar
-            (``exposure_us``, ``gain_db``, ``fps``, etc.).
-        data_extension : str
-            Extension for the binary frame stream.
-        write_binary : bool
-            When ``False``, only the JSON sidecar is produced. This is used
-            when another writer already owns the shared binary ``.dat`` file.
-        """
-        if self._data_file is not None:
+        if self._data_file is not None or self._json_path is not None:
             raise RuntimeError("RawWriter is already open; call close() first")
-
         if pixel_format not in _DTYPE_MAP:
             raise ValueError(f"Unsupported pixel format: {pixel_format}")
 
         self._pixel_format = pixel_format
         self._np_dtype = np.dtype(_DTYPE_MAP[pixel_format])
-        self._metadata = metadata or {}
+        self._metadata = dict(metadata or {})
         self._frame_count = 0
         self._bytes_written = 0
-        self._width = 0
-        self._height = 0
+        self._width = int(self._metadata.get("width", 0) or 0)
+        self._height = int(self._metadata.get("height", 0) or 0)
         self._write_binary = write_binary
 
         base = Path(path)
         base.parent.mkdir(parents=True, exist_ok=True)
         self._data_path = base.with_suffix(data_extension)
         self._json_path = base.with_suffix(".json")
-
         if self._write_binary:
             self._data_file = open(self._data_path, "wb")  # noqa: SIM115
-
-        logger.info(
-            "Raw writer opened: %s (format=%s, write_binary=%s)",
-            self._data_path,
-            pixel_format,
-            self._write_binary,
-        )
+        logger.info("Raw writer opened: %s (format=%s, write_binary=%s)", self._data_path, pixel_format, write_binary)
 
     def write_frame(self, frame: np.ndarray) -> None:
-        """Append one frame to the binary data file.
-
-        Parameters
-        ----------
-        frame : np.ndarray
-            Camera frame (typically shape ``(1024, 1280)``).  Cast to
-            the target dtype before writing.
-        """
         if not self._write_binary and self._json_path is None:
             raise RuntimeError("RawWriter is not open")
         if self._write_binary and self._data_file is None:
             raise RuntimeError("RawWriter is not open")
+        if frame.ndim != 2:
+            raise ValueError(f"Raw frame must be 2-D, got shape {frame.shape}")
 
-        # Record dimensions from first frame
+        height, width = (int(v) for v in frame.shape)
         if self._frame_count == 0:
-            self._height, self._width = frame.shape[:2]
+            if self._width and self._height and (width, height) != (self._width, self._height):
+                raise ValueError(
+                    f"Frame shape {frame.shape} != recording shape ({self._height}, {self._width})"
+                )
+            self._height, self._width = height, width
+        elif (width, height) != (self._width, self._height):
+            raise ValueError(
+                f"Frame shape {frame.shape} != recording shape ({self._height}, {self._width}); "
+                "stop recording before changing binning"
+            )
 
         data = frame.astype(self._np_dtype, copy=False).tobytes()
         if self._write_binary:
             self._data_file.write(data)
-        self._frame_count += 1
-        if self._write_binary:
             self._bytes_written += len(data)
+        self._frame_count += 1
 
     def close(self) -> None:
-        """Flush the binary data file and write the JSON sidecar."""
         if self._data_file is not None:
             self._data_file.flush()
             self._data_file.close()
             self._data_file = None
-            logger.info(
-                "Raw data file closed: %s (%d frames, %d bytes)",
-                self._data_path,
-                self._frame_count,
-                self._bytes_written,
-            )
+            logger.info("Raw data file closed: %s (%d frames, %d bytes)", self._data_path, self._frame_count, self._bytes_written)
 
         if self._json_path is not None:
             sidecar = {
@@ -194,11 +129,13 @@ class RawWriter:
                 "exposure_us": self._metadata.get("exposure_us"),
                 "gain_db": self._metadata.get("gain_db"),
                 "fps": self._metadata.get("fps"),
+                "binning_x": self._metadata.get("binning_x", 1),
+                "binning_y": self._metadata.get("binning_y", 1),
+                "binning": self._metadata.get("binning", "1x1"),
+                "original_width": self._metadata.get("original_width"),
+                "original_height": self._metadata.get("original_height"),
             }
-            self._json_path.write_text(
-                json.dumps(sidecar, indent=2, ensure_ascii=False),
-                encoding="utf-8",
-            )
+            self._json_path.write_text(json.dumps(sidecar, indent=2, ensure_ascii=False), encoding="utf-8")
             logger.info("JSON sidecar written: %s", self._json_path)
             self._data_path = None
             self._json_path = None

@@ -175,6 +175,16 @@ class OpticalCalPanel(QWidget):
     def get_pixel(self) -> tuple[int, int]:
         return self._x_spin.value(), self._y_spin.value()
 
+    def set_frame_shape(self, shape: tuple[int, int]) -> None:
+        """Constrain coordinate controls to the active camera output frame."""
+        rows, cols = shape
+        self._x_spin.blockSignals(True)
+        self._y_spin.blockSignals(True)
+        self._x_spin.setRange(0, max(0, cols - 1))
+        self._y_spin.setRange(0, max(0, rows - 1))
+        self._x_spin.blockSignals(False)
+        self._y_spin.blockSignals(False)
+
     def update_dn_neighborhood(self, frame: np.ndarray, x: int, y: int) -> None:
         """Populate the 9×9 DN table centered on (x, y).
 

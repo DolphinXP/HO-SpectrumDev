@@ -13,7 +13,13 @@ from ctypes import addressof, c_ubyte
 import numpy as np
 from PySide6.QtCore import QObject
 
-from src.device.device_interface import DEFAULT_PIXEL_FORMAT, DeviceInterface
+from src.device.device_interface import (
+    DEFAULT_PIXEL_FORMAT,
+    SENSOR_FRAME_SHAPE,
+    SUPPORTED_BINNING,
+    DeviceInterface,
+    validate_binning,
+)
 
 logger = logging.getLogger("specdev.device")
 
@@ -50,8 +56,8 @@ def get_camera_list() -> list[dict]:
 class DahengDevice(DeviceInterface):
     """Daheng MER3-138-136G3M-P-SWIR camera wrapper.
 
-    Emits raw mono numpy arrays of shape (1024, 1280) via frame_acquired
-    signal, unlike the reference implementation which converts to RGB QImage.
+    Emits raw Mono12 numpy arrays via ``frame_acquired`` rather than RGB
+    ``QImage`` objects. The emitted shape reflects hardware binning.
     """
 
     def __init__(self, serial_number: str = "", parent: QObject | None = None) -> None:
@@ -68,6 +74,10 @@ class DahengDevice(DeviceInterface):
         self._exposure_us: float = 10000.0
         self._gain_db: float = 0.0
         self._pixel_format: str = DEFAULT_PIXEL_FORMAT
+        # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
+        # setting while disconnected so it is applied during initialize().
+        self._binning: tuple[int, int] = (1, 1)
+        self._frame_shape: tuple[int, int] = SENSOR_FRAME_SHAPE
         self._running: bool = False
         self._frame_id_counter: int = 0
         self._last_error: str = ""
@@ -96,6 +106,9 @@ class DahengDevice(DeviceInterface):
             # camera's persisted/user-set format, because the frame parser and
             # downstream storage are configured for unpacked Mono12 samples.
             self._apply_pixel_format(DEFAULT_PIXEL_FORMAT)
+            # Binning changes Width, Height, and consequently PayloadSize.  It
+            # must therefore be configured and read back before acquisition.
+            self._apply_binning(*self._binning)
 
             # Set payload size for GigE cameras (critical for proper data transfer)
             try:
@@ -115,7 +128,14 @@ class DahengDevice(DeviceInterface):
             self._remote_feature.get_enum_feature("TriggerSource").set("Software")
             self._trigger_cmd = self._remote_feature.get_command_feature("TriggerSoftware")
 
-            logger.info("DahengDevice initialized: SN=%s", self._sn)
+            rows, cols = self._frame_shape
+            logger.info(
+                "DahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%d",
+                self._sn,
+                *self._binning,
+                cols,
+                rows,
+            )
             return True
 
         except Exception as e:
@@ -130,6 +150,15 @@ class DahengDevice(DeviceInterface):
     def start(self) -> None:
         if self._camera is None:
             logger.error("Cannot start — device not initialized")
+            return
+
+        # Reapply/read back the pending mode immediately before stream_on() so
+        # a change made while stopped cannot be superseded by camera state.
+        try:
+            self._apply_binning(*self._binning)
+        except Exception as e:
+            self._last_error = str(e)
+            logger.error("Cannot start acquisition; binning configuration failed: %s", e)
             return
 
         self._running = True
@@ -185,6 +214,142 @@ class DahengDevice(DeviceInterface):
                 logger.info("Gain set to %.1f dB", db)
             except Exception as e:
                 logger.error("Failed to set gain: %s", e)
+
+    def set_binning(self, x: int, y: int) -> None:
+        """Set Daheng hardware binning while acquisition is stopped.
+
+        ``BinningHorizontal`` is X (image columns) and
+        ``BinningVertical`` is Y (image rows).  The requested value is kept
+        when the device is not initialized yet and applied by ``initialize``.
+        """
+        binning = validate_binning(x, y)
+        if self._running:
+            raise RuntimeError(
+                "Cannot change camera binning while acquisition is running; "
+                "stop acquisition first"
+            )
+
+        try:
+            self._apply_binning(*binning)
+        except Exception as e:
+            self._last_error = str(e)
+            logger.error("Failed to set binning to %dx%d: %s", *binning, e)
+            raise
+
+    def get_binning(self) -> tuple[int, int]:
+        """Return the configured hardware ``(horizontal, vertical)`` binning."""
+        if self._remote_feature is None:
+            return self._binning
+
+        try:
+            horizontal = int(
+                self._remote_feature.get_int_feature("BinningHorizontal").get()
+            )
+            vertical = int(
+                self._remote_feature.get_int_feature("BinningVertical").get()
+            )
+            actual = (horizontal, vertical)
+            if actual in SUPPORTED_BINNING:
+                self._binning = actual
+            else:
+                logger.warning(
+                    "Camera reported unsupported binning %dx%d; retaining %dx%d",
+                    *actual,
+                    *self._binning,
+                )
+        except Exception as e:
+            logger.debug("Could not read camera binning: %s", e)
+        return self._binning
+
+    def get_supported_binning(self) -> tuple[tuple[int, int], ...]:
+        """Return the binning modes supported by this MER3 camera model."""
+        return SUPPORTED_BINNING
+
+    def _apply_binning(self, x: int, y: int) -> None:
+        """Set/read back Daheng binning nodes and the resulting frame geometry."""
+        binning = validate_binning(x, y)
+        if self._running:
+            raise RuntimeError(
+                "Cannot configure camera binning while acquisition is running"
+            )
+
+        # Allow configuration before initialize(); the desired setting is
+        # written to the camera as part of initialize(), before stream_on().
+        if self._remote_feature is None:
+            self._binning = binning
+            self._frame_shape = self._default_frame_shape_for_binning(binning)
+            return
+
+        feature_names = ("BinningHorizontal", "BinningVertical")
+        features = []
+        for feature_name in feature_names:
+            if not self._remote_feature.is_implemented(feature_name):
+                raise RuntimeError(
+                    f"Camera does not expose required {feature_name} feature"
+                )
+            if not self._remote_feature.is_writable(feature_name):
+                raise RuntimeError(f"Camera {feature_name} feature is not writable")
+            features.append(self._remote_feature.get_int_feature(feature_name))
+
+        previous_binning = self._binning
+        previous_shape = self._frame_shape
+        try:
+            features[0].set(binning[0])
+            features[1].set(binning[1])
+            actual = (int(features[0].get()), int(features[1].get()))
+            if actual != binning:
+                raise RuntimeError(
+                    "Camera rejected binning "
+                    f"{binning[0]}x{binning[1]}; read back {actual[0]}x{actual[1]}"
+                )
+
+            # Width/Height are camera-authoritative because they also reflect
+            # any camera ROI or feature dependencies.  Do not derive them only
+            # from the nominal 1280x1024 sensor geometry.
+            self._frame_shape = self._read_camera_frame_shape()
+            self._binning = actual
+        except Exception:
+            # Avoid reporting stale local state if the device rejects a partial
+            # update. Best-effort rollback leaves a stopped camera in its last
+            # known configuration when the SDK permits it.
+            try:
+                features[0].set(previous_binning[0])
+                features[1].set(previous_binning[1])
+            except Exception as rollback_error:
+                logger.warning("Could not roll back failed binning update: %s", rollback_error)
+            self._binning = previous_binning
+            self._frame_shape = previous_shape
+            raise
+
+        rows, cols = self._frame_shape
+        logger.info(
+            "Hardware binning set to %dx%d; camera output is %dx%d",
+            *self._binning,
+            cols,
+            rows,
+        )
+
+    @staticmethod
+    def _default_frame_shape_for_binning(
+        binning: tuple[int, int],
+    ) -> tuple[int, int]:
+        """Return the full-frame shape expected without a connected camera."""
+        binning_x, binning_y = binning
+        rows, cols = SENSOR_FRAME_SHAPE
+        return (rows // binning_y, cols // binning_x)
+
+    def _read_camera_frame_shape(self) -> tuple[int, int]:
+        """Read and validate camera Width/Height after a feature update."""
+        if self._remote_feature is None:
+            return self._default_frame_shape_for_binning(self._binning)
+
+        width = int(self._remote_feature.get_int_feature("Width").get())
+        height = int(self._remote_feature.get_int_feature("Height").get())
+        if width <= 0 or height <= 0:
+            raise RuntimeError(
+                f"Camera reported invalid frame dimensions {width}x{height}"
+            )
+        return (height, width)
 
     def set_pixel_format(self, fmt: str) -> None:
         if fmt != DEFAULT_PIXEL_FORMAT:
@@ -261,14 +426,12 @@ class DahengDevice(DeviceInterface):
         return self._pixel_format
 
     def get_frame_shape(self) -> tuple[int, int]:
-        if self._remote_feature:
+        if self._remote_feature is not None:
             try:
-                width = self._remote_feature.get_int_feature("Width").get()
-                height = self._remote_feature.get_int_feature("Height").get()
-                return (height, width)
-            except Exception:
-                pass
-        return (1024, 1280)  # Default for MER3-138-136G3M-P-SWIR
+                self._frame_shape = self._read_camera_frame_shape()
+            except Exception as e:
+                logger.debug("Could not read camera frame shape: %s", e)
+        return self._frame_shape
 
     def get_exposure(self) -> float:
         return self._exposure_us
@@ -343,6 +506,19 @@ class DahengDevice(DeviceInterface):
                 return
             frame = numpy_array.reshape(height, width).astype(np.uint16, copy=False)
 
+            frame_shape = (height, width)
+            if frame_shape != self._frame_shape:
+                logger.warning(
+                    "Camera frame dimensions changed from %dx%d to %dx%d during acquisition",
+                    self._frame_shape[1],
+                    self._frame_shape[0],
+                    width,
+                    height,
+                )
+                self._frame_shape = frame_shape
+
+            binning_x, binning_y = self._binning
+            original_rows, original_cols = SENSOR_FRAME_SHAPE
             metadata = {
                 "frame_id": raw_image.get_frame_id(),
                 "timestamp": time.time(),
@@ -351,6 +527,11 @@ class DahengDevice(DeviceInterface):
                 "gain_db": self._gain_db,
                 "width": width,
                 "height": height,
+                "binning_x": binning_x,
+                "binning_y": binning_y,
+                "binning": f"{binning_x}x{binning_y}",
+                "original_width": original_cols,
+                "original_height": original_rows,
             }
             self._frame_id_counter += 1
 

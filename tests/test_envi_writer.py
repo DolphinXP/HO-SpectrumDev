@@ -99,6 +99,7 @@ class TestEnviWriter:
         base = str(tmp_path / "bad_shape")
         writer = EnviWriter()
         writer.open(base, "Mono8")
+        writer.write_line(np.zeros((1024, 1280), dtype=np.uint8))
 
         with pytest.raises(ValueError, match="Frame shape"):
             writer.write_line(np.zeros((512, 640), dtype=np.uint8))
@@ -115,3 +116,29 @@ class TestEnviWriter:
             writer.open(base + "_2", "Mono8")
 
         writer.close()
+
+    def test_binned_geometry_and_metadata_are_written(self, tmp_path):
+        """A binned acquisition uses its actual frame geometry in the header."""
+        base = str(tmp_path / "bin2x2")
+        frame = np.full((512, 640), 123, dtype=np.uint16)
+        metadata = {
+            "width": 640,
+            "height": 512,
+            "binning_x": 2,
+            "binning_y": 2,
+            "binning": "2x2",
+            "original_width": 1280,
+            "original_height": 1024,
+        }
+        writer = EnviWriter()
+        writer.open(base, "Mono12", metadata=metadata)
+        writer.write_line(frame)
+        writer.close()
+
+        header = Path(base + ".hdr").read_text(encoding="utf-8")
+        assert "samples = 640" in header
+        assert "bands = 512" in header
+        assert "binning horizontal = 2" in header
+        assert "binning vertical = 2" in header
+        assert "binning = 2x2" in header
+        assert Path(base + ".dat").stat().st_size == frame.nbytes

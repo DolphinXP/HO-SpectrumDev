@@ -48,6 +48,15 @@ class FramePingPong:
                 return True
             return False
 
+    def clear(self) -> None:
+        """Discard any pending frame, for example after a geometry change."""
+        with self._lock:
+            self._can_pong = False
+            self._ping_frame = None
+            self._ping_meta = None
+            self._pong_frame = None
+            self._pong_meta = None
+
     def pong(self) -> tuple[np.ndarray, dict] | None:
         """Retrieve the latest frame if one is available.
 
