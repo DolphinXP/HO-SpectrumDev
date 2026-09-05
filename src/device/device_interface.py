@@ -77,3 +77,11 @@ class DeviceInterface(QObject, metaclass=_DeviceMeta):
     def get_pixel_format(self) -> str:
         """Return current pixel format string."""
         ...
+
+    def get_temperature(self) -> float | None:
+        """Return camera temperature in degrees Celsius when available.
+
+        Temperature is an optional device feature.  Devices that do not
+        expose it should return ``None`` rather than raising an exception.
+        """
+        return None

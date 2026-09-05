@@ -102,6 +102,9 @@ def _icon(name: str) -> QIcon:
 # to leave the event loop responsive for user input.
 _UI_REFRESH_MS = 16
 
+# Camera temperature changes slowly and does not need frame-rate polling.
+_TEMPERATURE_REFRESH_MS = 2000
+
 # Heavy analysis (MTF / spectral plots / DN neighborhood) runs at a
 # lower cadence to avoid saturating the main thread.
 _HEAVY_UPDATE_INTERVAL = 0.10  # seconds → ~10 Hz
@@ -160,6 +163,10 @@ class MainWindow(QMainWindow):
         self._refresh_timer = QTimer(self)
         self._refresh_timer.setTimerType(Qt.TimerType.PreciseTimer)
         self._refresh_timer.timeout.connect(self._poll_frame)
+
+        self._temperature_timer = QTimer(self)
+        self._temperature_timer.timeout.connect(self._refresh_temperature)
+        self._temperature_timer.start(_TEMPERATURE_REFRESH_MS)
 
         self._apply_display_mode()
         logger.info("MainWindow initialized")
@@ -510,6 +517,10 @@ class MainWindow(QMainWindow):
             self._optical_cal_panel.update_mtf(mtf_result)
             self._optical_cal_panel.update_dn_neighborhood(display_frame, x, y)
             self._update_spectral_plots(display_frame, x, y)
+
+    def _refresh_temperature(self) -> None:
+        """Refresh slow-changing camera state without coupling it to frames."""
+        self._device_control.update_temperature_from_device(self._device)
 
     # --------------------------------------------------------------- slots
     def _on_stats_updated(self, stats: dict) -> None:
@@ -974,6 +985,7 @@ class MainWindow(QMainWindow):
         if self._storage.is_recording:
             self._acquisition.storage = None
             self._storage.stop()
+        self._temperature_timer.stop()
         self._device.close()
         logger.info("Application closing")
         event.accept()

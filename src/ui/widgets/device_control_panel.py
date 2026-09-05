@@ -154,6 +154,17 @@ class DeviceControlPanel(QWidget):
         param_layout.addWidget(self._lbl_sensor, row, 1)
         row += 1
 
+        # --- Temperature (read-only, optional camera feature) ---
+        lbl_temperature = QLabel("温度:")
+        lbl_temperature.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
+        self._lbl_temperature = QLabel("--")
+        self._lbl_temperature.setProperty("class", "value")
+        param_layout.addWidget(lbl_temperature, row, 0)
+        param_layout.addWidget(self._lbl_temperature, row, 1)
+        row += 1
+
         # --- ADC Depth (read-only, follows pixel format) ---
         lbl_adc = QLabel("ADC 位深:")
         lbl_adc.setAlignment(
@@ -244,8 +255,24 @@ class DeviceControlPanel(QWidget):
         shape = device.get_frame_shape()
         self._lbl_resolution.setText(f"{shape[1]} × {shape[0]}")
 
+        self.update_temperature_from_device(device)
+
         # Update ADC label based on current pixel format (from saved settings)
         self._update_adc_label(self._combo_pixel_format.currentText())
+
+    def update_temperature_from_device(self, device) -> None:
+        """Refresh the optional camera temperature display."""
+        try:
+            get_temperature = getattr(device, "get_temperature", None)
+            temperature = get_temperature() if get_temperature else None
+        except Exception as e:
+            logger.debug("Could not update camera temperature display: %s", e)
+            temperature = None
+
+        if temperature is None:
+            self._lbl_temperature.setText("--")
+        else:
+            self._lbl_temperature.setText(f"{float(temperature):.1f} °C")
 
     def set_running(self, running: bool) -> None:
         """Update UI state to reflect acquisition running/stopped."""

@@ -206,6 +206,26 @@ class DahengDevice(DeviceInterface):
     def get_pixel_format(self) -> str:
         return self._pixel_format
 
+    def get_temperature(self) -> float | None:
+        """Read the camera temperature from the optional Daheng feature.
+
+        Not every camera model or firmware exposes ``DeviceTemperature``;
+        keep that case non-fatal so the rest of the device remains usable.
+        """
+        if self._remote_feature is None:
+            return None
+
+        try:
+            feature_name = "DeviceTemperature"
+            if not self._remote_feature.is_implemented(feature_name):
+                return None
+            if not self._remote_feature.is_readable(feature_name):
+                return None
+            return float(self._remote_feature.get_float_feature(feature_name).get())
+        except Exception as e:
+            logger.debug("Could not read camera temperature: %s", e)
+            return None
+
     def _capture_callback(self, raw_image) -> None:
         """SDK capture callback — extract raw mono numpy array and emit."""
         if raw_image is None or not self._running:
