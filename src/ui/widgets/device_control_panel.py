@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
 )
 from PySide6.QtGui import QIcon
+from src.device.device_interface import DEFAULT_PIXEL_FORMAT
 from src.utils.config import AppConfig
 
 logger = logging.getLogger("specdev.ui")
@@ -123,8 +124,9 @@ class DeviceControlPanel(QWidget):
         lbl_pf = QLabel("像素格式:")
         lbl_pf.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._combo_pixel_format = QComboBox()
-        self._combo_pixel_format.addItems(["Mono8", "Mono10", "Mono12"])
-        self._combo_pixel_format.setCurrentText("Mono8")
+        self._combo_pixel_format.addItem(DEFAULT_PIXEL_FORMAT)
+        self._combo_pixel_format.setCurrentText(DEFAULT_PIXEL_FORMAT)
+        self._combo_pixel_format.setEnabled(False)
         self._combo_pixel_format.currentTextChanged.connect(
             self._on_pixel_format_changed
         )
@@ -170,7 +172,7 @@ class DeviceControlPanel(QWidget):
         lbl_adc.setAlignment(
             Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
         )
-        self._lbl_adc = QLabel("8-bit")
+        self._lbl_adc = QLabel("12-bit")
         self._lbl_adc.setProperty("class", "value")
         param_layout.addWidget(lbl_adc, row, 0)
         param_layout.addWidget(self._lbl_adc, row, 1)
@@ -215,12 +217,21 @@ class DeviceControlPanel(QWidget):
         self._spin_gain.setValue(gain)
         self._spin_gain.blockSignals(False)
 
-        # Load pixel format (default Mono8)
-        pixel_format = self._config.get_str("pixel_format", "Mono8")
+        # Migrate any older saved Mono8/Mono10 setting to the required format.
+        saved_pixel_format = self._config.get_str(
+            "pixel_format", DEFAULT_PIXEL_FORMAT)
+        if saved_pixel_format != DEFAULT_PIXEL_FORMAT:
+            logger.info(
+                "Ignoring saved pixel format %s; using %s",
+                saved_pixel_format,
+                DEFAULT_PIXEL_FORMAT,
+            )
+        pixel_format = DEFAULT_PIXEL_FORMAT
         self._combo_pixel_format.blockSignals(True)
         self._combo_pixel_format.setCurrentText(pixel_format)
         self._combo_pixel_format.blockSignals(False)
         self._update_adc_label(pixel_format)
+        self._config.set("pixel_format", DEFAULT_PIXEL_FORMAT)
 
         logger.debug(
             "Loaded settings: exposure=%.1f µs, gain=%.1f dB, format=%s",
@@ -257,8 +268,19 @@ class DeviceControlPanel(QWidget):
 
         self.update_temperature_from_device(device)
 
-        # Update ADC label based on current pixel format (from saved settings)
-        self._update_adc_label(self._combo_pixel_format.currentText())
+        # The device is initialized in Mono12; keep the control synchronized
+        # with that enforced format rather than a stale UI-only setting.
+        pixel_format = device.get_pixel_format()
+        if pixel_format != DEFAULT_PIXEL_FORMAT:
+            logger.warning(
+                "Device reported %s; UI requires %s",
+                pixel_format,
+                DEFAULT_PIXEL_FORMAT,
+            )
+        self._combo_pixel_format.blockSignals(True)
+        self._combo_pixel_format.setCurrentText(DEFAULT_PIXEL_FORMAT)
+        self._combo_pixel_format.blockSignals(False)
+        self._update_adc_label(DEFAULT_PIXEL_FORMAT)
 
     def update_temperature_from_device(self, device) -> None:
         """Refresh the optional camera temperature display."""
@@ -327,7 +349,7 @@ class DeviceControlPanel(QWidget):
 
     def _update_adc_label(self, fmt: str) -> None:
         """Update ADC depth and max FPS labels based on pixel format."""
-        adc_map = {"Mono8": "8-bit", "Mono10": "10-bit", "Mono12": "12-bit"}
-        fps_map = {"Mono8": "135.54 fps", "Mono10": "72.4 fps", "Mono12": "72.4 fps"}
+        adc_map = {DEFAULT_PIXEL_FORMAT: "12-bit"}
+        fps_map = {DEFAULT_PIXEL_FORMAT: "72.4 fps"}
         self._lbl_adc.setText(adc_map.get(fmt, "?"))
         self._lbl_max_fps.setText(fps_map.get(fmt, "72.4 fps"))

@@ -13,7 +13,7 @@ from ctypes import addressof, c_ubyte
 import numpy as np
 from PySide6.QtCore import QObject
 
-from src.device.device_interface import DeviceInterface
+from src.device.device_interface import DEFAULT_PIXEL_FORMAT, DeviceInterface
 
 logger = logging.getLogger("specdev.device")
 
@@ -67,7 +67,7 @@ class DahengDevice(DeviceInterface):
 
         self._exposure_us: float = 10000.0
         self._gain_db: float = 0.0
-        self._pixel_format: str = "Mono8"
+        self._pixel_format: str = DEFAULT_PIXEL_FORMAT
         self._running: bool = False
         self._frame_id_counter: int = 0
         self._last_error: str = ""
@@ -88,6 +88,14 @@ class DahengDevice(DeviceInterface):
             self._camera = self._device_manager.open_device_by_sn(self._sn)
             self._remote_feature = self._camera.get_remote_device_feature_control()
             self._data_stream = self._camera.data_stream[0]
+
+            # Select the sensor ADC depth when the camera exposes that
+            # feature, then select the matching wire pixel format.
+            self._apply_sensor_bit_depth()
+            # Configure the camera before stream_on(). Do not rely on the
+            # camera's persisted/user-set format, because the frame parser and
+            # downstream storage are configured for unpacked Mono12 samples.
+            self._apply_pixel_format(DEFAULT_PIXEL_FORMAT)
 
             # Set payload size for GigE cameras (critical for proper data transfer)
             try:
@@ -179,13 +187,78 @@ class DahengDevice(DeviceInterface):
                 logger.error("Failed to set gain: %s", e)
 
     def set_pixel_format(self, fmt: str) -> None:
-        self._pixel_format = fmt
-        if self._remote_feature:
+        if fmt != DEFAULT_PIXEL_FORMAT:
+            raise ValueError(
+                f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
+
+        try:
+            self._apply_pixel_format(fmt)
+            logger.info("Pixel format set to %s", self._pixel_format)
+        except Exception as e:
+            self._last_error = str(e)
+            logger.error("Failed to set pixel format: %s", e)
+            raise
+
+    def _apply_pixel_format(self, fmt: str) -> None:
+        """Set and read back the camera pixel format before acquisition."""
+        if fmt != DEFAULT_PIXEL_FORMAT:
+            raise ValueError(
+                f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
+        if self._remote_feature is None:
+            self._pixel_format = fmt
+            return
+
+        feature = self._remote_feature.get_enum_feature("PixelFormat")
+        feature.set(fmt)
+        _, actual_format = feature.get()
+        if actual_format != fmt:
+            raise RuntimeError(
+                f"Camera rejected pixel format {fmt}; actual format is "
+                f"{actual_format}")
+        self._pixel_format = actual_format
+
+    def _apply_sensor_bit_depth(self) -> None:
+        """Configure and verify the camera's 12-bit sensor ADC mode."""
+        if self._remote_feature is None:
+            return
+
+        feature_name = "SensorBitDepth"
+        try:
+            if not self._remote_feature.is_implemented(feature_name):
+                logger.info(
+                    "%s is not exposed; relying on PixelFormat=Mono12",
+                    feature_name,
+                )
+                return
+
+            feature = self._remote_feature.get_enum_feature(feature_name)
+            if self._remote_feature.is_writable(feature_name):
+                feature.set(12)
+
+            actual_depth, actual_symbolic = feature.get()
+            if int(actual_depth) != 12:
+                raise RuntimeError(
+                    f"Camera SensorBitDepth is {actual_symbolic} "
+                    f"({actual_depth}), expected 12-bit")
+            logger.info("Sensor ADC bit depth set to 12-bit")
+        except Exception:
+            # A camera that exposes this node but cannot be confirmed at
+            # 12-bit must not enter acquisition with an unknown ADC mode.
+            raise
+
+    def get_pixel_format(self) -> str:
+        """Return the camera's actual format when the device is connected."""
+        if self._remote_feature is not None:
             try:
-                self._remote_feature.get_enum_feature("PixelFormat").set(fmt)
-                logger.info("Pixel format set to %s", fmt)
+                _, actual_format = (
+                    self._remote_feature
+                    .get_enum_feature("PixelFormat")
+                    .get()
+                )
+                self._pixel_format = actual_format
             except Exception as e:
-                logger.error("Failed to set pixel format: %s", e)
+                logger.debug("Could not read camera pixel format: %s", e)
+        return self._pixel_format
 
     def get_frame_shape(self) -> tuple[int, int]:
         if self._remote_feature:
@@ -202,9 +275,6 @@ class DahengDevice(DeviceInterface):
 
     def get_gain(self) -> float:
         return self._gain_db
-
-    def get_pixel_format(self) -> str:
-        return self._pixel_format
 
     def get_temperature(self) -> float | None:
         """Read the camera temperature from the optional Daheng feature.
@@ -244,31 +314,39 @@ class DahengDevice(DeviceInterface):
             width = raw_image.get_width()
             pixel_format = raw_image.get_pixel_format()
 
-            # Handle different pixel formats
-            if pixel_format in (GxPixelFormatEntry.MONO8, GxPixelFormatEntry.R8,
-                               GxPixelFormatEntry.B8, GxPixelFormatEntry.G8):
-                # Direct numpy array for 8-bit formats
-                numpy_array = raw_image.get_numpy_array()
-                if numpy_array is None:
-                    logger.warning("Failed to get numpy array from raw_image")
-                    if self._running and self._trigger_cmd:
-                        self._trigger_cmd.send_command()
-                    return
-                frame = numpy_array.reshape(height, width).astype(np.uint8)
-            else:
-                # For 10/12-bit formats, get raw data and reshape
-                numpy_array = raw_image.get_numpy_array()
-                if numpy_array is None:
-                    logger.warning("Failed to get numpy array for 10/12-bit format")
-                    if self._running and self._trigger_cmd:
-                        self._trigger_cmd.send_command()
-                    return
-                frame = numpy_array.reshape(height, width).astype(np.uint16)
+            # The production path is intentionally strict: Mono12 is the
+            # format configured during initialize(), and packed formats need a
+            # separate unpacking path that this raw-frame pipeline does not use.
+            if pixel_format != GxPixelFormatEntry.MONO12:
+                logger.error(
+                    "Unexpected camera pixel format %s; expected Mono12",
+                    pixel_format,
+                )
+                if self._running and self._trigger_cmd:
+                    self._trigger_cmd.send_command()
+                return
+
+            numpy_array = raw_image.get_numpy_array()
+            if numpy_array is None:
+                logger.warning("Failed to get numpy array for Mono12 frame")
+                if self._running and self._trigger_cmd:
+                    self._trigger_cmd.send_command()
+                return
+            if numpy_array.size != height * width:
+                logger.error(
+                    "Unexpected Mono12 buffer size: got %d samples, expected %d",
+                    numpy_array.size,
+                    height * width,
+                )
+                if self._running and self._trigger_cmd:
+                    self._trigger_cmd.send_command()
+                return
+            frame = numpy_array.reshape(height, width).astype(np.uint16, copy=False)
 
             metadata = {
                 "frame_id": raw_image.get_frame_id(),
                 "timestamp": time.time(),
-                "pixel_format": self._pixel_format,
+                "pixel_format": DEFAULT_PIXEL_FORMAT,
                 "exposure_us": self._exposure_us,
                 "gain_db": self._gain_db,
                 "width": width,

@@ -6,6 +6,10 @@ import numpy as np
 from PySide6.QtCore import QObject, Signal
 
 
+# The production camera pipeline is fixed to the sensor's 12-bit output.
+DEFAULT_PIXEL_FORMAT = "Mono12"
+
+
 class _DeviceMeta(type(QObject), ABCMeta):
     """Resolve metaclass conflict between QObject and ABC."""
     pass
@@ -55,7 +59,7 @@ class DeviceInterface(QObject, metaclass=_DeviceMeta):
 
     @abstractmethod
     def set_pixel_format(self, fmt: str) -> None:
-        """Set pixel format: 'Mono8', 'Mono10', or 'Mono12'."""
+        """Set the required Mono12 pixel format."""
         ...
 
     @abstractmethod
