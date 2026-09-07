@@ -1523,8 +1523,22 @@ static const char* const __pyx_f[] = {
 
 /*--- Type declarations ---*/
 struct __pyx_obj_3src_6device_13daheng_device___pyx_scope_struct__start;
+struct __pyx_ctuple_double__and_double;
+typedef struct __pyx_ctuple_double__and_double __pyx_ctuple_double__and_double;
 
-/* "src/device/daheng_device.py":150
+/* "src/device/daheng_device.py":308
+ *         return self._frame_rate_fps
+ * 
+ *     def get_frame_rate_range(self) -> tuple[float, float]:             # <<<<<<<<<<<<<<
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:
+*/
+struct __pyx_ctuple_double__and_double {
+  double f0;
+  double f1;
+};
+
+/* "src/device/daheng_device.py":160
  *         return self._last_error
  * 
  *     def start(self) -> None:             # <<<<<<<<<<<<<<
@@ -2193,42 +2207,8 @@ static PyObject *__Pyx_CyFunction_New(PyMethodDef *ml,
                                       PyObject *module, PyObject *globals,
                                       PyObject* code);
 
-/* pyint_simplify.proto */
-static CYTHON_INLINE int __Pyx_PyInt_FromNumber(PyObject **number_var, const char *argname, int accept_none);
-
-/* PyRuntimeError_Check.proto */
-#define __Pyx_PyExc_RuntimeError_Check(obj)  __Pyx_TypeCheck(obj, PyExc_RuntimeError)
-
-/* RaiseException.export */
-static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause);
-
-/* PyUnicode_Unicode.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyUnicode_Unicode(PyObject *obj);
-
-/* JoinPyUnicode.export */
-static PyObject* __Pyx_PyUnicode_Join(PyObject** values, Py_ssize_t value_count, Py_ssize_t result_ulength,
-                                      Py_UCS4 max_char);
-
-/* ListAppend.proto */
-#if CYTHON_USE_PYLIST_INTERNALS && CYTHON_ASSUME_SAFE_MACROS
-static CYTHON_INLINE int __Pyx_PyList_Append(PyObject* list, PyObject* x) {
-    PyListObject* L = (PyListObject*) list;
-    Py_ssize_t len = Py_SIZE(list);
-    if (likely(L->allocated > len) & likely(len > (L->allocated >> 1))) {
-        Py_INCREF(x);
-        #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030d0000
-        L->ob_item[len] = x;
-        #else
-        PyList_SET_ITEM(list, len, x);
-        #endif
-        __Pyx_SET_SIZE(list, len + 1);
-        return 0;
-    }
-    return PyList_Append(list, x);
-}
-#else
-#define __Pyx_PyList_Append(L,x) PyList_Append(L,x)
-#endif
+/* PyValueError_Check.proto */
+#define __Pyx_PyExc_ValueError_Check(obj)  __Pyx_TypeCheck(obj, PyExc_ValueError)
 
 /* PyObjectFormatSimple.proto */
 #if CYTHON_COMPILING_IN_PYPY
@@ -2247,11 +2227,15 @@ static CYTHON_INLINE int __Pyx_PyList_Append(PyObject* list, PyObject* x) {
         PyObject_Format(s, f))
 #endif
 
-/* PyValueError_Check.proto */
-#define __Pyx_PyExc_ValueError_Check(obj)  __Pyx_TypeCheck(obj, PyExc_ValueError)
+/* RaiseException.export */
+static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause);
 
-/* PyLongCompare.proto */
-static CYTHON_INLINE int __Pyx_PyLong_BoolNeObjC(PyObject *op1, PyObject *op2, long intval, long inplace);
+/* PyRuntimeError_Check.proto */
+#define __Pyx_PyExc_RuntimeError_Check(obj)  __Pyx_TypeCheck(obj, PyExc_RuntimeError)
+
+/* JoinPyUnicode.export */
+static PyObject* __Pyx_PyUnicode_Join(PyObject** values, Py_ssize_t value_count, Py_ssize_t result_ulength,
+                                      Py_UCS4 max_char);
 
 /* pybytes_as_double.proto (used by pynumber_float) */
 static double __Pyx_SlowPyString_AsDouble(PyObject *obj);
@@ -2415,6 +2399,70 @@ static CYTHON_INLINE double __Pyx_PyUnicode_AsDouble(PyObject *obj) {
 /* pynumber_float.proto */
 static CYTHON_INLINE PyObject* __Pyx__PyNumber_Float(PyObject* obj);
 #define __Pyx_PyNumber_Float(x) (PyFloat_CheckExact(x) ? __Pyx_NewRef(x) : __Pyx__PyNumber_Float(x))
+
+/* DictGetItem.proto */
+#if !CYTHON_COMPILING_IN_PYPY
+static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key);
+#define __Pyx_PyObject_Dict_GetItem(obj, name)\
+    (likely(PyDict_CheckExact(obj)) ?\
+     __Pyx_PyDict_GetItem(obj, name) : PyObject_GetItem(obj, name))
+#else
+#define __Pyx_PyDict_GetItem(d, key) PyObject_GetItem(d, key)
+#define __Pyx_PyObject_Dict_GetItem(obj, name)  PyObject_GetItem(obj, name)
+#endif
+
+/* pyobject_as_double.proto */
+static double __Pyx__PyObject_AsDouble(PyObject* obj);
+#if CYTHON_COMPILING_IN_PYPY
+#define __Pyx_PyObject_AsDouble(obj)\
+(likely(PyFloat_CheckExact(obj)) ? PyFloat_AS_DOUBLE(obj) :\
+ likely(PyLong_CheckExact(obj)) ?\
+ PyFloat_AsDouble(obj) : __Pyx__PyObject_AsDouble(obj))
+#else
+#define __Pyx_PyObject_AsDouble(obj)\
+((likely(PyFloat_CheckExact(obj))) ?  __Pyx_PyFloat_AS_DOUBLE(obj) :\
+ likely(PyLong_CheckExact(obj)) ?\
+ PyLong_AsDouble(obj) : __Pyx__PyObject_AsDouble(obj))
+#endif
+
+/* FloatExceptionCheck.proto */
+#define __PYX_CHECK_FLOAT_EXCEPTION(value, error_value)\
+    ((error_value) == (error_value) ?\
+     (value) == (error_value) :\
+     (value) != (value))
+
+/* IncludeStdlibH.proto */
+#include <stdlib.h>
+
+/* pyint_simplify.proto */
+static CYTHON_INLINE int __Pyx_PyInt_FromNumber(PyObject **number_var, const char *argname, int accept_none);
+
+/* PyUnicode_Unicode.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyUnicode_Unicode(PyObject *obj);
+
+/* ListAppend.proto */
+#if CYTHON_USE_PYLIST_INTERNALS && CYTHON_ASSUME_SAFE_MACROS
+static CYTHON_INLINE int __Pyx_PyList_Append(PyObject* list, PyObject* x) {
+    PyListObject* L = (PyListObject*) list;
+    Py_ssize_t len = Py_SIZE(list);
+    if (likely(L->allocated > len) & likely(len > (L->allocated >> 1))) {
+        Py_INCREF(x);
+        #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030d0000
+        L->ob_item[len] = x;
+        #else
+        PyList_SET_ITEM(list, len, x);
+        #endif
+        __Pyx_SET_SIZE(list, len + 1);
+        return 0;
+    }
+    return PyList_Append(list, x);
+}
+#else
+#define __Pyx_PyList_Append(L,x) PyList_Append(L,x)
+#endif
+
+/* PyLongCompare.proto */
+static CYTHON_INLINE int __Pyx_PyLong_BoolNeObjC(PyObject *op1, PyObject *op2, long intval, long inplace);
 
 /* pyfloat_simplify.proto */
 static CYTHON_INLINE int __Pyx_PyFloat_FromNumber(PyObject **number_var, const char *argname, int accept_none);
@@ -2704,21 +2752,25 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
 static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_exposure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, double __pyx_v_us); /* proto */
 static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, double __pyx_v_db); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_supported_binning(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default_frame_shape_for_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_binning); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_camera_frame_shape(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_fmt); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_fmt); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_sensor_bit_depth(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_frame_shape(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_38get_exposure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_40get_gain(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temperature(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture_callback(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_raw_image); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_frame_rate(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, double __pyx_v_fps); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18_apply_frame_rate(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, double __pyx_v_fps); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_frame_rate(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22get_frame_rate_range(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24set_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26get_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28get_supported_binning(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_default_frame_shape_for_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_binning); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34_read_camera_frame_shape(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36set_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_fmt); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_38_apply_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_fmt); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_40_apply_sensor_bit_depth(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44get_frame_shape(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_46get_exposure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_48get_gain(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_50get_temperature(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_52_capture_callback(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_raw_image); /* proto */
 static PyObject *__pyx_tp_new_3src_6device_13daheng_device___pyx_scope_struct__start(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 /* #### Code section: late_includes ### */
 /* #### Code section: module_state ### */
@@ -2745,10 +2797,10 @@ typedef struct {
   __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_items;
   __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_pop;
   __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_values;
-  PyObject *__pyx_tuple[7];
-  PyObject *__pyx_codeobj_tab[26];
-  PyObject *__pyx_string_tab[324];
-  PyObject *__pyx_number_tab[6];
+  PyObject *__pyx_tuple[8];
+  PyObject *__pyx_codeobj_tab[30];
+  PyObject *__pyx_string_tab[358];
+  PyObject *__pyx_number_tab[8];
 /* #### Code section: module_state_contents ### */
 /* CommonTypesMetaclass.module_state_decls */
 PyTypeObject *__pyx_CommonTypesMetaclassType;
@@ -2798,332 +2850,368 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #define __pyx_kp_u_Auto_detected_camera_SN_s __pyx_string_tab[1]
 #define __pyx_kp_u_Camera __pyx_string_tab[2]
 #define __pyx_kp_u_Camera_SensorBitDepth_is __pyx_string_tab[3]
-#define __pyx_kp_u_Camera_does_not_expose_required __pyx_string_tab[4]
-#define __pyx_kp_u_Camera_frame_dimensions_changed __pyx_string_tab[5]
-#define __pyx_kp_u_Camera_rejected_binning __pyx_string_tab[6]
-#define __pyx_kp_u_Camera_rejected_pixel_format __pyx_string_tab[7]
-#define __pyx_kp_u_Camera_reported_invalid_frame_di __pyx_string_tab[8]
-#define __pyx_kp_u_Camera_reported_unsupported_binn __pyx_string_tab[9]
-#define __pyx_kp_u_Cannot_change_camera_binning_whi __pyx_string_tab[10]
-#define __pyx_kp_u_Cannot_configure_camera_binning __pyx_string_tab[11]
-#define __pyx_kp_u_Cannot_start_acquisition_binning __pyx_string_tab[12]
-#define __pyx_kp_u_Cannot_start_device_not_initiali __pyx_string_tab[13]
-#define __pyx_kp_u_Capture_callback_error_s __pyx_string_tab[14]
-#define __pyx_kp_u_Could_not_read_PayloadSize_may_n __pyx_string_tab[15]
-#define __pyx_kp_u_Could_not_read_camera_binning_s __pyx_string_tab[16]
-#define __pyx_kp_u_Could_not_read_camera_frame_shap __pyx_string_tab[17]
-#define __pyx_kp_u_Could_not_read_camera_pixel_form __pyx_string_tab[18]
-#define __pyx_kp_u_Could_not_read_camera_temperatur __pyx_string_tab[19]
-#define __pyx_kp_u_Could_not_roll_back_failed_binni __pyx_string_tab[20]
-#define __pyx_kp_u_DahengDevice_acquisition_started __pyx_string_tab[21]
-#define __pyx_kp_u_DahengDevice_acquisition_stopped __pyx_string_tab[22]
-#define __pyx_kp_u_DahengDevice_closed __pyx_string_tab[23]
-#define __pyx_kp_u_DahengDevice_initialization_fail __pyx_string_tab[24]
-#define __pyx_kp_u_DahengDevice_initialized_SN_s_bi __pyx_string_tab[25]
-#define __pyx_kp_u_Daheng_MER3_138_136G3M_P_SWIR_ca __pyx_string_tab[26]
-#define __pyx_kp_u_Error_closing_device_s __pyx_string_tab[27]
-#define __pyx_kp_u_Error_stopping_camera_s __pyx_string_tab[28]
-#define __pyx_kp_u_Exposure_set_to_1f_s __pyx_string_tab[29]
-#define __pyx_kp_u_Failed_to_get_numpy_array_for_Mo __pyx_string_tab[30]
-#define __pyx_kp_u_Failed_to_set_binning_to_dx_d_s __pyx_string_tab[31]
-#define __pyx_kp_u_Failed_to_set_exposure_s __pyx_string_tab[32]
-#define __pyx_kp_u_Failed_to_set_gain_s __pyx_string_tab[33]
-#define __pyx_kp_u_Failed_to_set_pixel_format_s __pyx_string_tab[34]
-#define __pyx_kp_u_Frame_status_error_d __pyx_string_tab[35]
-#define __pyx_kp_u_Gain_set_to_1f_dB __pyx_string_tab[36]
-#define __pyx_kp_u_Hardware_binning_set_to_dx_d_cam __pyx_string_tab[37]
-#define __pyx_kp_u_No_Daheng_cameras_found __pyx_string_tab[38]
-#define __pyx_kp_u_None __pyx_string_tab[39]
-#define __pyx_kp_u_Note_that_Cython_is_deliberately __pyx_string_tab[40]
-#define __pyx_kp_u_Payload_size_d_bytes __pyx_string_tab[41]
-#define __pyx_kp_u_Pixel_format_set_to_s __pyx_string_tab[42]
-#define __pyx_kp_u_QObject_None __pyx_string_tab[43]
-#define __pyx_kp_u_Sensor_ADC_bit_depth_set_to_12_b __pyx_string_tab[44]
-#define __pyx_kp_u_This_application_requires __pyx_string_tab[45]
-#define __pyx_kp_u_Unexpected_Mono12_buffer_size_go __pyx_string_tab[46]
-#define __pyx_kp_u_Unexpected_camera_pixel_format_s __pyx_string_tab[47]
-#define __pyx_kp_u__2 __pyx_string_tab[48]
-#define __pyx_kp_u__3 __pyx_string_tab[49]
-#define __pyx_kp_u__4 __pyx_string_tab[50]
-#define __pyx_kp_u_actual_format_is __pyx_string_tab[51]
-#define __pyx_kp_u_add_note __pyx_string_tab[52]
-#define __pyx_kp_u_disable __pyx_string_tab[53]
-#define __pyx_kp_u_enable __pyx_string_tab[54]
-#define __pyx_kp_u_expected_12_bit __pyx_string_tab[55]
-#define __pyx_kp_u_feature __pyx_string_tab[56]
-#define __pyx_kp_u_feature_is_not_writable __pyx_string_tab[57]
-#define __pyx_kp_u_float_None __pyx_string_tab[58]
-#define __pyx_kp_u_gc __pyx_string_tab[59]
-#define __pyx_kp_u_got __pyx_string_tab[60]
-#define __pyx_kp_u_isenabled __pyx_string_tab[61]
-#define __pyx_kp_u_list_dict __pyx_string_tab[62]
-#define __pyx_kp_u_read_back __pyx_string_tab[63]
-#define __pyx_kp_u_s_is_not_exposed_relying_on_Pix __pyx_string_tab[64]
-#define __pyx_kp_u_specdev_device __pyx_string_tab[65]
-#define __pyx_kp_u_src_device_daheng_device_py __pyx_string_tab[66]
-#define __pyx_kp_u_tuple_int_int __pyx_string_tab[67]
-#define __pyx_kp_u_tuple_tuple_int_int __pyx_string_tab[68]
-#define __pyx_n_u_BinningHorizontal __pyx_string_tab[69]
-#define __pyx_n_u_BinningVertical __pyx_string_tab[70]
-#define __pyx_n_u_DEFAULT_PIXEL_FORMAT __pyx_string_tab[71]
-#define __pyx_n_u_DahengDevice __pyx_string_tab[72]
-#define __pyx_n_u_DahengDevice___init __pyx_string_tab[73]
-#define __pyx_n_u_DahengDevice__apply_binning __pyx_string_tab[74]
-#define __pyx_n_u_DahengDevice__apply_pixel_format __pyx_string_tab[75]
-#define __pyx_n_u_DahengDevice__apply_sensor_bit_d __pyx_string_tab[76]
-#define __pyx_n_u_DahengDevice__capture_callback __pyx_string_tab[77]
-#define __pyx_n_u_DahengDevice__default_frame_shap __pyx_string_tab[78]
-#define __pyx_n_u_DahengDevice__read_camera_frame __pyx_string_tab[79]
-#define __pyx_n_u_DahengDevice_close __pyx_string_tab[80]
-#define __pyx_n_u_DahengDevice_get_binning __pyx_string_tab[81]
-#define __pyx_n_u_DahengDevice_get_exposure __pyx_string_tab[82]
-#define __pyx_n_u_DahengDevice_get_frame_shape __pyx_string_tab[83]
-#define __pyx_n_u_DahengDevice_get_gain __pyx_string_tab[84]
-#define __pyx_n_u_DahengDevice_get_pixel_format __pyx_string_tab[85]
-#define __pyx_n_u_DahengDevice_get_supported_binni __pyx_string_tab[86]
-#define __pyx_n_u_DahengDevice_get_temperature __pyx_string_tab[87]
-#define __pyx_n_u_DahengDevice_initialize __pyx_string_tab[88]
-#define __pyx_n_u_DahengDevice_last_error __pyx_string_tab[89]
-#define __pyx_n_u_DahengDevice_set_binning __pyx_string_tab[90]
-#define __pyx_n_u_DahengDevice_set_exposure __pyx_string_tab[91]
-#define __pyx_n_u_DahengDevice_set_gain __pyx_string_tab[92]
-#define __pyx_n_u_DahengDevice_set_pixel_format __pyx_string_tab[93]
-#define __pyx_n_u_DahengDevice_start __pyx_string_tab[94]
-#define __pyx_n_u_DahengDevice_start_locals_lambda __pyx_string_tab[95]
-#define __pyx_n_u_DahengDevice_stop __pyx_string_tab[96]
-#define __pyx_n_u_DeviceInterface __pyx_string_tab[97]
-#define __pyx_n_u_DeviceManager __pyx_string_tab[98]
-#define __pyx_n_u_DeviceTemperature __pyx_string_tab[99]
-#define __pyx_n_u_DxValidBit __pyx_string_tab[100]
-#define __pyx_n_u_ExposureTime __pyx_string_tab[101]
-#define __pyx_n_u_Gain __pyx_string_tab[102]
-#define __pyx_n_u_GxPixelFormatEntry __pyx_string_tab[103]
-#define __pyx_n_u_Height __pyx_string_tab[104]
-#define __pyx_n_u_MONO12 __pyx_string_tab[105]
-#define __pyx_n_u_None __pyx_string_tab[106]
-#define __pyx_n_u_On __pyx_string_tab[107]
-#define __pyx_n_u_PayloadSize __pyx_string_tab[108]
-#define __pyx_n_u_PixelFormat __pyx_string_tab[109]
-#define __pyx_n_u_PySide6_QtCore __pyx_string_tab[110]
-#define __pyx_n_u_Pyx_PyDict_NextRef __pyx_string_tab[111]
-#define __pyx_n_u_QObject __pyx_string_tab[112]
-#define __pyx_n_u_SENSOR_FRAME_SHAPE __pyx_string_tab[113]
-#define __pyx_n_u_SUPPORTED_BINNING __pyx_string_tab[114]
-#define __pyx_n_u_SensorBitDepth __pyx_string_tab[115]
-#define __pyx_n_u_Software __pyx_string_tab[116]
-#define __pyx_n_u_TriggerMode __pyx_string_tab[117]
-#define __pyx_n_u_TriggerSoftware __pyx_string_tab[118]
-#define __pyx_n_u_TriggerSource __pyx_string_tab[119]
-#define __pyx_n_u_Width __pyx_string_tab[120]
-#define __pyx_n_u__5 __pyx_string_tab[121]
-#define __pyx_n_u_actual __pyx_string_tab[122]
-#define __pyx_n_u_actual_depth __pyx_string_tab[123]
-#define __pyx_n_u_actual_format __pyx_string_tab[124]
-#define __pyx_n_u_actual_symbolic __pyx_string_tab[125]
-#define __pyx_n_u_addressof __pyx_string_tab[126]
-#define __pyx_n_u_annotate __pyx_string_tab[127]
-#define __pyx_n_u_apply_binning __pyx_string_tab[128]
-#define __pyx_n_u_apply_pixel_format __pyx_string_tab[129]
-#define __pyx_n_u_apply_sensor_bit_depth __pyx_string_tab[130]
-#define __pyx_n_u_astype __pyx_string_tab[131]
-#define __pyx_n_u_asyncio_coroutines __pyx_string_tab[132]
-#define __pyx_n_u_binning __pyx_string_tab[133]
-#define __pyx_n_u_binning_2 __pyx_string_tab[134]
-#define __pyx_n_u_binning_x __pyx_string_tab[135]
-#define __pyx_n_u_binning_y __pyx_string_tab[136]
-#define __pyx_n_u_bool __pyx_string_tab[137]
-#define __pyx_n_u_c_ubyte __pyx_string_tab[138]
-#define __pyx_n_u_camera __pyx_string_tab[139]
-#define __pyx_n_u_capture_callback __pyx_string_tab[140]
-#define __pyx_n_u_cline_in_traceback __pyx_string_tab[141]
-#define __pyx_n_u_close __pyx_string_tab[142]
-#define __pyx_n_u_close_device __pyx_string_tab[143]
-#define __pyx_n_u_cols __pyx_string_tab[144]
-#define __pyx_n_u_copy __pyx_string_tab[145]
-#define __pyx_n_u_ctypes __pyx_string_tab[146]
-#define __pyx_n_u_data_stream __pyx_string_tab[147]
-#define __pyx_n_u_data_stream_2 __pyx_string_tab[148]
-#define __pyx_n_u_db __pyx_string_tab[149]
-#define __pyx_n_u_debug __pyx_string_tab[150]
-#define __pyx_n_u_default_frame_shape_for_binning __pyx_string_tab[151]
-#define __pyx_n_u_dev_info_list __pyx_string_tab[152]
-#define __pyx_n_u_dev_num __pyx_string_tab[153]
-#define __pyx_n_u_device_dir __pyx_string_tab[154]
-#define __pyx_n_u_device_manager __pyx_string_tab[155]
-#define __pyx_n_u_device_manager_2 __pyx_string_tab[156]
-#define __pyx_n_u_dirname __pyx_string_tab[157]
-#define __pyx_n_u_doc __pyx_string_tab[158]
-#define __pyx_n_u_e __pyx_string_tab[159]
-#define __pyx_n_u_emit __pyx_string_tab[160]
-#define __pyx_n_u_ensure_sdk __pyx_string_tab[161]
-#define __pyx_n_u_error __pyx_string_tab[162]
-#define __pyx_n_u_exposure_us __pyx_string_tab[163]
-#define __pyx_n_u_exposure_us_2 __pyx_string_tab[164]
-#define __pyx_n_u_feature_2 __pyx_string_tab[165]
-#define __pyx_n_u_feature_name __pyx_string_tab[166]
-#define __pyx_n_u_feature_names __pyx_string_tab[167]
-#define __pyx_n_u_features __pyx_string_tab[168]
-#define __pyx_n_u_file __pyx_string_tab[169]
-#define __pyx_n_u_float __pyx_string_tab[170]
-#define __pyx_n_u_fmt __pyx_string_tab[171]
-#define __pyx_n_u_frame __pyx_string_tab[172]
-#define __pyx_n_u_frame_acquired __pyx_string_tab[173]
-#define __pyx_n_u_frame_id __pyx_string_tab[174]
-#define __pyx_n_u_frame_id_counter __pyx_string_tab[175]
-#define __pyx_n_u_frame_shape __pyx_string_tab[176]
-#define __pyx_n_u_frame_shape_2 __pyx_string_tab[177]
-#define __pyx_n_u_func __pyx_string_tab[178]
-#define __pyx_n_u_gain_db __pyx_string_tab[179]
-#define __pyx_n_u_gain_db_2 __pyx_string_tab[180]
-#define __pyx_n_u_get __pyx_string_tab[181]
-#define __pyx_n_u_getLogger __pyx_string_tab[182]
-#define __pyx_n_u_get_binning __pyx_string_tab[183]
-#define __pyx_n_u_get_camera_list __pyx_string_tab[184]
-#define __pyx_n_u_get_command_feature __pyx_string_tab[185]
-#define __pyx_n_u_get_enum_feature __pyx_string_tab[186]
-#define __pyx_n_u_get_exposure __pyx_string_tab[187]
-#define __pyx_n_u_get_float_feature __pyx_string_tab[188]
-#define __pyx_n_u_get_frame_id __pyx_string_tab[189]
-#define __pyx_n_u_get_frame_shape __pyx_string_tab[190]
-#define __pyx_n_u_get_gain __pyx_string_tab[191]
-#define __pyx_n_u_get_height __pyx_string_tab[192]
-#define __pyx_n_u_get_int_feature __pyx_string_tab[193]
-#define __pyx_n_u_get_numpy_array __pyx_string_tab[194]
-#define __pyx_n_u_get_pixel_format __pyx_string_tab[195]
-#define __pyx_n_u_get_remote_device_feature_contro __pyx_string_tab[196]
-#define __pyx_n_u_get_status __pyx_string_tab[197]
-#define __pyx_n_u_get_supported_binning __pyx_string_tab[198]
-#define __pyx_n_u_get_temperature __pyx_string_tab[199]
-#define __pyx_n_u_get_width __pyx_string_tab[200]
-#define __pyx_n_u_gx __pyx_string_tab[201]
-#define __pyx_n_u_gx_2 __pyx_string_tab[202]
-#define __pyx_n_u_gxipy __pyx_string_tab[203]
-#define __pyx_n_u_gxipy_gxidef __pyx_string_tab[204]
-#define __pyx_n_u_height __pyx_string_tab[205]
-#define __pyx_n_u_horizontal __pyx_string_tab[206]
-#define __pyx_n_u_info __pyx_string_tab[207]
-#define __pyx_n_u_init __pyx_string_tab[208]
-#define __pyx_n_u_initialize __pyx_string_tab[209]
-#define __pyx_n_u_insert __pyx_string_tab[210]
-#define __pyx_n_u_int __pyx_string_tab[211]
-#define __pyx_n_u_is_coroutine __pyx_string_tab[212]
-#define __pyx_n_u_is_implemented __pyx_string_tab[213]
-#define __pyx_n_u_is_readable __pyx_string_tab[214]
-#define __pyx_n_u_is_writable __pyx_string_tab[215]
-#define __pyx_n_u_items __pyx_string_tab[216]
-#define __pyx_n_u_lambda __pyx_string_tab[217]
-#define __pyx_n_u_last_error __pyx_string_tab[218]
-#define __pyx_n_u_last_error_2 __pyx_string_tab[219]
-#define __pyx_n_u_logger __pyx_string_tab[220]
-#define __pyx_n_u_logging __pyx_string_tab[221]
-#define __pyx_n_u_main __pyx_string_tab[222]
-#define __pyx_n_u_metaclass __pyx_string_tab[223]
-#define __pyx_n_u_metadata __pyx_string_tab[224]
-#define __pyx_n_u_module __pyx_string_tab[225]
-#define __pyx_n_u_mro_entries __pyx_string_tab[226]
-#define __pyx_n_u_name __pyx_string_tab[227]
-#define __pyx_n_u_np __pyx_string_tab[228]
-#define __pyx_n_u_numpy __pyx_string_tab[229]
-#define __pyx_n_u_numpy_array __pyx_string_tab[230]
-#define __pyx_n_u_open_device_by_sn __pyx_string_tab[231]
-#define __pyx_n_u_original_cols __pyx_string_tab[232]
-#define __pyx_n_u_original_height __pyx_string_tab[233]
-#define __pyx_n_u_original_rows __pyx_string_tab[234]
-#define __pyx_n_u_original_width __pyx_string_tab[235]
-#define __pyx_n_u_os __pyx_string_tab[236]
-#define __pyx_n_u_parent __pyx_string_tab[237]
-#define __pyx_n_u_path __pyx_string_tab[238]
-#define __pyx_n_u_payload_size __pyx_string_tab[239]
-#define __pyx_n_u_pf __pyx_string_tab[240]
-#define __pyx_n_u_pixel_format __pyx_string_tab[241]
-#define __pyx_n_u_pixel_format_2 __pyx_string_tab[242]
-#define __pyx_n_u_pop __pyx_string_tab[243]
-#define __pyx_n_u_prepare __pyx_string_tab[244]
-#define __pyx_n_u_previous_binning __pyx_string_tab[245]
-#define __pyx_n_u_previous_shape __pyx_string_tab[246]
-#define __pyx_n_u_property __pyx_string_tab[247]
-#define __pyx_n_u_qualname __pyx_string_tab[248]
-#define __pyx_n_u_raw_image __pyx_string_tab[249]
-#define __pyx_n_u_read_camera_frame_shape __pyx_string_tab[250]
-#define __pyx_n_u_register_capture_callback __pyx_string_tab[251]
-#define __pyx_n_u_remote_feature __pyx_string_tab[252]
-#define __pyx_n_u_reshape __pyx_string_tab[253]
-#define __pyx_n_u_return __pyx_string_tab[254]
-#define __pyx_n_u_rollback_error __pyx_string_tab[255]
-#define __pyx_n_u_rows __pyx_string_tab[256]
-#define __pyx_n_u_running __pyx_string_tab[257]
-#define __pyx_n_u_self __pyx_string_tab[258]
-#define __pyx_n_u_send_command __pyx_string_tab[259]
-#define __pyx_n_u_serial_number __pyx_string_tab[260]
-#define __pyx_n_u_set __pyx_string_tab[261]
-#define __pyx_n_u_set_binning __pyx_string_tab[262]
-#define __pyx_n_u_set_exposure __pyx_string_tab[263]
-#define __pyx_n_u_set_gain __pyx_string_tab[264]
-#define __pyx_n_u_set_name __pyx_string_tab[265]
-#define __pyx_n_u_set_pixel_format __pyx_string_tab[266]
-#define __pyx_n_u_setdefault __pyx_string_tab[267]
-#define __pyx_n_u_size __pyx_string_tab[268]
-#define __pyx_n_u_sleep __pyx_string_tab[269]
-#define __pyx_n_u_sn __pyx_string_tab[270]
-#define __pyx_n_u_sn_2 __pyx_string_tab[271]
-#define __pyx_n_u_src_device_daheng_device __pyx_string_tab[272]
-#define __pyx_n_u_src_device_device_interface __pyx_string_tab[273]
-#define __pyx_n_u_start __pyx_string_tab[274]
-#define __pyx_n_u_staticmethod __pyx_string_tab[275]
-#define __pyx_n_u_stop __pyx_string_tab[276]
-#define __pyx_n_u_str __pyx_string_tab[277]
-#define __pyx_n_u_stream_off __pyx_string_tab[278]
-#define __pyx_n_u_stream_on __pyx_string_tab[279]
-#define __pyx_n_u_super __pyx_string_tab[280]
-#define __pyx_n_u_sys __pyx_string_tab[281]
-#define __pyx_n_u_test __pyx_string_tab[282]
-#define __pyx_n_u_time __pyx_string_tab[283]
-#define __pyx_n_u_timestamp __pyx_string_tab[284]
-#define __pyx_n_u_trigger_cmd __pyx_string_tab[285]
-#define __pyx_n_u_uint16 __pyx_string_tab[286]
-#define __pyx_n_u_unregister_capture_callback __pyx_string_tab[287]
-#define __pyx_n_u_update_all_device_list __pyx_string_tab[288]
-#define __pyx_n_u_us __pyx_string_tab[289]
-#define __pyx_n_u_validate_binning __pyx_string_tab[290]
-#define __pyx_n_u_values __pyx_string_tab[291]
-#define __pyx_n_u_vb __pyx_string_tab[292]
-#define __pyx_n_u_vertical __pyx_string_tab[293]
-#define __pyx_n_u_warning __pyx_string_tab[294]
-#define __pyx_n_u_width __pyx_string_tab[295]
-#define __pyx_n_u_x __pyx_string_tab[296]
-#define __pyx_n_u_y __pyx_string_tab[297]
-#define __pyx_kp_b_iso88591_3a_4q_a_4_1_A_EQa_a_1_A_t4_aq_l __pyx_string_tab[298]
-#define __pyx_kp_b_iso88591_4_1_1_1_t4_aq_q_t4_1A_q_5_q_TQR __pyx_string_tab[299]
-#define __pyx_kp_b_iso88591_4_1_4_8_Q_1D_8_Q_AT_9_4q_6_Bc_1 __pyx_string_tab[300]
-#define __pyx_kp_b_iso88591_4_1_q_t4_aq_e1_d_1A_t_q_t1A_G4q __pyx_string_tab[301]
-#define __pyx_kp_b_iso88591_4_q_1_Qa_Q_fA_Gq_t1 __pyx_string_tab[302]
-#define __pyx_kp_b_iso88591_4_q_D_A_fA_Fa_t1 __pyx_string_tab[303]
-#define __pyx_kp_b_iso88591_A_q_gQ_S_5_1 __pyx_string_tab[304]
-#define __pyx_kp_b_iso88591_A_q_t4q_TTU_83a_q_Q_1_G_4q_a_e1 __pyx_string_tab[305]
-#define __pyx_kp_b_iso88591_A_t1 __pyx_string_tab[306]
-#define __pyx_kp_b_iso88591_HA_4s_A_A_I_AQ_q_2_a_A_s_1_1 __pyx_string_tab[307]
-#define __pyx_kp_b_iso88591_Q_4_1_4q_A_4A5I_Q_s_4A5Gt1_l_wc __pyx_string_tab[308]
-#define __pyx_kp_b_iso88591_Q_L_4q_6awd_1_e1_31_fA_7q __pyx_string_tab[309]
-#define __pyx_kp_b_iso88591_XXQ_3a_4q_a_r_A_s_1 __pyx_string_tab[310]
-#define __pyx_kp_b_iso88591_a_L_4q_HKq_M_Q_ha_A_e1A __pyx_string_tab[311]
-#define __pyx_kp_b_iso88591_a_S_S_D_y_3c_ha_9_Q_4z_T_Yk_IZq __pyx_string_tab[312]
-#define __pyx_kp_b_iso88591_a_t1 __pyx_string_tab[313]
-#define __pyx_kp_b_iso88591_d_4AQ __pyx_string_tab[314]
-#define __pyx_kp_b_iso88591_j_8RRS_Ry_1_G1_r_q_Kq_q_A_A_1_q __pyx_string_tab[315]
-#define __pyx_kp_b_iso88591_q_4y_1_r_Q_A_s_1_WWX_L_M_31_HJa __pyx_string_tab[316]
-#define __pyx_kp_b_iso88591_q_E_4q_HM_ha_1_1_A_e1A __pyx_string_tab[317]
-#define __pyx_kp_b_iso88591_q_R_Q_B_xs_q_1 __pyx_string_tab[318]
-#define __pyx_kp_b_iso88591_q_q __pyx_string_tab[319]
-#define __pyx_kp_b_iso88591_s_Q_RuHAQ_gS_uG1Cq_A_Q_Q_Q __pyx_string_tab[320]
-#define __pyx_kp_b_iso88591_t1 __pyx_string_tab[321]
-#define __pyx_kp_b_iso88591_xq_4s_A_A_I_4_1_7q_t1A_7_a_A_a __pyx_string_tab[322]
-#define __pyx_kp_b_iso88591_z_A_4q_6a_d_1_e1_7q_fA_1 __pyx_string_tab[323]
+#define __pyx_kp_u_Camera_clamped_frame_rate_from_2 __pyx_string_tab[4]
+#define __pyx_kp_u_Camera_does_not_expose_required __pyx_string_tab[5]
+#define __pyx_kp_u_Camera_does_not_expose_s_frame_r __pyx_string_tab[6]
+#define __pyx_kp_u_Camera_frame_dimensions_changed __pyx_string_tab[7]
+#define __pyx_kp_u_Camera_rejected_binning __pyx_string_tab[8]
+#define __pyx_kp_u_Camera_rejected_pixel_format __pyx_string_tab[9]
+#define __pyx_kp_u_Camera_reported_invalid_frame_di __pyx_string_tab[10]
+#define __pyx_kp_u_Camera_reported_unsupported_binn __pyx_string_tab[11]
+#define __pyx_kp_u_Cannot_change_camera_binning_whi __pyx_string_tab[12]
+#define __pyx_kp_u_Cannot_change_camera_frame_rate __pyx_string_tab[13]
+#define __pyx_kp_u_Cannot_configure_camera_binning __pyx_string_tab[14]
+#define __pyx_kp_u_Cannot_start_acquisition_binning __pyx_string_tab[15]
+#define __pyx_kp_u_Cannot_start_device_not_initiali __pyx_string_tab[16]
+#define __pyx_kp_u_Capture_callback_error_s __pyx_string_tab[17]
+#define __pyx_kp_u_Could_not_read_PayloadSize_may_n __pyx_string_tab[18]
+#define __pyx_kp_u_Could_not_read_camera_binning_s __pyx_string_tab[19]
+#define __pyx_kp_u_Could_not_read_camera_frame_rate __pyx_string_tab[20]
+#define __pyx_kp_u_Could_not_read_camera_frame_rate_2 __pyx_string_tab[21]
+#define __pyx_kp_u_Could_not_read_camera_frame_shap __pyx_string_tab[22]
+#define __pyx_kp_u_Could_not_read_camera_pixel_form __pyx_string_tab[23]
+#define __pyx_kp_u_Could_not_read_camera_temperatur __pyx_string_tab[24]
+#define __pyx_kp_u_Could_not_read_s_range_s __pyx_string_tab[25]
+#define __pyx_kp_u_Could_not_roll_back_failed_binni __pyx_string_tab[26]
+#define __pyx_kp_u_DahengDevice_acquisition_started __pyx_string_tab[27]
+#define __pyx_kp_u_DahengDevice_acquisition_stopped __pyx_string_tab[28]
+#define __pyx_kp_u_DahengDevice_closed __pyx_string_tab[29]
+#define __pyx_kp_u_DahengDevice_initialization_fail __pyx_string_tab[30]
+#define __pyx_kp_u_DahengDevice_initialized_SN_s_bi __pyx_string_tab[31]
+#define __pyx_kp_u_Daheng_MER3_138_136G3M_P_SWIR_ca __pyx_string_tab[32]
+#define __pyx_kp_u_Error_closing_device_s __pyx_string_tab[33]
+#define __pyx_kp_u_Error_stopping_camera_s __pyx_string_tab[34]
+#define __pyx_kp_u_Exposure_set_to_1f_s __pyx_string_tab[35]
+#define __pyx_kp_u_Failed_to_get_numpy_array_for_Mo __pyx_string_tab[36]
+#define __pyx_kp_u_Failed_to_set_binning_to_dx_d_s __pyx_string_tab[37]
+#define __pyx_kp_u_Failed_to_set_exposure_s __pyx_string_tab[38]
+#define __pyx_kp_u_Failed_to_set_frame_rate_to_2f_f __pyx_string_tab[39]
+#define __pyx_kp_u_Failed_to_set_gain_s __pyx_string_tab[40]
+#define __pyx_kp_u_Failed_to_set_pixel_format_s __pyx_string_tab[41]
+#define __pyx_kp_u_Frame_rate_must_be_positive_got __pyx_string_tab[42]
+#define __pyx_kp_u_Frame_rate_set_to_2f_fps_range_2 __pyx_string_tab[43]
+#define __pyx_kp_u_Frame_status_error_d __pyx_string_tab[44]
+#define __pyx_kp_u_Gain_set_to_1f_dB __pyx_string_tab[45]
+#define __pyx_kp_u_Hardware_binning_set_to_dx_d_cam __pyx_string_tab[46]
+#define __pyx_kp_u_No_Daheng_cameras_found __pyx_string_tab[47]
+#define __pyx_kp_u_None __pyx_string_tab[48]
+#define __pyx_kp_u_Note_that_Cython_is_deliberately __pyx_string_tab[49]
+#define __pyx_kp_u_Payload_size_d_bytes __pyx_string_tab[50]
+#define __pyx_kp_u_Pixel_format_set_to_s __pyx_string_tab[51]
+#define __pyx_kp_u_QObject_None __pyx_string_tab[52]
+#define __pyx_kp_u_Sensor_ADC_bit_depth_set_to_12_b __pyx_string_tab[53]
+#define __pyx_kp_u_This_application_requires __pyx_string_tab[54]
+#define __pyx_kp_u_Unexpected_Mono12_buffer_size_go __pyx_string_tab[55]
+#define __pyx_kp_u_Unexpected_camera_pixel_format_s __pyx_string_tab[56]
+#define __pyx_kp_u__2 __pyx_string_tab[57]
+#define __pyx_kp_u__3 __pyx_string_tab[58]
+#define __pyx_kp_u__4 __pyx_string_tab[59]
+#define __pyx_kp_u_actual_format_is __pyx_string_tab[60]
+#define __pyx_kp_u_add_note __pyx_string_tab[61]
+#define __pyx_kp_u_disable __pyx_string_tab[62]
+#define __pyx_kp_u_enable __pyx_string_tab[63]
+#define __pyx_kp_u_expected_12_bit __pyx_string_tab[64]
+#define __pyx_kp_u_feature __pyx_string_tab[65]
+#define __pyx_kp_u_feature_is_not_writable __pyx_string_tab[66]
+#define __pyx_kp_u_float_None __pyx_string_tab[67]
+#define __pyx_kp_u_gc __pyx_string_tab[68]
+#define __pyx_kp_u_got __pyx_string_tab[69]
+#define __pyx_kp_u_isenabled __pyx_string_tab[70]
+#define __pyx_kp_u_list_dict __pyx_string_tab[71]
+#define __pyx_kp_u_read_back __pyx_string_tab[72]
+#define __pyx_kp_u_s_is_not_exposed_relying_on_Pix __pyx_string_tab[73]
+#define __pyx_kp_u_specdev_device __pyx_string_tab[74]
+#define __pyx_kp_u_src_device_daheng_device_py __pyx_string_tab[75]
+#define __pyx_kp_u_tuple_float_float __pyx_string_tab[76]
+#define __pyx_kp_u_tuple_int_int __pyx_string_tab[77]
+#define __pyx_kp_u_tuple_tuple_int_int __pyx_string_tab[78]
+#define __pyx_n_u_AcquisitionFrameRate __pyx_string_tab[79]
+#define __pyx_n_u_AcquisitionFrameRateMode __pyx_string_tab[80]
+#define __pyx_n_u_BinningHorizontal __pyx_string_tab[81]
+#define __pyx_n_u_BinningVertical __pyx_string_tab[82]
+#define __pyx_n_u_DEFAULT_PIXEL_FORMAT __pyx_string_tab[83]
+#define __pyx_n_u_DahengDevice __pyx_string_tab[84]
+#define __pyx_n_u_DahengDevice___init __pyx_string_tab[85]
+#define __pyx_n_u_DahengDevice__apply_binning __pyx_string_tab[86]
+#define __pyx_n_u_DahengDevice__apply_frame_rate __pyx_string_tab[87]
+#define __pyx_n_u_DahengDevice__apply_pixel_format __pyx_string_tab[88]
+#define __pyx_n_u_DahengDevice__apply_sensor_bit_d __pyx_string_tab[89]
+#define __pyx_n_u_DahengDevice__capture_callback __pyx_string_tab[90]
+#define __pyx_n_u_DahengDevice__default_frame_shap __pyx_string_tab[91]
+#define __pyx_n_u_DahengDevice__read_camera_frame __pyx_string_tab[92]
+#define __pyx_n_u_DahengDevice_close __pyx_string_tab[93]
+#define __pyx_n_u_DahengDevice_get_binning __pyx_string_tab[94]
+#define __pyx_n_u_DahengDevice_get_exposure __pyx_string_tab[95]
+#define __pyx_n_u_DahengDevice_get_frame_rate __pyx_string_tab[96]
+#define __pyx_n_u_DahengDevice_get_frame_rate_rang __pyx_string_tab[97]
+#define __pyx_n_u_DahengDevice_get_frame_shape __pyx_string_tab[98]
+#define __pyx_n_u_DahengDevice_get_gain __pyx_string_tab[99]
+#define __pyx_n_u_DahengDevice_get_pixel_format __pyx_string_tab[100]
+#define __pyx_n_u_DahengDevice_get_supported_binni __pyx_string_tab[101]
+#define __pyx_n_u_DahengDevice_get_temperature __pyx_string_tab[102]
+#define __pyx_n_u_DahengDevice_initialize __pyx_string_tab[103]
+#define __pyx_n_u_DahengDevice_last_error __pyx_string_tab[104]
+#define __pyx_n_u_DahengDevice_set_binning __pyx_string_tab[105]
+#define __pyx_n_u_DahengDevice_set_exposure __pyx_string_tab[106]
+#define __pyx_n_u_DahengDevice_set_frame_rate __pyx_string_tab[107]
+#define __pyx_n_u_DahengDevice_set_gain __pyx_string_tab[108]
+#define __pyx_n_u_DahengDevice_set_pixel_format __pyx_string_tab[109]
+#define __pyx_n_u_DahengDevice_start __pyx_string_tab[110]
+#define __pyx_n_u_DahengDevice_start_locals_lambda __pyx_string_tab[111]
+#define __pyx_n_u_DahengDevice_stop __pyx_string_tab[112]
+#define __pyx_n_u_DeviceInterface __pyx_string_tab[113]
+#define __pyx_n_u_DeviceManager __pyx_string_tab[114]
+#define __pyx_n_u_DeviceTemperature __pyx_string_tab[115]
+#define __pyx_n_u_DxValidBit __pyx_string_tab[116]
+#define __pyx_n_u_ExposureTime __pyx_string_tab[117]
+#define __pyx_n_u_Gain __pyx_string_tab[118]
+#define __pyx_n_u_GxPixelFormatEntry __pyx_string_tab[119]
+#define __pyx_n_u_Height __pyx_string_tab[120]
+#define __pyx_n_u_MONO12 __pyx_string_tab[121]
+#define __pyx_n_u_None __pyx_string_tab[122]
+#define __pyx_n_u_On __pyx_string_tab[123]
+#define __pyx_n_u_PayloadSize __pyx_string_tab[124]
+#define __pyx_n_u_PixelFormat __pyx_string_tab[125]
+#define __pyx_n_u_PySide6_QtCore __pyx_string_tab[126]
+#define __pyx_n_u_Pyx_PyDict_NextRef __pyx_string_tab[127]
+#define __pyx_n_u_QObject __pyx_string_tab[128]
+#define __pyx_n_u_SENSOR_FRAME_SHAPE __pyx_string_tab[129]
+#define __pyx_n_u_SUPPORTED_BINNING __pyx_string_tab[130]
+#define __pyx_n_u_SensorBitDepth __pyx_string_tab[131]
+#define __pyx_n_u_Software __pyx_string_tab[132]
+#define __pyx_n_u_TriggerMode __pyx_string_tab[133]
+#define __pyx_n_u_TriggerSoftware __pyx_string_tab[134]
+#define __pyx_n_u_TriggerSource __pyx_string_tab[135]
+#define __pyx_n_u_Width __pyx_string_tab[136]
+#define __pyx_n_u__5 __pyx_string_tab[137]
+#define __pyx_n_u_actual __pyx_string_tab[138]
+#define __pyx_n_u_actual_depth __pyx_string_tab[139]
+#define __pyx_n_u_actual_format __pyx_string_tab[140]
+#define __pyx_n_u_actual_symbolic __pyx_string_tab[141]
+#define __pyx_n_u_addressof __pyx_string_tab[142]
+#define __pyx_n_u_annotate __pyx_string_tab[143]
+#define __pyx_n_u_apply_binning __pyx_string_tab[144]
+#define __pyx_n_u_apply_frame_rate __pyx_string_tab[145]
+#define __pyx_n_u_apply_pixel_format __pyx_string_tab[146]
+#define __pyx_n_u_apply_sensor_bit_depth __pyx_string_tab[147]
+#define __pyx_n_u_astype __pyx_string_tab[148]
+#define __pyx_n_u_asyncio_coroutines __pyx_string_tab[149]
+#define __pyx_n_u_binning __pyx_string_tab[150]
+#define __pyx_n_u_binning_2 __pyx_string_tab[151]
+#define __pyx_n_u_binning_x __pyx_string_tab[152]
+#define __pyx_n_u_binning_y __pyx_string_tab[153]
+#define __pyx_n_u_bool __pyx_string_tab[154]
+#define __pyx_n_u_c_ubyte __pyx_string_tab[155]
+#define __pyx_n_u_camera __pyx_string_tab[156]
+#define __pyx_n_u_capture_callback __pyx_string_tab[157]
+#define __pyx_n_u_cline_in_traceback __pyx_string_tab[158]
+#define __pyx_n_u_close __pyx_string_tab[159]
+#define __pyx_n_u_close_device __pyx_string_tab[160]
+#define __pyx_n_u_cols __pyx_string_tab[161]
+#define __pyx_n_u_copy __pyx_string_tab[162]
+#define __pyx_n_u_ctypes __pyx_string_tab[163]
+#define __pyx_n_u_data_stream __pyx_string_tab[164]
+#define __pyx_n_u_data_stream_2 __pyx_string_tab[165]
+#define __pyx_n_u_db __pyx_string_tab[166]
+#define __pyx_n_u_debug __pyx_string_tab[167]
+#define __pyx_n_u_default_frame_shape_for_binning __pyx_string_tab[168]
+#define __pyx_n_u_dev_info_list __pyx_string_tab[169]
+#define __pyx_n_u_dev_num __pyx_string_tab[170]
+#define __pyx_n_u_device_dir __pyx_string_tab[171]
+#define __pyx_n_u_device_manager __pyx_string_tab[172]
+#define __pyx_n_u_device_manager_2 __pyx_string_tab[173]
+#define __pyx_n_u_dirname __pyx_string_tab[174]
+#define __pyx_n_u_doc __pyx_string_tab[175]
+#define __pyx_n_u_e __pyx_string_tab[176]
+#define __pyx_n_u_emit __pyx_string_tab[177]
+#define __pyx_n_u_ensure_sdk __pyx_string_tab[178]
+#define __pyx_n_u_error __pyx_string_tab[179]
+#define __pyx_n_u_exposure_us __pyx_string_tab[180]
+#define __pyx_n_u_exposure_us_2 __pyx_string_tab[181]
+#define __pyx_n_u_feature_2 __pyx_string_tab[182]
+#define __pyx_n_u_feature_name __pyx_string_tab[183]
+#define __pyx_n_u_feature_names __pyx_string_tab[184]
+#define __pyx_n_u_features __pyx_string_tab[185]
+#define __pyx_n_u_file __pyx_string_tab[186]
+#define __pyx_n_u_float __pyx_string_tab[187]
+#define __pyx_n_u_fmt __pyx_string_tab[188]
+#define __pyx_n_u_fps __pyx_string_tab[189]
+#define __pyx_n_u_frame __pyx_string_tab[190]
+#define __pyx_n_u_frame_acquired __pyx_string_tab[191]
+#define __pyx_n_u_frame_id __pyx_string_tab[192]
+#define __pyx_n_u_frame_id_counter __pyx_string_tab[193]
+#define __pyx_n_u_frame_rate_fps __pyx_string_tab[194]
+#define __pyx_n_u_frame_rate_range __pyx_string_tab[195]
+#define __pyx_n_u_frame_shape __pyx_string_tab[196]
+#define __pyx_n_u_frame_shape_2 __pyx_string_tab[197]
+#define __pyx_n_u_func __pyx_string_tab[198]
+#define __pyx_n_u_gain_db __pyx_string_tab[199]
+#define __pyx_n_u_gain_db_2 __pyx_string_tab[200]
+#define __pyx_n_u_get __pyx_string_tab[201]
+#define __pyx_n_u_getLogger __pyx_string_tab[202]
+#define __pyx_n_u_get_binning __pyx_string_tab[203]
+#define __pyx_n_u_get_camera_list __pyx_string_tab[204]
+#define __pyx_n_u_get_command_feature __pyx_string_tab[205]
+#define __pyx_n_u_get_enum_feature __pyx_string_tab[206]
+#define __pyx_n_u_get_exposure __pyx_string_tab[207]
+#define __pyx_n_u_get_float_feature __pyx_string_tab[208]
+#define __pyx_n_u_get_frame_id __pyx_string_tab[209]
+#define __pyx_n_u_get_frame_rate __pyx_string_tab[210]
+#define __pyx_n_u_get_frame_rate_range __pyx_string_tab[211]
+#define __pyx_n_u_get_frame_shape __pyx_string_tab[212]
+#define __pyx_n_u_get_gain __pyx_string_tab[213]
+#define __pyx_n_u_get_height __pyx_string_tab[214]
+#define __pyx_n_u_get_int_feature __pyx_string_tab[215]
+#define __pyx_n_u_get_numpy_array __pyx_string_tab[216]
+#define __pyx_n_u_get_pixel_format __pyx_string_tab[217]
+#define __pyx_n_u_get_range __pyx_string_tab[218]
+#define __pyx_n_u_get_remote_device_feature_contro __pyx_string_tab[219]
+#define __pyx_n_u_get_status __pyx_string_tab[220]
+#define __pyx_n_u_get_supported_binning __pyx_string_tab[221]
+#define __pyx_n_u_get_temperature __pyx_string_tab[222]
+#define __pyx_n_u_get_width __pyx_string_tab[223]
+#define __pyx_n_u_gx __pyx_string_tab[224]
+#define __pyx_n_u_gx_2 __pyx_string_tab[225]
+#define __pyx_n_u_gxipy __pyx_string_tab[226]
+#define __pyx_n_u_gxipy_gxidef __pyx_string_tab[227]
+#define __pyx_n_u_height __pyx_string_tab[228]
+#define __pyx_n_u_horizontal __pyx_string_tab[229]
+#define __pyx_n_u_info __pyx_string_tab[230]
+#define __pyx_n_u_init __pyx_string_tab[231]
+#define __pyx_n_u_initialize __pyx_string_tab[232]
+#define __pyx_n_u_insert __pyx_string_tab[233]
+#define __pyx_n_u_int __pyx_string_tab[234]
+#define __pyx_n_u_is_coroutine __pyx_string_tab[235]
+#define __pyx_n_u_is_implemented __pyx_string_tab[236]
+#define __pyx_n_u_is_readable __pyx_string_tab[237]
+#define __pyx_n_u_is_writable __pyx_string_tab[238]
+#define __pyx_n_u_items __pyx_string_tab[239]
+#define __pyx_n_u_lambda __pyx_string_tab[240]
+#define __pyx_n_u_last_error __pyx_string_tab[241]
+#define __pyx_n_u_last_error_2 __pyx_string_tab[242]
+#define __pyx_n_u_logger __pyx_string_tab[243]
+#define __pyx_n_u_logging __pyx_string_tab[244]
+#define __pyx_n_u_main __pyx_string_tab[245]
+#define __pyx_n_u_max __pyx_string_tab[246]
+#define __pyx_n_u_metaclass __pyx_string_tab[247]
+#define __pyx_n_u_metadata __pyx_string_tab[248]
+#define __pyx_n_u_min __pyx_string_tab[249]
+#define __pyx_n_u_mode_name __pyx_string_tab[250]
+#define __pyx_n_u_module __pyx_string_tab[251]
+#define __pyx_n_u_mro_entries __pyx_string_tab[252]
+#define __pyx_n_u_name __pyx_string_tab[253]
+#define __pyx_n_u_np __pyx_string_tab[254]
+#define __pyx_n_u_numpy __pyx_string_tab[255]
+#define __pyx_n_u_numpy_array __pyx_string_tab[256]
+#define __pyx_n_u_open_device_by_sn __pyx_string_tab[257]
+#define __pyx_n_u_original_cols __pyx_string_tab[258]
+#define __pyx_n_u_original_height __pyx_string_tab[259]
+#define __pyx_n_u_original_rows __pyx_string_tab[260]
+#define __pyx_n_u_original_width __pyx_string_tab[261]
+#define __pyx_n_u_os __pyx_string_tab[262]
+#define __pyx_n_u_parent __pyx_string_tab[263]
+#define __pyx_n_u_path __pyx_string_tab[264]
+#define __pyx_n_u_payload_size __pyx_string_tab[265]
+#define __pyx_n_u_pf __pyx_string_tab[266]
+#define __pyx_n_u_pixel_format __pyx_string_tab[267]
+#define __pyx_n_u_pixel_format_2 __pyx_string_tab[268]
+#define __pyx_n_u_pop __pyx_string_tab[269]
+#define __pyx_n_u_prepare __pyx_string_tab[270]
+#define __pyx_n_u_previous_binning __pyx_string_tab[271]
+#define __pyx_n_u_previous_shape __pyx_string_tab[272]
+#define __pyx_n_u_property __pyx_string_tab[273]
+#define __pyx_n_u_qualname __pyx_string_tab[274]
+#define __pyx_n_u_rate_feature __pyx_string_tab[275]
+#define __pyx_n_u_rate_name __pyx_string_tab[276]
+#define __pyx_n_u_rate_range __pyx_string_tab[277]
+#define __pyx_n_u_raw_image __pyx_string_tab[278]
+#define __pyx_n_u_read_camera_frame_shape __pyx_string_tab[279]
+#define __pyx_n_u_register_capture_callback __pyx_string_tab[280]
+#define __pyx_n_u_remote_feature __pyx_string_tab[281]
+#define __pyx_n_u_reshape __pyx_string_tab[282]
+#define __pyx_n_u_return __pyx_string_tab[283]
+#define __pyx_n_u_rollback_error __pyx_string_tab[284]
+#define __pyx_n_u_rows __pyx_string_tab[285]
+#define __pyx_n_u_running __pyx_string_tab[286]
+#define __pyx_n_u_self __pyx_string_tab[287]
+#define __pyx_n_u_send_command __pyx_string_tab[288]
+#define __pyx_n_u_serial_number __pyx_string_tab[289]
+#define __pyx_n_u_set __pyx_string_tab[290]
+#define __pyx_n_u_set_binning __pyx_string_tab[291]
+#define __pyx_n_u_set_exposure __pyx_string_tab[292]
+#define __pyx_n_u_set_frame_rate __pyx_string_tab[293]
+#define __pyx_n_u_set_gain __pyx_string_tab[294]
+#define __pyx_n_u_set_name __pyx_string_tab[295]
+#define __pyx_n_u_set_pixel_format __pyx_string_tab[296]
+#define __pyx_n_u_setdefault __pyx_string_tab[297]
+#define __pyx_n_u_size __pyx_string_tab[298]
+#define __pyx_n_u_sleep __pyx_string_tab[299]
+#define __pyx_n_u_sn __pyx_string_tab[300]
+#define __pyx_n_u_sn_2 __pyx_string_tab[301]
+#define __pyx_n_u_src_device_daheng_device __pyx_string_tab[302]
+#define __pyx_n_u_src_device_device_interface __pyx_string_tab[303]
+#define __pyx_n_u_start __pyx_string_tab[304]
+#define __pyx_n_u_staticmethod __pyx_string_tab[305]
+#define __pyx_n_u_stop __pyx_string_tab[306]
+#define __pyx_n_u_str __pyx_string_tab[307]
+#define __pyx_n_u_stream_off __pyx_string_tab[308]
+#define __pyx_n_u_stream_on __pyx_string_tab[309]
+#define __pyx_n_u_super __pyx_string_tab[310]
+#define __pyx_n_u_sys __pyx_string_tab[311]
+#define __pyx_n_u_test __pyx_string_tab[312]
+#define __pyx_n_u_time __pyx_string_tab[313]
+#define __pyx_n_u_timestamp __pyx_string_tab[314]
+#define __pyx_n_u_trigger_cmd __pyx_string_tab[315]
+#define __pyx_n_u_uint16 __pyx_string_tab[316]
+#define __pyx_n_u_unregister_capture_callback __pyx_string_tab[317]
+#define __pyx_n_u_update_all_device_list __pyx_string_tab[318]
+#define __pyx_n_u_us __pyx_string_tab[319]
+#define __pyx_n_u_validate_binning __pyx_string_tab[320]
+#define __pyx_n_u_values __pyx_string_tab[321]
+#define __pyx_n_u_vb __pyx_string_tab[322]
+#define __pyx_n_u_vertical __pyx_string_tab[323]
+#define __pyx_n_u_warning __pyx_string_tab[324]
+#define __pyx_n_u_width __pyx_string_tab[325]
+#define __pyx_n_u_x __pyx_string_tab[326]
+#define __pyx_n_u_y __pyx_string_tab[327]
+#define __pyx_kp_b_iso88591_3a_4q_a_4_1_A_EQa_a_1_A_t4_aq_l __pyx_string_tab[328]
+#define __pyx_kp_b_iso88591_4_1_1_1_t4_aq_q_t4_1A_q_5_q_TQR __pyx_string_tab[329]
+#define __pyx_kp_b_iso88591_4_1_4_8_Q_1D_8_Q_AT_9_4q_6_Bc_1 __pyx_string_tab[330]
+#define __pyx_kp_b_iso88591_4_1_q_t4_aq_e1_d_1A_t_q_t1A_G4q __pyx_string_tab[331]
+#define __pyx_kp_b_iso88591_4_q_1_Qa_Q_fA_Gq_t1 __pyx_string_tab[332]
+#define __pyx_kp_b_iso88591_4_q_4_aq_5_a_VVZZ_fA_EQ_t1 __pyx_string_tab[333]
+#define __pyx_kp_b_iso88591_4_q_D_A_fA_Fa_t1 __pyx_string_tab[334]
+#define __pyx_kp_b_iso88591_A_e1A_4s_A_4q_a_1_A_s_1_EU __pyx_string_tab[335]
+#define __pyx_kp_b_iso88591_A_q_gQ_S_5_1 __pyx_string_tab[336]
+#define __pyx_kp_b_iso88591_A_q_t4q_TTU_83a_q_Q_1_G_4q_a_e1 __pyx_string_tab[337]
+#define __pyx_kp_b_iso88591_A_t1 __pyx_string_tab[338]
+#define __pyx_kp_b_iso88591_HA_4s_A_A_I_AQ_q_2_a_A_s_1_1 __pyx_string_tab[339]
+#define __pyx_kp_b_iso88591_Q_4_1_4q_A_4A5I_Q_s_4A5Gt1_l_wc __pyx_string_tab[340]
+#define __pyx_kp_b_iso88591_Q_L_4q_6awd_1_e1_31_fA_7q __pyx_string_tab[341]
+#define __pyx_kp_b_iso88591_XXQ_3a_4q_a_r_A_s_1 __pyx_string_tab[342]
+#define __pyx_kp_b_iso88591_Zq_4_1_1_A_A_4t_1_q_1_4_aq_t4_1 __pyx_string_tab[343]
+#define __pyx_kp_b_iso88591_a_4_q_4_aq_a_VV_a_Qj_Qj_fA_K1_t __pyx_string_tab[344]
+#define __pyx_kp_b_iso88591_a_L_4q_HKq_M_Q_ha_A_e1A __pyx_string_tab[345]
+#define __pyx_kp_b_iso88591_a_S_S_D_y_3c_ha_9_Q_4z_T_Yk_IZq __pyx_string_tab[346]
+#define __pyx_kp_b_iso88591_a_t1 __pyx_string_tab[347]
+#define __pyx_kp_b_iso88591_d_4AQ __pyx_string_tab[348]
+#define __pyx_kp_b_iso88591_j_8RRS_Ry_1_G1_r_q_Kq_q_A_A_1_q __pyx_string_tab[349]
+#define __pyx_kp_b_iso88591_q_4y_1_r_Q_A_s_1_WWX_L_M_31_HJa __pyx_string_tab[350]
+#define __pyx_kp_b_iso88591_q_E_4q_HM_ha_1_1_A_e1A __pyx_string_tab[351]
+#define __pyx_kp_b_iso88591_q_R_Q_B_xs_q_1 __pyx_string_tab[352]
+#define __pyx_kp_b_iso88591_q_q __pyx_string_tab[353]
+#define __pyx_kp_b_iso88591_s_Q_RuHAQ_gS_uG1Cq_A_Q_Q_Q __pyx_string_tab[354]
+#define __pyx_kp_b_iso88591_t1 __pyx_string_tab[355]
+#define __pyx_kp_b_iso88591_xq_4s_A_A_I_4_1_7q_t1A_7_a_A_a __pyx_string_tab[356]
+#define __pyx_kp_b_iso88591_z_A_4q_6a_d_1_e1_7q_fA_1 __pyx_string_tab[357]
 #define __pyx_float_0_0 __pyx_number_tab[0]
 #define __pyx_float_0_1 __pyx_number_tab[1]
-#define __pyx_float_10000_0 __pyx_number_tab[2]
-#define __pyx_int_0 __pyx_number_tab[3]
-#define __pyx_int_1 __pyx_number_tab[4]
-#define __pyx_int_12 __pyx_number_tab[5]
+#define __pyx_float_1_0 __pyx_number_tab[2]
+#define __pyx_float_72_4 __pyx_number_tab[3]
+#define __pyx_float_10000_0 __pyx_number_tab[4]
+#define __pyx_int_0 __pyx_number_tab[5]
+#define __pyx_int_1 __pyx_number_tab[6]
+#define __pyx_int_12 __pyx_number_tab[7]
 /* #### Code section: module_state_clear ### */
 #if CYTHON_USE_MODULE_STATE
 static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
@@ -3140,10 +3228,10 @@ static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
   #endif
   Py_CLEAR(clear_module_state->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start);
   Py_CLEAR(clear_module_state->__pyx_type_3src_6device_13daheng_device___pyx_scope_struct__start);
-  for (int i=0; i<7; ++i) { Py_CLEAR(clear_module_state->__pyx_tuple[i]); }
-  for (int i=0; i<26; ++i) { Py_CLEAR(clear_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<324; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
-  for (int i=0; i<6; ++i) { Py_CLEAR(clear_module_state->__pyx_number_tab[i]); }
+  for (int i=0; i<8; ++i) { Py_CLEAR(clear_module_state->__pyx_tuple[i]); }
+  for (int i=0; i<30; ++i) { Py_CLEAR(clear_module_state->__pyx_codeobj_tab[i]); }
+  for (int i=0; i<358; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<8; ++i) { Py_CLEAR(clear_module_state->__pyx_number_tab[i]); }
 /* #### Code section: module_state_clear_contents ### */
 /* CommonTypesMetaclass.module_state_clear */
 Py_CLEAR(clear_module_state->__pyx_CommonTypesMetaclassType);
@@ -3168,10 +3256,10 @@ static CYTHON_SMALL_CODE int __pyx_m_traverse(PyObject *m, visitproc visit, void
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_empty_unicode);
   Py_VISIT(traverse_module_state->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start);
   Py_VISIT(traverse_module_state->__pyx_type_3src_6device_13daheng_device___pyx_scope_struct__start);
-  for (int i=0; i<7; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_tuple[i]); }
-  for (int i=0; i<26; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<324; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
-  for (int i=0; i<6; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_number_tab[i]); }
+  for (int i=0; i<8; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_tuple[i]); }
+  for (int i=0; i<30; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_codeobj_tab[i]); }
+  for (int i=0; i<358; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<8; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_number_tab[i]); }
 /* #### Code section: module_state_traverse_contents ### */
 /* CommonTypesMetaclass.module_state_traverse */
 Py_VISIT(traverse_module_state->__pyx_CommonTypesMetaclassType);
@@ -3992,7 +4080,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice___init__(C
  *         self._exposure_us: float = 10000.0
  *         self._gain_db: float = 0.0             # <<<<<<<<<<<<<<
  *         self._pixel_format: str = DEFAULT_PIXEL_FORMAT
- *         # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
+ *         # Target acquisition frame rate (fps) and camera-reported valid range.
 */
   if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db, __pyx_mstate_global->__pyx_float_0_0) < (0)) __PYX_ERR(0, 75, __pyx_L1_error)
 
@@ -4000,61 +4088,79 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice___init__(C
  *         self._exposure_us: float = 10000.0
  *         self._gain_db: float = 0.0
  *         self._pixel_format: str = DEFAULT_PIXEL_FORMAT             # <<<<<<<<<<<<<<
- *         # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
- *         # setting while disconnected so it is applied during initialize().
+ *         # Target acquisition frame rate (fps) and camera-reported valid range.
+ *         # The range defaults to the MER3 full-frame capability and is refined
 */
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format, __pyx_t_1) < (0)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":79
+  /* "src/device/daheng_device.py":80
+ *         # The range defaults to the MER3 full-frame capability and is refined
+ *         # from the camera's AcquisitionFrameRate node during initialize().
+ *         self._frame_rate_fps: float = 72.4             # <<<<<<<<<<<<<<
+ *         self._frame_rate_range: tuple[float, float] = (1.0, 72.4)
+ *         # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
+*/
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_fps, __pyx_mstate_global->__pyx_float_72_4) < (0)) __PYX_ERR(0, 80, __pyx_L1_error)
+
+  /* "src/device/daheng_device.py":81
+ *         # from the camera's AcquisitionFrameRate node during initialize().
+ *         self._frame_rate_fps: float = 72.4
+ *         self._frame_rate_range: tuple[float, float] = (1.0, 72.4)             # <<<<<<<<<<<<<<
+ *         # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
+ *         # setting while disconnected so it is applied during initialize().
+*/
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_range, __pyx_mstate_global->__pyx_tuple[0]) < (0)) __PYX_ERR(0, 81, __pyx_L1_error)
+
+  /* "src/device/daheng_device.py":84
  *         # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
  *         # setting while disconnected so it is applied during initialize().
  *         self._binning: tuple[int, int] = (1, 1)             # <<<<<<<<<<<<<<
  *         self._frame_shape: tuple[int, int] = SENSOR_FRAME_SHAPE
  *         self._running: bool = False
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_mstate_global->__pyx_tuple[0]) < (0)) __PYX_ERR(0, 79, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_mstate_global->__pyx_tuple[1]) < (0)) __PYX_ERR(0, 84, __pyx_L1_error)
 
-  /* "src/device/daheng_device.py":80
+  /* "src/device/daheng_device.py":85
  *         # setting while disconnected so it is applied during initialize().
  *         self._binning: tuple[int, int] = (1, 1)
  *         self._frame_shape: tuple[int, int] = SENSOR_FRAME_SHAPE             # <<<<<<<<<<<<<<
  *         self._running: bool = False
  *         self._frame_id_counter: int = 0
 */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_SENSOR_FRAME_SHAPE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_SENSOR_FRAME_SHAPE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_t_1) < (0)) __PYX_ERR(0, 80, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_t_1) < (0)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":81
+  /* "src/device/daheng_device.py":86
  *         self._binning: tuple[int, int] = (1, 1)
  *         self._frame_shape: tuple[int, int] = SENSOR_FRAME_SHAPE
  *         self._running: bool = False             # <<<<<<<<<<<<<<
  *         self._frame_id_counter: int = 0
  *         self._last_error: str = ""
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running, Py_False) < (0)) __PYX_ERR(0, 81, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running, Py_False) < (0)) __PYX_ERR(0, 86, __pyx_L1_error)
 
-  /* "src/device/daheng_device.py":82
+  /* "src/device/daheng_device.py":87
  *         self._frame_shape: tuple[int, int] = SENSOR_FRAME_SHAPE
  *         self._running: bool = False
  *         self._frame_id_counter: int = 0             # <<<<<<<<<<<<<<
  *         self._last_error: str = ""
  * 
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_id_counter, __pyx_mstate_global->__pyx_int_0) < (0)) __PYX_ERR(0, 82, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_id_counter, __pyx_mstate_global->__pyx_int_0) < (0)) __PYX_ERR(0, 87, __pyx_L1_error)
 
-  /* "src/device/daheng_device.py":83
+  /* "src/device/daheng_device.py":88
  *         self._running: bool = False
  *         self._frame_id_counter: int = 0
  *         self._last_error: str = ""             # <<<<<<<<<<<<<<
  * 
  *     def initialize(self) -> bool:
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_mstate_global->__pyx_kp_u__2) < (0)) __PYX_ERR(0, 83, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_mstate_global->__pyx_kp_u__2) < (0)) __PYX_ERR(0, 88, __pyx_L1_error)
 
   /* "src/device/daheng_device.py":63
  *     """
@@ -4081,7 +4187,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice___init__(C
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":85
+/* "src/device/daheng_device.py":90
  *         self._last_error: str = ""
  * 
  *     def initialize(self) -> bool:             # <<<<<<<<<<<<<<
@@ -4128,32 +4234,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 85, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 90, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 85, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 90, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "initialize", 0) < (0)) __PYX_ERR(0, 85, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "initialize", 0) < (0)) __PYX_ERR(0, 90, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("initialize", 1, 1, 1, i); __PYX_ERR(0, 85, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("initialize", 1, 1, 1, i); __PYX_ERR(0, 90, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 85, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 90, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("initialize", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 85, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("initialize", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 90, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -4215,7 +4321,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("initialize", 0);
 
-  /* "src/device/daheng_device.py":86
+  /* "src/device/daheng_device.py":91
  * 
  *     def initialize(self) -> bool:
  *         try:             # <<<<<<<<<<<<<<
@@ -4231,37 +4337,37 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":87
+      /* "src/device/daheng_device.py":92
  *     def initialize(self) -> bool:
  *         try:
  *             self._last_error = ""             # <<<<<<<<<<<<<<
  *             # Auto-detect if no serial number given
  *             if not self._sn:
 */
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_mstate_global->__pyx_kp_u__2) < (0)) __PYX_ERR(0, 87, __pyx_L3_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_mstate_global->__pyx_kp_u__2) < (0)) __PYX_ERR(0, 92, __pyx_L3_error)
 
-      /* "src/device/daheng_device.py":89
+      /* "src/device/daheng_device.py":94
  *             self._last_error = ""
  *             # Auto-detect if no serial number given
  *             if not self._sn:             # <<<<<<<<<<<<<<
  *                 dev_num, dev_info_list = self._device_manager.update_all_device_list()
  *                 if dev_num == 0:
 */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 89, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 89, __pyx_L3_error)
+      __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 94, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_6 = (!__pyx_t_5);
       if (__pyx_t_6) {
 
-        /* "src/device/daheng_device.py":90
+        /* "src/device/daheng_device.py":95
  *             # Auto-detect if no serial number given
  *             if not self._sn:
  *                 dev_num, dev_info_list = self._device_manager.update_all_device_list()             # <<<<<<<<<<<<<<
  *                 if dev_num == 0:
  *                     self._last_error = "No Daheng cameras found"
 */
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_device_manager); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 90, __pyx_L3_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_device_manager); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 95, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_8);
         __pyx_t_7 = __pyx_t_8;
         __Pyx_INCREF(__pyx_t_7);
@@ -4271,7 +4377,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
           __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_update_all_device_list, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L3_error)
+          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 95, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_4);
         }
         if ((likely(PyTuple_CheckExact(__pyx_t_4))) || (PyList_CheckExact(__pyx_t_4))) {
@@ -4280,7 +4386,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
           if (unlikely(size != 2)) {
             if (size > 2) __Pyx_RaiseTooManyValuesError(2);
             else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-            __PYX_ERR(0, 90, __pyx_L3_error)
+            __PYX_ERR(0, 95, __pyx_L3_error)
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
           if (likely(PyTuple_CheckExact(sequence))) {
@@ -4290,22 +4396,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
             __Pyx_INCREF(__pyx_t_7);
           } else {
             __pyx_t_8 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 90, __pyx_L3_error)
+            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 95, __pyx_L3_error)
             __Pyx_XGOTREF(__pyx_t_8);
             __pyx_t_7 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-            if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 90, __pyx_L3_error)
+            if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 95, __pyx_L3_error)
             __Pyx_XGOTREF(__pyx_t_7);
           }
           #else
-          __pyx_t_8 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 90, __pyx_L3_error)
+          __pyx_t_8 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 95, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_7 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 90, __pyx_L3_error)
+          __pyx_t_7 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 95, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_7);
           #endif
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         } else {
           Py_ssize_t index = -1;
-          __pyx_t_10 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 90, __pyx_L3_error)
+          __pyx_t_10 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 95, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __pyx_t_11 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_10);
@@ -4313,7 +4419,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
           __Pyx_GOTREF(__pyx_t_8);
           index = 1; __pyx_t_7 = __pyx_t_11(__pyx_t_10); if (unlikely(!__pyx_t_7)) goto __pyx_L10_unpacking_failed;
           __Pyx_GOTREF(__pyx_t_7);
-          if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_10), 2) < (0)) __PYX_ERR(0, 90, __pyx_L3_error)
+          if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_10), 2) < (0)) __PYX_ERR(0, 95, __pyx_L3_error)
           __pyx_t_11 = NULL;
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           goto __pyx_L11_unpacking_done;
@@ -4321,7 +4427,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           __pyx_t_11 = NULL;
           if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-          __PYX_ERR(0, 90, __pyx_L3_error)
+          __PYX_ERR(0, 95, __pyx_L3_error)
           __pyx_L11_unpacking_done:;
         }
         __pyx_v_dev_num = __pyx_t_8;
@@ -4329,26 +4435,26 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __pyx_v_dev_info_list = __pyx_t_7;
         __pyx_t_7 = 0;
 
-        /* "src/device/daheng_device.py":91
+        /* "src/device/daheng_device.py":96
  *             if not self._sn:
  *                 dev_num, dev_info_list = self._device_manager.update_all_device_list()
  *                 if dev_num == 0:             # <<<<<<<<<<<<<<
  *                     self._last_error = "No Daheng cameras found"
  *                     logger.error(self._last_error)
 */
-        __pyx_t_6 = (__Pyx_PyLong_BoolEqObjC(__pyx_v_dev_num, __pyx_mstate_global->__pyx_int_0, 0, 0)); if (unlikely((__pyx_t_6 < 0))) __PYX_ERR(0, 91, __pyx_L3_error)
+        __pyx_t_6 = (__Pyx_PyLong_BoolEqObjC(__pyx_v_dev_num, __pyx_mstate_global->__pyx_int_0, 0, 0)); if (unlikely((__pyx_t_6 < 0))) __PYX_ERR(0, 96, __pyx_L3_error)
         if (__pyx_t_6) {
 
-          /* "src/device/daheng_device.py":92
+          /* "src/device/daheng_device.py":97
  *                 dev_num, dev_info_list = self._device_manager.update_all_device_list()
  *                 if dev_num == 0:
  *                     self._last_error = "No Daheng cameras found"             # <<<<<<<<<<<<<<
  *                     logger.error(self._last_error)
  *                     return False
 */
-          if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_mstate_global->__pyx_kp_u_No_Daheng_cameras_found) < (0)) __PYX_ERR(0, 92, __pyx_L3_error)
+          if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_mstate_global->__pyx_kp_u_No_Daheng_cameras_found) < (0)) __PYX_ERR(0, 97, __pyx_L3_error)
 
-          /* "src/device/daheng_device.py":93
+          /* "src/device/daheng_device.py":98
  *                 if dev_num == 0:
  *                     self._last_error = "No Daheng cameras found"
  *                     logger.error(self._last_error)             # <<<<<<<<<<<<<<
@@ -4356,12 +4462,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
  *                 self._sn = dev_info_list[0].get("sn", "")
 */
           __pyx_t_7 = NULL;
-          __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 93, __pyx_L3_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 98, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 93, __pyx_L3_error)
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 98, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 93, __pyx_L3_error)
+          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 98, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_8);
           __pyx_t_9 = 1;
           #if CYTHON_UNPACK_METHODS
@@ -4381,12 +4487,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
             __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 93, __pyx_L3_error)
+            if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 98, __pyx_L3_error)
             __Pyx_GOTREF(__pyx_t_4);
           }
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-          /* "src/device/daheng_device.py":94
+          /* "src/device/daheng_device.py":99
  *                     self._last_error = "No Daheng cameras found"
  *                     logger.error(self._last_error)
  *                     return False             # <<<<<<<<<<<<<<
@@ -4398,7 +4504,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
           __pyx_r = Py_False;
           goto __pyx_L7_try_return;
 
-          /* "src/device/daheng_device.py":91
+          /* "src/device/daheng_device.py":96
  *             if not self._sn:
  *                 dev_num, dev_info_list = self._device_manager.update_all_device_list()
  *                 if dev_num == 0:             # <<<<<<<<<<<<<<
@@ -4407,25 +4513,25 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
 */
         }
 
-        /* "src/device/daheng_device.py":95
+        /* "src/device/daheng_device.py":100
  *                     logger.error(self._last_error)
  *                     return False
  *                 self._sn = dev_info_list[0].get("sn", "")             # <<<<<<<<<<<<<<
  *                 logger.info("Auto-detected camera SN: %s", self._sn)
  * 
 */
-        __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_dev_info_list, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 95, __pyx_L3_error)
+        __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_dev_info_list, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_get); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 95, __pyx_L3_error)
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_get); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 100, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_mstate_global->__pyx_tuple[1], NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 95, __pyx_L3_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_mstate_global->__pyx_tuple[2], NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn, __pyx_t_4) < (0)) __PYX_ERR(0, 95, __pyx_L3_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn, __pyx_t_4) < (0)) __PYX_ERR(0, 100, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "src/device/daheng_device.py":96
+        /* "src/device/daheng_device.py":101
  *                     return False
  *                 self._sn = dev_info_list[0].get("sn", "")
  *                 logger.info("Auto-detected camera SN: %s", self._sn)             # <<<<<<<<<<<<<<
@@ -4433,12 +4539,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
  *             self._camera = self._device_manager.open_device_by_sn(self._sn)
 */
         __pyx_t_10 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 96, __pyx_L3_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 101, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 96, __pyx_L3_error)
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 96, __pyx_L3_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 101, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_8);
         __pyx_t_9 = 1;
         #if CYTHON_UNPACK_METHODS
@@ -4458,12 +4564,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
           __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 96, __pyx_L3_error)
+          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 101, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_4);
         }
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "src/device/daheng_device.py":89
+        /* "src/device/daheng_device.py":94
  *             self._last_error = ""
  *             # Auto-detect if no serial number given
  *             if not self._sn:             # <<<<<<<<<<<<<<
@@ -4472,18 +4578,18 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
 */
       }
 
-      /* "src/device/daheng_device.py":98
+      /* "src/device/daheng_device.py":103
  *                 logger.info("Auto-detected camera SN: %s", self._sn)
  * 
  *             self._camera = self._device_manager.open_device_by_sn(self._sn)             # <<<<<<<<<<<<<<
  *             self._remote_feature = self._camera.get_remote_device_feature_control()
  *             self._data_stream = self._camera.data_stream[0]
 */
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_device_manager); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 98, __pyx_L3_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_device_manager); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 103, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_7 = __pyx_t_8;
       __Pyx_INCREF(__pyx_t_7);
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 98, __pyx_L3_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 103, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_9 = 0;
       {
@@ -4492,20 +4598,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 98, __pyx_L3_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 103, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
       }
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera, __pyx_t_4) < (0)) __PYX_ERR(0, 98, __pyx_L3_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera, __pyx_t_4) < (0)) __PYX_ERR(0, 103, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":99
+      /* "src/device/daheng_device.py":104
  * 
  *             self._camera = self._device_manager.open_device_by_sn(self._sn)
  *             self._remote_feature = self._camera.get_remote_device_feature_control()             # <<<<<<<<<<<<<<
  *             self._data_stream = self._camera.data_stream[0]
  * 
 */
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 99, __pyx_L3_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 104, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_8 = __pyx_t_10;
       __Pyx_INCREF(__pyx_t_8);
@@ -4515,31 +4621,31 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_remote_device_feature_contro, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L3_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 104, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
       }
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature, __pyx_t_4) < (0)) __PYX_ERR(0, 99, __pyx_L3_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature, __pyx_t_4) < (0)) __PYX_ERR(0, 104, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":100
+      /* "src/device/daheng_device.py":105
  *             self._camera = self._device_manager.open_device_by_sn(self._sn)
  *             self._remote_feature = self._camera.get_remote_device_feature_control()
  *             self._data_stream = self._camera.data_stream[0]             # <<<<<<<<<<<<<<
  * 
  *             # Select the sensor ADC depth when the camera exposes that
 */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_data_stream_2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 100, __pyx_L3_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_data_stream_2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 105, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_10, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_10, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_data_stream, __pyx_t_4) < (0)) __PYX_ERR(0, 100, __pyx_L3_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_data_stream, __pyx_t_4) < (0)) __PYX_ERR(0, 105, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":104
+      /* "src/device/daheng_device.py":109
  *             # Select the sensor ADC depth when the camera exposes that
  *             # feature, then select the matching wire pixel format.
  *             self._apply_sensor_bit_depth()             # <<<<<<<<<<<<<<
@@ -4553,12 +4659,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         PyObject *__pyx_callargs[2] = {__pyx_t_10, NULL};
         __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_apply_sensor_bit_depth, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 104, __pyx_L3_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 109, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":108
+      /* "src/device/daheng_device.py":113
  *             # camera's persisted/user-set format, because the frame parser and
  *             # downstream storage are configured for unpacked Mono12 samples.
  *             self._apply_pixel_format(DEFAULT_PIXEL_FORMAT)             # <<<<<<<<<<<<<<
@@ -4567,7 +4673,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
 */
       __pyx_t_10 = __pyx_v_self;
       __Pyx_INCREF(__pyx_t_10);
-      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 108, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 113, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_9 = 0;
       {
@@ -4575,32 +4681,32 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_apply_pixel_format, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 108, __pyx_L3_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":111
+      /* "src/device/daheng_device.py":116
  *             # Binning changes Width, Height, and consequently PayloadSize.  It
  *             # must therefore be configured and read back before acquisition.
  *             self._apply_binning(*self._binning)             # <<<<<<<<<<<<<<
  * 
  *             # Set payload size for GigE cameras (critical for proper data transfer)
 */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_apply_binning); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 111, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_apply_binning); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 116, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 111, __pyx_L3_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 116, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_10 = __Pyx_PySequence_Tuple(__pyx_t_8); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 111, __pyx_L3_error)
+      __pyx_t_10 = __Pyx_PySequence_Tuple(__pyx_t_8); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 116, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 111, __pyx_L3_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 116, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-      /* "src/device/daheng_device.py":114
+      /* "src/device/daheng_device.py":119
  * 
  *             # Set payload size for GigE cameras (critical for proper data transfer)
  *             try:             # <<<<<<<<<<<<<<
@@ -4616,14 +4722,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __Pyx_XGOTREF(__pyx_t_14);
         /*try:*/ {
 
-          /* "src/device/daheng_device.py":115
+          /* "src/device/daheng_device.py":120
  *             # Set payload size for GigE cameras (critical for proper data transfer)
  *             try:
  *                 payload_size = self._remote_feature.get_int_feature("PayloadSize").get()             # <<<<<<<<<<<<<<
  *                 logger.info("Payload size: %d bytes", payload_size)
  *             except Exception as e:
 */
-          __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 115, __pyx_L13_error)
+          __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 120, __pyx_L13_error)
           __Pyx_GOTREF(__pyx_t_15);
           __pyx_t_7 = __pyx_t_15;
           __Pyx_INCREF(__pyx_t_7);
@@ -4633,7 +4739,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
             __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_int_feature, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
             __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-            if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L13_error)
+            if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L13_error)
             __Pyx_GOTREF(__pyx_t_4);
           }
           __pyx_t_10 = __pyx_t_4;
@@ -4644,13 +4750,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
             __pyx_t_8 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 115, __pyx_L13_error)
+            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 120, __pyx_L13_error)
             __Pyx_GOTREF(__pyx_t_8);
           }
           __pyx_v_payload_size = __pyx_t_8;
           __pyx_t_8 = 0;
 
-          /* "src/device/daheng_device.py":116
+          /* "src/device/daheng_device.py":121
  *             try:
  *                 payload_size = self._remote_feature.get_int_feature("PayloadSize").get()
  *                 logger.info("Payload size: %d bytes", payload_size)             # <<<<<<<<<<<<<<
@@ -4658,9 +4764,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
  *                 logger.warning("Could not read PayloadSize (may not be GigE camera): %s", e)
 */
           __pyx_t_4 = NULL;
-          __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 116, __pyx_L13_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 121, __pyx_L13_error)
           __Pyx_GOTREF(__pyx_t_10);
-          __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 116, __pyx_L13_error)
+          __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 121, __pyx_L13_error)
           __Pyx_GOTREF(__pyx_t_15);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           __pyx_t_9 = 1;
@@ -4680,12 +4786,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
             __pyx_t_8 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_15, __pyx_callargs+__pyx_t_9, (3-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
             __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 116, __pyx_L13_error)
+            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 121, __pyx_L13_error)
             __Pyx_GOTREF(__pyx_t_8);
           }
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-          /* "src/device/daheng_device.py":114
+          /* "src/device/daheng_device.py":119
  * 
  *             # Set payload size for GigE cameras (critical for proper data transfer)
  *             try:             # <<<<<<<<<<<<<<
@@ -4704,7 +4810,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-        /* "src/device/daheng_device.py":117
+        /* "src/device/daheng_device.py":122
  *                 payload_size = self._remote_feature.get_int_feature("PayloadSize").get()
  *                 logger.info("Payload size: %d bytes", payload_size)
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -4714,7 +4820,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __pyx_t_16 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
         if (__pyx_t_16) {
           __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.initialize", __pyx_clineno, __pyx_lineno, __pyx_filename);
-          if (__Pyx_GetException(&__pyx_t_8, &__pyx_t_15, &__pyx_t_4) < 0) __PYX_ERR(0, 117, __pyx_L15_except_error)
+          if (__Pyx_GetException(&__pyx_t_8, &__pyx_t_15, &__pyx_t_4) < 0) __PYX_ERR(0, 122, __pyx_L15_except_error)
           __Pyx_XGOTREF(__pyx_t_8);
           __Pyx_XGOTREF(__pyx_t_15);
           __Pyx_XGOTREF(__pyx_t_4);
@@ -4722,7 +4828,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
           __pyx_v_e = __pyx_t_15;
           /*try:*/ {
 
-            /* "src/device/daheng_device.py":118
+            /* "src/device/daheng_device.py":123
  *                 logger.info("Payload size: %d bytes", payload_size)
  *             except Exception as e:
  *                 logger.warning("Could not read PayloadSize (may not be GigE camera): %s", e)             # <<<<<<<<<<<<<<
@@ -4730,9 +4836,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
  *             # Set exposure
 */
             __pyx_t_7 = NULL;
-            __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 118, __pyx_L24_error)
+            __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 123, __pyx_L24_error)
             __Pyx_GOTREF(__pyx_t_17);
-            __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 118, __pyx_L24_error)
+            __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 123, __pyx_L24_error)
             __Pyx_GOTREF(__pyx_t_18);
             __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
             __pyx_t_9 = 1;
@@ -4752,13 +4858,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
               __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_18, __pyx_callargs+__pyx_t_9, (3-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
               __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
               __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-              if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 118, __pyx_L24_error)
+              if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 123, __pyx_L24_error)
               __Pyx_GOTREF(__pyx_t_10);
             }
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           }
 
-          /* "src/device/daheng_device.py":117
+          /* "src/device/daheng_device.py":122
  *                 payload_size = self._remote_feature.get_int_feature("PayloadSize").get()
  *                 logger.info("Payload size: %d bytes", payload_size)
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -4812,7 +4918,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         }
         goto __pyx_L15_except_error;
 
-        /* "src/device/daheng_device.py":114
+        /* "src/device/daheng_device.py":119
  * 
  *             # Set payload size for GigE cameras (critical for proper data transfer)
  *             try:             # <<<<<<<<<<<<<<
@@ -4833,14 +4939,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __pyx_L18_try_end:;
       }
 
-      /* "src/device/daheng_device.py":121
+      /* "src/device/daheng_device.py":126
  * 
  *             # Set exposure
  *             self._remote_feature.get_float_feature("ExposureTime").set(self._exposure_us)             # <<<<<<<<<<<<<<
  * 
  *             # Set gain
 */
-      __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 121, __pyx_L3_error)
+      __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 126, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_18);
       __pyx_t_10 = __pyx_t_18;
       __Pyx_INCREF(__pyx_t_10);
@@ -4850,12 +4956,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __pyx_t_8 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_float_feature, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-        if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 121, __pyx_L3_error)
+        if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 126, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_8);
       }
       __pyx_t_15 = __pyx_t_8;
       __Pyx_INCREF(__pyx_t_15);
-      __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_exposure_us); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 121, __pyx_L3_error)
+      __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_exposure_us); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 126, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_18);
       __pyx_t_9 = 0;
       {
@@ -4864,19 +4970,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
         __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 121, __pyx_L3_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 126, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":124
+      /* "src/device/daheng_device.py":129
  * 
  *             # Set gain
  *             self._remote_feature.get_float_feature("Gain").set(self._gain_db)             # <<<<<<<<<<<<<<
  * 
- *             # Software trigger mode
+ *             # Frame-rate control is configured while acquisition is stopped.
 */
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 124, __pyx_L3_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 129, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_15 = __pyx_t_10;
       __Pyx_INCREF(__pyx_t_15);
@@ -4886,12 +4992,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __pyx_t_18 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_float_feature, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 124, __pyx_L3_error)
+        if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 129, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_18);
       }
       __pyx_t_8 = __pyx_t_18;
       __Pyx_INCREF(__pyx_t_8);
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 124, __pyx_L3_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 129, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_9 = 0;
       {
@@ -4900,108 +5006,130 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 124, __pyx_L3_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 129, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":127
+      /* "src/device/daheng_device.py":134
+ *             # The camera's valid range depends on exposure, binning and pixel
+ *             # format, so it is read back here after those nodes are applied.
+ *             self._apply_frame_rate(self._frame_rate_fps)             # <<<<<<<<<<<<<<
+ * 
+ *             # Software trigger mode
+*/
+      __pyx_t_18 = __pyx_v_self;
+      __Pyx_INCREF(__pyx_t_18);
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_fps); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 134, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_10);
+      __pyx_t_9 = 0;
+      {
+        PyObject *__pyx_callargs[2] = {__pyx_t_18, __pyx_t_10};
+        __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_apply_frame_rate, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 134, __pyx_L3_error)
+        __Pyx_GOTREF(__pyx_t_4);
+      }
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+      /* "src/device/daheng_device.py":137
  * 
  *             # Software trigger mode
  *             self._remote_feature.get_enum_feature("TriggerMode").set("On")             # <<<<<<<<<<<<<<
  *             self._remote_feature.get_enum_feature("TriggerSource").set("Software")
  *             self._trigger_cmd = self._remote_feature.get_command_feature("TriggerSoftware")
 */
-      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 127, __pyx_L3_error)
+      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 137, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_15);
       __pyx_t_8 = __pyx_t_15;
       __Pyx_INCREF(__pyx_t_8);
       __pyx_t_9 = 0;
       {
         PyObject *__pyx_callargs[2] = {__pyx_t_8, __pyx_mstate_global->__pyx_n_u_TriggerMode};
-        __pyx_t_10 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_enum_feature, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __pyx_t_18 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_enum_feature, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-        if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 127, __pyx_L3_error)
-        __Pyx_GOTREF(__pyx_t_10);
-      }
-      __pyx_t_18 = __pyx_t_10;
-      __Pyx_INCREF(__pyx_t_18);
-      __pyx_t_9 = 0;
-      {
-        PyObject *__pyx_callargs[2] = {__pyx_t_18, __pyx_mstate_global->__pyx_n_u_On};
-        __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_set, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
-        __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 127, __pyx_L3_error)
-        __Pyx_GOTREF(__pyx_t_4);
-      }
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-      /* "src/device/daheng_device.py":128
- *             # Software trigger mode
- *             self._remote_feature.get_enum_feature("TriggerMode").set("On")
- *             self._remote_feature.get_enum_feature("TriggerSource").set("Software")             # <<<<<<<<<<<<<<
- *             self._trigger_cmd = self._remote_feature.get_command_feature("TriggerSoftware")
- * 
-*/
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 128, __pyx_L3_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_15 = __pyx_t_8;
-      __Pyx_INCREF(__pyx_t_15);
-      __pyx_t_9 = 0;
-      {
-        PyObject *__pyx_callargs[2] = {__pyx_t_15, __pyx_mstate_global->__pyx_n_u_TriggerSource};
-        __pyx_t_18 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_enum_feature, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
-        __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 128, __pyx_L3_error)
+        if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 137, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_18);
       }
       __pyx_t_10 = __pyx_t_18;
       __Pyx_INCREF(__pyx_t_10);
       __pyx_t_9 = 0;
       {
-        PyObject *__pyx_callargs[2] = {__pyx_t_10, __pyx_mstate_global->__pyx_n_u_Software};
+        PyObject *__pyx_callargs[2] = {__pyx_t_10, __pyx_mstate_global->__pyx_n_u_On};
         __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_set, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 128, __pyx_L3_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 137, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":129
+      /* "src/device/daheng_device.py":138
+ *             # Software trigger mode
+ *             self._remote_feature.get_enum_feature("TriggerMode").set("On")
+ *             self._remote_feature.get_enum_feature("TriggerSource").set("Software")             # <<<<<<<<<<<<<<
+ *             self._trigger_cmd = self._remote_feature.get_command_feature("TriggerSoftware")
+ * 
+*/
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 138, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_15 = __pyx_t_8;
+      __Pyx_INCREF(__pyx_t_15);
+      __pyx_t_9 = 0;
+      {
+        PyObject *__pyx_callargs[2] = {__pyx_t_15, __pyx_mstate_global->__pyx_n_u_TriggerSource};
+        __pyx_t_10 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_enum_feature, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 138, __pyx_L3_error)
+        __Pyx_GOTREF(__pyx_t_10);
+      }
+      __pyx_t_18 = __pyx_t_10;
+      __Pyx_INCREF(__pyx_t_18);
+      __pyx_t_9 = 0;
+      {
+        PyObject *__pyx_callargs[2] = {__pyx_t_18, __pyx_mstate_global->__pyx_n_u_Software};
+        __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_set, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 138, __pyx_L3_error)
+        __Pyx_GOTREF(__pyx_t_4);
+      }
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+      /* "src/device/daheng_device.py":139
  *             self._remote_feature.get_enum_feature("TriggerMode").set("On")
  *             self._remote_feature.get_enum_feature("TriggerSource").set("Software")
  *             self._trigger_cmd = self._remote_feature.get_command_feature("TriggerSoftware")             # <<<<<<<<<<<<<<
  * 
  *             rows, cols = self._frame_shape
 */
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 129, __pyx_L3_error)
-      __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_18 = __pyx_t_10;
-      __Pyx_INCREF(__pyx_t_18);
+      __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 139, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_18);
+      __pyx_t_10 = __pyx_t_18;
+      __Pyx_INCREF(__pyx_t_10);
       __pyx_t_9 = 0;
       {
-        PyObject *__pyx_callargs[2] = {__pyx_t_18, __pyx_mstate_global->__pyx_n_u_TriggerSoftware};
+        PyObject *__pyx_callargs[2] = {__pyx_t_10, __pyx_mstate_global->__pyx_n_u_TriggerSoftware};
         __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_command_feature, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
-        __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 129, __pyx_L3_error)
+        __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 139, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
       }
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd, __pyx_t_4) < (0)) __PYX_ERR(0, 129, __pyx_L3_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd, __pyx_t_4) < (0)) __PYX_ERR(0, 139, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":131
+      /* "src/device/daheng_device.py":141
  *             self._trigger_cmd = self._remote_feature.get_command_feature("TriggerSoftware")
  * 
  *             rows, cols = self._frame_shape             # <<<<<<<<<<<<<<
  *             logger.info(
  *                 "DahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%d",
 */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 131, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 141, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       if ((likely(PyTuple_CheckExact(__pyx_t_4))) || (PyList_CheckExact(__pyx_t_4))) {
         PyObject* sequence = __pyx_t_4;
@@ -5009,40 +5137,40 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 131, __pyx_L3_error)
+          __PYX_ERR(0, 141, __pyx_L3_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
-          __pyx_t_10 = PyTuple_GET_ITEM(sequence, 0);
-          __Pyx_INCREF(__pyx_t_10);
-          __pyx_t_18 = PyTuple_GET_ITEM(sequence, 1);
+          __pyx_t_18 = PyTuple_GET_ITEM(sequence, 0);
           __Pyx_INCREF(__pyx_t_18);
+          __pyx_t_10 = PyTuple_GET_ITEM(sequence, 1);
+          __Pyx_INCREF(__pyx_t_10);
         } else {
-          __pyx_t_10 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 131, __pyx_L3_error)
-          __Pyx_XGOTREF(__pyx_t_10);
-          __pyx_t_18 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-          if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 131, __pyx_L3_error)
+          __pyx_t_18 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
+          if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 141, __pyx_L3_error)
           __Pyx_XGOTREF(__pyx_t_18);
+          __pyx_t_10 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
+          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 141, __pyx_L3_error)
+          __Pyx_XGOTREF(__pyx_t_10);
         }
         #else
-        __pyx_t_10 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 131, __pyx_L3_error)
-        __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_18 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 131, __pyx_L3_error)
+        __pyx_t_18 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 141, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_18);
+        __pyx_t_10 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 141, __pyx_L3_error)
+        __Pyx_GOTREF(__pyx_t_10);
         #endif
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_8 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 131, __pyx_L3_error)
+        __pyx_t_8 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 141, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __pyx_t_11 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_8);
-        index = 0; __pyx_t_10 = __pyx_t_11(__pyx_t_8); if (unlikely(!__pyx_t_10)) goto __pyx_L30_unpacking_failed;
-        __Pyx_GOTREF(__pyx_t_10);
-        index = 1; __pyx_t_18 = __pyx_t_11(__pyx_t_8); if (unlikely(!__pyx_t_18)) goto __pyx_L30_unpacking_failed;
+        index = 0; __pyx_t_18 = __pyx_t_11(__pyx_t_8); if (unlikely(!__pyx_t_18)) goto __pyx_L30_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_18);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_8), 2) < (0)) __PYX_ERR(0, 131, __pyx_L3_error)
+        index = 1; __pyx_t_10 = __pyx_t_11(__pyx_t_8); if (unlikely(!__pyx_t_10)) goto __pyx_L30_unpacking_failed;
+        __Pyx_GOTREF(__pyx_t_10);
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_8), 2) < (0)) __PYX_ERR(0, 141, __pyx_L3_error)
         __pyx_t_11 = NULL;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         goto __pyx_L31_unpacking_done;
@@ -5050,112 +5178,112 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_t_11 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 131, __pyx_L3_error)
+        __PYX_ERR(0, 141, __pyx_L3_error)
         __pyx_L31_unpacking_done:;
       }
-      __pyx_v_rows = __pyx_t_10;
-      __pyx_t_10 = 0;
-      __pyx_v_cols = __pyx_t_18;
+      __pyx_v_rows = __pyx_t_18;
       __pyx_t_18 = 0;
+      __pyx_v_cols = __pyx_t_10;
+      __pyx_t_10 = 0;
 
-      /* "src/device/daheng_device.py":132
+      /* "src/device/daheng_device.py":142
  * 
  *             rows, cols = self._frame_shape
  *             logger.info(             # <<<<<<<<<<<<<<
  *                 "DahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%d",
  *                 self._sn,
 */
-      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 132, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 142, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 132, __pyx_L3_error)
-      __Pyx_GOTREF(__pyx_t_18);
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 142, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":134
+      /* "src/device/daheng_device.py":144
  *             logger.info(
  *                 "DahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%d",
  *                 self._sn,             # <<<<<<<<<<<<<<
  *                 *self._binning,
  *                 cols,
 */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 134, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_sn); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 144, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
 
-      /* "src/device/daheng_device.py":132
+      /* "src/device/daheng_device.py":142
  * 
  *             rows, cols = self._frame_shape
  *             logger.info(             # <<<<<<<<<<<<<<
  *                 "DahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%d",
  *                 self._sn,
 */
-      __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 132, __pyx_L3_error)
-      __Pyx_GOTREF(__pyx_t_10);
+      __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 142, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_18);
       __Pyx_INCREF(__pyx_mstate_global->__pyx_kp_u_DahengDevice_initialized_SN_s_bi);
       __Pyx_GIVEREF(__pyx_mstate_global->__pyx_kp_u_DahengDevice_initialized_SN_s_bi);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_mstate_global->__pyx_kp_u_DahengDevice_initialized_SN_s_bi) != (0)) __PYX_ERR(0, 132, __pyx_L3_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_mstate_global->__pyx_kp_u_DahengDevice_initialized_SN_s_bi) != (0)) __PYX_ERR(0, 142, __pyx_L3_error);
       __Pyx_GIVEREF(__pyx_t_4);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_t_4) != (0)) __PYX_ERR(0, 132, __pyx_L3_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_t_4) != (0)) __PYX_ERR(0, 142, __pyx_L3_error);
       __pyx_t_4 = 0;
 
-      /* "src/device/daheng_device.py":135
+      /* "src/device/daheng_device.py":145
  *                 "DahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%d",
  *                 self._sn,
  *                 *self._binning,             # <<<<<<<<<<<<<<
  *                 cols,
  *                 rows,
 */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 135, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 145, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
 
-      /* "src/device/daheng_device.py":132
+      /* "src/device/daheng_device.py":142
  * 
  *             rows, cols = self._frame_shape
  *             logger.info(             # <<<<<<<<<<<<<<
  *                 "DahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%d",
  *                 self._sn,
 */
-      __pyx_t_8 = __Pyx_PySequence_Tuple(__pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 132, __pyx_L3_error)
+      __pyx_t_8 = __Pyx_PySequence_Tuple(__pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 142, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_10, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 132, __pyx_L3_error)
+      __pyx_t_4 = PyNumber_Add(__pyx_t_18, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 142, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+      __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-      /* "src/device/daheng_device.py":137
+      /* "src/device/daheng_device.py":147
  *                 *self._binning,
  *                 cols,
  *                 rows,             # <<<<<<<<<<<<<<
  *             )
  *             return True
 */
-      __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 132, __pyx_L3_error)
+      __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 142, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_INCREF(__pyx_v_cols);
       __Pyx_GIVEREF(__pyx_v_cols);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_v_cols) != (0)) __PYX_ERR(0, 132, __pyx_L3_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_v_cols) != (0)) __PYX_ERR(0, 142, __pyx_L3_error);
       __Pyx_INCREF(__pyx_v_rows);
       __Pyx_GIVEREF(__pyx_v_rows);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_v_rows) != (0)) __PYX_ERR(0, 132, __pyx_L3_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_v_rows) != (0)) __PYX_ERR(0, 142, __pyx_L3_error);
 
-      /* "src/device/daheng_device.py":132
+      /* "src/device/daheng_device.py":142
  * 
  *             rows, cols = self._frame_shape
  *             logger.info(             # <<<<<<<<<<<<<<
  *                 "DahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%d",
  *                 self._sn,
 */
-      __pyx_t_10 = PyNumber_Add(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 132, __pyx_L3_error)
-      __Pyx_GOTREF(__pyx_t_10);
+      __pyx_t_18 = PyNumber_Add(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 142, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_18);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_18, __pyx_t_10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 132, __pyx_L3_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_18, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 142, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+      __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-      /* "src/device/daheng_device.py":139
+      /* "src/device/daheng_device.py":149
  *                 rows,
  *             )
  *             return True             # <<<<<<<<<<<<<<
@@ -5167,7 +5295,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
       __pyx_r = Py_True;
       goto __pyx_L7_try_return;
 
-      /* "src/device/daheng_device.py":86
+      /* "src/device/daheng_device.py":91
  * 
  *     def initialize(self) -> bool:
  *         try:             # <<<<<<<<<<<<<<
@@ -5184,7 +5312,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "src/device/daheng_device.py":141
+    /* "src/device/daheng_device.py":151
  *             return True
  * 
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -5194,27 +5322,27 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
     __pyx_t_19 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_19) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.initialize", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_8, &__pyx_t_10, &__pyx_t_18) < 0) __PYX_ERR(0, 141, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_8, &__pyx_t_18, &__pyx_t_10) < 0) __PYX_ERR(0, 151, __pyx_L5_except_error)
       __Pyx_XGOTREF(__pyx_t_8);
-      __Pyx_XGOTREF(__pyx_t_10);
       __Pyx_XGOTREF(__pyx_t_18);
-      __Pyx_INCREF(__pyx_t_10);
-      __Pyx_XDECREF_SET(__pyx_v_e, __pyx_t_10);
+      __Pyx_XGOTREF(__pyx_t_10);
+      __Pyx_INCREF(__pyx_t_18);
+      __Pyx_XDECREF_SET(__pyx_v_e, __pyx_t_18);
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":142
+        /* "src/device/daheng_device.py":152
  * 
  *         except Exception as e:
  *             self._last_error = str(e)             # <<<<<<<<<<<<<<
  *             logger.error("DahengDevice initialization failed: %s", e)
  *             return False
 */
-        __pyx_t_4 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 142, __pyx_L37_error)
+        __pyx_t_4 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 152, __pyx_L37_error)
         __Pyx_GOTREF(__pyx_t_4);
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_4) < (0)) __PYX_ERR(0, 142, __pyx_L37_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_4) < (0)) __PYX_ERR(0, 152, __pyx_L37_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "src/device/daheng_device.py":143
+        /* "src/device/daheng_device.py":153
  *         except Exception as e:
  *             self._last_error = str(e)
  *             logger.error("DahengDevice initialization failed: %s", e)             # <<<<<<<<<<<<<<
@@ -5222,9 +5350,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
  * 
 */
         __pyx_t_15 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 143, __pyx_L37_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 153, __pyx_L37_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 143, __pyx_L37_error)
+        __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 153, __pyx_L37_error)
         __Pyx_GOTREF(__pyx_t_17);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __pyx_t_9 = 1;
@@ -5244,12 +5372,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
           __pyx_t_4 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_17, __pyx_callargs+__pyx_t_9, (3-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
           __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L37_error)
+          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 153, __pyx_L37_error)
           __Pyx_GOTREF(__pyx_t_4);
         }
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "src/device/daheng_device.py":144
+        /* "src/device/daheng_device.py":154
  *             self._last_error = str(e)
  *             logger.error("DahengDevice initialization failed: %s", e)
  *             return False             # <<<<<<<<<<<<<<
@@ -5265,7 +5393,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
         goto __pyx_L36_return;
       }
 
-      /* "src/device/daheng_device.py":141
+      /* "src/device/daheng_device.py":151
  *             return True
  * 
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -5318,7 +5446,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
     }
     goto __pyx_L5_except_error;
 
-    /* "src/device/daheng_device.py":86
+    /* "src/device/daheng_device.py":91
  * 
  *     def initialize(self) -> bool:
  *         try:             # <<<<<<<<<<<<<<
@@ -5345,7 +5473,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
     goto __pyx_L0;
   }
 
-  /* "src/device/daheng_device.py":85
+  /* "src/device/daheng_device.py":90
  *         self._last_error: str = ""
  * 
  *     def initialize(self) -> bool:             # <<<<<<<<<<<<<<
@@ -5376,7 +5504,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_2initializ
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":146
+/* "src/device/daheng_device.py":156
  *             return False
  * 
  *     @property             # <<<<<<<<<<<<<<
@@ -5423,32 +5551,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 146, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 156, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 146, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 156, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "last_error", 0) < (0)) __PYX_ERR(0, 146, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "last_error", 0) < (0)) __PYX_ERR(0, 156, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("last_error", 1, 1, 1, i); __PYX_ERR(0, 146, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("last_error", 1, 1, 1, i); __PYX_ERR(0, 156, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 146, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 156, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("last_error", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 146, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("last_error", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 156, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -5478,7 +5606,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_4last_erro
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("last_error", 0);
 
-  /* "src/device/daheng_device.py":148
+  /* "src/device/daheng_device.py":158
  *     @property
  *     def last_error(self) -> str:
  *         return self._last_error             # <<<<<<<<<<<<<<
@@ -5486,14 +5614,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_4last_erro
  *     def start(self) -> None:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 148, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(PyUnicode_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("str", __pyx_t_1))) __PYX_ERR(0, 148, __pyx_L1_error)
+  if (!(likely(PyUnicode_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("str", __pyx_t_1))) __PYX_ERR(0, 158, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":146
+  /* "src/device/daheng_device.py":156
  *             return False
  * 
  *     @property             # <<<<<<<<<<<<<<
@@ -5512,7 +5640,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_4last_erro
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":150
+/* "src/device/daheng_device.py":160
  *         return self._last_error
  * 
  *     def start(self) -> None:             # <<<<<<<<<<<<<<
@@ -5559,32 +5687,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 150, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 160, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 150, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 160, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "start", 0) < (0)) __PYX_ERR(0, 150, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "start", 0) < (0)) __PYX_ERR(0, 160, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("start", 1, 1, 1, i); __PYX_ERR(0, 150, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("start", 1, 1, 1, i); __PYX_ERR(0, 160, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 150, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 160, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("start", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 150, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("start", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 160, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -5605,7 +5733,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":171
+/* "src/device/daheng_device.py":181
  *         # so wrap in a lambda like the reference example does.
  *         self._data_stream.register_capture_callback(
  *             lambda raw_image: self._capture_callback(raw_image))             # <<<<<<<<<<<<<<
@@ -5652,32 +5780,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_raw_image,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 171, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 181, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 171, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 181, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "lambda", 0) < (0)) __PYX_ERR(0, 171, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "lambda", 0) < (0)) __PYX_ERR(0, 181, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("lambda", 1, 1, 1, i); __PYX_ERR(0, 171, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("lambda", 1, 1, 1, i); __PYX_ERR(0, 181, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 171, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 181, __pyx_L3_error)
     }
     __pyx_v_raw_image = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("lambda", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 171, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("lambda", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 181, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -5713,7 +5841,7 @@ static PyObject *__pyx_lambda_funcdef_lambda(PyObject *__pyx_self, PyObject *__p
   __pyx_outer_scope = (struct __pyx_obj_3src_6device_13daheng_device___pyx_scope_struct__start *) __Pyx_CyFunction_GetClosure(__pyx_self);
   __pyx_cur_scope = __pyx_outer_scope;
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_cur_scope->__pyx_v_self)) { __Pyx_RaiseClosureNameError("self"); __PYX_ERR(0, 171, __pyx_L1_error) }
+  if (unlikely(!__pyx_cur_scope->__pyx_v_self)) { __Pyx_RaiseClosureNameError("self"); __PYX_ERR(0, 181, __pyx_L1_error) }
   __pyx_t_2 = __pyx_cur_scope->__pyx_v_self;
   __Pyx_INCREF(__pyx_t_2);
   __pyx_t_3 = 0;
@@ -5721,7 +5849,7 @@ static PyObject *__pyx_lambda_funcdef_lambda(PyObject *__pyx_self, PyObject *__p
     PyObject *__pyx_callargs[2] = {__pyx_t_2, __pyx_v_raw_image};
     __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_capture_callback, __pyx_callargs+__pyx_t_3, (2-__pyx_t_3) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 181, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __pyx_r = __pyx_t_1;
@@ -5740,7 +5868,7 @@ static PyObject *__pyx_lambda_funcdef_lambda(PyObject *__pyx_self, PyObject *__p
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":150
+/* "src/device/daheng_device.py":160
  *         return self._last_error
  * 
  *     def start(self) -> None:             # <<<<<<<<<<<<<<
@@ -5782,7 +5910,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_3src_6device_13daheng_device___pyx_scope_struct__start *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 150, __pyx_L1_error)
+    __PYX_ERR(0, 160, __pyx_L1_error)
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
@@ -5790,20 +5918,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_self);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_self);
 
-  /* "src/device/daheng_device.py":151
+  /* "src/device/daheng_device.py":161
  * 
  *     def start(self) -> None:
  *         if self._camera is None:             # <<<<<<<<<<<<<<
  *             logger.error("Cannot start  device not initialized")
  *             return
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 == Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":152
+    /* "src/device/daheng_device.py":162
  *     def start(self) -> None:
  *         if self._camera is None:
  *             logger.error("Cannot start  device not initialized")             # <<<<<<<<<<<<<<
@@ -5811,9 +5939,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
  * 
 */
     __pyx_t_3 = NULL;
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 162, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 162, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_6 = 1;
@@ -5833,12 +5961,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
       __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_5, __pyx_callargs+__pyx_t_6, (2-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 162, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "src/device/daheng_device.py":153
+    /* "src/device/daheng_device.py":163
  *         if self._camera is None:
  *             logger.error("Cannot start  device not initialized")
  *             return             # <<<<<<<<<<<<<<
@@ -5849,7 +5977,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "src/device/daheng_device.py":151
+    /* "src/device/daheng_device.py":161
  * 
  *     def start(self) -> None:
  *         if self._camera is None:             # <<<<<<<<<<<<<<
@@ -5858,7 +5986,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
 */
   }
 
-  /* "src/device/daheng_device.py":157
+  /* "src/device/daheng_device.py":167
  *         # Reapply/read back the pending mode immediately before stream_on() so
  *         # a change made while stopped cannot be superseded by camera state.
  *         try:             # <<<<<<<<<<<<<<
@@ -5874,27 +6002,27 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __Pyx_XGOTREF(__pyx_t_9);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":158
+      /* "src/device/daheng_device.py":168
  *         # a change made while stopped cannot be superseded by camera state.
  *         try:
  *             self._apply_binning(*self._binning)             # <<<<<<<<<<<<<<
  *         except Exception as e:
  *             self._last_error = str(e)
 */
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_apply_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L4_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_apply_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 158, __pyx_L4_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 168, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_3 = __Pyx_PySequence_Tuple(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L4_error)
+      __pyx_t_3 = __Pyx_PySequence_Tuple(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 168, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 158, __pyx_L4_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 168, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "src/device/daheng_device.py":157
+      /* "src/device/daheng_device.py":167
  *         # Reapply/read back the pending mode immediately before stream_on() so
  *         # a change made while stopped cannot be superseded by camera state.
  *         try:             # <<<<<<<<<<<<<<
@@ -5912,7 +6040,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "src/device/daheng_device.py":159
+    /* "src/device/daheng_device.py":169
  *         try:
  *             self._apply_binning(*self._binning)
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -5922,7 +6050,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __pyx_t_10 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_10) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.start", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_3, &__pyx_t_1) < 0) __PYX_ERR(0, 159, __pyx_L6_except_error)
+      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_3, &__pyx_t_1) < 0) __PYX_ERR(0, 169, __pyx_L6_except_error)
       __Pyx_XGOTREF(__pyx_t_5);
       __Pyx_XGOTREF(__pyx_t_3);
       __Pyx_XGOTREF(__pyx_t_1);
@@ -5930,19 +6058,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
       __pyx_v_e = __pyx_t_3;
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":160
+        /* "src/device/daheng_device.py":170
  *             self._apply_binning(*self._binning)
  *         except Exception as e:
  *             self._last_error = str(e)             # <<<<<<<<<<<<<<
  *             logger.error("Cannot start acquisition; binning configuration failed: %s", e)
  *             return
 */
-        __pyx_t_4 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 160, __pyx_L15_error)
+        __pyx_t_4 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 170, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_4);
-        if (__Pyx_PyObject_SetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_4) < (0)) __PYX_ERR(0, 160, __pyx_L15_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_4) < (0)) __PYX_ERR(0, 170, __pyx_L15_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "src/device/daheng_device.py":161
+        /* "src/device/daheng_device.py":171
  *         except Exception as e:
  *             self._last_error = str(e)
  *             logger.error("Cannot start acquisition; binning configuration failed: %s", e)             # <<<<<<<<<<<<<<
@@ -5950,9 +6078,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
  * 
 */
         __pyx_t_11 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 161, __pyx_L15_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 171, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_12);
-        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 161, __pyx_L15_error)
+        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 171, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __pyx_t_6 = 1;
@@ -5972,12 +6100,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
           __pyx_t_4 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_6, (3-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 161, __pyx_L15_error)
+          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 171, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_4);
         }
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "src/device/daheng_device.py":162
+        /* "src/device/daheng_device.py":172
  *             self._last_error = str(e)
  *             logger.error("Cannot start acquisition; binning configuration failed: %s", e)
  *             return             # <<<<<<<<<<<<<<
@@ -5992,7 +6120,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
         goto __pyx_L14_return;
       }
 
-      /* "src/device/daheng_device.py":159
+      /* "src/device/daheng_device.py":169
  *         try:
  *             self._apply_binning(*self._binning)
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -6045,7 +6173,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     }
     goto __pyx_L6_except_error;
 
-    /* "src/device/daheng_device.py":157
+    /* "src/device/daheng_device.py":167
  *         # Reapply/read back the pending mode immediately before stream_on() so
  *         # a change made while stopped cannot be superseded by camera state.
  *         try:             # <<<<<<<<<<<<<<
@@ -6067,44 +6195,44 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __pyx_L9_try_end:;
   }
 
-  /* "src/device/daheng_device.py":164
+  /* "src/device/daheng_device.py":174
  *             return
  * 
  *         self._running = True             # <<<<<<<<<<<<<<
  *         self._frame_id_counter = 0
  * 
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running, Py_True) < (0)) __PYX_ERR(0, 164, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running, Py_True) < (0)) __PYX_ERR(0, 174, __pyx_L1_error)
 
-  /* "src/device/daheng_device.py":165
+  /* "src/device/daheng_device.py":175
  * 
  *         self._running = True
  *         self._frame_id_counter = 0             # <<<<<<<<<<<<<<
  * 
  *         # Register capture callback  emits raw mono numpy array.
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_id_counter, __pyx_mstate_global->__pyx_int_0) < (0)) __PYX_ERR(0, 165, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_id_counter, __pyx_mstate_global->__pyx_int_0) < (0)) __PYX_ERR(0, 175, __pyx_L1_error)
 
-  /* "src/device/daheng_device.py":170
+  /* "src/device/daheng_device.py":180
  *         # gxipy rejects bound methods (isinstance FunctionType check),
  *         # so wrap in a lambda like the reference example does.
  *         self._data_stream.register_capture_callback(             # <<<<<<<<<<<<<<
  *             lambda raw_image: self._capture_callback(raw_image))
  *         self._camera.stream_on()
 */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_data_stream); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 170, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_data_stream); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 180, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_3 = __pyx_t_5;
   __Pyx_INCREF(__pyx_t_3);
 
-  /* "src/device/daheng_device.py":171
+  /* "src/device/daheng_device.py":181
  *         # so wrap in a lambda like the reference example does.
  *         self._data_stream.register_capture_callback(
  *             lambda raw_image: self._capture_callback(raw_image))             # <<<<<<<<<<<<<<
  *         self._camera.stream_on()
  * 
 */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_5start_lambda, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_start_locals_lambda, ((PyObject*)__pyx_cur_scope), __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[0])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 171, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_5start_lambda, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_start_locals_lambda, ((PyObject*)__pyx_cur_scope), __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[0])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 181, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_6 = 0;
   {
@@ -6113,19 +6241,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 180, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":172
+  /* "src/device/daheng_device.py":182
  *         self._data_stream.register_capture_callback(
  *             lambda raw_image: self._capture_callback(raw_image))
  *         self._camera.stream_on()             # <<<<<<<<<<<<<<
  * 
  *         # Initial trigger to start the chain
 */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 172, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 182, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = __pyx_t_4;
   __Pyx_INCREF(__pyx_t_5);
@@ -6135,12 +6263,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_stream_on, __pyx_callargs+__pyx_t_6, (1-__pyx_t_6) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 172, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 182, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":175
+  /* "src/device/daheng_device.py":185
  * 
  *         # Initial trigger to start the chain
  *         time.sleep(0.1)             # <<<<<<<<<<<<<<
@@ -6148,9 +6276,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
  *         logger.info("DahengDevice acquisition started")
 */
   __pyx_t_4 = NULL;
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 175, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 185, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_sleep); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 175, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_sleep); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 185, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_6 = 1;
@@ -6170,19 +6298,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_3, __pyx_callargs+__pyx_t_6, (2-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 175, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":176
+  /* "src/device/daheng_device.py":186
  *         # Initial trigger to start the chain
  *         time.sleep(0.1)
  *         self._trigger_cmd.send_command()             # <<<<<<<<<<<<<<
  *         logger.info("DahengDevice acquisition started")
  * 
 */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 176, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 186, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_3 = __pyx_t_4;
   __Pyx_INCREF(__pyx_t_3);
@@ -6192,12 +6320,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_send_command, __pyx_callargs+__pyx_t_6, (1-__pyx_t_6) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 186, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":177
+  /* "src/device/daheng_device.py":187
  *         time.sleep(0.1)
  *         self._trigger_cmd.send_command()
  *         logger.info("DahengDevice acquisition started")             # <<<<<<<<<<<<<<
@@ -6205,9 +6333,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
  *     def stop(self) -> None:
 */
   __pyx_t_4 = NULL;
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 187, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 187, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_6 = 1;
@@ -6227,12 +6355,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
     __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_5, __pyx_callargs+__pyx_t_6, (2-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 177, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":150
+  /* "src/device/daheng_device.py":160
  *         return self._last_error
  * 
  *     def start(self) -> None:             # <<<<<<<<<<<<<<
@@ -6261,7 +6389,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_6start(CYT
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":179
+/* "src/device/daheng_device.py":189
  *         logger.info("DahengDevice acquisition started")
  * 
  *     def stop(self) -> None:             # <<<<<<<<<<<<<<
@@ -6308,32 +6436,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 179, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 189, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 179, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 189, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "stop", 0) < (0)) __PYX_ERR(0, 179, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "stop", 0) < (0)) __PYX_ERR(0, 189, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("stop", 1, 1, 1, i); __PYX_ERR(0, 179, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("stop", 1, 1, 1, i); __PYX_ERR(0, 189, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 179, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 189, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("stop", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 179, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("stop", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 189, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -6384,29 +6512,29 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("stop", 0);
 
-  /* "src/device/daheng_device.py":180
+  /* "src/device/daheng_device.py":190
  * 
  *     def stop(self) -> None:
  *         self._running = False             # <<<<<<<<<<<<<<
  *         if self._camera:
  *             try:
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running, Py_False) < (0)) __PYX_ERR(0, 180, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running, Py_False) < (0)) __PYX_ERR(0, 190, __pyx_L1_error)
 
-  /* "src/device/daheng_device.py":181
+  /* "src/device/daheng_device.py":191
  *     def stop(self) -> None:
  *         self._running = False
  *         if self._camera:             # <<<<<<<<<<<<<<
  *             try:
  *                 self._camera.stream_off()
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 181, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 181, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 191, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":182
+    /* "src/device/daheng_device.py":192
  *         self._running = False
  *         if self._camera:
  *             try:             # <<<<<<<<<<<<<<
@@ -6422,14 +6550,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
       __Pyx_XGOTREF(__pyx_t_5);
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":183
+        /* "src/device/daheng_device.py":193
  *         if self._camera:
  *             try:
  *                 self._camera.stream_off()             # <<<<<<<<<<<<<<
  *                 self._data_stream.unregister_capture_callback()
  *             except Exception as e:
 */
-        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 183, __pyx_L4_error)
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 193, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_7);
         __pyx_t_6 = __pyx_t_7;
         __Pyx_INCREF(__pyx_t_6);
@@ -6439,19 +6567,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
           __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_stream_off, __pyx_callargs+__pyx_t_8, (1-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 183, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 193, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":184
+        /* "src/device/daheng_device.py":194
  *             try:
  *                 self._camera.stream_off()
  *                 self._data_stream.unregister_capture_callback()             # <<<<<<<<<<<<<<
  *             except Exception as e:
  *                 logger.warning("Error stopping camera: %s", e)
 */
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_data_stream); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 184, __pyx_L4_error)
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_data_stream); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 194, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
         __pyx_t_7 = __pyx_t_6;
         __Pyx_INCREF(__pyx_t_7);
@@ -6461,12 +6589,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
           __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_unregister_capture_callback, __pyx_callargs+__pyx_t_8, (1-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 184, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 194, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":182
+        /* "src/device/daheng_device.py":192
  *         self._running = False
  *         if self._camera:
  *             try:             # <<<<<<<<<<<<<<
@@ -6483,7 +6611,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "src/device/daheng_device.py":185
+      /* "src/device/daheng_device.py":195
  *                 self._camera.stream_off()
  *                 self._data_stream.unregister_capture_callback()
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -6493,7 +6621,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
       __pyx_t_9 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
       if (__pyx_t_9) {
         __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.stop", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(0, 185, __pyx_L6_except_error)
+        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(0, 195, __pyx_L6_except_error)
         __Pyx_XGOTREF(__pyx_t_1);
         __Pyx_XGOTREF(__pyx_t_6);
         __Pyx_XGOTREF(__pyx_t_7);
@@ -6501,7 +6629,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
         __pyx_v_e = __pyx_t_6;
         /*try:*/ {
 
-          /* "src/device/daheng_device.py":186
+          /* "src/device/daheng_device.py":196
  *                 self._data_stream.unregister_capture_callback()
  *             except Exception as e:
  *                 logger.warning("Error stopping camera: %s", e)             # <<<<<<<<<<<<<<
@@ -6509,9 +6637,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
  * 
 */
           __pyx_t_11 = NULL;
-          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 186, __pyx_L15_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 196, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 186, __pyx_L15_error)
+          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 196, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __pyx_t_8 = 1;
@@ -6531,13 +6659,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
             __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_8, (3-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 186, __pyx_L15_error)
+            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 196, __pyx_L15_error)
             __Pyx_GOTREF(__pyx_t_10);
           }
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         }
 
-        /* "src/device/daheng_device.py":185
+        /* "src/device/daheng_device.py":195
  *                 self._camera.stream_off()
  *                 self._data_stream.unregister_capture_callback()
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -6591,7 +6719,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
       }
       goto __pyx_L6_except_error;
 
-      /* "src/device/daheng_device.py":182
+      /* "src/device/daheng_device.py":192
  *         self._running = False
  *         if self._camera:
  *             try:             # <<<<<<<<<<<<<<
@@ -6612,7 +6740,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
       __pyx_L9_try_end:;
     }
 
-    /* "src/device/daheng_device.py":181
+    /* "src/device/daheng_device.py":191
  *     def stop(self) -> None:
  *         self._running = False
  *         if self._camera:             # <<<<<<<<<<<<<<
@@ -6621,7 +6749,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
 */
   }
 
-  /* "src/device/daheng_device.py":187
+  /* "src/device/daheng_device.py":197
  *             except Exception as e:
  *                 logger.warning("Error stopping camera: %s", e)
  *         logger.info("DahengDevice acquisition stopped")             # <<<<<<<<<<<<<<
@@ -6629,9 +6757,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
  *     def close(self) -> None:
 */
   __pyx_t_6 = NULL;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 187, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 197, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_8 = 1;
@@ -6651,12 +6779,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
     __pyx_t_7 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_10, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 187, __pyx_L1_error)
+    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 197, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
   }
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "src/device/daheng_device.py":179
+  /* "src/device/daheng_device.py":189
  *         logger.info("DahengDevice acquisition started")
  * 
  *     def stop(self) -> None:             # <<<<<<<<<<<<<<
@@ -6684,7 +6812,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_8stop(CYTH
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":189
+/* "src/device/daheng_device.py":199
  *         logger.info("DahengDevice acquisition stopped")
  * 
  *     def close(self) -> None:             # <<<<<<<<<<<<<<
@@ -6731,32 +6859,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 189, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 199, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 189, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 199, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "close", 0) < (0)) __PYX_ERR(0, 189, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "close", 0) < (0)) __PYX_ERR(0, 199, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("close", 1, 1, 1, i); __PYX_ERR(0, 189, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("close", 1, 1, 1, i); __PYX_ERR(0, 199, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 189, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 199, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("close", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 189, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("close", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 199, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -6807,7 +6935,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("close", 0);
 
-  /* "src/device/daheng_device.py":190
+  /* "src/device/daheng_device.py":200
  * 
  *     def close(self) -> None:
  *         self.stop()             # <<<<<<<<<<<<<<
@@ -6821,25 +6949,25 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
     PyObject *__pyx_callargs[2] = {__pyx_t_2, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_stop, __pyx_callargs+__pyx_t_3, (1-__pyx_t_3) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":191
+  /* "src/device/daheng_device.py":201
  *     def close(self) -> None:
  *         self.stop()
  *         if self._camera:             # <<<<<<<<<<<<<<
  *             try:
  *                 self._camera.close_device()
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 191, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 201, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_4) {
 
-    /* "src/device/daheng_device.py":192
+    /* "src/device/daheng_device.py":202
  *         self.stop()
  *         if self._camera:
  *             try:             # <<<<<<<<<<<<<<
@@ -6855,14 +6983,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
       __Pyx_XGOTREF(__pyx_t_7);
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":193
+        /* "src/device/daheng_device.py":203
  *         if self._camera:
  *             try:
  *                 self._camera.close_device()             # <<<<<<<<<<<<<<
  *             except Exception as e:
  *                 logger.warning("Error closing device: %s", e)
 */
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 193, __pyx_L4_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 203, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_8);
         __pyx_t_2 = __pyx_t_8;
         __Pyx_INCREF(__pyx_t_2);
@@ -6872,12 +7000,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
           __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_close_device, __pyx_callargs+__pyx_t_3, (1-__pyx_t_3) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 193, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":192
+        /* "src/device/daheng_device.py":202
  *         self.stop()
  *         if self._camera:
  *             try:             # <<<<<<<<<<<<<<
@@ -6894,7 +7022,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-      /* "src/device/daheng_device.py":194
+      /* "src/device/daheng_device.py":204
  *             try:
  *                 self._camera.close_device()
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -6904,7 +7032,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
       __pyx_t_9 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
       if (__pyx_t_9) {
         __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.close", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_8, &__pyx_t_2) < 0) __PYX_ERR(0, 194, __pyx_L6_except_error)
+        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_8, &__pyx_t_2) < 0) __PYX_ERR(0, 204, __pyx_L6_except_error)
         __Pyx_XGOTREF(__pyx_t_1);
         __Pyx_XGOTREF(__pyx_t_8);
         __Pyx_XGOTREF(__pyx_t_2);
@@ -6912,7 +7040,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
         __pyx_v_e = __pyx_t_8;
         /*try:*/ {
 
-          /* "src/device/daheng_device.py":195
+          /* "src/device/daheng_device.py":205
  *                 self._camera.close_device()
  *             except Exception as e:
  *                 logger.warning("Error closing device: %s", e)             # <<<<<<<<<<<<<<
@@ -6920,9 +7048,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
  *         self._data_stream = None
 */
           __pyx_t_11 = NULL;
-          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 195, __pyx_L15_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 205, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 195, __pyx_L15_error)
+          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 205, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __pyx_t_3 = 1;
@@ -6942,13 +7070,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
             __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_3, (3-__pyx_t_3) | (__pyx_t_3*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 195, __pyx_L15_error)
+            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 205, __pyx_L15_error)
             __Pyx_GOTREF(__pyx_t_10);
           }
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         }
 
-        /* "src/device/daheng_device.py":194
+        /* "src/device/daheng_device.py":204
  *             try:
  *                 self._camera.close_device()
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -7002,7 +7130,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
       }
       goto __pyx_L6_except_error;
 
-      /* "src/device/daheng_device.py":192
+      /* "src/device/daheng_device.py":202
  *         self.stop()
  *         if self._camera:
  *             try:             # <<<<<<<<<<<<<<
@@ -7023,16 +7151,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
       __pyx_L9_try_end:;
     }
 
-    /* "src/device/daheng_device.py":196
+    /* "src/device/daheng_device.py":206
  *             except Exception as e:
  *                 logger.warning("Error closing device: %s", e)
  *             self._camera = None             # <<<<<<<<<<<<<<
  *         self._data_stream = None
  *         logger.info("DahengDevice closed")
 */
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera, Py_None) < (0)) __PYX_ERR(0, 196, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_camera, Py_None) < (0)) __PYX_ERR(0, 206, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":191
+    /* "src/device/daheng_device.py":201
  *     def close(self) -> None:
  *         self.stop()
  *         if self._camera:             # <<<<<<<<<<<<<<
@@ -7041,16 +7169,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
 */
   }
 
-  /* "src/device/daheng_device.py":197
+  /* "src/device/daheng_device.py":207
  *                 logger.warning("Error closing device: %s", e)
  *             self._camera = None
  *         self._data_stream = None             # <<<<<<<<<<<<<<
  *         logger.info("DahengDevice closed")
  * 
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_data_stream, Py_None) < (0)) __PYX_ERR(0, 197, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_data_stream, Py_None) < (0)) __PYX_ERR(0, 207, __pyx_L1_error)
 
-  /* "src/device/daheng_device.py":198
+  /* "src/device/daheng_device.py":208
  *             self._camera = None
  *         self._data_stream = None
  *         logger.info("DahengDevice closed")             # <<<<<<<<<<<<<<
@@ -7058,9 +7186,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
  *     def set_exposure(self, us: float) -> None:
 */
   __pyx_t_8 = NULL;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 208, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 208, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = 1;
@@ -7080,12 +7208,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
     __pyx_t_2 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_10, __pyx_callargs+__pyx_t_3, (2-__pyx_t_3) | (__pyx_t_3*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 198, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "src/device/daheng_device.py":189
+  /* "src/device/daheng_device.py":199
  *         logger.info("DahengDevice acquisition stopped")
  * 
  *     def close(self) -> None:             # <<<<<<<<<<<<<<
@@ -7113,7 +7241,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_10close(CY
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":200
+/* "src/device/daheng_device.py":210
  *         logger.info("DahengDevice closed")
  * 
  *     def set_exposure(self, us: float) -> None:             # <<<<<<<<<<<<<<
@@ -7161,39 +7289,39 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_us,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 200, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 210, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 200, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 210, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 200, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 210, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_exposure", 0) < (0)) __PYX_ERR(0, 200, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_exposure", 0) < (0)) __PYX_ERR(0, 210, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 2; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_exposure", 1, 2, 2, i); __PYX_ERR(0, 200, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_exposure", 1, 2, 2, i); __PYX_ERR(0, 210, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 200, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 210, __pyx_L3_error)
       values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 200, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 210, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
-    __pyx_v_us = __Pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_us == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 200, __pyx_L3_error)
+    __pyx_v_us = __Pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_us == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 210, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_exposure", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 200, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_exposure", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 210, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -7244,32 +7372,32 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_exposure", 0);
 
-  /* "src/device/daheng_device.py":201
+  /* "src/device/daheng_device.py":211
  * 
  *     def set_exposure(self, us: float) -> None:
  *         self._exposure_us = us             # <<<<<<<<<<<<<<
  *         if self._remote_feature:
  *             try:
 */
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_us); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_us); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_exposure_us, __pyx_t_1) < (0)) __PYX_ERR(0, 201, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_exposure_us, __pyx_t_1) < (0)) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":202
+  /* "src/device/daheng_device.py":212
  *     def set_exposure(self, us: float) -> None:
  *         self._exposure_us = us
  *         if self._remote_feature:             # <<<<<<<<<<<<<<
  *             try:
  *                 self._remote_feature.get_float_feature("ExposureTime").set(us)
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 202, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":203
+    /* "src/device/daheng_device.py":213
  *         self._exposure_us = us
  *         if self._remote_feature:
  *             try:             # <<<<<<<<<<<<<<
@@ -7285,14 +7413,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
       __Pyx_XGOTREF(__pyx_t_5);
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":204
+        /* "src/device/daheng_device.py":214
  *         if self._remote_feature:
  *             try:
  *                 self._remote_feature.get_float_feature("ExposureTime").set(us)             # <<<<<<<<<<<<<<
  *                 logger.info("Exposure set to %.1f s", us)
  *             except Exception as e:
 */
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 204, __pyx_L4_error)
+        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 214, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
         __pyx_t_8 = __pyx_t_9;
         __Pyx_INCREF(__pyx_t_8);
@@ -7302,12 +7430,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
           __pyx_t_7 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_float_feature, __pyx_callargs+__pyx_t_10, (2-__pyx_t_10) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 204, __pyx_L4_error)
+          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 214, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_7);
         }
         __pyx_t_6 = __pyx_t_7;
         __Pyx_INCREF(__pyx_t_6);
-        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_us); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 204, __pyx_L4_error)
+        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_us); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 214, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
         __pyx_t_10 = 0;
         {
@@ -7316,12 +7444,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 204, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 214, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":205
+        /* "src/device/daheng_device.py":215
  *             try:
  *                 self._remote_feature.get_float_feature("ExposureTime").set(us)
  *                 logger.info("Exposure set to %.1f s", us)             # <<<<<<<<<<<<<<
@@ -7329,12 +7457,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
  *                 logger.error("Failed to set exposure: %s", e)
 */
         __pyx_t_7 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 205, __pyx_L4_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 215, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 205, __pyx_L4_error)
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 215, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_us); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 205, __pyx_L4_error)
+        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_us); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 215, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
         __pyx_t_10 = 1;
         #if CYTHON_UNPACK_METHODS
@@ -7354,12 +7482,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 205, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":203
+        /* "src/device/daheng_device.py":213
  *         self._exposure_us = us
  *         if self._remote_feature:
  *             try:             # <<<<<<<<<<<<<<
@@ -7378,7 +7506,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-      /* "src/device/daheng_device.py":206
+      /* "src/device/daheng_device.py":216
  *                 self._remote_feature.get_float_feature("ExposureTime").set(us)
  *                 logger.info("Exposure set to %.1f s", us)
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -7388,7 +7516,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
       __pyx_t_11 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
       if (__pyx_t_11) {
         __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.set_exposure", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_9) < 0) __PYX_ERR(0, 206, __pyx_L6_except_error)
+        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_9) < 0) __PYX_ERR(0, 216, __pyx_L6_except_error)
         __Pyx_XGOTREF(__pyx_t_1);
         __Pyx_XGOTREF(__pyx_t_6);
         __Pyx_XGOTREF(__pyx_t_9);
@@ -7396,7 +7524,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
         __pyx_v_e = __pyx_t_6;
         /*try:*/ {
 
-          /* "src/device/daheng_device.py":207
+          /* "src/device/daheng_device.py":217
  *                 logger.info("Exposure set to %.1f s", us)
  *             except Exception as e:
  *                 logger.error("Failed to set exposure: %s", e)             # <<<<<<<<<<<<<<
@@ -7404,9 +7532,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
  *     def set_gain(self, db: float) -> None:
 */
           __pyx_t_8 = NULL;
-          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 207, __pyx_L15_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 217, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 207, __pyx_L15_error)
+          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 217, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __pyx_t_10 = 1;
@@ -7426,13 +7554,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
             __pyx_t_7 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_10, (3-__pyx_t_10) | (__pyx_t_10*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 207, __pyx_L15_error)
+            if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 217, __pyx_L15_error)
             __Pyx_GOTREF(__pyx_t_7);
           }
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         }
 
-        /* "src/device/daheng_device.py":206
+        /* "src/device/daheng_device.py":216
  *                 self._remote_feature.get_float_feature("ExposureTime").set(us)
  *                 logger.info("Exposure set to %.1f s", us)
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -7486,7 +7614,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
       }
       goto __pyx_L6_except_error;
 
-      /* "src/device/daheng_device.py":203
+      /* "src/device/daheng_device.py":213
  *         self._exposure_us = us
  *         if self._remote_feature:
  *             try:             # <<<<<<<<<<<<<<
@@ -7507,7 +7635,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
       __pyx_L9_try_end:;
     }
 
-    /* "src/device/daheng_device.py":202
+    /* "src/device/daheng_device.py":212
  *     def set_exposure(self, us: float) -> None:
  *         self._exposure_us = us
  *         if self._remote_feature:             # <<<<<<<<<<<<<<
@@ -7516,7 +7644,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
 */
   }
 
-  /* "src/device/daheng_device.py":200
+  /* "src/device/daheng_device.py":210
  *         logger.info("DahengDevice closed")
  * 
  *     def set_exposure(self, us: float) -> None:             # <<<<<<<<<<<<<<
@@ -7544,7 +7672,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_12set_expo
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":209
+/* "src/device/daheng_device.py":219
  *                 logger.error("Failed to set exposure: %s", e)
  * 
  *     def set_gain(self, db: float) -> None:             # <<<<<<<<<<<<<<
@@ -7592,39 +7720,39 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_db,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 209, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 219, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 209, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 219, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 209, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 219, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_gain", 0) < (0)) __PYX_ERR(0, 209, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_gain", 0) < (0)) __PYX_ERR(0, 219, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 2; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_gain", 1, 2, 2, i); __PYX_ERR(0, 209, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_gain", 1, 2, 2, i); __PYX_ERR(0, 219, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 209, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 219, __pyx_L3_error)
       values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 209, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 219, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
-    __pyx_v_db = __Pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_db == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L3_error)
+    __pyx_v_db = __Pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_db == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 219, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_gain", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 209, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_gain", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 219, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -7675,32 +7803,32 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_gain", 0);
 
-  /* "src/device/daheng_device.py":210
+  /* "src/device/daheng_device.py":220
  * 
  *     def set_gain(self, db: float) -> None:
  *         self._gain_db = db             # <<<<<<<<<<<<<<
  *         if self._remote_feature:
  *             try:
 */
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_db); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 210, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_db); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db, __pyx_t_1) < (0)) __PYX_ERR(0, 210, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db, __pyx_t_1) < (0)) __PYX_ERR(0, 220, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":211
+  /* "src/device/daheng_device.py":221
  *     def set_gain(self, db: float) -> None:
  *         self._gain_db = db
  *         if self._remote_feature:             # <<<<<<<<<<<<<<
  *             try:
  *                 self._remote_feature.get_float_feature("Gain").set(db)
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 221, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 221, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":212
+    /* "src/device/daheng_device.py":222
  *         self._gain_db = db
  *         if self._remote_feature:
  *             try:             # <<<<<<<<<<<<<<
@@ -7716,14 +7844,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
       __Pyx_XGOTREF(__pyx_t_5);
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":213
+        /* "src/device/daheng_device.py":223
  *         if self._remote_feature:
  *             try:
  *                 self._remote_feature.get_float_feature("Gain").set(db)             # <<<<<<<<<<<<<<
  *                 logger.info("Gain set to %.1f dB", db)
  *             except Exception as e:
 */
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 213, __pyx_L4_error)
+        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 223, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
         __pyx_t_8 = __pyx_t_9;
         __Pyx_INCREF(__pyx_t_8);
@@ -7733,12 +7861,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
           __pyx_t_7 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_float_feature, __pyx_callargs+__pyx_t_10, (2-__pyx_t_10) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 213, __pyx_L4_error)
+          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 223, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_7);
         }
         __pyx_t_6 = __pyx_t_7;
         __Pyx_INCREF(__pyx_t_6);
-        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_db); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 213, __pyx_L4_error)
+        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_db); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 223, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
         __pyx_t_10 = 0;
         {
@@ -7747,12 +7875,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 223, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":214
+        /* "src/device/daheng_device.py":224
  *             try:
  *                 self._remote_feature.get_float_feature("Gain").set(db)
  *                 logger.info("Gain set to %.1f dB", db)             # <<<<<<<<<<<<<<
@@ -7760,12 +7888,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
  *                 logger.error("Failed to set gain: %s", e)
 */
         __pyx_t_7 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 214, __pyx_L4_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 224, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 214, __pyx_L4_error)
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 224, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_db); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 214, __pyx_L4_error)
+        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_db); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 224, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
         __pyx_t_10 = 1;
         #if CYTHON_UNPACK_METHODS
@@ -7785,12 +7913,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 214, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 224, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":212
+        /* "src/device/daheng_device.py":222
  *         self._gain_db = db
  *         if self._remote_feature:
  *             try:             # <<<<<<<<<<<<<<
@@ -7809,7 +7937,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-      /* "src/device/daheng_device.py":215
+      /* "src/device/daheng_device.py":225
  *                 self._remote_feature.get_float_feature("Gain").set(db)
  *                 logger.info("Gain set to %.1f dB", db)
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -7819,7 +7947,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
       __pyx_t_11 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
       if (__pyx_t_11) {
         __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.set_gain", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_9) < 0) __PYX_ERR(0, 215, __pyx_L6_except_error)
+        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_9) < 0) __PYX_ERR(0, 225, __pyx_L6_except_error)
         __Pyx_XGOTREF(__pyx_t_1);
         __Pyx_XGOTREF(__pyx_t_6);
         __Pyx_XGOTREF(__pyx_t_9);
@@ -7827,17 +7955,17 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
         __pyx_v_e = __pyx_t_6;
         /*try:*/ {
 
-          /* "src/device/daheng_device.py":216
+          /* "src/device/daheng_device.py":226
  *                 logger.info("Gain set to %.1f dB", db)
  *             except Exception as e:
  *                 logger.error("Failed to set gain: %s", e)             # <<<<<<<<<<<<<<
  * 
- *     def set_binning(self, x: int, y: int) -> None:
+ *     def set_frame_rate(self, fps: float) -> None:
 */
           __pyx_t_8 = NULL;
-          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 216, __pyx_L15_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 226, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 216, __pyx_L15_error)
+          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 226, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __pyx_t_10 = 1;
@@ -7857,13 +7985,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
             __pyx_t_7 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_10, (3-__pyx_t_10) | (__pyx_t_10*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 216, __pyx_L15_error)
+            if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 226, __pyx_L15_error)
             __Pyx_GOTREF(__pyx_t_7);
           }
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         }
 
-        /* "src/device/daheng_device.py":215
+        /* "src/device/daheng_device.py":225
  *                 self._remote_feature.get_float_feature("Gain").set(db)
  *                 logger.info("Gain set to %.1f dB", db)
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -7917,7 +8045,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
       }
       goto __pyx_L6_except_error;
 
-      /* "src/device/daheng_device.py":212
+      /* "src/device/daheng_device.py":222
  *         self._gain_db = db
  *         if self._remote_feature:
  *             try:             # <<<<<<<<<<<<<<
@@ -7938,7 +8066,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
       __pyx_L9_try_end:;
     }
 
-    /* "src/device/daheng_device.py":211
+    /* "src/device/daheng_device.py":221
  *     def set_gain(self, db: float) -> None:
  *         self._gain_db = db
  *         if self._remote_feature:             # <<<<<<<<<<<<<<
@@ -7947,7 +8075,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
 */
   }
 
-  /* "src/device/daheng_device.py":209
+  /* "src/device/daheng_device.py":219
  *                 logger.error("Failed to set exposure: %s", e)
  * 
  *     def set_gain(self, db: float) -> None:             # <<<<<<<<<<<<<<
@@ -7975,8 +8103,2286 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":218
+/* "src/device/daheng_device.py":228
  *                 logger.error("Failed to set gain: %s", e)
+ * 
+ *     def set_frame_rate(self, fps: float) -> None:             # <<<<<<<<<<<<<<
+ *         """Set the target acquisition frame rate (fps) while acquisition is stopped.
+ * 
+*/
+
+/* Python wrapper */
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_17set_frame_rate(PyObject *__pyx_self, 
+#if CYTHON_METH_FASTCALL
+PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
+#else
+PyObject *__pyx_args, PyObject *__pyx_kwds
+#endif
+); /*proto*/
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_16set_frame_rate, "Set the target acquisition frame rate (fps) while acquisition is stopped.\n\n        The desired value is cached so it can be applied during ``initialize()``;\n        with a connected camera it is written immediately to the GenICam\n        ``AcquisitionFrameRate`` node after enabling ``AcquisitionFrameRateMode``.\n        ");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_17set_frame_rate = {"set_frame_rate", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_17set_frame_rate, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_16set_frame_rate};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_17set_frame_rate(PyObject *__pyx_self, 
+#if CYTHON_METH_FASTCALL
+PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
+#else
+PyObject *__pyx_args, PyObject *__pyx_kwds
+#endif
+) {
+  PyObject *__pyx_v_self = 0;
+  double __pyx_v_fps;
+  #if !CYTHON_METH_FASTCALL
+  CYTHON_UNUSED Py_ssize_t __pyx_nargs;
+  #endif
+  CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
+  PyObject* values[2] = {0,0};
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_frame_rate (wrapper)", 0);
+  #if !CYTHON_METH_FASTCALL
+  #if CYTHON_ASSUME_SAFE_SIZE
+  __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
+  #else
+  __pyx_nargs = PyTuple_Size(__pyx_args); if (unlikely(__pyx_nargs < 0)) return NULL;
+  #endif
+  #endif
+  __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
+  {
+    PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_fps,0};
+    const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 228, __pyx_L3_error)
+    if (__pyx_kwds_len > 0) {
+      switch (__pyx_nargs) {
+        case  2:
+        values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 228, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  1:
+        values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 228, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      const Py_ssize_t kwd_pos_args = __pyx_nargs;
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_frame_rate", 0) < (0)) __PYX_ERR(0, 228, __pyx_L3_error)
+      for (Py_ssize_t i = __pyx_nargs; i < 2; i++) {
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_frame_rate", 1, 2, 2, i); __PYX_ERR(0, 228, __pyx_L3_error) }
+      }
+    } else if (unlikely(__pyx_nargs != 2)) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 228, __pyx_L3_error)
+      values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 228, __pyx_L3_error)
+    }
+    __pyx_v_self = values[0];
+    __pyx_v_fps = __Pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fps == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 228, __pyx_L3_error)
+  }
+  goto __pyx_L6_skip;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("set_frame_rate", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 228, __pyx_L3_error)
+  __pyx_L6_skip:;
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
+    Py_XDECREF(values[__pyx_temp]);
+  }
+  __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.set_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_frame_rate(__pyx_self, __pyx_v_self, __pyx_v_fps);
+
+  /* function exit code */
+  for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
+    Py_XDECREF(values[__pyx_temp]);
+  }
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_frame_rate(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, double __pyx_v_fps) {
+  PyObject *__pyx_v_e = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  size_t __pyx_t_6;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyObject *__pyx_t_9 = NULL;
+  int __pyx_t_10;
+  PyObject *__pyx_t_11 = NULL;
+  PyObject *__pyx_t_12 = NULL;
+  PyObject *__pyx_t_13 = NULL;
+  int __pyx_t_14;
+  char const *__pyx_t_15;
+  PyObject *__pyx_t_16 = NULL;
+  PyObject *__pyx_t_17 = NULL;
+  PyObject *__pyx_t_18 = NULL;
+  PyObject *__pyx_t_19 = NULL;
+  PyObject *__pyx_t_20 = NULL;
+  PyObject *__pyx_t_21 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("set_frame_rate", 0);
+
+  /* "src/device/daheng_device.py":236
+ *         """
+ *         fps = float(fps)
+ *         if fps <= 0:             # <<<<<<<<<<<<<<
+ *             raise ValueError(f"Frame rate must be positive; got {fps}")
+ *         if self._running:
+*/
+  __pyx_t_1 = (__pyx_v_fps <= 0.0);
+  if (unlikely(__pyx_t_1)) {
+
+    /* "src/device/daheng_device.py":237
+ *         fps = float(fps)
+ *         if fps <= 0:
+ *             raise ValueError(f"Frame rate must be positive; got {fps}")             # <<<<<<<<<<<<<<
+ *         if self._running:
+ *             raise RuntimeError(
+*/
+    __pyx_t_3 = NULL;
+    __pyx_t_4 = PyFloat_FromDouble(__pyx_v_fps); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 237, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_4, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 237, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyUnicode_Concat(__pyx_mstate_global->__pyx_kp_u_Frame_rate_must_be_positive_got, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 237, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __pyx_t_6 = 1;
+    {
+      PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_t_4};
+      __pyx_t_2 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_6, (2-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 237, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+    }
+    __Pyx_Raise(__pyx_t_2, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __PYX_ERR(0, 237, __pyx_L1_error)
+
+    /* "src/device/daheng_device.py":236
+ *         """
+ *         fps = float(fps)
+ *         if fps <= 0:             # <<<<<<<<<<<<<<
+ *             raise ValueError(f"Frame rate must be positive; got {fps}")
+ *         if self._running:
+*/
+  }
+
+  /* "src/device/daheng_device.py":238
+ *         if fps <= 0:
+ *             raise ValueError(f"Frame rate must be positive; got {fps}")
+ *         if self._running:             # <<<<<<<<<<<<<<
+ *             raise RuntimeError(
+ *                 "Cannot change camera frame rate while acquisition is running; "
+*/
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 238, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(__pyx_t_1)) {
+
+    /* "src/device/daheng_device.py":239
+ *             raise ValueError(f"Frame rate must be positive; got {fps}")
+ *         if self._running:
+ *             raise RuntimeError(             # <<<<<<<<<<<<<<
+ *                 "Cannot change camera frame rate while acquisition is running; "
+ *                 "stop acquisition first"
+*/
+    __pyx_t_4 = NULL;
+    __pyx_t_6 = 1;
+    {
+      PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_mstate_global->__pyx_kp_u_Cannot_change_camera_frame_rate};
+      __pyx_t_2 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_6, (2-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 239, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+    }
+    __Pyx_Raise(__pyx_t_2, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __PYX_ERR(0, 239, __pyx_L1_error)
+
+    /* "src/device/daheng_device.py":238
+ *         if fps <= 0:
+ *             raise ValueError(f"Frame rate must be positive; got {fps}")
+ *         if self._running:             # <<<<<<<<<<<<<<
+ *             raise RuntimeError(
+ *                 "Cannot change camera frame rate while acquisition is running; "
+*/
+  }
+
+  /* "src/device/daheng_device.py":244
+ *             )
+ * 
+ *         try:             # <<<<<<<<<<<<<<
+ *             self._apply_frame_rate(fps)
+ *         except Exception as e:
+*/
+  {
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ExceptionSave(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
+    __Pyx_XGOTREF(__pyx_t_7);
+    __Pyx_XGOTREF(__pyx_t_8);
+    __Pyx_XGOTREF(__pyx_t_9);
+    /*try:*/ {
+
+      /* "src/device/daheng_device.py":245
+ * 
+ *         try:
+ *             self._apply_frame_rate(fps)             # <<<<<<<<<<<<<<
+ *         except Exception as e:
+ *             self._last_error = str(e)
+*/
+      __pyx_t_4 = __pyx_v_self;
+      __Pyx_INCREF(__pyx_t_4);
+      __pyx_t_3 = PyFloat_FromDouble(__pyx_v_fps); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 245, __pyx_L5_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_6 = 0;
+      {
+        PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_t_3};
+        __pyx_t_2 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_apply_frame_rate, __pyx_callargs+__pyx_t_6, (2-__pyx_t_6) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 245, __pyx_L5_error)
+        __Pyx_GOTREF(__pyx_t_2);
+      }
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+      /* "src/device/daheng_device.py":244
+ *             )
+ * 
+ *         try:             # <<<<<<<<<<<<<<
+ *             self._apply_frame_rate(fps)
+ *         except Exception as e:
+*/
+    }
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+    goto __pyx_L10_try_end;
+    __pyx_L5_error:;
+    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+    /* "src/device/daheng_device.py":246
+ *         try:
+ *             self._apply_frame_rate(fps)
+ *         except Exception as e:             # <<<<<<<<<<<<<<
+ *             self._last_error = str(e)
+ *             logger.error("Failed to set frame rate to %.2f fps: %s", fps, e)
+*/
+    __pyx_t_10 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
+    if (__pyx_t_10) {
+      __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.set_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      if (__Pyx_GetException(&__pyx_t_2, &__pyx_t_3, &__pyx_t_4) < 0) __PYX_ERR(0, 246, __pyx_L7_except_error)
+      __Pyx_XGOTREF(__pyx_t_2);
+      __Pyx_XGOTREF(__pyx_t_3);
+      __Pyx_XGOTREF(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_3);
+      __pyx_v_e = __pyx_t_3;
+      /*try:*/ {
+
+        /* "src/device/daheng_device.py":247
+ *             self._apply_frame_rate(fps)
+ *         except Exception as e:
+ *             self._last_error = str(e)             # <<<<<<<<<<<<<<
+ *             logger.error("Failed to set frame rate to %.2f fps: %s", fps, e)
+ *             raise
+*/
+        __pyx_t_5 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 247, __pyx_L16_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_5) < (0)) __PYX_ERR(0, 247, __pyx_L16_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+        /* "src/device/daheng_device.py":248
+ *         except Exception as e:
+ *             self._last_error = str(e)
+ *             logger.error("Failed to set frame rate to %.2f fps: %s", fps, e)             # <<<<<<<<<<<<<<
+ *             raise
+ * 
+*/
+        __pyx_t_11 = NULL;
+        __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 248, __pyx_L16_error)
+        __Pyx_GOTREF(__pyx_t_12);
+        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 248, __pyx_L16_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __pyx_t_12 = PyFloat_FromDouble(__pyx_v_fps); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 248, __pyx_L16_error)
+        __Pyx_GOTREF(__pyx_t_12);
+        __pyx_t_6 = 1;
+        #if CYTHON_UNPACK_METHODS
+        if (unlikely(PyMethod_Check(__pyx_t_13))) {
+          __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_13);
+          assert(__pyx_t_11);
+          PyObject* __pyx__function = PyMethod_GET_FUNCTION(__pyx_t_13);
+          __Pyx_INCREF(__pyx_t_11);
+          __Pyx_INCREF(__pyx__function);
+          __Pyx_DECREF_SET(__pyx_t_13, __pyx__function);
+          __pyx_t_6 = 0;
+        }
+        #endif
+        {
+          PyObject *__pyx_callargs[4] = {__pyx_t_11, __pyx_mstate_global->__pyx_kp_u_Failed_to_set_frame_rate_to_2f_f, __pyx_t_12, __pyx_v_e};
+          __pyx_t_5 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_6, (4-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+          __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+          __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+          if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 248, __pyx_L16_error)
+          __Pyx_GOTREF(__pyx_t_5);
+        }
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+        /* "src/device/daheng_device.py":249
+ *             self._last_error = str(e)
+ *             logger.error("Failed to set frame rate to %.2f fps: %s", fps, e)
+ *             raise             # <<<<<<<<<<<<<<
+ * 
+ *     def _apply_frame_rate(self, fps: float) -> None:
+*/
+        __Pyx_GIVEREF(__pyx_t_2);
+        __Pyx_GIVEREF(__pyx_t_3);
+        __Pyx_XGIVEREF(__pyx_t_4);
+        __Pyx_ErrRestoreWithState(__pyx_t_2, __pyx_t_3, __pyx_t_4);
+        __pyx_t_2 = 0;  __pyx_t_3 = 0;  __pyx_t_4 = 0; 
+        __PYX_ERR(0, 249, __pyx_L16_error)
+      }
+
+      /* "src/device/daheng_device.py":246
+ *         try:
+ *             self._apply_frame_rate(fps)
+ *         except Exception as e:             # <<<<<<<<<<<<<<
+ *             self._last_error = str(e)
+ *             logger.error("Failed to set frame rate to %.2f fps: %s", fps, e)
+*/
+      /*finally:*/ {
+        __pyx_L16_error:;
+        /*exception exit:*/{
+          __Pyx_PyThreadState_declare
+          __Pyx_PyThreadState_assign
+          __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
+          __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+          __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
+          __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+          __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+           __Pyx_ExceptionSwap(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21);
+          if ( unlikely(__Pyx_GetException(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18) < 0)) __Pyx_ErrFetch(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18);
+          __Pyx_XGOTREF(__pyx_t_16);
+          __Pyx_XGOTREF(__pyx_t_17);
+          __Pyx_XGOTREF(__pyx_t_18);
+          __Pyx_XGOTREF(__pyx_t_19);
+          __Pyx_XGOTREF(__pyx_t_20);
+          __Pyx_XGOTREF(__pyx_t_21);
+          __pyx_t_10 = __pyx_lineno; __pyx_t_14 = __pyx_clineno; __pyx_t_15 = __pyx_filename;
+          {
+            __Pyx_DECREF(__pyx_v_e); __pyx_v_e = 0;
+          }
+          __Pyx_XGIVEREF(__pyx_t_19);
+          __Pyx_XGIVEREF(__pyx_t_20);
+          __Pyx_XGIVEREF(__pyx_t_21);
+          __Pyx_ExceptionReset(__pyx_t_19, __pyx_t_20, __pyx_t_21);
+          __Pyx_XGIVEREF(__pyx_t_16);
+          __Pyx_XGIVEREF(__pyx_t_17);
+          __Pyx_XGIVEREF(__pyx_t_18);
+          __Pyx_ErrRestore(__pyx_t_16, __pyx_t_17, __pyx_t_18);
+          __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
+          __pyx_lineno = __pyx_t_10; __pyx_clineno = __pyx_t_14; __pyx_filename = __pyx_t_15;
+          goto __pyx_L7_except_error;
+        }
+      }
+    }
+    goto __pyx_L7_except_error;
+
+    /* "src/device/daheng_device.py":244
+ *             )
+ * 
+ *         try:             # <<<<<<<<<<<<<<
+ *             self._apply_frame_rate(fps)
+ *         except Exception as e:
+*/
+    __pyx_L7_except_error:;
+    __Pyx_XGIVEREF(__pyx_t_7);
+    __Pyx_XGIVEREF(__pyx_t_8);
+    __Pyx_XGIVEREF(__pyx_t_9);
+    __Pyx_ExceptionReset(__pyx_t_7, __pyx_t_8, __pyx_t_9);
+    goto __pyx_L1_error;
+    __pyx_L10_try_end:;
+  }
+
+  /* "src/device/daheng_device.py":228
+ *                 logger.error("Failed to set gain: %s", e)
+ * 
+ *     def set_frame_rate(self, fps: float) -> None:             # <<<<<<<<<<<<<<
+ *         """Set the target acquisition frame rate (fps) while acquisition is stopped.
+ * 
+*/
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_11);
+  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_XDECREF(__pyx_t_13);
+  __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.set_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_e);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/device/daheng_device.py":251
+ *             raise
+ * 
+ *     def _apply_frame_rate(self, fps: float) -> None:             # <<<<<<<<<<<<<<
+ *         """Write the frame-rate nodes and cache the camera-reported valid range."""
+ *         if self._remote_feature is None:
+*/
+
+/* Python wrapper */
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_19_apply_frame_rate(PyObject *__pyx_self, 
+#if CYTHON_METH_FASTCALL
+PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
+#else
+PyObject *__pyx_args, PyObject *__pyx_kwds
+#endif
+); /*proto*/
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_18_apply_frame_rate, "Write the frame-rate nodes and cache the camera-reported valid range.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_19_apply_frame_rate = {"_apply_frame_rate", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_19_apply_frame_rate, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_18_apply_frame_rate};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_19_apply_frame_rate(PyObject *__pyx_self, 
+#if CYTHON_METH_FASTCALL
+PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
+#else
+PyObject *__pyx_args, PyObject *__pyx_kwds
+#endif
+) {
+  PyObject *__pyx_v_self = 0;
+  double __pyx_v_fps;
+  #if !CYTHON_METH_FASTCALL
+  CYTHON_UNUSED Py_ssize_t __pyx_nargs;
+  #endif
+  CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
+  PyObject* values[2] = {0,0};
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("_apply_frame_rate (wrapper)", 0);
+  #if !CYTHON_METH_FASTCALL
+  #if CYTHON_ASSUME_SAFE_SIZE
+  __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
+  #else
+  __pyx_nargs = PyTuple_Size(__pyx_args); if (unlikely(__pyx_nargs < 0)) return NULL;
+  #endif
+  #endif
+  __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
+  {
+    PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_fps,0};
+    const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 251, __pyx_L3_error)
+    if (__pyx_kwds_len > 0) {
+      switch (__pyx_nargs) {
+        case  2:
+        values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 251, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  1:
+        values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 251, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      const Py_ssize_t kwd_pos_args = __pyx_nargs;
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_apply_frame_rate", 0) < (0)) __PYX_ERR(0, 251, __pyx_L3_error)
+      for (Py_ssize_t i = __pyx_nargs; i < 2; i++) {
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_apply_frame_rate", 1, 2, 2, i); __PYX_ERR(0, 251, __pyx_L3_error) }
+      }
+    } else if (unlikely(__pyx_nargs != 2)) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 251, __pyx_L3_error)
+      values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 251, __pyx_L3_error)
+    }
+    __pyx_v_self = values[0];
+    __pyx_v_fps = __Pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fps == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 251, __pyx_L3_error)
+  }
+  goto __pyx_L6_skip;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("_apply_frame_rate", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 251, __pyx_L3_error)
+  __pyx_L6_skip:;
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
+    Py_XDECREF(values[__pyx_temp]);
+  }
+  __Pyx_AddTraceback("src.device.daheng_device.DahengDevice._apply_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_18_apply_frame_rate(__pyx_self, __pyx_v_self, __pyx_v_fps);
+
+  /* function exit code */
+  for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
+    Py_XDECREF(values[__pyx_temp]);
+  }
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18_apply_frame_rate(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, double __pyx_v_fps) {
+  PyObject *__pyx_v_mode_name = NULL;
+  PyObject *__pyx_v_rate_name = NULL;
+  PyObject *__pyx_v_rate_feature = NULL;
+  PyObject *__pyx_v_rate_range = NULL;
+  PyObject *__pyx_v_e = NULL;
+  double __pyx_v_actual;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  size_t __pyx_t_5;
+  int __pyx_t_6;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8[3];
+  PyObject *__pyx_t_9 = NULL;
+  PyObject *__pyx_t_10 = NULL;
+  PyObject *__pyx_t_11 = NULL;
+  PyObject *__pyx_t_12 = NULL;
+  int __pyx_t_13;
+  PyObject *__pyx_t_14 = NULL;
+  PyObject *__pyx_t_15 = NULL;
+  int __pyx_t_16;
+  char const *__pyx_t_17;
+  PyObject *__pyx_t_18 = NULL;
+  PyObject *__pyx_t_19 = NULL;
+  PyObject *__pyx_t_20 = NULL;
+  PyObject *__pyx_t_21 = NULL;
+  PyObject *__pyx_t_22 = NULL;
+  PyObject *__pyx_t_23 = NULL;
+  double __pyx_t_24;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("_apply_frame_rate", 0);
+
+  /* "src/device/daheng_device.py":253
+ *     def _apply_frame_rate(self, fps: float) -> None:
+ *         """Write the frame-rate nodes and cache the camera-reported valid range."""
+ *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
+ *             self._frame_rate_fps = fps
+ *             return
+*/
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = (__pyx_t_1 == Py_None);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "src/device/daheng_device.py":254
+ *         """Write the frame-rate nodes and cache the camera-reported valid range."""
+ *         if self._remote_feature is None:
+ *             self._frame_rate_fps = fps             # <<<<<<<<<<<<<<
+ *             return
+ * 
+*/
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fps); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_fps, __pyx_t_1) < (0)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "src/device/daheng_device.py":255
+ *         if self._remote_feature is None:
+ *             self._frame_rate_fps = fps
+ *             return             # <<<<<<<<<<<<<<
+ * 
+ *         mode_name = "AcquisitionFrameRateMode"
+*/
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+    goto __pyx_L0;
+
+    /* "src/device/daheng_device.py":253
+ *     def _apply_frame_rate(self, fps: float) -> None:
+ *         """Write the frame-rate nodes and cache the camera-reported valid range."""
+ *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
+ *             self._frame_rate_fps = fps
+ *             return
+*/
+  }
+
+  /* "src/device/daheng_device.py":257
+ *             return
+ * 
+ *         mode_name = "AcquisitionFrameRateMode"             # <<<<<<<<<<<<<<
+ *         rate_name = "AcquisitionFrameRate"
+ * 
+*/
+  __Pyx_INCREF(__pyx_mstate_global->__pyx_n_u_AcquisitionFrameRateMode);
+  __pyx_v_mode_name = __pyx_mstate_global->__pyx_n_u_AcquisitionFrameRateMode;
+
+  /* "src/device/daheng_device.py":258
+ * 
+ *         mode_name = "AcquisitionFrameRateMode"
+ *         rate_name = "AcquisitionFrameRate"             # <<<<<<<<<<<<<<
+ * 
+ *         # Some firmware hides frame-rate control entirely; fall back to the
+*/
+  __Pyx_INCREF(__pyx_mstate_global->__pyx_n_u_AcquisitionFrameRate);
+  __pyx_v_rate_name = __pyx_mstate_global->__pyx_n_u_AcquisitionFrameRate;
+
+  /* "src/device/daheng_device.py":262
+ *         # Some firmware hides frame-rate control entirely; fall back to the
+ *         # exposure-determined rate in that case rather than failing initialize().
+ *         if not self._remote_feature.is_implemented(rate_name):             # <<<<<<<<<<<<<<
+ *             logger.info(
+ *                 "Camera does not expose %s; frame rate is exposure-determined",
+*/
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 262, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = __pyx_t_4;
+  __Pyx_INCREF(__pyx_t_3);
+  __pyx_t_5 = 0;
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_v_rate_name};
+    __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_implemented, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 262, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+  }
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 262, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_6 = (!__pyx_t_2);
+  if (__pyx_t_6) {
+
+    /* "src/device/daheng_device.py":263
+ *         # exposure-determined rate in that case rather than failing initialize().
+ *         if not self._remote_feature.is_implemented(rate_name):
+ *             logger.info(             # <<<<<<<<<<<<<<
+ *                 "Camera does not expose %s; frame rate is exposure-determined",
+ *                 rate_name,
+*/
+    __pyx_t_4 = NULL;
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 263, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 263, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "src/device/daheng_device.py":265
+ *             logger.info(
+ *                 "Camera does not expose %s; frame rate is exposure-determined",
+ *                 rate_name,             # <<<<<<<<<<<<<<
+ *             )
+ *             self._frame_rate_fps = fps
+*/
+    __pyx_t_5 = 1;
+    #if CYTHON_UNPACK_METHODS
+    if (unlikely(PyMethod_Check(__pyx_t_7))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_7);
+      assert(__pyx_t_4);
+      PyObject* __pyx__function = PyMethod_GET_FUNCTION(__pyx_t_7);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(__pyx__function);
+      __Pyx_DECREF_SET(__pyx_t_7, __pyx__function);
+      __pyx_t_5 = 0;
+    }
+    #endif
+    {
+      PyObject *__pyx_callargs[3] = {__pyx_t_4, __pyx_mstate_global->__pyx_kp_u_Camera_does_not_expose_s_frame_r, __pyx_v_rate_name};
+      __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_7, __pyx_callargs+__pyx_t_5, (3-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+    }
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "src/device/daheng_device.py":267
+ *                 rate_name,
+ *             )
+ *             self._frame_rate_fps = fps             # <<<<<<<<<<<<<<
+ *             return
+ * 
+*/
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fps); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 267, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_fps, __pyx_t_1) < (0)) __PYX_ERR(0, 267, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "src/device/daheng_device.py":268
+ *             )
+ *             self._frame_rate_fps = fps
+ *             return             # <<<<<<<<<<<<<<
+ * 
+ *         if self._remote_feature.is_implemented(mode_name):
+*/
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+    goto __pyx_L0;
+
+    /* "src/device/daheng_device.py":262
+ *         # Some firmware hides frame-rate control entirely; fall back to the
+ *         # exposure-determined rate in that case rather than failing initialize().
+ *         if not self._remote_feature.is_implemented(rate_name):             # <<<<<<<<<<<<<<
+ *             logger.info(
+ *                 "Camera does not expose %s; frame rate is exposure-determined",
+*/
+  }
+
+  /* "src/device/daheng_device.py":270
+ *             return
+ * 
+ *         if self._remote_feature.is_implemented(mode_name):             # <<<<<<<<<<<<<<
+ *             if not self._remote_feature.is_writable(mode_name):
+ *                 raise RuntimeError(f"Camera {mode_name} feature is not writable")
+*/
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 270, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_7 = __pyx_t_4;
+  __Pyx_INCREF(__pyx_t_7);
+  __pyx_t_5 = 0;
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_7, __pyx_v_mode_name};
+    __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_implemented, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+  }
+  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_6 < 0))) __PYX_ERR(0, 270, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_6) {
+
+    /* "src/device/daheng_device.py":271
+ * 
+ *         if self._remote_feature.is_implemented(mode_name):
+ *             if not self._remote_feature.is_writable(mode_name):             # <<<<<<<<<<<<<<
+ *                 raise RuntimeError(f"Camera {mode_name} feature is not writable")
+ *             self._remote_feature.get_enum_feature(mode_name).set("On")
+*/
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 271, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_4 = __pyx_t_7;
+    __Pyx_INCREF(__pyx_t_4);
+    __pyx_t_5 = 0;
+    {
+      PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_v_mode_name};
+      __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_writable, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 271, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+    }
+    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_6 < 0))) __PYX_ERR(0, 271, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_2 = (!__pyx_t_6);
+    if (unlikely(__pyx_t_2)) {
+
+      /* "src/device/daheng_device.py":272
+ *         if self._remote_feature.is_implemented(mode_name):
+ *             if not self._remote_feature.is_writable(mode_name):
+ *                 raise RuntimeError(f"Camera {mode_name} feature is not writable")             # <<<<<<<<<<<<<<
+ *             self._remote_feature.get_enum_feature(mode_name).set("On")
+ * 
+*/
+      __pyx_t_7 = NULL;
+      __pyx_t_8[0] = __pyx_mstate_global->__pyx_kp_u_Camera;
+      __pyx_t_8[1] = __pyx_v_mode_name;
+      __pyx_t_8[2] = __pyx_mstate_global->__pyx_kp_u_feature_is_not_writable;
+      __pyx_t_4 = __Pyx_PyUnicode_Join(__pyx_t_8, 3, 7 + __Pyx_PyUnicode_GET_LENGTH(__pyx_v_mode_name) + 24, 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_v_mode_name));
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 272, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_5 = 1;
+      {
+        PyObject *__pyx_callargs[2] = {__pyx_t_7, __pyx_t_4};
+        __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 272, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+      }
+      __Pyx_Raise(__pyx_t_1, 0, 0, 0);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __PYX_ERR(0, 272, __pyx_L1_error)
+
+      /* "src/device/daheng_device.py":271
+ * 
+ *         if self._remote_feature.is_implemented(mode_name):
+ *             if not self._remote_feature.is_writable(mode_name):             # <<<<<<<<<<<<<<
+ *                 raise RuntimeError(f"Camera {mode_name} feature is not writable")
+ *             self._remote_feature.get_enum_feature(mode_name).set("On")
+*/
+    }
+
+    /* "src/device/daheng_device.py":273
+ *             if not self._remote_feature.is_writable(mode_name):
+ *                 raise RuntimeError(f"Camera {mode_name} feature is not writable")
+ *             self._remote_feature.get_enum_feature(mode_name).set("On")             # <<<<<<<<<<<<<<
+ * 
+ *         if not self._remote_feature.is_writable(rate_name):
+*/
+    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 273, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_3 = __pyx_t_9;
+    __Pyx_INCREF(__pyx_t_3);
+    __pyx_t_5 = 0;
+    {
+      PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_v_mode_name};
+      __pyx_t_7 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_enum_feature, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+    }
+    __pyx_t_4 = __pyx_t_7;
+    __Pyx_INCREF(__pyx_t_4);
+    __pyx_t_5 = 0;
+    {
+      PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_mstate_global->__pyx_n_u_On};
+      __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_set, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+    }
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "src/device/daheng_device.py":270
+ *             return
+ * 
+ *         if self._remote_feature.is_implemented(mode_name):             # <<<<<<<<<<<<<<
+ *             if not self._remote_feature.is_writable(mode_name):
+ *                 raise RuntimeError(f"Camera {mode_name} feature is not writable")
+*/
+  }
+
+  /* "src/device/daheng_device.py":275
+ *             self._remote_feature.get_enum_feature(mode_name).set("On")
+ * 
+ *         if not self._remote_feature.is_writable(rate_name):             # <<<<<<<<<<<<<<
+ *             raise RuntimeError(f"Camera {rate_name} feature is not writable")
+ * 
+*/
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 275, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_7 = __pyx_t_4;
+  __Pyx_INCREF(__pyx_t_7);
+  __pyx_t_5 = 0;
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_7, __pyx_v_rate_name};
+    __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_writable, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 275, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+  }
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 275, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_6 = (!__pyx_t_2);
+  if (unlikely(__pyx_t_6)) {
+
+    /* "src/device/daheng_device.py":276
+ * 
+ *         if not self._remote_feature.is_writable(rate_name):
+ *             raise RuntimeError(f"Camera {rate_name} feature is not writable")             # <<<<<<<<<<<<<<
+ * 
+ *         rate_feature = self._remote_feature.get_float_feature(rate_name)
+*/
+    __pyx_t_4 = NULL;
+    __pyx_t_8[0] = __pyx_mstate_global->__pyx_kp_u_Camera;
+    __pyx_t_8[1] = __pyx_v_rate_name;
+    __pyx_t_8[2] = __pyx_mstate_global->__pyx_kp_u_feature_is_not_writable;
+    __pyx_t_7 = __Pyx_PyUnicode_Join(__pyx_t_8, 3, 7 + __Pyx_PyUnicode_GET_LENGTH(__pyx_v_rate_name) + 24, 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_v_rate_name));
+    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 276, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_5 = 1;
+    {
+      PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_t_7};
+      __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 276, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+    }
+    __Pyx_Raise(__pyx_t_1, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __PYX_ERR(0, 276, __pyx_L1_error)
+
+    /* "src/device/daheng_device.py":275
+ *             self._remote_feature.get_enum_feature(mode_name).set("On")
+ * 
+ *         if not self._remote_feature.is_writable(rate_name):             # <<<<<<<<<<<<<<
+ *             raise RuntimeError(f"Camera {rate_name} feature is not writable")
+ * 
+*/
+  }
+
+  /* "src/device/daheng_device.py":278
+ *             raise RuntimeError(f"Camera {rate_name} feature is not writable")
+ * 
+ *         rate_feature = self._remote_feature.get_float_feature(rate_name)             # <<<<<<<<<<<<<<
+ *         try:
+ *             rate_range = rate_feature.get_range()
+*/
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_7 = __pyx_t_4;
+  __Pyx_INCREF(__pyx_t_7);
+  __pyx_t_5 = 0;
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_7, __pyx_v_rate_name};
+    __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_float_feature, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+  }
+  __pyx_v_rate_feature = __pyx_t_1;
+  __pyx_t_1 = 0;
+
+  /* "src/device/daheng_device.py":279
+ * 
+ *         rate_feature = self._remote_feature.get_float_feature(rate_name)
+ *         try:             # <<<<<<<<<<<<<<
+ *             rate_range = rate_feature.get_range()
+ *             self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))
+*/
+  {
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ExceptionSave(&__pyx_t_10, &__pyx_t_11, &__pyx_t_12);
+    __Pyx_XGOTREF(__pyx_t_10);
+    __Pyx_XGOTREF(__pyx_t_11);
+    __Pyx_XGOTREF(__pyx_t_12);
+    /*try:*/ {
+
+      /* "src/device/daheng_device.py":280
+ *         rate_feature = self._remote_feature.get_float_feature(rate_name)
+ *         try:
+ *             rate_range = rate_feature.get_range()             # <<<<<<<<<<<<<<
+ *             self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))
+ *         except Exception as e:
+*/
+      __pyx_t_4 = __pyx_v_rate_feature;
+      __Pyx_INCREF(__pyx_t_4);
+      __pyx_t_5 = 0;
+      {
+        PyObject *__pyx_callargs[2] = {__pyx_t_4, NULL};
+        __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_range, __pyx_callargs+__pyx_t_5, (1-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L8_error)
+        __Pyx_GOTREF(__pyx_t_1);
+      }
+      __pyx_v_rate_range = __pyx_t_1;
+      __pyx_t_1 = 0;
+
+      /* "src/device/daheng_device.py":281
+ *         try:
+ *             rate_range = rate_feature.get_range()
+ *             self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))             # <<<<<<<<<<<<<<
+ *         except Exception as e:
+ *             logger.debug("Could not read %s range: %s", rate_name, e)
+*/
+      __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_v_rate_range, __pyx_mstate_global->__pyx_n_u_min); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L8_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_4 = __Pyx_PyNumber_Float(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L8_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_v_rate_range, __pyx_mstate_global->__pyx_n_u_max); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L8_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_7 = __Pyx_PyNumber_Float(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 281, __pyx_L8_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L8_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_GIVEREF(__pyx_t_4);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4) != (0)) __PYX_ERR(0, 281, __pyx_L8_error);
+      __Pyx_GIVEREF(__pyx_t_7);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_7) != (0)) __PYX_ERR(0, 281, __pyx_L8_error);
+      __pyx_t_4 = 0;
+      __pyx_t_7 = 0;
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_range, __pyx_t_1) < (0)) __PYX_ERR(0, 281, __pyx_L8_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "src/device/daheng_device.py":279
+ * 
+ *         rate_feature = self._remote_feature.get_float_feature(rate_name)
+ *         try:             # <<<<<<<<<<<<<<
+ *             rate_range = rate_feature.get_range()
+ *             self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))
+*/
+    }
+    __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+    __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
+    goto __pyx_L13_try_end;
+    __pyx_L8_error:;
+    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "src/device/daheng_device.py":282
+ *             rate_range = rate_feature.get_range()
+ *             self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))
+ *         except Exception as e:             # <<<<<<<<<<<<<<
+ *             logger.debug("Could not read %s range: %s", rate_name, e)
+ * 
+*/
+    __pyx_t_13 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
+    if (__pyx_t_13) {
+      __Pyx_AddTraceback("src.device.daheng_device.DahengDevice._apply_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_7, &__pyx_t_4) < 0) __PYX_ERR(0, 282, __pyx_L10_except_error)
+      __Pyx_XGOTREF(__pyx_t_1);
+      __Pyx_XGOTREF(__pyx_t_7);
+      __Pyx_XGOTREF(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_7);
+      __pyx_v_e = __pyx_t_7;
+      /*try:*/ {
+
+        /* "src/device/daheng_device.py":283
+ *             self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))
+ *         except Exception as e:
+ *             logger.debug("Could not read %s range: %s", rate_name, e)             # <<<<<<<<<<<<<<
+ * 
+ *         rate_feature.set(float(fps))
+*/
+        __pyx_t_3 = NULL;
+        __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 283, __pyx_L19_error)
+        __Pyx_GOTREF(__pyx_t_14);
+        __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 283, __pyx_L19_error)
+        __Pyx_GOTREF(__pyx_t_15);
+        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        __pyx_t_5 = 1;
+        #if CYTHON_UNPACK_METHODS
+        if (unlikely(PyMethod_Check(__pyx_t_15))) {
+          __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_15);
+          assert(__pyx_t_3);
+          PyObject* __pyx__function = PyMethod_GET_FUNCTION(__pyx_t_15);
+          __Pyx_INCREF(__pyx_t_3);
+          __Pyx_INCREF(__pyx__function);
+          __Pyx_DECREF_SET(__pyx_t_15, __pyx__function);
+          __pyx_t_5 = 0;
+        }
+        #endif
+        {
+          PyObject *__pyx_callargs[4] = {__pyx_t_3, __pyx_mstate_global->__pyx_kp_u_Could_not_read_s_range_s, __pyx_v_rate_name, __pyx_v_e};
+          __pyx_t_9 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_15, __pyx_callargs+__pyx_t_5, (4-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+          __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+          __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
+          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 283, __pyx_L19_error)
+          __Pyx_GOTREF(__pyx_t_9);
+        }
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      }
+
+      /* "src/device/daheng_device.py":282
+ *             rate_range = rate_feature.get_range()
+ *             self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))
+ *         except Exception as e:             # <<<<<<<<<<<<<<
+ *             logger.debug("Could not read %s range: %s", rate_name, e)
+ * 
+*/
+      /*finally:*/ {
+        /*normal exit:*/{
+          __Pyx_DECREF(__pyx_v_e); __pyx_v_e = 0;
+          goto __pyx_L20;
+        }
+        __pyx_L19_error:;
+        /*exception exit:*/{
+          __Pyx_PyThreadState_declare
+          __Pyx_PyThreadState_assign
+          __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0;
+          __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
+          __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
+          __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+          __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+           __Pyx_ExceptionSwap(&__pyx_t_21, &__pyx_t_22, &__pyx_t_23);
+          if ( unlikely(__Pyx_GetException(&__pyx_t_18, &__pyx_t_19, &__pyx_t_20) < 0)) __Pyx_ErrFetch(&__pyx_t_18, &__pyx_t_19, &__pyx_t_20);
+          __Pyx_XGOTREF(__pyx_t_18);
+          __Pyx_XGOTREF(__pyx_t_19);
+          __Pyx_XGOTREF(__pyx_t_20);
+          __Pyx_XGOTREF(__pyx_t_21);
+          __Pyx_XGOTREF(__pyx_t_22);
+          __Pyx_XGOTREF(__pyx_t_23);
+          __pyx_t_13 = __pyx_lineno; __pyx_t_16 = __pyx_clineno; __pyx_t_17 = __pyx_filename;
+          {
+            __Pyx_DECREF(__pyx_v_e); __pyx_v_e = 0;
+          }
+          __Pyx_XGIVEREF(__pyx_t_21);
+          __Pyx_XGIVEREF(__pyx_t_22);
+          __Pyx_XGIVEREF(__pyx_t_23);
+          __Pyx_ExceptionReset(__pyx_t_21, __pyx_t_22, __pyx_t_23);
+          __Pyx_XGIVEREF(__pyx_t_18);
+          __Pyx_XGIVEREF(__pyx_t_19);
+          __Pyx_XGIVEREF(__pyx_t_20);
+          __Pyx_ErrRestore(__pyx_t_18, __pyx_t_19, __pyx_t_20);
+          __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0;
+          __pyx_lineno = __pyx_t_13; __pyx_clineno = __pyx_t_16; __pyx_filename = __pyx_t_17;
+          goto __pyx_L10_except_error;
+        }
+        __pyx_L20:;
+      }
+      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      goto __pyx_L9_exception_handled;
+    }
+    goto __pyx_L10_except_error;
+
+    /* "src/device/daheng_device.py":279
+ * 
+ *         rate_feature = self._remote_feature.get_float_feature(rate_name)
+ *         try:             # <<<<<<<<<<<<<<
+ *             rate_range = rate_feature.get_range()
+ *             self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))
+*/
+    __pyx_L10_except_error:;
+    __Pyx_XGIVEREF(__pyx_t_10);
+    __Pyx_XGIVEREF(__pyx_t_11);
+    __Pyx_XGIVEREF(__pyx_t_12);
+    __Pyx_ExceptionReset(__pyx_t_10, __pyx_t_11, __pyx_t_12);
+    goto __pyx_L1_error;
+    __pyx_L9_exception_handled:;
+    __Pyx_XGIVEREF(__pyx_t_10);
+    __Pyx_XGIVEREF(__pyx_t_11);
+    __Pyx_XGIVEREF(__pyx_t_12);
+    __Pyx_ExceptionReset(__pyx_t_10, __pyx_t_11, __pyx_t_12);
+    __pyx_L13_try_end:;
+  }
+
+  /* "src/device/daheng_device.py":285
+ *             logger.debug("Could not read %s range: %s", rate_name, e)
+ * 
+ *         rate_feature.set(float(fps))             # <<<<<<<<<<<<<<
+ *         actual = float(rate_feature.get())
+ *         self._frame_rate_fps = actual
+*/
+  __pyx_t_7 = __pyx_v_rate_feature;
+  __Pyx_INCREF(__pyx_t_7);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fps); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_5 = 0;
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_7, __pyx_t_1};
+    __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_set, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 285, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+  }
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "src/device/daheng_device.py":286
+ * 
+ *         rate_feature.set(float(fps))
+ *         actual = float(rate_feature.get())             # <<<<<<<<<<<<<<
+ *         self._frame_rate_fps = actual
+ *         if abs(actual - fps) > 0.01:
+*/
+  __pyx_t_1 = __pyx_v_rate_feature;
+  __Pyx_INCREF(__pyx_t_1);
+  __pyx_t_5 = 0;
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_1, NULL};
+    __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_5, (1-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+  }
+  __pyx_t_24 = __Pyx_PyObject_AsDouble(__pyx_t_4); if (unlikely(__PYX_CHECK_FLOAT_EXCEPTION(__pyx_t_24, ((double)((double)-1))) && PyErr_Occurred())) __PYX_ERR(0, 286, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_v_actual = __pyx_t_24;
+
+  /* "src/device/daheng_device.py":287
+ *         rate_feature.set(float(fps))
+ *         actual = float(rate_feature.get())
+ *         self._frame_rate_fps = actual             # <<<<<<<<<<<<<<
+ *         if abs(actual - fps) > 0.01:
+ *             logger.warning(
+*/
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_actual); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_fps, __pyx_t_4) < (0)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "src/device/daheng_device.py":288
+ *         actual = float(rate_feature.get())
+ *         self._frame_rate_fps = actual
+ *         if abs(actual - fps) > 0.01:             # <<<<<<<<<<<<<<
+ *             logger.warning(
+ *                 "Camera clamped frame rate from %.2f to %.2f fps",
+*/
+  __pyx_t_24 = fabs((__pyx_v_actual - __pyx_v_fps)); 
+  __pyx_t_6 = (__pyx_t_24 > 0.01);
+  if (__pyx_t_6) {
+
+    /* "src/device/daheng_device.py":289
+ *         self._frame_rate_fps = actual
+ *         if abs(actual - fps) > 0.01:
+ *             logger.warning(             # <<<<<<<<<<<<<<
+ *                 "Camera clamped frame rate from %.2f to %.2f fps",
+ *                 fps,
+*/
+    __pyx_t_1 = NULL;
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 289, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 289, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+    /* "src/device/daheng_device.py":291
+ *             logger.warning(
+ *                 "Camera clamped frame rate from %.2f to %.2f fps",
+ *                 fps,             # <<<<<<<<<<<<<<
+ *                 actual,
+ *             )
+*/
+    __pyx_t_7 = PyFloat_FromDouble(__pyx_v_fps); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 291, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+
+    /* "src/device/daheng_device.py":292
+ *                 "Camera clamped frame rate from %.2f to %.2f fps",
+ *                 fps,
+ *                 actual,             # <<<<<<<<<<<<<<
+ *             )
+ *         logger.info("Frame rate set to %.2f fps (range %.2f%.2f)", actual, *self._frame_rate_range)
+*/
+    __pyx_t_15 = PyFloat_FromDouble(__pyx_v_actual); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 292, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_15);
+    __pyx_t_5 = 1;
+    #if CYTHON_UNPACK_METHODS
+    if (unlikely(PyMethod_Check(__pyx_t_9))) {
+      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_9);
+      assert(__pyx_t_1);
+      PyObject* __pyx__function = PyMethod_GET_FUNCTION(__pyx_t_9);
+      __Pyx_INCREF(__pyx_t_1);
+      __Pyx_INCREF(__pyx__function);
+      __Pyx_DECREF_SET(__pyx_t_9, __pyx__function);
+      __pyx_t_5 = 0;
+    }
+    #endif
+    {
+      PyObject *__pyx_callargs[4] = {__pyx_t_1, __pyx_mstate_global->__pyx_kp_u_Camera_clamped_frame_rate_from_2, __pyx_t_7, __pyx_t_15};
+      __pyx_t_4 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_9, __pyx_callargs+__pyx_t_5, (4-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 289, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+    }
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+    /* "src/device/daheng_device.py":288
+ *         actual = float(rate_feature.get())
+ *         self._frame_rate_fps = actual
+ *         if abs(actual - fps) > 0.01:             # <<<<<<<<<<<<<<
+ *             logger.warning(
+ *                 "Camera clamped frame rate from %.2f to %.2f fps",
+*/
+  }
+
+  /* "src/device/daheng_device.py":294
+ *                 actual,
+ *             )
+ *         logger.info("Frame rate set to %.2f fps (range %.2f%.2f)", actual, *self._frame_rate_range)             # <<<<<<<<<<<<<<
+ * 
+ *     def get_frame_rate(self) -> float:
+*/
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_actual); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_15 = PyTuple_New(2); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_15);
+  __Pyx_INCREF(__pyx_mstate_global->__pyx_kp_u_Frame_rate_set_to_2f_fps_range_2);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_kp_u_Frame_rate_set_to_2f_fps_range_2);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_mstate_global->__pyx_kp_u_Frame_rate_set_to_2f_fps_range_2) != (0)) __PYX_ERR(0, 294, __pyx_L1_error);
+  __Pyx_GIVEREF(__pyx_t_4);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_15, 1, __pyx_t_4) != (0)) __PYX_ERR(0, 294, __pyx_L1_error);
+  __pyx_t_4 = 0;
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_range); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_7 = __Pyx_PySequence_Tuple(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_15, __pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_4, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+  /* "src/device/daheng_device.py":251
+ *             raise
+ * 
+ *     def _apply_frame_rate(self, fps: float) -> None:             # <<<<<<<<<<<<<<
+ *         """Write the frame-rate nodes and cache the camera-reported valid range."""
+ *         if self._remote_feature is None:
+*/
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_14);
+  __Pyx_XDECREF(__pyx_t_15);
+  __Pyx_AddTraceback("src.device.daheng_device.DahengDevice._apply_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_mode_name);
+  __Pyx_XDECREF(__pyx_v_rate_name);
+  __Pyx_XDECREF(__pyx_v_rate_feature);
+  __Pyx_XDECREF(__pyx_v_rate_range);
+  __Pyx_XDECREF(__pyx_v_e);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/device/daheng_device.py":296
+ *         logger.info("Frame rate set to %.2f fps (range %.2f%.2f)", actual, *self._frame_rate_range)
+ * 
+ *     def get_frame_rate(self) -> float:             # <<<<<<<<<<<<<<
+ *         """Return the configured target frame rate, preferring the camera value."""
+ *         if self._remote_feature is not None:
+*/
+
+/* Python wrapper */
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_21get_frame_rate(PyObject *__pyx_self, 
+#if CYTHON_METH_FASTCALL
+PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
+#else
+PyObject *__pyx_args, PyObject *__pyx_kwds
+#endif
+); /*proto*/
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_20get_frame_rate, "Return the configured target frame rate, preferring the camera value.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_21get_frame_rate = {"get_frame_rate", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_21get_frame_rate, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_20get_frame_rate};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_21get_frame_rate(PyObject *__pyx_self, 
+#if CYTHON_METH_FASTCALL
+PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
+#else
+PyObject *__pyx_args, PyObject *__pyx_kwds
+#endif
+) {
+  PyObject *__pyx_v_self = 0;
+  #if !CYTHON_METH_FASTCALL
+  CYTHON_UNUSED Py_ssize_t __pyx_nargs;
+  #endif
+  CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
+  PyObject* values[1] = {0};
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_frame_rate (wrapper)", 0);
+  #if !CYTHON_METH_FASTCALL
+  #if CYTHON_ASSUME_SAFE_SIZE
+  __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
+  #else
+  __pyx_nargs = PyTuple_Size(__pyx_args); if (unlikely(__pyx_nargs < 0)) return NULL;
+  #endif
+  #endif
+  __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
+  {
+    PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
+    const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 296, __pyx_L3_error)
+    if (__pyx_kwds_len > 0) {
+      switch (__pyx_nargs) {
+        case  1:
+        values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 296, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      const Py_ssize_t kwd_pos_args = __pyx_nargs;
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_frame_rate", 0) < (0)) __PYX_ERR(0, 296, __pyx_L3_error)
+      for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_frame_rate", 1, 1, 1, i); __PYX_ERR(0, 296, __pyx_L3_error) }
+      }
+    } else if (unlikely(__pyx_nargs != 1)) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 296, __pyx_L3_error)
+    }
+    __pyx_v_self = values[0];
+  }
+  goto __pyx_L6_skip;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("get_frame_rate", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 296, __pyx_L3_error)
+  __pyx_L6_skip:;
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
+    Py_XDECREF(values[__pyx_temp]);
+  }
+  __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_frame_rate(__pyx_self, __pyx_v_self);
+
+  /* function exit code */
+  for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
+    Py_XDECREF(values[__pyx_temp]);
+  }
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_frame_rate(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+  PyObject *__pyx_v_e = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  size_t __pyx_t_8;
+  PyObject *__pyx_t_9 = NULL;
+  PyObject *__pyx_t_10 = NULL;
+  int __pyx_t_11;
+  PyObject *__pyx_t_12 = NULL;
+  PyObject *__pyx_t_13 = NULL;
+  int __pyx_t_14;
+  char const *__pyx_t_15;
+  PyObject *__pyx_t_16 = NULL;
+  PyObject *__pyx_t_17 = NULL;
+  PyObject *__pyx_t_18 = NULL;
+  PyObject *__pyx_t_19 = NULL;
+  PyObject *__pyx_t_20 = NULL;
+  PyObject *__pyx_t_21 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_frame_rate", 0);
+
+  /* "src/device/daheng_device.py":298
+ *     def get_frame_rate(self) -> float:
+ *         """Return the configured target frame rate, preferring the camera value."""
+ *         if self._remote_feature is not None:             # <<<<<<<<<<<<<<
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+*/
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 298, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = (__pyx_t_1 != Py_None);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "src/device/daheng_device.py":299
+ *         """Return the configured target frame rate, preferring the camera value."""
+ *         if self._remote_feature is not None:
+ *             try:             # <<<<<<<<<<<<<<
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     self._frame_rate_fps = float(
+*/
+    {
+      __Pyx_PyThreadState_declare
+      __Pyx_PyThreadState_assign
+      __Pyx_ExceptionSave(&__pyx_t_3, &__pyx_t_4, &__pyx_t_5);
+      __Pyx_XGOTREF(__pyx_t_3);
+      __Pyx_XGOTREF(__pyx_t_4);
+      __Pyx_XGOTREF(__pyx_t_5);
+      /*try:*/ {
+
+        /* "src/device/daheng_device.py":300
+ *         if self._remote_feature is not None:
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):             # <<<<<<<<<<<<<<
+ *                     self._frame_rate_fps = float(
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get()
+*/
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 300, __pyx_L4_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __pyx_t_6 = __pyx_t_7;
+        __Pyx_INCREF(__pyx_t_6);
+        __pyx_t_8 = 0;
+        {
+          PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_mstate_global->__pyx_n_u_AcquisitionFrameRate};
+          __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_implemented, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+          __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_1);
+        }
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 300, __pyx_L4_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_2) {
+
+          /* "src/device/daheng_device.py":302
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     self._frame_rate_fps = float(
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get()             # <<<<<<<<<<<<<<
+ *                     )
+ *             except Exception as e:
+*/
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 302, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_10);
+          __pyx_t_9 = __pyx_t_10;
+          __Pyx_INCREF(__pyx_t_9);
+          __pyx_t_8 = 0;
+          {
+            PyObject *__pyx_callargs[2] = {__pyx_t_9, __pyx_mstate_global->__pyx_n_u_AcquisitionFrameRate};
+            __pyx_t_6 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_float_feature, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+            __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+            if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 302, __pyx_L4_error)
+            __Pyx_GOTREF(__pyx_t_6);
+          }
+          __pyx_t_7 = __pyx_t_6;
+          __Pyx_INCREF(__pyx_t_7);
+          __pyx_t_8 = 0;
+          {
+            PyObject *__pyx_callargs[2] = {__pyx_t_7, NULL};
+            __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_8, (1-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+            __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+            if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 302, __pyx_L4_error)
+            __Pyx_GOTREF(__pyx_t_1);
+          }
+
+          /* "src/device/daheng_device.py":301
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     self._frame_rate_fps = float(             # <<<<<<<<<<<<<<
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get()
+ *                     )
+*/
+          __pyx_t_6 = __Pyx_PyNumber_Float(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 301, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_fps, __pyx_t_6) < (0)) __PYX_ERR(0, 301, __pyx_L4_error)
+          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+          /* "src/device/daheng_device.py":300
+ *         if self._remote_feature is not None:
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):             # <<<<<<<<<<<<<<
+ *                     self._frame_rate_fps = float(
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get()
+*/
+        }
+
+        /* "src/device/daheng_device.py":299
+ *         """Return the configured target frame rate, preferring the camera value."""
+ *         if self._remote_feature is not None:
+ *             try:             # <<<<<<<<<<<<<<
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     self._frame_rate_fps = float(
+*/
+      }
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+      goto __pyx_L9_try_end;
+      __pyx_L4_error:;
+      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+      /* "src/device/daheng_device.py":304
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get()
+ *                     )
+ *             except Exception as e:             # <<<<<<<<<<<<<<
+ *                 logger.debug("Could not read camera frame rate: %s", e)
+ *         return self._frame_rate_fps
+*/
+      __pyx_t_11 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
+      if (__pyx_t_11) {
+        __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+        if (__Pyx_GetException(&__pyx_t_6, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 304, __pyx_L6_except_error)
+        __Pyx_XGOTREF(__pyx_t_6);
+        __Pyx_XGOTREF(__pyx_t_1);
+        __Pyx_XGOTREF(__pyx_t_7);
+        __Pyx_INCREF(__pyx_t_1);
+        __pyx_v_e = __pyx_t_1;
+        /*try:*/ {
+
+          /* "src/device/daheng_device.py":305
+ *                     )
+ *             except Exception as e:
+ *                 logger.debug("Could not read camera frame rate: %s", e)             # <<<<<<<<<<<<<<
+ *         return self._frame_rate_fps
+ * 
+*/
+          __pyx_t_9 = NULL;
+          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 305, __pyx_L16_error)
+          __Pyx_GOTREF(__pyx_t_12);
+          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 305, __pyx_L16_error)
+          __Pyx_GOTREF(__pyx_t_13);
+          __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+          __pyx_t_8 = 1;
+          #if CYTHON_UNPACK_METHODS
+          if (unlikely(PyMethod_Check(__pyx_t_13))) {
+            __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_13);
+            assert(__pyx_t_9);
+            PyObject* __pyx__function = PyMethod_GET_FUNCTION(__pyx_t_13);
+            __Pyx_INCREF(__pyx_t_9);
+            __Pyx_INCREF(__pyx__function);
+            __Pyx_DECREF_SET(__pyx_t_13, __pyx__function);
+            __pyx_t_8 = 0;
+          }
+          #endif
+          {
+            PyObject *__pyx_callargs[3] = {__pyx_t_9, __pyx_mstate_global->__pyx_kp_u_Could_not_read_camera_frame_rate, __pyx_v_e};
+            __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_8, (3-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+            __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+            __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 305, __pyx_L16_error)
+            __Pyx_GOTREF(__pyx_t_10);
+          }
+          __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+        }
+
+        /* "src/device/daheng_device.py":304
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get()
+ *                     )
+ *             except Exception as e:             # <<<<<<<<<<<<<<
+ *                 logger.debug("Could not read camera frame rate: %s", e)
+ *         return self._frame_rate_fps
+*/
+        /*finally:*/ {
+          /*normal exit:*/{
+            __Pyx_DECREF(__pyx_v_e); __pyx_v_e = 0;
+            goto __pyx_L17;
+          }
+          __pyx_L16_error:;
+          /*exception exit:*/{
+            __Pyx_PyThreadState_declare
+            __Pyx_PyThreadState_assign
+            __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
+            __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+            __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+             __Pyx_ExceptionSwap(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21);
+            if ( unlikely(__Pyx_GetException(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18) < 0)) __Pyx_ErrFetch(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18);
+            __Pyx_XGOTREF(__pyx_t_16);
+            __Pyx_XGOTREF(__pyx_t_17);
+            __Pyx_XGOTREF(__pyx_t_18);
+            __Pyx_XGOTREF(__pyx_t_19);
+            __Pyx_XGOTREF(__pyx_t_20);
+            __Pyx_XGOTREF(__pyx_t_21);
+            __pyx_t_11 = __pyx_lineno; __pyx_t_14 = __pyx_clineno; __pyx_t_15 = __pyx_filename;
+            {
+              __Pyx_DECREF(__pyx_v_e); __pyx_v_e = 0;
+            }
+            __Pyx_XGIVEREF(__pyx_t_19);
+            __Pyx_XGIVEREF(__pyx_t_20);
+            __Pyx_XGIVEREF(__pyx_t_21);
+            __Pyx_ExceptionReset(__pyx_t_19, __pyx_t_20, __pyx_t_21);
+            __Pyx_XGIVEREF(__pyx_t_16);
+            __Pyx_XGIVEREF(__pyx_t_17);
+            __Pyx_XGIVEREF(__pyx_t_18);
+            __Pyx_ErrRestore(__pyx_t_16, __pyx_t_17, __pyx_t_18);
+            __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
+            __pyx_lineno = __pyx_t_11; __pyx_clineno = __pyx_t_14; __pyx_filename = __pyx_t_15;
+            goto __pyx_L6_except_error;
+          }
+          __pyx_L17:;
+        }
+        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+        goto __pyx_L5_exception_handled;
+      }
+      goto __pyx_L6_except_error;
+
+      /* "src/device/daheng_device.py":299
+ *         """Return the configured target frame rate, preferring the camera value."""
+ *         if self._remote_feature is not None:
+ *             try:             # <<<<<<<<<<<<<<
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     self._frame_rate_fps = float(
+*/
+      __pyx_L6_except_error:;
+      __Pyx_XGIVEREF(__pyx_t_3);
+      __Pyx_XGIVEREF(__pyx_t_4);
+      __Pyx_XGIVEREF(__pyx_t_5);
+      __Pyx_ExceptionReset(__pyx_t_3, __pyx_t_4, __pyx_t_5);
+      goto __pyx_L1_error;
+      __pyx_L5_exception_handled:;
+      __Pyx_XGIVEREF(__pyx_t_3);
+      __Pyx_XGIVEREF(__pyx_t_4);
+      __Pyx_XGIVEREF(__pyx_t_5);
+      __Pyx_ExceptionReset(__pyx_t_3, __pyx_t_4, __pyx_t_5);
+      __pyx_L9_try_end:;
+    }
+
+    /* "src/device/daheng_device.py":298
+ *     def get_frame_rate(self) -> float:
+ *         """Return the configured target frame rate, preferring the camera value."""
+ *         if self._remote_feature is not None:             # <<<<<<<<<<<<<<
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+*/
+  }
+
+  /* "src/device/daheng_device.py":306
+ *             except Exception as e:
+ *                 logger.debug("Could not read camera frame rate: %s", e)
+ *         return self._frame_rate_fps             # <<<<<<<<<<<<<<
+ * 
+ *     def get_frame_rate_range(self) -> tuple[float, float]:
+*/
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_fps); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_r = __pyx_t_7;
+  __pyx_t_7 = 0;
+  goto __pyx_L0;
+
+  /* "src/device/daheng_device.py":296
+ *         logger.info("Frame rate set to %.2f fps (range %.2f%.2f)", actual, *self._frame_rate_range)
+ * 
+ *     def get_frame_rate(self) -> float:             # <<<<<<<<<<<<<<
+ *         """Return the configured target frame rate, preferring the camera value."""
+ *         if self._remote_feature is not None:
+*/
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_10);
+  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_XDECREF(__pyx_t_13);
+  __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_frame_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_e);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/device/daheng_device.py":308
+ *         return self._frame_rate_fps
+ * 
+ *     def get_frame_rate_range(self) -> tuple[float, float]:             # <<<<<<<<<<<<<<
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:
+*/
+
+/* Python wrapper */
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_23get_frame_rate_range(PyObject *__pyx_self, 
+#if CYTHON_METH_FASTCALL
+PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
+#else
+PyObject *__pyx_args, PyObject *__pyx_kwds
+#endif
+); /*proto*/
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_22get_frame_rate_range, "Return the camera's current valid frame-rate range in fps.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_23get_frame_rate_range = {"get_frame_rate_range", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_23get_frame_rate_range, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_22get_frame_rate_range};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_23get_frame_rate_range(PyObject *__pyx_self, 
+#if CYTHON_METH_FASTCALL
+PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
+#else
+PyObject *__pyx_args, PyObject *__pyx_kwds
+#endif
+) {
+  PyObject *__pyx_v_self = 0;
+  #if !CYTHON_METH_FASTCALL
+  CYTHON_UNUSED Py_ssize_t __pyx_nargs;
+  #endif
+  CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
+  PyObject* values[1] = {0};
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_frame_rate_range (wrapper)", 0);
+  #if !CYTHON_METH_FASTCALL
+  #if CYTHON_ASSUME_SAFE_SIZE
+  __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
+  #else
+  __pyx_nargs = PyTuple_Size(__pyx_args); if (unlikely(__pyx_nargs < 0)) return NULL;
+  #endif
+  #endif
+  __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
+  {
+    PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
+    const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 308, __pyx_L3_error)
+    if (__pyx_kwds_len > 0) {
+      switch (__pyx_nargs) {
+        case  1:
+        values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 308, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      const Py_ssize_t kwd_pos_args = __pyx_nargs;
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_frame_rate_range", 0) < (0)) __PYX_ERR(0, 308, __pyx_L3_error)
+      for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_frame_rate_range", 1, 1, 1, i); __PYX_ERR(0, 308, __pyx_L3_error) }
+      }
+    } else if (unlikely(__pyx_nargs != 1)) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 308, __pyx_L3_error)
+    }
+    __pyx_v_self = values[0];
+  }
+  goto __pyx_L6_skip;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("get_frame_rate_range", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 308, __pyx_L3_error)
+  __pyx_L6_skip:;
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
+    Py_XDECREF(values[__pyx_temp]);
+  }
+  __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_frame_rate_range", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_22get_frame_rate_range(__pyx_self, __pyx_v_self);
+
+  /* function exit code */
+  for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
+    Py_XDECREF(values[__pyx_temp]);
+  }
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22get_frame_rate_range(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+  PyObject *__pyx_v_rate_range = NULL;
+  PyObject *__pyx_v_e = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  size_t __pyx_t_8;
+  PyObject *__pyx_t_9 = NULL;
+  PyObject *__pyx_t_10 = NULL;
+  int __pyx_t_11;
+  PyObject *__pyx_t_12 = NULL;
+  PyObject *__pyx_t_13 = NULL;
+  int __pyx_t_14;
+  char const *__pyx_t_15;
+  PyObject *__pyx_t_16 = NULL;
+  PyObject *__pyx_t_17 = NULL;
+  PyObject *__pyx_t_18 = NULL;
+  PyObject *__pyx_t_19 = NULL;
+  PyObject *__pyx_t_20 = NULL;
+  PyObject *__pyx_t_21 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_frame_rate_range", 0);
+
+  /* "src/device/daheng_device.py":310
+ *     def get_frame_rate_range(self) -> tuple[float, float]:
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:             # <<<<<<<<<<<<<<
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+*/
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = (__pyx_t_1 != Py_None);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "src/device/daheng_device.py":311
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:
+ *             try:             # <<<<<<<<<<<<<<
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     rate_range = (
+*/
+    {
+      __Pyx_PyThreadState_declare
+      __Pyx_PyThreadState_assign
+      __Pyx_ExceptionSave(&__pyx_t_3, &__pyx_t_4, &__pyx_t_5);
+      __Pyx_XGOTREF(__pyx_t_3);
+      __Pyx_XGOTREF(__pyx_t_4);
+      __Pyx_XGOTREF(__pyx_t_5);
+      /*try:*/ {
+
+        /* "src/device/daheng_device.py":312
+ *         if self._remote_feature is not None:
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):             # <<<<<<<<<<<<<<
+ *                     rate_range = (
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get_range()
+*/
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 312, __pyx_L4_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __pyx_t_6 = __pyx_t_7;
+        __Pyx_INCREF(__pyx_t_6);
+        __pyx_t_8 = 0;
+        {
+          PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_mstate_global->__pyx_n_u_AcquisitionFrameRate};
+          __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_implemented, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+          __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 312, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_1);
+        }
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 312, __pyx_L4_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_2) {
+
+          /* "src/device/daheng_device.py":314
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     rate_range = (
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get_range()             # <<<<<<<<<<<<<<
+ *                     )
+ *                     self._frame_rate_range = (
+*/
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 314, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_10);
+          __pyx_t_9 = __pyx_t_10;
+          __Pyx_INCREF(__pyx_t_9);
+          __pyx_t_8 = 0;
+          {
+            PyObject *__pyx_callargs[2] = {__pyx_t_9, __pyx_mstate_global->__pyx_n_u_AcquisitionFrameRate};
+            __pyx_t_6 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_float_feature, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+            __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+            if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 314, __pyx_L4_error)
+            __Pyx_GOTREF(__pyx_t_6);
+          }
+          __pyx_t_7 = __pyx_t_6;
+          __Pyx_INCREF(__pyx_t_7);
+          __pyx_t_8 = 0;
+          {
+            PyObject *__pyx_callargs[2] = {__pyx_t_7, NULL};
+            __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_range, __pyx_callargs+__pyx_t_8, (1-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+            __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+            if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 314, __pyx_L4_error)
+            __Pyx_GOTREF(__pyx_t_1);
+          }
+          __pyx_v_rate_range = __pyx_t_1;
+          __pyx_t_1 = 0;
+
+          /* "src/device/daheng_device.py":317
+ *                     )
+ *                     self._frame_rate_range = (
+ *                         float(rate_range["min"]),             # <<<<<<<<<<<<<<
+ *                         float(rate_range["max"]),
+ *                     )
+*/
+          __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_v_rate_range, __pyx_mstate_global->__pyx_n_u_min); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 317, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_6 = __Pyx_PyNumber_Float(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 317, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+          /* "src/device/daheng_device.py":318
+ *                     self._frame_rate_range = (
+ *                         float(rate_range["min"]),
+ *                         float(rate_range["max"]),             # <<<<<<<<<<<<<<
+ *                     )
+ *             except Exception as e:
+*/
+          __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_v_rate_range, __pyx_mstate_global->__pyx_n_u_max); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 318, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_7 = __Pyx_PyNumber_Float(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 318, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+          /* "src/device/daheng_device.py":317
+ *                     )
+ *                     self._frame_rate_range = (
+ *                         float(rate_range["min"]),             # <<<<<<<<<<<<<<
+ *                         float(rate_range["max"]),
+ *                     )
+*/
+          __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 317, __pyx_L4_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __Pyx_GIVEREF(__pyx_t_6);
+          if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_6) != (0)) __PYX_ERR(0, 317, __pyx_L4_error);
+          __Pyx_GIVEREF(__pyx_t_7);
+          if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_7) != (0)) __PYX_ERR(0, 317, __pyx_L4_error);
+          __pyx_t_6 = 0;
+          __pyx_t_7 = 0;
+
+          /* "src/device/daheng_device.py":316
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get_range()
+ *                     )
+ *                     self._frame_rate_range = (             # <<<<<<<<<<<<<<
+ *                         float(rate_range["min"]),
+ *                         float(rate_range["max"]),
+*/
+          if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_range, __pyx_t_1) < (0)) __PYX_ERR(0, 316, __pyx_L4_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+          /* "src/device/daheng_device.py":312
+ *         if self._remote_feature is not None:
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):             # <<<<<<<<<<<<<<
+ *                     rate_range = (
+ *                         self._remote_feature.get_float_feature("AcquisitionFrameRate").get_range()
+*/
+        }
+
+        /* "src/device/daheng_device.py":311
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:
+ *             try:             # <<<<<<<<<<<<<<
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     rate_range = (
+*/
+      }
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+      goto __pyx_L9_try_end;
+      __pyx_L4_error:;
+      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+      /* "src/device/daheng_device.py":320
+ *                         float(rate_range["max"]),
+ *                     )
+ *             except Exception as e:             # <<<<<<<<<<<<<<
+ *                 logger.debug("Could not read camera frame-rate range: %s", e)
+ *         return self._frame_rate_range
+*/
+      __pyx_t_11 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
+      if (__pyx_t_11) {
+        __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_frame_rate_range", __pyx_clineno, __pyx_lineno, __pyx_filename);
+        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_7, &__pyx_t_6) < 0) __PYX_ERR(0, 320, __pyx_L6_except_error)
+        __Pyx_XGOTREF(__pyx_t_1);
+        __Pyx_XGOTREF(__pyx_t_7);
+        __Pyx_XGOTREF(__pyx_t_6);
+        __Pyx_INCREF(__pyx_t_7);
+        __pyx_v_e = __pyx_t_7;
+        /*try:*/ {
+
+          /* "src/device/daheng_device.py":321
+ *                     )
+ *             except Exception as e:
+ *                 logger.debug("Could not read camera frame-rate range: %s", e)             # <<<<<<<<<<<<<<
+ *         return self._frame_rate_range
+ * 
+*/
+          __pyx_t_9 = NULL;
+          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 321, __pyx_L16_error)
+          __Pyx_GOTREF(__pyx_t_12);
+          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 321, __pyx_L16_error)
+          __Pyx_GOTREF(__pyx_t_13);
+          __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+          __pyx_t_8 = 1;
+          #if CYTHON_UNPACK_METHODS
+          if (unlikely(PyMethod_Check(__pyx_t_13))) {
+            __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_13);
+            assert(__pyx_t_9);
+            PyObject* __pyx__function = PyMethod_GET_FUNCTION(__pyx_t_13);
+            __Pyx_INCREF(__pyx_t_9);
+            __Pyx_INCREF(__pyx__function);
+            __Pyx_DECREF_SET(__pyx_t_13, __pyx__function);
+            __pyx_t_8 = 0;
+          }
+          #endif
+          {
+            PyObject *__pyx_callargs[3] = {__pyx_t_9, __pyx_mstate_global->__pyx_kp_u_Could_not_read_camera_frame_rate_2, __pyx_v_e};
+            __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_8, (3-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+            __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+            __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 321, __pyx_L16_error)
+            __Pyx_GOTREF(__pyx_t_10);
+          }
+          __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+        }
+
+        /* "src/device/daheng_device.py":320
+ *                         float(rate_range["max"]),
+ *                     )
+ *             except Exception as e:             # <<<<<<<<<<<<<<
+ *                 logger.debug("Could not read camera frame-rate range: %s", e)
+ *         return self._frame_rate_range
+*/
+        /*finally:*/ {
+          /*normal exit:*/{
+            __Pyx_DECREF(__pyx_v_e); __pyx_v_e = 0;
+            goto __pyx_L17;
+          }
+          __pyx_L16_error:;
+          /*exception exit:*/{
+            __Pyx_PyThreadState_declare
+            __Pyx_PyThreadState_assign
+            __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
+            __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+            __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+             __Pyx_ExceptionSwap(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21);
+            if ( unlikely(__Pyx_GetException(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18) < 0)) __Pyx_ErrFetch(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18);
+            __Pyx_XGOTREF(__pyx_t_16);
+            __Pyx_XGOTREF(__pyx_t_17);
+            __Pyx_XGOTREF(__pyx_t_18);
+            __Pyx_XGOTREF(__pyx_t_19);
+            __Pyx_XGOTREF(__pyx_t_20);
+            __Pyx_XGOTREF(__pyx_t_21);
+            __pyx_t_11 = __pyx_lineno; __pyx_t_14 = __pyx_clineno; __pyx_t_15 = __pyx_filename;
+            {
+              __Pyx_DECREF(__pyx_v_e); __pyx_v_e = 0;
+            }
+            __Pyx_XGIVEREF(__pyx_t_19);
+            __Pyx_XGIVEREF(__pyx_t_20);
+            __Pyx_XGIVEREF(__pyx_t_21);
+            __Pyx_ExceptionReset(__pyx_t_19, __pyx_t_20, __pyx_t_21);
+            __Pyx_XGIVEREF(__pyx_t_16);
+            __Pyx_XGIVEREF(__pyx_t_17);
+            __Pyx_XGIVEREF(__pyx_t_18);
+            __Pyx_ErrRestore(__pyx_t_16, __pyx_t_17, __pyx_t_18);
+            __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
+            __pyx_lineno = __pyx_t_11; __pyx_clineno = __pyx_t_14; __pyx_filename = __pyx_t_15;
+            goto __pyx_L6_except_error;
+          }
+          __pyx_L17:;
+        }
+        __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        goto __pyx_L5_exception_handled;
+      }
+      goto __pyx_L6_except_error;
+
+      /* "src/device/daheng_device.py":311
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:
+ *             try:             # <<<<<<<<<<<<<<
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+ *                     rate_range = (
+*/
+      __pyx_L6_except_error:;
+      __Pyx_XGIVEREF(__pyx_t_3);
+      __Pyx_XGIVEREF(__pyx_t_4);
+      __Pyx_XGIVEREF(__pyx_t_5);
+      __Pyx_ExceptionReset(__pyx_t_3, __pyx_t_4, __pyx_t_5);
+      goto __pyx_L1_error;
+      __pyx_L5_exception_handled:;
+      __Pyx_XGIVEREF(__pyx_t_3);
+      __Pyx_XGIVEREF(__pyx_t_4);
+      __Pyx_XGIVEREF(__pyx_t_5);
+      __Pyx_ExceptionReset(__pyx_t_3, __pyx_t_4, __pyx_t_5);
+      __pyx_L9_try_end:;
+    }
+
+    /* "src/device/daheng_device.py":310
+ *     def get_frame_rate_range(self) -> tuple[float, float]:
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:             # <<<<<<<<<<<<<<
+ *             try:
+ *                 if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+*/
+  }
+
+  /* "src/device/daheng_device.py":322
+ *             except Exception as e:
+ *                 logger.debug("Could not read camera frame-rate range: %s", e)
+ *         return self._frame_rate_range             # <<<<<<<<<<<<<<
+ * 
+ *     def set_binning(self, x: int, y: int) -> None:
+*/
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_rate_range); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_r = __pyx_t_6;
+  __pyx_t_6 = 0;
+  goto __pyx_L0;
+
+  /* "src/device/daheng_device.py":308
+ *         return self._frame_rate_fps
+ * 
+ *     def get_frame_rate_range(self) -> tuple[float, float]:             # <<<<<<<<<<<<<<
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:
+*/
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_10);
+  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_XDECREF(__pyx_t_13);
+  __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_frame_rate_range", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_rate_range);
+  __Pyx_XDECREF(__pyx_v_e);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/device/daheng_device.py":324
+ *         return self._frame_rate_range
  * 
  *     def set_binning(self, x: int, y: int) -> None:             # <<<<<<<<<<<<<<
  *         """Set Daheng hardware binning while acquisition is stopped.
@@ -7984,16 +10390,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_14set_gain
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_17set_binning(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_25set_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_16set_binning, "Set Daheng hardware binning while acquisition is stopped.\n\n        ``BinningHorizontal`` is X (image columns) and\n        ``BinningVertical`` is Y (image rows).  The requested value is kept\n        when the device is not initialized yet and applied by ``initialize``.\n        ");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_17set_binning = {"set_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_17set_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_16set_binning};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_17set_binning(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_24set_binning, "Set Daheng hardware binning while acquisition is stopped.\n\n        ``BinningHorizontal`` is X (image columns) and\n        ``BinningVertical`` is Y (image rows).  The requested value is kept\n        when the device is not initialized yet and applied by ``initialize``.\n        ");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_25set_binning = {"set_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_25set_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_24set_binning};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_25set_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -8025,48 +10431,48 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_x,&__pyx_mstate_global->__pyx_n_u_y,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 218, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 324, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  3:
         values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 218, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 324, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 218, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 324, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 218, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 324, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_binning", 0) < (0)) __PYX_ERR(0, 218, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_binning", 0) < (0)) __PYX_ERR(0, 324, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 3; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_binning", 1, 3, 3, i); __PYX_ERR(0, 218, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_binning", 1, 3, 3, i); __PYX_ERR(0, 324, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 3)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 218, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 324, __pyx_L3_error)
       values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 218, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 324, __pyx_L3_error)
       values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 218, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 324, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
-    if (__Pyx_PyInt_FromNumber(&values[1], "x", 0) < (0)) __PYX_ERR(0, 218, __pyx_L3_error)
+    if (__Pyx_PyInt_FromNumber(&values[1], "x", 0) < (0)) __PYX_ERR(0, 324, __pyx_L3_error)
     __pyx_v_x = ((PyObject*)values[1]);
-    if (__Pyx_PyInt_FromNumber(&values[2], "y", 0) < (0)) __PYX_ERR(0, 218, __pyx_L3_error)
+    if (__Pyx_PyInt_FromNumber(&values[2], "y", 0) < (0)) __PYX_ERR(0, 324, __pyx_L3_error)
     __pyx_v_y = ((PyObject*)values[2]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_binning", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 218, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_binning", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 324, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -8077,9 +10483,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), (&PyLong_Type), 0, "x", 2))) __PYX_ERR(0, 218, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), (&PyLong_Type), 0, "y", 2))) __PYX_ERR(0, 218, __pyx_L1_error)
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binning(__pyx_self, __pyx_v_self, __pyx_v_x, __pyx_v_y);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), (&PyLong_Type), 0, "x", 2))) __PYX_ERR(0, 324, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), (&PyLong_Type), 0, "y", 2))) __PYX_ERR(0, 324, __pyx_L1_error)
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_24set_binning(__pyx_self, __pyx_v_self, __pyx_v_x, __pyx_v_y);
 
   /* function exit code */
   goto __pyx_L0;
@@ -8098,7 +10504,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24set_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y) {
   PyObject *__pyx_v_binning = NULL;
   PyObject *__pyx_v_e = NULL;
   PyObject *__pyx_r = NULL;
@@ -8129,7 +10535,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_binning", 0);
 
-  /* "src/device/daheng_device.py":225
+  /* "src/device/daheng_device.py":331
  *         when the device is not initialized yet and applied by ``initialize``.
  *         """
  *         binning = validate_binning(x, y)             # <<<<<<<<<<<<<<
@@ -8137,7 +10543,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
  *             raise RuntimeError(
 */
   __pyx_t_2 = NULL;
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_validate_binning); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 225, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_validate_binning); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 331, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = 1;
   #if CYTHON_UNPACK_METHODS
@@ -8156,26 +10562,26 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
     __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_3, __pyx_callargs+__pyx_t_4, (3-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 225, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 331, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __pyx_v_binning = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":226
+  /* "src/device/daheng_device.py":332
  *         """
  *         binning = validate_binning(x, y)
  *         if self._running:             # <<<<<<<<<<<<<<
  *             raise RuntimeError(
  *                 "Cannot change camera binning while acquisition is running; "
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 332, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 332, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (unlikely(__pyx_t_5)) {
 
-    /* "src/device/daheng_device.py":227
+    /* "src/device/daheng_device.py":333
  *         binning = validate_binning(x, y)
  *         if self._running:
  *             raise RuntimeError(             # <<<<<<<<<<<<<<
@@ -8188,14 +10594,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
       PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_mstate_global->__pyx_kp_u_Cannot_change_camera_binning_whi};
       __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 227, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 333, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 227, __pyx_L1_error)
+    __PYX_ERR(0, 333, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":226
+    /* "src/device/daheng_device.py":332
  *         """
  *         binning = validate_binning(x, y)
  *         if self._running:             # <<<<<<<<<<<<<<
@@ -8204,7 +10610,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
 */
   }
 
-  /* "src/device/daheng_device.py":232
+  /* "src/device/daheng_device.py":338
  *             )
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -8220,24 +10626,24 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
     __Pyx_XGOTREF(__pyx_t_8);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":233
+      /* "src/device/daheng_device.py":339
  * 
  *         try:
  *             self._apply_binning(*binning)             # <<<<<<<<<<<<<<
  *         except Exception as e:
  *             self._last_error = str(e)
 */
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_apply_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 233, __pyx_L4_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_apply_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 339, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = __Pyx_PySequence_Tuple(__pyx_v_binning); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 233, __pyx_L4_error)
+      __pyx_t_3 = __Pyx_PySequence_Tuple(__pyx_v_binning); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 339, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 233, __pyx_L4_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 339, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "src/device/daheng_device.py":232
+      /* "src/device/daheng_device.py":338
  *             )
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -8254,7 +10660,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "src/device/daheng_device.py":234
+    /* "src/device/daheng_device.py":340
  *         try:
  *             self._apply_binning(*binning)
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -8264,7 +10670,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
     __pyx_t_9 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_9) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.set_binning", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_2, &__pyx_t_3, &__pyx_t_1) < 0) __PYX_ERR(0, 234, __pyx_L6_except_error)
+      if (__Pyx_GetException(&__pyx_t_2, &__pyx_t_3, &__pyx_t_1) < 0) __PYX_ERR(0, 340, __pyx_L6_except_error)
       __Pyx_XGOTREF(__pyx_t_2);
       __Pyx_XGOTREF(__pyx_t_3);
       __Pyx_XGOTREF(__pyx_t_1);
@@ -8272,51 +10678,51 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
       __pyx_v_e = __pyx_t_3;
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":235
+        /* "src/device/daheng_device.py":341
  *             self._apply_binning(*binning)
  *         except Exception as e:
  *             self._last_error = str(e)             # <<<<<<<<<<<<<<
  *             logger.error("Failed to set binning to %dx%d: %s", *binning, e)
  *             raise
 */
-        __pyx_t_10 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 235, __pyx_L15_error)
+        __pyx_t_10 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 341, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_10);
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_10) < (0)) __PYX_ERR(0, 235, __pyx_L15_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_10) < (0)) __PYX_ERR(0, 341, __pyx_L15_error)
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-        /* "src/device/daheng_device.py":236
+        /* "src/device/daheng_device.py":342
  *         except Exception as e:
  *             self._last_error = str(e)
  *             logger.error("Failed to set binning to %dx%d: %s", *binning, e)             # <<<<<<<<<<<<<<
  *             raise
  * 
 */
-        __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 236, __pyx_L15_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 342, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 236, __pyx_L15_error)
+        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 342, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __pyx_t_10 = __Pyx_PySequence_Tuple(__pyx_v_binning); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 236, __pyx_L15_error)
+        __pyx_t_10 = __Pyx_PySequence_Tuple(__pyx_v_binning); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 342, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_12 = PyNumber_Add(__pyx_mstate_global->__pyx_tuple[2], __pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 236, __pyx_L15_error)
+        __pyx_t_12 = PyNumber_Add(__pyx_mstate_global->__pyx_tuple[3], __pyx_t_10); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 342, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __pyx_t_10 = PyTuple_New(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 236, __pyx_L15_error)
+        __pyx_t_10 = PyTuple_New(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 342, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_INCREF(__pyx_v_e);
         __Pyx_GIVEREF(__pyx_v_e);
-        if (__Pyx_PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_v_e) != (0)) __PYX_ERR(0, 236, __pyx_L15_error);
-        __pyx_t_13 = PyNumber_Add(__pyx_t_12, __pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 236, __pyx_L15_error)
+        if (__Pyx_PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_v_e) != (0)) __PYX_ERR(0, 342, __pyx_L15_error);
+        __pyx_t_13 = PyNumber_Add(__pyx_t_12, __pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 342, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_13, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 236, __pyx_L15_error)
+        __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_13, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 342, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-        /* "src/device/daheng_device.py":237
+        /* "src/device/daheng_device.py":343
  *             self._last_error = str(e)
  *             logger.error("Failed to set binning to %dx%d: %s", *binning, e)
  *             raise             # <<<<<<<<<<<<<<
@@ -8328,10 +10734,10 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
         __Pyx_XGIVEREF(__pyx_t_1);
         __Pyx_ErrRestoreWithState(__pyx_t_2, __pyx_t_3, __pyx_t_1);
         __pyx_t_2 = 0;  __pyx_t_3 = 0;  __pyx_t_1 = 0; 
-        __PYX_ERR(0, 237, __pyx_L15_error)
+        __PYX_ERR(0, 343, __pyx_L15_error)
       }
 
-      /* "src/device/daheng_device.py":234
+      /* "src/device/daheng_device.py":340
  *         try:
  *             self._apply_binning(*binning)
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -8376,7 +10782,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
     }
     goto __pyx_L6_except_error;
 
-    /* "src/device/daheng_device.py":232
+    /* "src/device/daheng_device.py":338
  *             )
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -8392,8 +10798,8 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
     __pyx_L9_try_end:;
   }
 
-  /* "src/device/daheng_device.py":218
- *                 logger.error("Failed to set gain: %s", e)
+  /* "src/device/daheng_device.py":324
+ *         return self._frame_rate_range
  * 
  *     def set_binning(self, x: int, y: int) -> None:             # <<<<<<<<<<<<<<
  *         """Set Daheng hardware binning while acquisition is stopped.
@@ -8421,7 +10827,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":239
+/* "src/device/daheng_device.py":345
  *             raise
  * 
  *     def get_binning(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -8430,16 +10836,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_16set_binn
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_19get_binning(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_27get_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_18get_binning, "Return the configured hardware ``(horizontal, vertical)`` binning.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_19get_binning = {"get_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_19get_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_18get_binning};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_19get_binning(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_26get_binning, "Return the configured hardware ``(horizontal, vertical)`` binning.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_27get_binning = {"get_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_27get_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_26get_binning};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_27get_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -8469,32 +10875,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 239, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 345, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 239, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 345, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_binning", 0) < (0)) __PYX_ERR(0, 239, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_binning", 0) < (0)) __PYX_ERR(0, 345, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_binning", 1, 1, 1, i); __PYX_ERR(0, 239, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_binning", 1, 1, 1, i); __PYX_ERR(0, 345, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 239, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 345, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_binning", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 239, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_binning", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 345, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -8505,7 +10911,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binning(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_26get_binning(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -8515,7 +10921,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26get_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_v_horizontal = NULL;
   PyObject *__pyx_v_vertical = NULL;
   PyObject *__pyx_v_actual = NULL;
@@ -8548,20 +10954,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_binning", 0);
 
-  /* "src/device/daheng_device.py":241
+  /* "src/device/daheng_device.py":347
  *     def get_binning(self) -> tuple[int, int]:
  *         """Return the configured hardware ``(horizontal, vertical)`` binning."""
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
  *             return self._binning
  * 
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 241, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 347, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 == Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":242
+    /* "src/device/daheng_device.py":348
  *         """Return the configured hardware ``(horizontal, vertical)`` binning."""
  *         if self._remote_feature is None:
  *             return self._binning             # <<<<<<<<<<<<<<
@@ -8569,14 +10975,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
  *         try:
 */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 348, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 242, __pyx_L1_error)
+    if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 348, __pyx_L1_error)
     __pyx_r = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "src/device/daheng_device.py":241
+    /* "src/device/daheng_device.py":347
  *     def get_binning(self) -> tuple[int, int]:
  *         """Return the configured hardware ``(horizontal, vertical)`` binning."""
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
@@ -8585,7 +10991,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
 */
   }
 
-  /* "src/device/daheng_device.py":244
+  /* "src/device/daheng_device.py":350
  *             return self._binning
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -8601,14 +11007,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
     __Pyx_XGOTREF(__pyx_t_5);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":246
+      /* "src/device/daheng_device.py":352
  *         try:
  *             horizontal = int(
  *                 self._remote_feature.get_int_feature("BinningHorizontal").get()             # <<<<<<<<<<<<<<
  *             )
  *             vertical = int(
 */
-      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 246, __pyx_L4_error)
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 352, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_9);
       __pyx_t_8 = __pyx_t_9;
       __Pyx_INCREF(__pyx_t_8);
@@ -8618,7 +11024,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
         __pyx_t_7 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_int_feature, __pyx_callargs+__pyx_t_10, (2-__pyx_t_10) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 246, __pyx_L4_error)
+        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 352, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_7);
       }
       __pyx_t_6 = __pyx_t_7;
@@ -8629,31 +11035,31 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_10, (1-__pyx_t_10) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 352, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
 
-      /* "src/device/daheng_device.py":245
+      /* "src/device/daheng_device.py":351
  * 
  *         try:
  *             horizontal = int(             # <<<<<<<<<<<<<<
  *                 self._remote_feature.get_int_feature("BinningHorizontal").get()
  *             )
 */
-      __pyx_t_7 = __Pyx_PyNumber_Int(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 245, __pyx_L4_error)
+      __pyx_t_7 = __Pyx_PyNumber_Int(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 351, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_v_horizontal = ((PyObject*)__pyx_t_7);
       __pyx_t_7 = 0;
 
-      /* "src/device/daheng_device.py":249
+      /* "src/device/daheng_device.py":355
  *             )
  *             vertical = int(
  *                 self._remote_feature.get_int_feature("BinningVertical").get()             # <<<<<<<<<<<<<<
  *             )
  *             actual = (horizontal, vertical)
 */
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 249, __pyx_L4_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 355, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_9 = __pyx_t_8;
       __Pyx_INCREF(__pyx_t_9);
@@ -8663,7 +11069,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
         __pyx_t_6 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_int_feature, __pyx_callargs+__pyx_t_10, (2-__pyx_t_10) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 249, __pyx_L4_error)
+        if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 355, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
       }
       __pyx_t_1 = __pyx_t_6;
@@ -8674,64 +11080,64 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
         __pyx_t_7 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_10, (1-__pyx_t_10) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 249, __pyx_L4_error)
+        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 355, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_7);
       }
 
-      /* "src/device/daheng_device.py":248
+      /* "src/device/daheng_device.py":354
  *                 self._remote_feature.get_int_feature("BinningHorizontal").get()
  *             )
  *             vertical = int(             # <<<<<<<<<<<<<<
  *                 self._remote_feature.get_int_feature("BinningVertical").get()
  *             )
 */
-      __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 248, __pyx_L4_error)
+      __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 354, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_v_vertical = ((PyObject*)__pyx_t_6);
       __pyx_t_6 = 0;
 
-      /* "src/device/daheng_device.py":251
+      /* "src/device/daheng_device.py":357
  *                 self._remote_feature.get_int_feature("BinningVertical").get()
  *             )
  *             actual = (horizontal, vertical)             # <<<<<<<<<<<<<<
  *             if actual in SUPPORTED_BINNING:
  *                 self._binning = actual
 */
-      __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 251, __pyx_L4_error)
+      __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 357, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_INCREF(__pyx_v_horizontal);
       __Pyx_GIVEREF(__pyx_v_horizontal);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_horizontal) != (0)) __PYX_ERR(0, 251, __pyx_L4_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_horizontal) != (0)) __PYX_ERR(0, 357, __pyx_L4_error);
       __Pyx_INCREF(__pyx_v_vertical);
       __Pyx_GIVEREF(__pyx_v_vertical);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_v_vertical) != (0)) __PYX_ERR(0, 251, __pyx_L4_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_v_vertical) != (0)) __PYX_ERR(0, 357, __pyx_L4_error);
       __pyx_v_actual = ((PyObject*)__pyx_t_6);
       __pyx_t_6 = 0;
 
-      /* "src/device/daheng_device.py":252
+      /* "src/device/daheng_device.py":358
  *             )
  *             actual = (horizontal, vertical)
  *             if actual in SUPPORTED_BINNING:             # <<<<<<<<<<<<<<
  *                 self._binning = actual
  *             else:
 */
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_SUPPORTED_BINNING); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 252, __pyx_L4_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_SUPPORTED_BINNING); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 358, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_actual, __pyx_t_6, Py_EQ)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 252, __pyx_L4_error)
+      __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_actual, __pyx_t_6, Py_EQ)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 358, __pyx_L4_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       if (__pyx_t_2) {
 
-        /* "src/device/daheng_device.py":253
+        /* "src/device/daheng_device.py":359
  *             actual = (horizontal, vertical)
  *             if actual in SUPPORTED_BINNING:
  *                 self._binning = actual             # <<<<<<<<<<<<<<
  *             else:
  *                 logger.warning(
 */
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_v_actual) < (0)) __PYX_ERR(0, 253, __pyx_L4_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_v_actual) < (0)) __PYX_ERR(0, 359, __pyx_L4_error)
 
-        /* "src/device/daheng_device.py":252
+        /* "src/device/daheng_device.py":358
  *             )
  *             actual = (horizontal, vertical)
  *             if actual in SUPPORTED_BINNING:             # <<<<<<<<<<<<<<
@@ -8741,7 +11147,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
         goto __pyx_L10;
       }
 
-      /* "src/device/daheng_device.py":255
+      /* "src/device/daheng_device.py":361
  *                 self._binning = actual
  *             else:
  *                 logger.warning(             # <<<<<<<<<<<<<<
@@ -8749,47 +11155,47 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
  *                     *actual,
 */
       /*else*/ {
-        __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 255, __pyx_L4_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 361, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 255, __pyx_L4_error)
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 361, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-        /* "src/device/daheng_device.py":257
+        /* "src/device/daheng_device.py":363
  *                 logger.warning(
  *                     "Camera reported unsupported binning %dx%d; retaining %dx%d",
  *                     *actual,             # <<<<<<<<<<<<<<
  *                     *self._binning,
  *                 )
 */
-        __pyx_t_6 = PyNumber_Add(__pyx_mstate_global->__pyx_tuple[3], __pyx_v_actual); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 255, __pyx_L4_error)
+        __pyx_t_6 = PyNumber_Add(__pyx_mstate_global->__pyx_tuple[4], __pyx_v_actual); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 361, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
 
-        /* "src/device/daheng_device.py":258
+        /* "src/device/daheng_device.py":364
  *                     "Camera reported unsupported binning %dx%d; retaining %dx%d",
  *                     *actual,
  *                     *self._binning,             # <<<<<<<<<<<<<<
  *                 )
  *         except Exception as e:
 */
-        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 258, __pyx_L4_error)
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 364, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
 
-        /* "src/device/daheng_device.py":255
+        /* "src/device/daheng_device.py":361
  *                 self._binning = actual
  *             else:
  *                 logger.warning(             # <<<<<<<<<<<<<<
  *                     "Camera reported unsupported binning %dx%d; retaining %dx%d",
  *                     *actual,
 */
-        __pyx_t_8 = __Pyx_PySequence_Tuple(__pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 255, __pyx_L4_error)
+        __pyx_t_8 = __Pyx_PySequence_Tuple(__pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 361, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = PyNumber_Add(__pyx_t_6, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 255, __pyx_L4_error)
+        __pyx_t_1 = PyNumber_Add(__pyx_t_6, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 361, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_1, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 255, __pyx_L4_error)
+        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_1, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 361, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8797,7 +11203,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
       }
       __pyx_L10:;
 
-      /* "src/device/daheng_device.py":244
+      /* "src/device/daheng_device.py":350
  *             return self._binning
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -8816,7 +11222,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "src/device/daheng_device.py":260
+    /* "src/device/daheng_device.py":366
  *                     *self._binning,
  *                 )
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -8826,7 +11232,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
     __pyx_t_11 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_11) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_binning", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_8, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 260, __pyx_L6_except_error)
+      if (__Pyx_GetException(&__pyx_t_8, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 366, __pyx_L6_except_error)
       __Pyx_XGOTREF(__pyx_t_8);
       __Pyx_XGOTREF(__pyx_t_1);
       __Pyx_XGOTREF(__pyx_t_7);
@@ -8834,7 +11240,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
       __pyx_v_e = __pyx_t_1;
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":261
+        /* "src/device/daheng_device.py":367
  *                 )
  *         except Exception as e:
  *             logger.debug("Could not read camera binning: %s", e)             # <<<<<<<<<<<<<<
@@ -8842,9 +11248,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
  * 
 */
         __pyx_t_9 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 261, __pyx_L16_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 367, __pyx_L16_error)
         __Pyx_GOTREF(__pyx_t_12);
-        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 261, __pyx_L16_error)
+        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 367, __pyx_L16_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __pyx_t_10 = 1;
@@ -8864,13 +11270,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
           __pyx_t_6 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_10, (3-__pyx_t_10) | (__pyx_t_10*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 261, __pyx_L16_error)
+          if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 367, __pyx_L16_error)
           __Pyx_GOTREF(__pyx_t_6);
         }
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
 
-      /* "src/device/daheng_device.py":260
+      /* "src/device/daheng_device.py":366
  *                     *self._binning,
  *                 )
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -8924,7 +11330,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
     }
     goto __pyx_L6_except_error;
 
-    /* "src/device/daheng_device.py":244
+    /* "src/device/daheng_device.py":350
  *             return self._binning
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -8945,7 +11351,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
     __pyx_L9_try_end:;
   }
 
-  /* "src/device/daheng_device.py":262
+  /* "src/device/daheng_device.py":368
  *         except Exception as e:
  *             logger.debug("Could not read camera binning: %s", e)
  *         return self._binning             # <<<<<<<<<<<<<<
@@ -8953,14 +11359,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
  *     def get_supported_binning(self) -> tuple[tuple[int, int], ...]:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 262, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 368, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (!(likely(PyTuple_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_7))) __PYX_ERR(0, 262, __pyx_L1_error)
+  if (!(likely(PyTuple_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_7))) __PYX_ERR(0, 368, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_7);
   __pyx_t_7 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":239
+  /* "src/device/daheng_device.py":345
  *             raise
  * 
  *     def get_binning(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -8989,7 +11395,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":264
+/* "src/device/daheng_device.py":370
  *         return self._binning
  * 
  *     def get_supported_binning(self) -> tuple[tuple[int, int], ...]:             # <<<<<<<<<<<<<<
@@ -8998,16 +11404,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_18get_binn
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_21get_supported_binning(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_29get_supported_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_20get_supported_binning, "Return the binning modes supported by this MER3 camera model.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_21get_supported_binning = {"get_supported_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_21get_supported_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_20get_supported_binning};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_21get_supported_binning(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_28get_supported_binning, "Return the binning modes supported by this MER3 camera model.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_29get_supported_binning = {"get_supported_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_29get_supported_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_28get_supported_binning};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_29get_supported_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -9037,32 +11443,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 264, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 370, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 264, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 370, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_supported_binning", 0) < (0)) __PYX_ERR(0, 264, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_supported_binning", 0) < (0)) __PYX_ERR(0, 370, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_supported_binning", 1, 1, 1, i); __PYX_ERR(0, 264, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_supported_binning", 1, 1, 1, i); __PYX_ERR(0, 370, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 264, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 370, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_supported_binning", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 264, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_supported_binning", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 370, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -9073,7 +11479,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_supported_binning(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_28get_supported_binning(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -9083,7 +11489,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_supported_binning(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28get_supported_binning(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -9092,7 +11498,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_supp
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_supported_binning", 0);
 
-  /* "src/device/daheng_device.py":266
+  /* "src/device/daheng_device.py":372
  *     def get_supported_binning(self) -> tuple[tuple[int, int], ...]:
  *         """Return the binning modes supported by this MER3 camera model."""
  *         return SUPPORTED_BINNING             # <<<<<<<<<<<<<<
@@ -9100,14 +11506,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_supp
  *     def _apply_binning(self, x: int, y: int) -> None:
 */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_SUPPORTED_BINNING); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_SUPPORTED_BINNING); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 372, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 266, __pyx_L1_error)
+  if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 372, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":264
+  /* "src/device/daheng_device.py":370
  *         return self._binning
  * 
  *     def get_supported_binning(self) -> tuple[tuple[int, int], ...]:             # <<<<<<<<<<<<<<
@@ -9126,7 +11532,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_supp
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":268
+/* "src/device/daheng_device.py":374
  *         return SUPPORTED_BINNING
  * 
  *     def _apply_binning(self, x: int, y: int) -> None:             # <<<<<<<<<<<<<<
@@ -9135,16 +11541,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_20get_supp
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_23_apply_binning(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_31_apply_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_22_apply_binning, "Set/read back Daheng binning nodes and the resulting frame geometry.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_23_apply_binning = {"_apply_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_23_apply_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_22_apply_binning};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_23_apply_binning(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_30_apply_binning, "Set/read back Daheng binning nodes and the resulting frame geometry.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_31_apply_binning = {"_apply_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_31_apply_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_30_apply_binning};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_31_apply_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -9176,48 +11582,48 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_x,&__pyx_mstate_global->__pyx_n_u_y,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 268, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 374, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  3:
         values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 268, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 374, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 268, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 374, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 268, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 374, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_apply_binning", 0) < (0)) __PYX_ERR(0, 268, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_apply_binning", 0) < (0)) __PYX_ERR(0, 374, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 3; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_apply_binning", 1, 3, 3, i); __PYX_ERR(0, 268, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_apply_binning", 1, 3, 3, i); __PYX_ERR(0, 374, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 3)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 268, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 374, __pyx_L3_error)
       values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 268, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 374, __pyx_L3_error)
       values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 268, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 374, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
-    if (__Pyx_PyInt_FromNumber(&values[1], "x", 0) < (0)) __PYX_ERR(0, 268, __pyx_L3_error)
+    if (__Pyx_PyInt_FromNumber(&values[1], "x", 0) < (0)) __PYX_ERR(0, 374, __pyx_L3_error)
     __pyx_v_x = ((PyObject*)values[1]);
-    if (__Pyx_PyInt_FromNumber(&values[2], "y", 0) < (0)) __PYX_ERR(0, 268, __pyx_L3_error)
+    if (__Pyx_PyInt_FromNumber(&values[2], "y", 0) < (0)) __PYX_ERR(0, 374, __pyx_L3_error)
     __pyx_v_y = ((PyObject*)values[2]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_apply_binning", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 268, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_apply_binning", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 374, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -9228,9 +11634,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), (&PyLong_Type), 0, "x", 2))) __PYX_ERR(0, 268, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), (&PyLong_Type), 0, "y", 2))) __PYX_ERR(0, 268, __pyx_L1_error)
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_binning(__pyx_self, __pyx_v_self, __pyx_v_x, __pyx_v_y);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_x), (&PyLong_Type), 0, "x", 2))) __PYX_ERR(0, 374, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), (&PyLong_Type), 0, "y", 2))) __PYX_ERR(0, 374, __pyx_L1_error)
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_binning(__pyx_self, __pyx_v_self, __pyx_v_x, __pyx_v_y);
 
   /* function exit code */
   goto __pyx_L0;
@@ -9249,7 +11655,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_x, PyObject *__pyx_v_y) {
   PyObject *__pyx_v_binning = NULL;
   PyObject *__pyx_v_feature_names = NULL;
   PyObject *__pyx_v_features = NULL;
@@ -9300,7 +11706,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_apply_binning", 0);
 
-  /* "src/device/daheng_device.py":270
+  /* "src/device/daheng_device.py":376
  *     def _apply_binning(self, x: int, y: int) -> None:
  *         """Set/read back Daheng binning nodes and the resulting frame geometry."""
  *         binning = validate_binning(x, y)             # <<<<<<<<<<<<<<
@@ -9308,7 +11714,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
  *             raise RuntimeError(
 */
   __pyx_t_2 = NULL;
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_validate_binning); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 270, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_validate_binning); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 376, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = 1;
   #if CYTHON_UNPACK_METHODS
@@ -9327,26 +11733,26 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_3, __pyx_callargs+__pyx_t_4, (3-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 376, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __pyx_v_binning = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":271
+  /* "src/device/daheng_device.py":377
  *         """Set/read back Daheng binning nodes and the resulting frame geometry."""
  *         binning = validate_binning(x, y)
  *         if self._running:             # <<<<<<<<<<<<<<
  *             raise RuntimeError(
  *                 "Cannot configure camera binning while acquisition is running"
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 271, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 377, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 271, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 377, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (unlikely(__pyx_t_5)) {
 
-    /* "src/device/daheng_device.py":272
+    /* "src/device/daheng_device.py":378
  *         binning = validate_binning(x, y)
  *         if self._running:
  *             raise RuntimeError(             # <<<<<<<<<<<<<<
@@ -9359,14 +11765,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
       PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_mstate_global->__pyx_kp_u_Cannot_configure_camera_binning};
       __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 272, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 272, __pyx_L1_error)
+    __PYX_ERR(0, 378, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":271
+    /* "src/device/daheng_device.py":377
  *         """Set/read back Daheng binning nodes and the resulting frame geometry."""
  *         binning = validate_binning(x, y)
  *         if self._running:             # <<<<<<<<<<<<<<
@@ -9375,29 +11781,29 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
 */
   }
 
-  /* "src/device/daheng_device.py":278
+  /* "src/device/daheng_device.py":384
  *         # Allow configuration before initialize(); the desired setting is
  *         # written to the camera as part of initialize(), before stream_on().
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
  *             self._binning = binning
  *             self._frame_shape = self._default_frame_shape_for_binning(binning)
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 384, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_5 = (__pyx_t_1 == Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_5) {
 
-    /* "src/device/daheng_device.py":279
+    /* "src/device/daheng_device.py":385
  *         # written to the camera as part of initialize(), before stream_on().
  *         if self._remote_feature is None:
  *             self._binning = binning             # <<<<<<<<<<<<<<
  *             self._frame_shape = self._default_frame_shape_for_binning(binning)
  *             return
 */
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_v_binning) < (0)) __PYX_ERR(0, 279, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_v_binning) < (0)) __PYX_ERR(0, 385, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":280
+    /* "src/device/daheng_device.py":386
  *         if self._remote_feature is None:
  *             self._binning = binning
  *             self._frame_shape = self._default_frame_shape_for_binning(binning)             # <<<<<<<<<<<<<<
@@ -9411,13 +11817,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
       PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_v_binning};
       __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_default_frame_shape_for_binning, __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 386, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_t_1) < (0)) __PYX_ERR(0, 280, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_t_1) < (0)) __PYX_ERR(0, 386, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "src/device/daheng_device.py":281
+    /* "src/device/daheng_device.py":387
  *             self._binning = binning
  *             self._frame_shape = self._default_frame_shape_for_binning(binning)
  *             return             # <<<<<<<<<<<<<<
@@ -9428,7 +11834,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "src/device/daheng_device.py":278
+    /* "src/device/daheng_device.py":384
  *         # Allow configuration before initialize(); the desired setting is
  *         # written to the camera as part of initialize(), before stream_on().
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
@@ -9437,29 +11843,29 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
 */
   }
 
-  /* "src/device/daheng_device.py":283
+  /* "src/device/daheng_device.py":389
  *             return
  * 
  *         feature_names = ("BinningHorizontal", "BinningVertical")             # <<<<<<<<<<<<<<
  *         features = []
  *         for feature_name in feature_names:
 */
-  __Pyx_INCREF(__pyx_mstate_global->__pyx_tuple[4]);
-  __pyx_v_feature_names = __pyx_mstate_global->__pyx_tuple[4];
+  __Pyx_INCREF(__pyx_mstate_global->__pyx_tuple[5]);
+  __pyx_v_feature_names = __pyx_mstate_global->__pyx_tuple[5];
 
-  /* "src/device/daheng_device.py":284
+  /* "src/device/daheng_device.py":390
  * 
  *         feature_names = ("BinningHorizontal", "BinningVertical")
  *         features = []             # <<<<<<<<<<<<<<
  *         for feature_name in feature_names:
  *             if not self._remote_feature.is_implemented(feature_name):
 */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 284, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 390, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_features = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":285
+  /* "src/device/daheng_device.py":391
  *         feature_names = ("BinningHorizontal", "BinningVertical")
  *         features = []
  *         for feature_name in feature_names:             # <<<<<<<<<<<<<<
@@ -9472,7 +11878,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     {
       Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_1);
       #if !CYTHON_ASSUME_SAFE_SIZE
-      if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 285, __pyx_L1_error)
+      if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 391, __pyx_L1_error)
       #endif
       if (__pyx_t_6 >= __pyx_temp) break;
     }
@@ -9482,19 +11888,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_6);
     #endif
     ++__pyx_t_6;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 285, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 391, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_XDECREF_SET(__pyx_v_feature_name, ((PyObject*)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "src/device/daheng_device.py":286
+    /* "src/device/daheng_device.py":392
  *         features = []
  *         for feature_name in feature_names:
  *             if not self._remote_feature.is_implemented(feature_name):             # <<<<<<<<<<<<<<
  *                 raise RuntimeError(
  *                     f"Camera does not expose required {feature_name} feature"
 */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 286, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 392, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_2 = __pyx_t_7;
     __Pyx_INCREF(__pyx_t_2);
@@ -9504,15 +11910,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
       __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_implemented, __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 286, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 392, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
     }
-    __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 392, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_8 = (!__pyx_t_5);
     if (unlikely(__pyx_t_8)) {
 
-      /* "src/device/daheng_device.py":287
+      /* "src/device/daheng_device.py":393
  *         for feature_name in feature_names:
  *             if not self._remote_feature.is_implemented(feature_name):
  *                 raise RuntimeError(             # <<<<<<<<<<<<<<
@@ -9521,20 +11927,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
 */
       __pyx_t_7 = NULL;
 
-      /* "src/device/daheng_device.py":288
+      /* "src/device/daheng_device.py":394
  *             if not self._remote_feature.is_implemented(feature_name):
  *                 raise RuntimeError(
  *                     f"Camera does not expose required {feature_name} feature"             # <<<<<<<<<<<<<<
  *                 )
  *             if not self._remote_feature.is_writable(feature_name):
 */
-      __pyx_t_2 = __Pyx_PyUnicode_Unicode(__pyx_v_feature_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 288, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyUnicode_Unicode(__pyx_v_feature_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 394, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_9[0] = __pyx_mstate_global->__pyx_kp_u_Camera_does_not_expose_required;
       __pyx_t_9[1] = __pyx_t_2;
       __pyx_t_9[2] = __pyx_mstate_global->__pyx_kp_u_feature;
       __pyx_t_10 = __Pyx_PyUnicode_Join(__pyx_t_9, 3, 32 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_2) + 8, 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_2));
-      if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 288, __pyx_L1_error)
+      if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 394, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_t_4 = 1;
@@ -9543,14 +11949,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 287, __pyx_L1_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 393, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
       }
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __PYX_ERR(0, 287, __pyx_L1_error)
+      __PYX_ERR(0, 393, __pyx_L1_error)
 
-      /* "src/device/daheng_device.py":286
+      /* "src/device/daheng_device.py":392
  *         features = []
  *         for feature_name in feature_names:
  *             if not self._remote_feature.is_implemented(feature_name):             # <<<<<<<<<<<<<<
@@ -9559,14 +11965,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
 */
     }
 
-    /* "src/device/daheng_device.py":290
+    /* "src/device/daheng_device.py":396
  *                     f"Camera does not expose required {feature_name} feature"
  *                 )
  *             if not self._remote_feature.is_writable(feature_name):             # <<<<<<<<<<<<<<
  *                 raise RuntimeError(f"Camera {feature_name} feature is not writable")
  *             features.append(self._remote_feature.get_int_feature(feature_name))
 */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 290, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 396, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_10 = __pyx_t_7;
     __Pyx_INCREF(__pyx_t_10);
@@ -9576,15 +11982,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
       __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_writable, __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 290, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 396, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
     }
-    __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_8 < 0))) __PYX_ERR(0, 290, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_8 < 0))) __PYX_ERR(0, 396, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_5 = (!__pyx_t_8);
     if (unlikely(__pyx_t_5)) {
 
-      /* "src/device/daheng_device.py":291
+      /* "src/device/daheng_device.py":397
  *                 )
  *             if not self._remote_feature.is_writable(feature_name):
  *                 raise RuntimeError(f"Camera {feature_name} feature is not writable")             # <<<<<<<<<<<<<<
@@ -9592,13 +11998,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
  * 
 */
       __pyx_t_7 = NULL;
-      __pyx_t_10 = __Pyx_PyUnicode_Unicode(__pyx_v_feature_name); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 291, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyUnicode_Unicode(__pyx_v_feature_name); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 397, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_9[0] = __pyx_mstate_global->__pyx_kp_u_Camera;
       __pyx_t_9[1] = __pyx_t_10;
       __pyx_t_9[2] = __pyx_mstate_global->__pyx_kp_u_feature_is_not_writable;
       __pyx_t_2 = __Pyx_PyUnicode_Join(__pyx_t_9, 3, 7 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_10) + 24, 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_10));
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 291, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 397, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       __pyx_t_4 = 1;
@@ -9607,14 +12013,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 291, __pyx_L1_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 397, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
       }
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __PYX_ERR(0, 291, __pyx_L1_error)
+      __PYX_ERR(0, 397, __pyx_L1_error)
 
-      /* "src/device/daheng_device.py":290
+      /* "src/device/daheng_device.py":396
  *                     f"Camera does not expose required {feature_name} feature"
  *                 )
  *             if not self._remote_feature.is_writable(feature_name):             # <<<<<<<<<<<<<<
@@ -9623,14 +12029,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
 */
     }
 
-    /* "src/device/daheng_device.py":292
+    /* "src/device/daheng_device.py":398
  *             if not self._remote_feature.is_writable(feature_name):
  *                 raise RuntimeError(f"Camera {feature_name} feature is not writable")
  *             features.append(self._remote_feature.get_int_feature(feature_name))             # <<<<<<<<<<<<<<
  * 
  *         previous_binning = self._binning
 */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 292, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 398, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_2 = __pyx_t_7;
     __Pyx_INCREF(__pyx_t_2);
@@ -9640,13 +12046,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
       __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_int_feature, __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 292, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 398, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
     }
-    __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_features, __pyx_t_3); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 292, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_features, __pyx_t_3); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 398, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "src/device/daheng_device.py":285
+    /* "src/device/daheng_device.py":391
  *         feature_names = ("BinningHorizontal", "BinningVertical")
  *         features = []
  *         for feature_name in feature_names:             # <<<<<<<<<<<<<<
@@ -9656,31 +12062,31 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":294
+  /* "src/device/daheng_device.py":400
  *             features.append(self._remote_feature.get_int_feature(feature_name))
  * 
  *         previous_binning = self._binning             # <<<<<<<<<<<<<<
  *         previous_shape = self._frame_shape
  *         try:
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_previous_binning = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":295
+  /* "src/device/daheng_device.py":401
  * 
  *         previous_binning = self._binning
  *         previous_shape = self._frame_shape             # <<<<<<<<<<<<<<
  *         try:
  *             features[0].set(binning[0])
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 295, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 401, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_previous_shape = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":296
+  /* "src/device/daheng_device.py":402
  *         previous_binning = self._binning
  *         previous_shape = self._frame_shape
  *         try:             # <<<<<<<<<<<<<<
@@ -9696,18 +12102,18 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __Pyx_XGOTREF(__pyx_t_14);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":297
+      /* "src/device/daheng_device.py":403
  *         previous_shape = self._frame_shape
  *         try:
  *             features[0].set(binning[0])             # <<<<<<<<<<<<<<
  *             features[1].set(binning[1])
  *             actual = (int(features[0].get()), int(features[1].get()))
 */
-      __pyx_t_7 = __Pyx_GetItemInt_List(__pyx_v_features, 0, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 297, __pyx_L10_error)
+      __pyx_t_7 = __Pyx_GetItemInt_List(__pyx_v_features, 0, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 403, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_7);
       __pyx_t_3 = __pyx_t_7;
       __Pyx_INCREF(__pyx_t_3);
-      __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_binning, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 297, __pyx_L10_error)
+      __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_binning, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 403, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_4 = 0;
       {
@@ -9716,23 +12122,23 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 297, __pyx_L10_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 403, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "src/device/daheng_device.py":298
+      /* "src/device/daheng_device.py":404
  *         try:
  *             features[0].set(binning[0])
  *             features[1].set(binning[1])             # <<<<<<<<<<<<<<
  *             actual = (int(features[0].get()), int(features[1].get()))
  *             if actual != binning:
 */
-      __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_features, 1, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 298, __pyx_L10_error)
+      __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_features, 1, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 404, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_7 = __pyx_t_2;
       __Pyx_INCREF(__pyx_t_7);
-      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_binning, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 298, __pyx_L10_error)
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_binning, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 404, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_4 = 0;
       {
@@ -9741,19 +12147,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 298, __pyx_L10_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 404, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "src/device/daheng_device.py":299
+      /* "src/device/daheng_device.py":405
  *             features[0].set(binning[0])
  *             features[1].set(binning[1])
  *             actual = (int(features[0].get()), int(features[1].get()))             # <<<<<<<<<<<<<<
  *             if actual != binning:
  *                 raise RuntimeError(
 */
-      __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_features, 0, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 299, __pyx_L10_error)
+      __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_features, 0, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 405, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_2 = __pyx_t_3;
       __Pyx_INCREF(__pyx_t_2);
@@ -9763,13 +12169,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_4, (1-__pyx_t_4) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L10_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 405, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
-      __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 299, __pyx_L10_error)
+      __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 405, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_7 = __Pyx_GetItemInt_List(__pyx_v_features, 1, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 299, __pyx_L10_error)
+      __pyx_t_7 = __Pyx_GetItemInt_List(__pyx_v_features, 1, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 405, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_7);
       __pyx_t_2 = __pyx_t_7;
       __Pyx_INCREF(__pyx_t_2);
@@ -9779,36 +12185,36 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_4, (1-__pyx_t_4) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L10_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 405, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
-      __pyx_t_7 = __Pyx_PyNumber_Int(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 299, __pyx_L10_error)
+      __pyx_t_7 = __Pyx_PyNumber_Int(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 405, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L10_error)
+      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 405, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_GIVEREF(__pyx_t_3);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_3) != (0)) __PYX_ERR(0, 299, __pyx_L10_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_3) != (0)) __PYX_ERR(0, 405, __pyx_L10_error);
       __Pyx_GIVEREF(__pyx_t_7);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_7) != (0)) __PYX_ERR(0, 299, __pyx_L10_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_7) != (0)) __PYX_ERR(0, 405, __pyx_L10_error);
       __pyx_t_3 = 0;
       __pyx_t_7 = 0;
       __pyx_v_actual = ((PyObject*)__pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "src/device/daheng_device.py":300
+      /* "src/device/daheng_device.py":406
  *             features[1].set(binning[1])
  *             actual = (int(features[0].get()), int(features[1].get()))
  *             if actual != binning:             # <<<<<<<<<<<<<<
  *                 raise RuntimeError(
  *                     "Camera rejected binning "
 */
-      __pyx_t_1 = PyObject_RichCompare(__pyx_v_actual, __pyx_v_binning, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L10_error)
-      __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 300, __pyx_L10_error)
+      __pyx_t_1 = PyObject_RichCompare(__pyx_v_actual, __pyx_v_binning, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 406, __pyx_L10_error)
+      __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_5 < 0))) __PYX_ERR(0, 406, __pyx_L10_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       if (unlikely(__pyx_t_5)) {
 
-        /* "src/device/daheng_device.py":301
+        /* "src/device/daheng_device.py":407
  *             actual = (int(features[0].get()), int(features[1].get()))
  *             if actual != binning:
  *                 raise RuntimeError(             # <<<<<<<<<<<<<<
@@ -9817,31 +12223,31 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
 */
         __pyx_t_7 = NULL;
 
-        /* "src/device/daheng_device.py":303
+        /* "src/device/daheng_device.py":409
  *                 raise RuntimeError(
  *                     "Camera rejected binning "
  *                     f"{binning[0]}x{binning[1]}; read back {actual[0]}x{actual[1]}"             # <<<<<<<<<<<<<<
  *                 )
  * 
 */
-        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_binning, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L10_error)
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_binning, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 409, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_2 = __Pyx_PyObject_FormatSimple(__pyx_t_3, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 303, __pyx_L10_error)
+        __pyx_t_2 = __Pyx_PyObject_FormatSimple(__pyx_t_3, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 409, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_binning, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L10_error)
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_binning, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 409, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_10 = __Pyx_PyObject_FormatSimple(__pyx_t_3, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 303, __pyx_L10_error)
+        __pyx_t_10 = __Pyx_PyObject_FormatSimple(__pyx_t_3, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 409, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_actual, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L10_error)
+        __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_actual, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 409, __pyx_L10_error)
         __Pyx_GOTREF((PyObject *)__pyx_t_3);
-        __pyx_t_15 = __Pyx_PyObject_FormatSimple(((PyObject *)__pyx_t_3), __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 303, __pyx_L10_error)
+        __pyx_t_15 = __Pyx_PyObject_FormatSimple(((PyObject *)__pyx_t_3), __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 409, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_15);
         __Pyx_DECREF((PyObject *)__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_actual, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L10_error)
+        __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_actual, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 409, __pyx_L10_error)
         __Pyx_GOTREF((PyObject *)__pyx_t_3);
-        __pyx_t_16 = __Pyx_PyObject_FormatSimple(((PyObject *)__pyx_t_3), __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 303, __pyx_L10_error)
+        __pyx_t_16 = __Pyx_PyObject_FormatSimple(((PyObject *)__pyx_t_3), __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 409, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF((PyObject *)__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_17[0] = __pyx_mstate_global->__pyx_kp_u_Camera_rejected_binning;
@@ -9853,7 +12259,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __pyx_t_17[6] = __pyx_mstate_global->__pyx_n_u_x;
         __pyx_t_17[7] = __pyx_t_16;
 
-        /* "src/device/daheng_device.py":302
+        /* "src/device/daheng_device.py":408
  *             if actual != binning:
  *                 raise RuntimeError(
  *                     "Camera rejected binning "             # <<<<<<<<<<<<<<
@@ -9861,7 +12267,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
  *                 )
 */
         __pyx_t_3 = __Pyx_PyUnicode_Join(__pyx_t_17, 8, 24 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_2) + 1 * 2 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_10) + 12 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_15) + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_16), 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_2) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_10) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_15) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_16));
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 302, __pyx_L10_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 408, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -9873,14 +12279,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
           __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L10_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 407, __pyx_L10_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_Raise(__pyx_t_1, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __PYX_ERR(0, 301, __pyx_L10_error)
+        __PYX_ERR(0, 407, __pyx_L10_error)
 
-        /* "src/device/daheng_device.py":300
+        /* "src/device/daheng_device.py":406
  *             features[1].set(binning[1])
  *             actual = (int(features[0].get()), int(features[1].get()))
  *             if actual != binning:             # <<<<<<<<<<<<<<
@@ -9889,7 +12295,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
 */
       }
 
-      /* "src/device/daheng_device.py":309
+      /* "src/device/daheng_device.py":415
  *             # any camera ROI or feature dependencies.  Do not derive them only
  *             # from the nominal 1280x1024 sensor geometry.
  *             self._frame_shape = self._read_camera_frame_shape()             # <<<<<<<<<<<<<<
@@ -9903,22 +12309,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_read_camera_frame_shape, __pyx_callargs+__pyx_t_4, (1-__pyx_t_4) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L10_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 415, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_t_1) < (0)) __PYX_ERR(0, 309, __pyx_L10_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_t_1) < (0)) __PYX_ERR(0, 415, __pyx_L10_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "src/device/daheng_device.py":310
+      /* "src/device/daheng_device.py":416
  *             # from the nominal 1280x1024 sensor geometry.
  *             self._frame_shape = self._read_camera_frame_shape()
  *             self._binning = actual             # <<<<<<<<<<<<<<
  *         except Exception:
  *             # Avoid reporting stale local state if the device rejects a partial
 */
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_v_actual) < (0)) __PYX_ERR(0, 310, __pyx_L10_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_v_actual) < (0)) __PYX_ERR(0, 416, __pyx_L10_error)
 
-      /* "src/device/daheng_device.py":296
+      /* "src/device/daheng_device.py":402
  *         previous_binning = self._binning
  *         previous_shape = self._frame_shape
  *         try:             # <<<<<<<<<<<<<<
@@ -9939,7 +12345,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "src/device/daheng_device.py":311
+    /* "src/device/daheng_device.py":417
  *             self._frame_shape = self._read_camera_frame_shape()
  *             self._binning = actual
  *         except Exception:             # <<<<<<<<<<<<<<
@@ -9949,12 +12355,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __pyx_t_18 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_18) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice._apply_binning", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_3, &__pyx_t_7) < 0) __PYX_ERR(0, 311, __pyx_L12_except_error)
+      if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_3, &__pyx_t_7) < 0) __PYX_ERR(0, 417, __pyx_L12_except_error)
       __Pyx_XGOTREF(__pyx_t_1);
       __Pyx_XGOTREF(__pyx_t_3);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "src/device/daheng_device.py":315
+      /* "src/device/daheng_device.py":421
  *             # update. Best-effort rollback leaves a stopped camera in its last
  *             # known configuration when the SDK permits it.
  *             try:             # <<<<<<<<<<<<<<
@@ -9970,18 +12376,18 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __Pyx_XGOTREF(__pyx_t_21);
         /*try:*/ {
 
-          /* "src/device/daheng_device.py":316
+          /* "src/device/daheng_device.py":422
  *             # known configuration when the SDK permits it.
  *             try:
  *                 features[0].set(previous_binning[0])             # <<<<<<<<<<<<<<
  *                 features[1].set(previous_binning[1])
  *             except Exception as rollback_error:
 */
-          __pyx_t_10 = __Pyx_GetItemInt_List(__pyx_v_features, 0, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 316, __pyx_L19_error)
+          __pyx_t_10 = __Pyx_GetItemInt_List(__pyx_v_features, 0, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 422, __pyx_L19_error)
           __Pyx_GOTREF(__pyx_t_10);
           __pyx_t_15 = __pyx_t_10;
           __Pyx_INCREF(__pyx_t_15);
-          __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_previous_binning, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 316, __pyx_L19_error)
+          __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_previous_binning, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 422, __pyx_L19_error)
           __Pyx_GOTREF(__pyx_t_2);
           __pyx_t_4 = 0;
           {
@@ -9990,23 +12396,23 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
             __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 316, __pyx_L19_error)
+            if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 422, __pyx_L19_error)
             __Pyx_GOTREF(__pyx_t_16);
           }
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-          /* "src/device/daheng_device.py":317
+          /* "src/device/daheng_device.py":423
  *             try:
  *                 features[0].set(previous_binning[0])
  *                 features[1].set(previous_binning[1])             # <<<<<<<<<<<<<<
  *             except Exception as rollback_error:
  *                 logger.warning("Could not roll back failed binning update: %s", rollback_error)
 */
-          __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_features, 1, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 317, __pyx_L19_error)
+          __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_features, 1, long, 1, __Pyx_PyLong_From_long, 1, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 423, __pyx_L19_error)
           __Pyx_GOTREF(__pyx_t_2);
           __pyx_t_10 = __pyx_t_2;
           __Pyx_INCREF(__pyx_t_10);
-          __pyx_t_15 = __Pyx_GetItemInt(__pyx_v_previous_binning, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 317, __pyx_L19_error)
+          __pyx_t_15 = __Pyx_GetItemInt(__pyx_v_previous_binning, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 423, __pyx_L19_error)
           __Pyx_GOTREF(__pyx_t_15);
           __pyx_t_4 = 0;
           {
@@ -10015,12 +12421,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
             __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
             __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-            if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 317, __pyx_L19_error)
+            if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 423, __pyx_L19_error)
             __Pyx_GOTREF(__pyx_t_16);
           }
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-          /* "src/device/daheng_device.py":315
+          /* "src/device/daheng_device.py":421
  *             # update. Best-effort rollback leaves a stopped camera in its last
  *             # known configuration when the SDK permits it.
  *             try:             # <<<<<<<<<<<<<<
@@ -10038,7 +12444,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "src/device/daheng_device.py":318
+        /* "src/device/daheng_device.py":424
  *                 features[0].set(previous_binning[0])
  *                 features[1].set(previous_binning[1])
  *             except Exception as rollback_error:             # <<<<<<<<<<<<<<
@@ -10048,7 +12454,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __pyx_t_18 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
         if (__pyx_t_18) {
           __Pyx_AddTraceback("src.device.daheng_device.DahengDevice._apply_binning", __pyx_clineno, __pyx_lineno, __pyx_filename);
-          if (__Pyx_GetException(&__pyx_t_16, &__pyx_t_2, &__pyx_t_15) < 0) __PYX_ERR(0, 318, __pyx_L21_except_error)
+          if (__Pyx_GetException(&__pyx_t_16, &__pyx_t_2, &__pyx_t_15) < 0) __PYX_ERR(0, 424, __pyx_L21_except_error)
           __Pyx_XGOTREF(__pyx_t_16);
           __Pyx_XGOTREF(__pyx_t_2);
           __Pyx_XGOTREF(__pyx_t_15);
@@ -10056,7 +12462,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
           __pyx_v_rollback_error = __pyx_t_2;
           /*try:*/ {
 
-            /* "src/device/daheng_device.py":319
+            /* "src/device/daheng_device.py":425
  *                 features[1].set(previous_binning[1])
  *             except Exception as rollback_error:
  *                 logger.warning("Could not roll back failed binning update: %s", rollback_error)             # <<<<<<<<<<<<<<
@@ -10064,9 +12470,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
  *             self._frame_shape = previous_shape
 */
             __pyx_t_22 = NULL;
-            __Pyx_GetModuleGlobalName(__pyx_t_23, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_23)) __PYX_ERR(0, 319, __pyx_L32_error)
+            __Pyx_GetModuleGlobalName(__pyx_t_23, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_23)) __PYX_ERR(0, 425, __pyx_L32_error)
             __Pyx_GOTREF(__pyx_t_23);
-            __pyx_t_24 = __Pyx_PyObject_GetAttrStr(__pyx_t_23, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 319, __pyx_L32_error)
+            __pyx_t_24 = __Pyx_PyObject_GetAttrStr(__pyx_t_23, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 425, __pyx_L32_error)
             __Pyx_GOTREF(__pyx_t_24);
             __Pyx_DECREF(__pyx_t_23); __pyx_t_23 = 0;
             __pyx_t_4 = 1;
@@ -10086,13 +12492,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
               __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_24, __pyx_callargs+__pyx_t_4, (3-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
               __Pyx_XDECREF(__pyx_t_22); __pyx_t_22 = 0;
               __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
-              if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 319, __pyx_L32_error)
+              if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 425, __pyx_L32_error)
               __Pyx_GOTREF(__pyx_t_10);
             }
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           }
 
-          /* "src/device/daheng_device.py":318
+          /* "src/device/daheng_device.py":424
  *                 features[0].set(previous_binning[0])
  *                 features[1].set(previous_binning[1])
  *             except Exception as rollback_error:             # <<<<<<<<<<<<<<
@@ -10146,7 +12552,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         }
         goto __pyx_L21_except_error;
 
-        /* "src/device/daheng_device.py":315
+        /* "src/device/daheng_device.py":421
  *             # update. Best-effort rollback leaves a stopped camera in its last
  *             # known configuration when the SDK permits it.
  *             try:             # <<<<<<<<<<<<<<
@@ -10167,25 +12573,25 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
         __pyx_L26_try_end:;
       }
 
-      /* "src/device/daheng_device.py":320
+      /* "src/device/daheng_device.py":426
  *             except Exception as rollback_error:
  *                 logger.warning("Could not roll back failed binning update: %s", rollback_error)
  *             self._binning = previous_binning             # <<<<<<<<<<<<<<
  *             self._frame_shape = previous_shape
  *             raise
 */
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_v_previous_binning) < (0)) __PYX_ERR(0, 320, __pyx_L12_except_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning, __pyx_v_previous_binning) < (0)) __PYX_ERR(0, 426, __pyx_L12_except_error)
 
-      /* "src/device/daheng_device.py":321
+      /* "src/device/daheng_device.py":427
  *                 logger.warning("Could not roll back failed binning update: %s", rollback_error)
  *             self._binning = previous_binning
  *             self._frame_shape = previous_shape             # <<<<<<<<<<<<<<
  *             raise
  * 
 */
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_v_previous_shape) < (0)) __PYX_ERR(0, 321, __pyx_L12_except_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_v_previous_shape) < (0)) __PYX_ERR(0, 427, __pyx_L12_except_error)
 
-      /* "src/device/daheng_device.py":322
+      /* "src/device/daheng_device.py":428
  *             self._binning = previous_binning
  *             self._frame_shape = previous_shape
  *             raise             # <<<<<<<<<<<<<<
@@ -10197,11 +12603,11 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
       __Pyx_XGIVEREF(__pyx_t_7);
       __Pyx_ErrRestoreWithState(__pyx_t_1, __pyx_t_3, __pyx_t_7);
       __pyx_t_1 = 0;  __pyx_t_3 = 0;  __pyx_t_7 = 0; 
-      __PYX_ERR(0, 322, __pyx_L12_except_error)
+      __PYX_ERR(0, 428, __pyx_L12_except_error)
     }
     goto __pyx_L12_except_error;
 
-    /* "src/device/daheng_device.py":296
+    /* "src/device/daheng_device.py":402
  *         previous_binning = self._binning
  *         previous_shape = self._frame_shape
  *         try:             # <<<<<<<<<<<<<<
@@ -10217,14 +12623,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __pyx_L15_try_end:;
   }
 
-  /* "src/device/daheng_device.py":324
+  /* "src/device/daheng_device.py":430
  *             raise
  * 
  *         rows, cols = self._frame_shape             # <<<<<<<<<<<<<<
  *         logger.info(
  *             "Hardware binning set to %dx%d; camera output is %dx%d",
 */
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 324, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 430, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   if ((likely(PyTuple_CheckExact(__pyx_t_7))) || (PyList_CheckExact(__pyx_t_7))) {
     PyObject* sequence = __pyx_t_7;
@@ -10232,7 +12638,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 324, __pyx_L1_error)
+      __PYX_ERR(0, 430, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -10242,22 +12648,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
       __Pyx_INCREF(__pyx_t_1);
     } else {
       __pyx_t_3 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 324, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 430, __pyx_L1_error)
       __Pyx_XGOTREF(__pyx_t_3);
       __pyx_t_1 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 324, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 430, __pyx_L1_error)
       __Pyx_XGOTREF(__pyx_t_1);
     }
     #else
-    __pyx_t_3 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 324, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 430, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 324, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 430, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     #endif
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_15 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 324, __pyx_L1_error)
+    __pyx_t_15 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 430, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_33 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_15);
@@ -10265,7 +12671,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __Pyx_GOTREF(__pyx_t_3);
     index = 1; __pyx_t_1 = __pyx_t_33(__pyx_t_15); if (unlikely(!__pyx_t_1)) goto __pyx_L38_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_1);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_33(__pyx_t_15), 2) < (0)) __PYX_ERR(0, 324, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_33(__pyx_t_15), 2) < (0)) __PYX_ERR(0, 430, __pyx_L1_error)
     __pyx_t_33 = NULL;
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
     goto __pyx_L39_unpacking_done;
@@ -10273,7 +12679,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
     __pyx_t_33 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 324, __pyx_L1_error)
+    __PYX_ERR(0, 430, __pyx_L1_error)
     __pyx_L39_unpacking_done:;
   }
   __pyx_v_rows = __pyx_t_3;
@@ -10281,77 +12687,77 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
   __pyx_v_cols = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":325
+  /* "src/device/daheng_device.py":431
  * 
  *         rows, cols = self._frame_shape
  *         logger.info(             # <<<<<<<<<<<<<<
  *             "Hardware binning set to %dx%d; camera output is %dx%d",
  *             *self._binning,
 */
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "src/device/daheng_device.py":327
+  /* "src/device/daheng_device.py":433
  *         logger.info(
  *             "Hardware binning set to %dx%d; camera output is %dx%d",
  *             *self._binning,             # <<<<<<<<<<<<<<
  *             cols,
  *             rows,
 */
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 327, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 433, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
 
-  /* "src/device/daheng_device.py":325
+  /* "src/device/daheng_device.py":431
  * 
  *         rows, cols = self._frame_shape
  *         logger.info(             # <<<<<<<<<<<<<<
  *             "Hardware binning set to %dx%d; camera output is %dx%d",
  *             *self._binning,
 */
-  __pyx_t_3 = __Pyx_PySequence_Tuple(__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PySequence_Tuple(__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_mstate_global->__pyx_tuple[5], __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __pyx_t_7 = PyNumber_Add(__pyx_mstate_global->__pyx_tuple[6], __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "src/device/daheng_device.py":329
+  /* "src/device/daheng_device.py":435
  *             *self._binning,
  *             cols,
  *             rows,             # <<<<<<<<<<<<<<
  *         )
  * 
 */
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_v_cols);
   __Pyx_GIVEREF(__pyx_v_cols);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v_cols) != (0)) __PYX_ERR(0, 325, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v_cols) != (0)) __PYX_ERR(0, 431, __pyx_L1_error);
   __Pyx_INCREF(__pyx_v_rows);
   __Pyx_GIVEREF(__pyx_v_rows);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_v_rows) != (0)) __PYX_ERR(0, 325, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_v_rows) != (0)) __PYX_ERR(0, 431, __pyx_L1_error);
 
-  /* "src/device/daheng_device.py":325
+  /* "src/device/daheng_device.py":431
  * 
  *         rows, cols = self._frame_shape
  *         logger.info(             # <<<<<<<<<<<<<<
  *             "Hardware binning set to %dx%d; camera output is %dx%d",
  *             *self._binning,
 */
-  __pyx_t_15 = PyNumber_Add(__pyx_t_7, __pyx_t_3); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __pyx_t_15 = PyNumber_Add(__pyx_t_7, __pyx_t_3); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_15, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_15, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "src/device/daheng_device.py":268
+  /* "src/device/daheng_device.py":374
  *         return SUPPORTED_BINNING
  * 
  *     def _apply_binning(self, x: int, y: int) -> None:             # <<<<<<<<<<<<<<
@@ -10391,7 +12797,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":332
+/* "src/device/daheng_device.py":438
  *         )
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
@@ -10400,16 +12806,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_22_apply_b
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_25_default_frame_shape_for_binning(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_33_default_frame_shape_for_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_24_default_frame_shape_for_binning, "Return the full-frame shape expected without a connected camera.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_25_default_frame_shape_for_binning = {"_default_frame_shape_for_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_25_default_frame_shape_for_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_24_default_frame_shape_for_binning};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_25_default_frame_shape_for_binning(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_32_default_frame_shape_for_binning, "Return the full-frame shape expected without a connected camera.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_33_default_frame_shape_for_binning = {"_default_frame_shape_for_binning", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_33_default_frame_shape_for_binning, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_32_default_frame_shape_for_binning};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_33_default_frame_shape_for_binning(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -10439,32 +12845,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_binning_2,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 332, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 438, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 332, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 438, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_default_frame_shape_for_binning", 0) < (0)) __PYX_ERR(0, 332, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_default_frame_shape_for_binning", 0) < (0)) __PYX_ERR(0, 438, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_default_frame_shape_for_binning", 1, 1, 1, i); __PYX_ERR(0, 332, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_default_frame_shape_for_binning", 1, 1, 1, i); __PYX_ERR(0, 438, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 332, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 438, __pyx_L3_error)
     }
     __pyx_v_binning = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_default_frame_shape_for_binning", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 332, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_default_frame_shape_for_binning", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 438, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -10475,8 +12881,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_binning), (&PyTuple_Type), 0, "binning", 2))) __PYX_ERR(0, 334, __pyx_L1_error)
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default_frame_shape_for_binning(__pyx_self, __pyx_v_binning);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_binning), (&PyTuple_Type), 0, "binning", 2))) __PYX_ERR(0, 440, __pyx_L1_error)
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_default_frame_shape_for_binning(__pyx_self, __pyx_v_binning);
 
   /* function exit code */
   goto __pyx_L0;
@@ -10495,7 +12901,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default_frame_shape_for_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_binning) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_default_frame_shape_for_binning(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_binning) {
   PyObject *__pyx_v_binning_x = NULL;
   PyObject *__pyx_v_binning_y = NULL;
   PyObject *__pyx_v_rows = NULL;
@@ -10512,7 +12918,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_default_frame_shape_for_binning", 0);
 
-  /* "src/device/daheng_device.py":337
+  /* "src/device/daheng_device.py":443
  *     ) -> tuple[int, int]:
  *         """Return the full-frame shape expected without a connected camera."""
  *         binning_x, binning_y = binning             # <<<<<<<<<<<<<<
@@ -10525,7 +12931,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 337, __pyx_L1_error)
+      __PYX_ERR(0, 443, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     __pyx_t_1 = PyTuple_GET_ITEM(sequence, 0);
@@ -10533,9 +12939,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
     __pyx_t_2 = PyTuple_GET_ITEM(sequence, 1);
     __Pyx_INCREF(__pyx_t_2);
     #else
-    __pyx_t_1 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 337, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 337, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     #endif
   }
@@ -10544,14 +12950,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
   __pyx_v_binning_y = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "src/device/daheng_device.py":338
+  /* "src/device/daheng_device.py":444
  *         """Return the full-frame shape expected without a connected camera."""
  *         binning_x, binning_y = binning
  *         rows, cols = SENSOR_FRAME_SHAPE             # <<<<<<<<<<<<<<
  *         return (rows // binning_y, cols // binning_x)
  * 
 */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_mstate_global->__pyx_n_u_SENSOR_FRAME_SHAPE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 338, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_mstate_global->__pyx_n_u_SENSOR_FRAME_SHAPE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 444, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   if ((likely(PyTuple_CheckExact(__pyx_t_2))) || (PyList_CheckExact(__pyx_t_2))) {
     PyObject* sequence = __pyx_t_2;
@@ -10559,7 +12965,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 338, __pyx_L1_error)
+      __PYX_ERR(0, 444, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -10569,22 +12975,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
       __Pyx_INCREF(__pyx_t_3);
     } else {
       __pyx_t_1 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 338, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 444, __pyx_L1_error)
       __Pyx_XGOTREF(__pyx_t_1);
       __pyx_t_3 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 338, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 444, __pyx_L1_error)
       __Pyx_XGOTREF(__pyx_t_3);
     }
     #else
-    __pyx_t_1 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 338, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 444, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 338, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 444, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_4 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 338, __pyx_L1_error)
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 444, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_5 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_4);
@@ -10592,7 +12998,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
     __Pyx_GOTREF(__pyx_t_1);
     index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < (0)) __PYX_ERR(0, 338, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < (0)) __PYX_ERR(0, 444, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     goto __pyx_L4_unpacking_done;
@@ -10600,7 +13006,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 338, __pyx_L1_error)
+    __PYX_ERR(0, 444, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
   __pyx_v_rows = __pyx_t_1;
@@ -10608,7 +13014,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
   __pyx_v_cols = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "src/device/daheng_device.py":339
+  /* "src/device/daheng_device.py":445
  *         binning_x, binning_y = binning
  *         rows, cols = SENSOR_FRAME_SHAPE
  *         return (rows // binning_y, cols // binning_x)             # <<<<<<<<<<<<<<
@@ -10616,23 +13022,23 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
  *     def _read_camera_frame_shape(self) -> tuple[int, int]:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = PyNumber_FloorDivide(__pyx_v_rows, __pyx_v_binning_y); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 339, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_FloorDivide(__pyx_v_rows, __pyx_v_binning_y); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 445, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyNumber_FloorDivide(__pyx_v_cols, __pyx_v_binning_x); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 339, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_FloorDivide(__pyx_v_cols, __pyx_v_binning_x); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 445, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 339, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 445, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_2) != (0)) __PYX_ERR(0, 339, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_2) != (0)) __PYX_ERR(0, 445, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_3);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_3) != (0)) __PYX_ERR(0, 339, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_3) != (0)) __PYX_ERR(0, 445, __pyx_L1_error);
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
   __pyx_r = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":332
+  /* "src/device/daheng_device.py":438
  *         )
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
@@ -10658,7 +13064,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":341
+/* "src/device/daheng_device.py":447
  *         return (rows // binning_y, cols // binning_x)
  * 
  *     def _read_camera_frame_shape(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -10667,16 +13073,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_24_default
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_27_read_camera_frame_shape(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_35_read_camera_frame_shape(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_26_read_camera_frame_shape, "Read and validate camera Width/Height after a feature update.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_27_read_camera_frame_shape = {"_read_camera_frame_shape", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_27_read_camera_frame_shape, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_26_read_camera_frame_shape};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_27_read_camera_frame_shape(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_34_read_camera_frame_shape, "Read and validate camera Width/Height after a feature update.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_35_read_camera_frame_shape = {"_read_camera_frame_shape", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_35_read_camera_frame_shape, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_34_read_camera_frame_shape};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_35_read_camera_frame_shape(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -10706,32 +13112,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 341, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 447, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 341, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 447, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_read_camera_frame_shape", 0) < (0)) __PYX_ERR(0, 341, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_read_camera_frame_shape", 0) < (0)) __PYX_ERR(0, 447, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_read_camera_frame_shape", 1, 1, 1, i); __PYX_ERR(0, 341, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_read_camera_frame_shape", 1, 1, 1, i); __PYX_ERR(0, 447, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 341, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 447, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_read_camera_frame_shape", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 341, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_read_camera_frame_shape", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 447, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -10742,7 +13148,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_camera_frame_shape(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_34_read_camera_frame_shape(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -10752,7 +13158,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_camera_frame_shape(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34_read_camera_frame_shape(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_v_width = NULL;
   PyObject *__pyx_v_height = NULL;
   PyObject *__pyx_r = NULL;
@@ -10771,20 +13177,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_read_camera_frame_shape", 0);
 
-  /* "src/device/daheng_device.py":343
+  /* "src/device/daheng_device.py":449
  *     def _read_camera_frame_shape(self) -> tuple[int, int]:
  *         """Read and validate camera Width/Height after a feature update."""
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
  *             return self._default_frame_shape_for_binning(self._binning)
  * 
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 343, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 449, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 == Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":344
+    /* "src/device/daheng_device.py":450
  *         """Read and validate camera Width/Height after a feature update."""
  *         if self._remote_feature is None:
  *             return self._default_frame_shape_for_binning(self._binning)             # <<<<<<<<<<<<<<
@@ -10794,7 +13200,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_3 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 344, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 450, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = 0;
     {
@@ -10802,15 +13208,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
       __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_default_frame_shape_for_binning, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 344, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 450, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
-    if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 344, __pyx_L1_error)
+    if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 450, __pyx_L1_error)
     __pyx_r = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "src/device/daheng_device.py":343
+    /* "src/device/daheng_device.py":449
  *     def _read_camera_frame_shape(self) -> tuple[int, int]:
  *         """Read and validate camera Width/Height after a feature update."""
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
@@ -10819,14 +13225,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
 */
   }
 
-  /* "src/device/daheng_device.py":346
+  /* "src/device/daheng_device.py":452
  *             return self._default_frame_shape_for_binning(self._binning)
  * 
  *         width = int(self._remote_feature.get_int_feature("Width").get())             # <<<<<<<<<<<<<<
  *         height = int(self._remote_feature.get_int_feature("Height").get())
  *         if width <= 0 or height <= 0:
 */
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 346, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 452, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __pyx_t_6 = __pyx_t_7;
   __Pyx_INCREF(__pyx_t_6);
@@ -10836,7 +13242,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
     __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_int_feature, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 346, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 452, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
   }
   __pyx_t_4 = __pyx_t_3;
@@ -10847,23 +13253,23 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
     __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_5, (1-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 346, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 452, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
-  __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 346, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 452, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_width = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "src/device/daheng_device.py":347
+  /* "src/device/daheng_device.py":453
  * 
  *         width = int(self._remote_feature.get_int_feature("Width").get())
  *         height = int(self._remote_feature.get_int_feature("Height").get())             # <<<<<<<<<<<<<<
  *         if width <= 0 or height <= 0:
  *             raise RuntimeError(
 */
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 347, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 453, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_7 = __pyx_t_6;
   __Pyx_INCREF(__pyx_t_7);
@@ -10873,7 +13279,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
     __pyx_t_4 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_int_feature, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 347, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 453, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
   }
   __pyx_t_1 = __pyx_t_4;
@@ -10884,38 +13290,38 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
     __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_5, (1-__pyx_t_5) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 347, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 453, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
   }
-  __pyx_t_4 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 347, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 453, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_height = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "src/device/daheng_device.py":348
+  /* "src/device/daheng_device.py":454
  *         width = int(self._remote_feature.get_int_feature("Width").get())
  *         height = int(self._remote_feature.get_int_feature("Height").get())
  *         if width <= 0 or height <= 0:             # <<<<<<<<<<<<<<
  *             raise RuntimeError(
  *                 f"Camera reported invalid frame dimensions {width}x{height}"
 */
-  __pyx_t_4 = PyObject_RichCompare(__pyx_v_width, __pyx_mstate_global->__pyx_int_0, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 348, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_8 < 0))) __PYX_ERR(0, 348, __pyx_L1_error)
+  __pyx_t_4 = PyObject_RichCompare(__pyx_v_width, __pyx_mstate_global->__pyx_int_0, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 454, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_8 < 0))) __PYX_ERR(0, 454, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   if (!__pyx_t_8) {
   } else {
     __pyx_t_2 = __pyx_t_8;
     goto __pyx_L5_bool_binop_done;
   }
-  __pyx_t_4 = PyObject_RichCompare(__pyx_v_height, __pyx_mstate_global->__pyx_int_0, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 348, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_8 < 0))) __PYX_ERR(0, 348, __pyx_L1_error)
+  __pyx_t_4 = PyObject_RichCompare(__pyx_v_height, __pyx_mstate_global->__pyx_int_0, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 454, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_8 < 0))) __PYX_ERR(0, 454, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_2 = __pyx_t_8;
   __pyx_L5_bool_binop_done:;
   if (unlikely(__pyx_t_2)) {
 
-    /* "src/device/daheng_device.py":349
+    /* "src/device/daheng_device.py":455
  *         height = int(self._remote_feature.get_int_feature("Height").get())
  *         if width <= 0 or height <= 0:
  *             raise RuntimeError(             # <<<<<<<<<<<<<<
@@ -10924,23 +13330,23 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
 */
     __pyx_t_3 = NULL;
 
-    /* "src/device/daheng_device.py":350
+    /* "src/device/daheng_device.py":456
  *         if width <= 0 or height <= 0:
  *             raise RuntimeError(
  *                 f"Camera reported invalid frame dimensions {width}x{height}"             # <<<<<<<<<<<<<<
  *             )
  *         return (height, width)
 */
-    __pyx_t_1 = __Pyx_PyObject_FormatSimple(__pyx_v_width, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_FormatSimple(__pyx_v_width, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_FormatSimple(__pyx_v_height, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_FormatSimple(__pyx_v_height, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_9[0] = __pyx_mstate_global->__pyx_kp_u_Camera_reported_invalid_frame_di;
     __pyx_t_9[1] = __pyx_t_1;
     __pyx_t_9[2] = __pyx_mstate_global->__pyx_n_u_x;
     __pyx_t_9[3] = __pyx_t_6;
     __pyx_t_7 = __Pyx_PyUnicode_Join(__pyx_t_9, 4, 41 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_1) + 1 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_6), 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_1) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_6));
-    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 350, __pyx_L1_error)
+    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -10950,14 +13356,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
       __pyx_t_4 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 349, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 455, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
     }
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 349, __pyx_L1_error)
+    __PYX_ERR(0, 455, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":348
+    /* "src/device/daheng_device.py":454
  *         width = int(self._remote_feature.get_int_feature("Width").get())
  *         height = int(self._remote_feature.get_int_feature("Height").get())
  *         if width <= 0 or height <= 0:             # <<<<<<<<<<<<<<
@@ -10966,7 +13372,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
 */
   }
 
-  /* "src/device/daheng_device.py":352
+  /* "src/device/daheng_device.py":458
  *                 f"Camera reported invalid frame dimensions {width}x{height}"
  *             )
  *         return (height, width)             # <<<<<<<<<<<<<<
@@ -10974,19 +13380,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
  *     def set_pixel_format(self, fmt: str) -> None:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 352, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 458, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_v_height);
   __Pyx_GIVEREF(__pyx_v_height);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_height) != (0)) __PYX_ERR(0, 352, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_height) != (0)) __PYX_ERR(0, 458, __pyx_L1_error);
   __Pyx_INCREF(__pyx_v_width);
   __Pyx_GIVEREF(__pyx_v_width);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_v_width) != (0)) __PYX_ERR(0, 352, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_v_width) != (0)) __PYX_ERR(0, 458, __pyx_L1_error);
   __pyx_r = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":341
+  /* "src/device/daheng_device.py":447
  *         return (rows // binning_y, cols // binning_x)
  * 
  *     def _read_camera_frame_shape(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -11011,7 +13417,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":354
+/* "src/device/daheng_device.py":460
  *         return (height, width)
  * 
  *     def set_pixel_format(self, fmt: str) -> None:             # <<<<<<<<<<<<<<
@@ -11020,15 +13426,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_26_read_ca
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_29set_pixel_format(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_37set_pixel_format(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_29set_pixel_format = {"set_pixel_format", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_29set_pixel_format, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_29set_pixel_format(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_37set_pixel_format = {"set_pixel_format", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_37set_pixel_format, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_37set_pixel_format(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -11059,39 +13465,39 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_fmt,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 354, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 460, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 354, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 460, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 354, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 460, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_pixel_format", 0) < (0)) __PYX_ERR(0, 354, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "set_pixel_format", 0) < (0)) __PYX_ERR(0, 460, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 2; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_pixel_format", 1, 2, 2, i); __PYX_ERR(0, 354, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("set_pixel_format", 1, 2, 2, i); __PYX_ERR(0, 460, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 354, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 460, __pyx_L3_error)
       values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 354, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 460, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
     __pyx_v_fmt = ((PyObject*)values[1]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_pixel_format", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 354, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_pixel_format", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 460, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -11102,8 +13508,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fmt), (&PyUnicode_Type), 0, "fmt", 2))) __PYX_ERR(0, 354, __pyx_L1_error)
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixel_format(__pyx_self, __pyx_v_self, __pyx_v_fmt);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fmt), (&PyUnicode_Type), 0, "fmt", 2))) __PYX_ERR(0, 460, __pyx_L1_error)
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_36set_pixel_format(__pyx_self, __pyx_v_self, __pyx_v_fmt);
 
   /* function exit code */
   goto __pyx_L0;
@@ -11122,7 +13528,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_fmt) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36set_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_fmt) {
   PyObject *__pyx_v_e = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -11153,20 +13559,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_pixel_format", 0);
 
-  /* "src/device/daheng_device.py":355
+  /* "src/device/daheng_device.py":461
  * 
  *     def set_pixel_format(self, fmt: str) -> None:
  *         if fmt != DEFAULT_PIXEL_FORMAT:             # <<<<<<<<<<<<<<
  *             raise ValueError(
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
 */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 355, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 461, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_fmt, __pyx_t_1, Py_NE)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 355, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_fmt, __pyx_t_1, Py_NE)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 461, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (unlikely(__pyx_t_2)) {
 
-    /* "src/device/daheng_device.py":356
+    /* "src/device/daheng_device.py":462
  *     def set_pixel_format(self, fmt: str) -> None:
  *         if fmt != DEFAULT_PIXEL_FORMAT:
  *             raise ValueError(             # <<<<<<<<<<<<<<
@@ -11175,16 +13581,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
 */
     __pyx_t_3 = NULL;
 
-    /* "src/device/daheng_device.py":357
+    /* "src/device/daheng_device.py":463
  *         if fmt != DEFAULT_PIXEL_FORMAT:
  *             raise ValueError(
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")             # <<<<<<<<<<<<<<
  * 
  *         try:
 */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 357, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 463, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_4, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 357, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_4, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 463, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_6[0] = __pyx_mstate_global->__pyx_kp_u_This_application_requires;
@@ -11192,7 +13598,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
     __pyx_t_6[2] = __pyx_mstate_global->__pyx_kp_u_got;
     __pyx_t_6[3] = __pyx_v_fmt;
     __pyx_t_4 = __Pyx_PyUnicode_Join(__pyx_t_6, 4, 26 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_5) + 6 + __Pyx_PyUnicode_GET_LENGTH(__pyx_v_fmt), 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_v_fmt));
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 357, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 463, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_7 = 1;
@@ -11201,14 +13607,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
       __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 356, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 462, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 356, __pyx_L1_error)
+    __PYX_ERR(0, 462, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":355
+    /* "src/device/daheng_device.py":461
  * 
  *     def set_pixel_format(self, fmt: str) -> None:
  *         if fmt != DEFAULT_PIXEL_FORMAT:             # <<<<<<<<<<<<<<
@@ -11217,7 +13623,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
 */
   }
 
-  /* "src/device/daheng_device.py":359
+  /* "src/device/daheng_device.py":465
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -11233,7 +13639,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
     __Pyx_XGOTREF(__pyx_t_10);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":360
+      /* "src/device/daheng_device.py":466
  * 
  *         try:
  *             self._apply_pixel_format(fmt)             # <<<<<<<<<<<<<<
@@ -11247,12 +13653,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
         PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_v_fmt};
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_apply_pixel_format, __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 360, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "src/device/daheng_device.py":361
+      /* "src/device/daheng_device.py":467
  *         try:
  *             self._apply_pixel_format(fmt)
  *             logger.info("Pixel format set to %s", self._pixel_format)             # <<<<<<<<<<<<<<
@@ -11260,12 +13666,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
  *             self._last_error = str(e)
 */
       __pyx_t_4 = NULL;
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 361, __pyx_L4_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 467, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 361, __pyx_L4_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 467, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 361, __pyx_L4_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 467, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_7 = 1;
       #if CYTHON_UNPACK_METHODS
@@ -11285,12 +13691,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 361, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 467, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "src/device/daheng_device.py":359
+      /* "src/device/daheng_device.py":465
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -11308,7 +13714,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "src/device/daheng_device.py":362
+    /* "src/device/daheng_device.py":468
  *             self._apply_pixel_format(fmt)
  *             logger.info("Pixel format set to %s", self._pixel_format)
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -11318,7 +13724,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
     __pyx_t_11 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_11) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.set_pixel_format", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_5, &__pyx_t_3) < 0) __PYX_ERR(0, 362, __pyx_L6_except_error)
+      if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_5, &__pyx_t_3) < 0) __PYX_ERR(0, 468, __pyx_L6_except_error)
       __Pyx_XGOTREF(__pyx_t_1);
       __Pyx_XGOTREF(__pyx_t_5);
       __Pyx_XGOTREF(__pyx_t_3);
@@ -11326,19 +13732,19 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
       __pyx_v_e = __pyx_t_5;
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":363
+        /* "src/device/daheng_device.py":469
  *             logger.info("Pixel format set to %s", self._pixel_format)
  *         except Exception as e:
  *             self._last_error = str(e)             # <<<<<<<<<<<<<<
  *             logger.error("Failed to set pixel format: %s", e)
  *             raise
 */
-        __pyx_t_4 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 363, __pyx_L15_error)
+        __pyx_t_4 = __Pyx_PyObject_Unicode(__pyx_v_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 469, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_4);
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_4) < (0)) __PYX_ERR(0, 363, __pyx_L15_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_last_error, __pyx_t_4) < (0)) __PYX_ERR(0, 469, __pyx_L15_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "src/device/daheng_device.py":364
+        /* "src/device/daheng_device.py":470
  *         except Exception as e:
  *             self._last_error = str(e)
  *             logger.error("Failed to set pixel format: %s", e)             # <<<<<<<<<<<<<<
@@ -11346,9 +13752,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
  * 
 */
         __pyx_t_12 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 364, __pyx_L15_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 470, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 364, __pyx_L15_error)
+        __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 470, __pyx_L15_error)
         __Pyx_GOTREF(__pyx_t_14);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __pyx_t_7 = 1;
@@ -11368,12 +13774,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
           __pyx_t_4 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_14, __pyx_callargs+__pyx_t_7, (3-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 364, __pyx_L15_error)
+          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 470, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_4);
         }
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "src/device/daheng_device.py":365
+        /* "src/device/daheng_device.py":471
  *             self._last_error = str(e)
  *             logger.error("Failed to set pixel format: %s", e)
  *             raise             # <<<<<<<<<<<<<<
@@ -11385,10 +13791,10 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
         __Pyx_XGIVEREF(__pyx_t_3);
         __Pyx_ErrRestoreWithState(__pyx_t_1, __pyx_t_5, __pyx_t_3);
         __pyx_t_1 = 0;  __pyx_t_5 = 0;  __pyx_t_3 = 0; 
-        __PYX_ERR(0, 365, __pyx_L15_error)
+        __PYX_ERR(0, 471, __pyx_L15_error)
       }
 
-      /* "src/device/daheng_device.py":362
+      /* "src/device/daheng_device.py":468
  *             self._apply_pixel_format(fmt)
  *             logger.info("Pixel format set to %s", self._pixel_format)
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -11433,7 +13839,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
     }
     goto __pyx_L6_except_error;
 
-    /* "src/device/daheng_device.py":359
+    /* "src/device/daheng_device.py":465
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -11449,7 +13855,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
     __pyx_L9_try_end:;
   }
 
-  /* "src/device/daheng_device.py":354
+  /* "src/device/daheng_device.py":460
  *         return (height, width)
  * 
  *     def set_pixel_format(self, fmt: str) -> None:             # <<<<<<<<<<<<<<
@@ -11477,7 +13883,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":367
+/* "src/device/daheng_device.py":473
  *             raise
  * 
  *     def _apply_pixel_format(self, fmt: str) -> None:             # <<<<<<<<<<<<<<
@@ -11486,16 +13892,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_28set_pixe
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_31_apply_pixel_format(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_39_apply_pixel_format(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_30_apply_pixel_format, "Set and read back the camera pixel format before acquisition.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_31_apply_pixel_format = {"_apply_pixel_format", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_31_apply_pixel_format, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_30_apply_pixel_format};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_31_apply_pixel_format(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_38_apply_pixel_format, "Set and read back the camera pixel format before acquisition.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_39_apply_pixel_format = {"_apply_pixel_format", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_39_apply_pixel_format, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_38_apply_pixel_format};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_39_apply_pixel_format(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -11526,39 +13932,39 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_fmt,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 367, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 473, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 367, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 473, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 367, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 473, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_apply_pixel_format", 0) < (0)) __PYX_ERR(0, 367, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_apply_pixel_format", 0) < (0)) __PYX_ERR(0, 473, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 2; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_apply_pixel_format", 1, 2, 2, i); __PYX_ERR(0, 367, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_apply_pixel_format", 1, 2, 2, i); __PYX_ERR(0, 473, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 367, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 473, __pyx_L3_error)
       values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 367, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 473, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
     __pyx_v_fmt = ((PyObject*)values[1]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_apply_pixel_format", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 367, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_apply_pixel_format", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 473, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -11569,8 +13975,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fmt), (&PyUnicode_Type), 0, "fmt", 2))) __PYX_ERR(0, 367, __pyx_L1_error)
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_pixel_format(__pyx_self, __pyx_v_self, __pyx_v_fmt);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fmt), (&PyUnicode_Type), 0, "fmt", 2))) __PYX_ERR(0, 473, __pyx_L1_error)
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_38_apply_pixel_format(__pyx_self, __pyx_v_self, __pyx_v_fmt);
 
   /* function exit code */
   goto __pyx_L0;
@@ -11589,7 +13995,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_fmt) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_38_apply_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_fmt) {
   PyObject *__pyx_v_feature = NULL;
   CYTHON_UNUSED PyObject *__pyx_v__ = NULL;
   PyObject *__pyx_v_actual_format = NULL;
@@ -11608,20 +14014,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_apply_pixel_format", 0);
 
-  /* "src/device/daheng_device.py":369
+  /* "src/device/daheng_device.py":475
  *     def _apply_pixel_format(self, fmt: str) -> None:
  *         """Set and read back the camera pixel format before acquisition."""
  *         if fmt != DEFAULT_PIXEL_FORMAT:             # <<<<<<<<<<<<<<
  *             raise ValueError(
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
 */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 369, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_fmt, __pyx_t_1, Py_NE)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 369, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_fmt, __pyx_t_1, Py_NE)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (unlikely(__pyx_t_2)) {
 
-    /* "src/device/daheng_device.py":370
+    /* "src/device/daheng_device.py":476
  *         """Set and read back the camera pixel format before acquisition."""
  *         if fmt != DEFAULT_PIXEL_FORMAT:
  *             raise ValueError(             # <<<<<<<<<<<<<<
@@ -11630,16 +14036,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
 */
     __pyx_t_3 = NULL;
 
-    /* "src/device/daheng_device.py":371
+    /* "src/device/daheng_device.py":477
  *         if fmt != DEFAULT_PIXEL_FORMAT:
  *             raise ValueError(
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")             # <<<<<<<<<<<<<<
  *         if self._remote_feature is None:
  *             self._pixel_format = fmt
 */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 477, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_4, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_4, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 477, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_6[0] = __pyx_mstate_global->__pyx_kp_u_This_application_requires;
@@ -11647,7 +14053,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
     __pyx_t_6[2] = __pyx_mstate_global->__pyx_kp_u_got;
     __pyx_t_6[3] = __pyx_v_fmt;
     __pyx_t_4 = __Pyx_PyUnicode_Join(__pyx_t_6, 4, 26 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_5) + 6 + __Pyx_PyUnicode_GET_LENGTH(__pyx_v_fmt), 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_v_fmt));
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 371, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 477, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_7 = 1;
@@ -11656,14 +14062,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
       __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 370, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 476, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 370, __pyx_L1_error)
+    __PYX_ERR(0, 476, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":369
+    /* "src/device/daheng_device.py":475
  *     def _apply_pixel_format(self, fmt: str) -> None:
  *         """Set and read back the camera pixel format before acquisition."""
  *         if fmt != DEFAULT_PIXEL_FORMAT:             # <<<<<<<<<<<<<<
@@ -11672,29 +14078,29 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
 */
   }
 
-  /* "src/device/daheng_device.py":372
+  /* "src/device/daheng_device.py":478
  *             raise ValueError(
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
  *             self._pixel_format = fmt
  *             return
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 372, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 478, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 == Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":373
+    /* "src/device/daheng_device.py":479
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
  *         if self._remote_feature is None:
  *             self._pixel_format = fmt             # <<<<<<<<<<<<<<
  *             return
  * 
 */
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format, __pyx_v_fmt) < (0)) __PYX_ERR(0, 373, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format, __pyx_v_fmt) < (0)) __PYX_ERR(0, 479, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":374
+    /* "src/device/daheng_device.py":480
  *         if self._remote_feature is None:
  *             self._pixel_format = fmt
  *             return             # <<<<<<<<<<<<<<
@@ -11705,7 +14111,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "src/device/daheng_device.py":372
+    /* "src/device/daheng_device.py":478
  *             raise ValueError(
  *                 f"This application requires {DEFAULT_PIXEL_FORMAT}; got {fmt}")
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
@@ -11714,14 +14120,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
 */
   }
 
-  /* "src/device/daheng_device.py":376
+  /* "src/device/daheng_device.py":482
  *             return
  * 
  *         feature = self._remote_feature.get_enum_feature("PixelFormat")             # <<<<<<<<<<<<<<
  *         feature.set(fmt)
  *         _, actual_format = feature.get()
 */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 376, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = __pyx_t_3;
   __Pyx_INCREF(__pyx_t_4);
@@ -11731,13 +14137,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
     __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_enum_feature, __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 376, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 482, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __pyx_v_feature = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":377
+  /* "src/device/daheng_device.py":483
  * 
  *         feature = self._remote_feature.get_enum_feature("PixelFormat")
  *         feature.set(fmt)             # <<<<<<<<<<<<<<
@@ -11751,12 +14157,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
     PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_v_fmt};
     __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_set, __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 377, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 483, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/device/daheng_device.py":378
+  /* "src/device/daheng_device.py":484
  *         feature = self._remote_feature.get_enum_feature("PixelFormat")
  *         feature.set(fmt)
  *         _, actual_format = feature.get()             # <<<<<<<<<<<<<<
@@ -11770,7 +14176,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_7, (1-__pyx_t_7) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   }
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
@@ -11779,7 +14185,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 378, __pyx_L1_error)
+      __PYX_ERR(0, 484, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -11789,22 +14195,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
       __Pyx_INCREF(__pyx_t_4);
     } else {
       __pyx_t_3 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 378, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_XGOTREF(__pyx_t_3);
       __pyx_t_4 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 378, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_XGOTREF(__pyx_t_4);
     }
     #else
-    __pyx_t_3 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 484, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 484, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 484, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_8 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_5);
@@ -11812,7 +14218,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
     __Pyx_GOTREF(__pyx_t_3);
     index = 1; __pyx_t_4 = __pyx_t_8(__pyx_t_5); if (unlikely(!__pyx_t_4)) goto __pyx_L5_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_4);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_5), 2) < (0)) __PYX_ERR(0, 378, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_5), 2) < (0)) __PYX_ERR(0, 484, __pyx_L1_error)
     __pyx_t_8 = NULL;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     goto __pyx_L6_unpacking_done;
@@ -11820,7 +14226,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_8 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 378, __pyx_L1_error)
+    __PYX_ERR(0, 484, __pyx_L1_error)
     __pyx_L6_unpacking_done:;
   }
   __pyx_v__ = __pyx_t_3;
@@ -11828,17 +14234,17 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
   __pyx_v_actual_format = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "src/device/daheng_device.py":379
+  /* "src/device/daheng_device.py":485
  *         feature.set(fmt)
  *         _, actual_format = feature.get()
  *         if actual_format != fmt:             # <<<<<<<<<<<<<<
  *             raise RuntimeError(
  *                 f"Camera rejected pixel format {fmt}; actual format is "
 */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_actual_format, __pyx_v_fmt, Py_NE)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 379, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_actual_format, __pyx_v_fmt, Py_NE)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 485, __pyx_L1_error)
   if (unlikely(__pyx_t_2)) {
 
-    /* "src/device/daheng_device.py":380
+    /* "src/device/daheng_device.py":486
  *         _, actual_format = feature.get()
  *         if actual_format != fmt:
  *             raise RuntimeError(             # <<<<<<<<<<<<<<
@@ -11847,21 +14253,21 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
 */
     __pyx_t_4 = NULL;
 
-    /* "src/device/daheng_device.py":382
+    /* "src/device/daheng_device.py":488
  *             raise RuntimeError(
  *                 f"Camera rejected pixel format {fmt}; actual format is "
  *                 f"{actual_format}")             # <<<<<<<<<<<<<<
  *         self._pixel_format = actual_format
  * 
 */
-    __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_v_actual_format, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 382, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_v_actual_format, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 488, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_6[0] = __pyx_mstate_global->__pyx_kp_u_Camera_rejected_pixel_format;
     __pyx_t_6[1] = __pyx_v_fmt;
     __pyx_t_6[2] = __pyx_mstate_global->__pyx_kp_u_actual_format_is;
     __pyx_t_6[3] = __pyx_t_3;
 
-    /* "src/device/daheng_device.py":381
+    /* "src/device/daheng_device.py":487
  *         if actual_format != fmt:
  *             raise RuntimeError(
  *                 f"Camera rejected pixel format {fmt}; actual format is "             # <<<<<<<<<<<<<<
@@ -11869,7 +14275,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
  *         self._pixel_format = actual_format
 */
     __pyx_t_5 = __Pyx_PyUnicode_Join(__pyx_t_6, 4, 29 + __Pyx_PyUnicode_GET_LENGTH(__pyx_v_fmt) + 19 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_3), 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_v_fmt) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_3));
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 381, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 487, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_7 = 1;
@@ -11878,14 +14284,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
       __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 380, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 486, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 380, __pyx_L1_error)
+    __PYX_ERR(0, 486, __pyx_L1_error)
 
-    /* "src/device/daheng_device.py":379
+    /* "src/device/daheng_device.py":485
  *         feature.set(fmt)
  *         _, actual_format = feature.get()
  *         if actual_format != fmt:             # <<<<<<<<<<<<<<
@@ -11894,16 +14300,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
 */
   }
 
-  /* "src/device/daheng_device.py":383
+  /* "src/device/daheng_device.py":489
  *                 f"Camera rejected pixel format {fmt}; actual format is "
  *                 f"{actual_format}")
  *         self._pixel_format = actual_format             # <<<<<<<<<<<<<<
  * 
  *     def _apply_sensor_bit_depth(self) -> None:
 */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format, __pyx_v_actual_format) < (0)) __PYX_ERR(0, 383, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format, __pyx_v_actual_format) < (0)) __PYX_ERR(0, 489, __pyx_L1_error)
 
-  /* "src/device/daheng_device.py":367
+  /* "src/device/daheng_device.py":473
  *             raise
  * 
  *     def _apply_pixel_format(self, fmt: str) -> None:             # <<<<<<<<<<<<<<
@@ -11930,7 +14336,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":385
+/* "src/device/daheng_device.py":491
  *         self._pixel_format = actual_format
  * 
  *     def _apply_sensor_bit_depth(self) -> None:             # <<<<<<<<<<<<<<
@@ -11939,16 +14345,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_30_apply_p
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_33_apply_sensor_bit_depth(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_41_apply_sensor_bit_depth(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_32_apply_sensor_bit_depth, "Configure and verify the camera's 12-bit sensor ADC mode.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_33_apply_sensor_bit_depth = {"_apply_sensor_bit_depth", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_33_apply_sensor_bit_depth, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_32_apply_sensor_bit_depth};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_33_apply_sensor_bit_depth(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_40_apply_sensor_bit_depth, "Configure and verify the camera's 12-bit sensor ADC mode.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_41_apply_sensor_bit_depth = {"_apply_sensor_bit_depth", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_41_apply_sensor_bit_depth, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_40_apply_sensor_bit_depth};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_41_apply_sensor_bit_depth(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -11978,32 +14384,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 385, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 491, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 385, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 491, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_apply_sensor_bit_depth", 0) < (0)) __PYX_ERR(0, 385, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_apply_sensor_bit_depth", 0) < (0)) __PYX_ERR(0, 491, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_apply_sensor_bit_depth", 1, 1, 1, i); __PYX_ERR(0, 385, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_apply_sensor_bit_depth", 1, 1, 1, i); __PYX_ERR(0, 491, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 385, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 491, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_apply_sensor_bit_depth", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 385, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_apply_sensor_bit_depth", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 491, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -12014,7 +14420,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_sensor_bit_depth(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_40_apply_sensor_bit_depth(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -12024,7 +14430,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_sensor_bit_depth(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_40_apply_sensor_bit_depth(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_v_feature_name = NULL;
   PyObject *__pyx_v_feature = NULL;
   PyObject *__pyx_v_actual_depth = NULL;
@@ -12050,20 +14456,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_apply_sensor_bit_depth", 0);
 
-  /* "src/device/daheng_device.py":387
+  /* "src/device/daheng_device.py":493
  *     def _apply_sensor_bit_depth(self) -> None:
  *         """Configure and verify the camera's 12-bit sensor ADC mode."""
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
  *             return
  * 
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 387, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 493, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 == Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":388
+    /* "src/device/daheng_device.py":494
  *         """Configure and verify the camera's 12-bit sensor ADC mode."""
  *         if self._remote_feature is None:
  *             return             # <<<<<<<<<<<<<<
@@ -12074,7 +14480,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "src/device/daheng_device.py":387
+    /* "src/device/daheng_device.py":493
  *     def _apply_sensor_bit_depth(self) -> None:
  *         """Configure and verify the camera's 12-bit sensor ADC mode."""
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
@@ -12083,7 +14489,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
 */
   }
 
-  /* "src/device/daheng_device.py":390
+  /* "src/device/daheng_device.py":496
  *             return
  * 
  *         feature_name = "SensorBitDepth"             # <<<<<<<<<<<<<<
@@ -12093,7 +14499,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
   __Pyx_INCREF(__pyx_mstate_global->__pyx_n_u_SensorBitDepth);
   __pyx_v_feature_name = __pyx_mstate_global->__pyx_n_u_SensorBitDepth;
 
-  /* "src/device/daheng_device.py":391
+  /* "src/device/daheng_device.py":497
  * 
  *         feature_name = "SensorBitDepth"
  *         try:             # <<<<<<<<<<<<<<
@@ -12109,14 +14515,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
     __Pyx_XGOTREF(__pyx_t_5);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":392
+      /* "src/device/daheng_device.py":498
  *         feature_name = "SensorBitDepth"
  *         try:
  *             if not self._remote_feature.is_implemented(feature_name):             # <<<<<<<<<<<<<<
  *                 logger.info(
  *                     "%s is not exposed; relying on PixelFormat=Mono12",
 */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 392, __pyx_L4_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 498, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_7);
       __pyx_t_6 = __pyx_t_7;
       __Pyx_INCREF(__pyx_t_6);
@@ -12126,15 +14532,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_implemented, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 392, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 498, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
-      __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 392, __pyx_L4_error)
+      __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 498, __pyx_L4_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_9 = (!__pyx_t_2);
       if (__pyx_t_9) {
 
-        /* "src/device/daheng_device.py":393
+        /* "src/device/daheng_device.py":499
  *         try:
  *             if not self._remote_feature.is_implemented(feature_name):
  *                 logger.info(             # <<<<<<<<<<<<<<
@@ -12142,13 +14548,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
  *                     feature_name,
 */
         __pyx_t_7 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 393, __pyx_L4_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 499, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 393, __pyx_L4_error)
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 499, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-        /* "src/device/daheng_device.py":395
+        /* "src/device/daheng_device.py":501
  *                 logger.info(
  *                     "%s is not exposed; relying on PixelFormat=Mono12",
  *                     feature_name,             # <<<<<<<<<<<<<<
@@ -12172,12 +14578,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
           __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_10, __pyx_callargs+__pyx_t_8, (3-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 393, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 499, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":397
+        /* "src/device/daheng_device.py":503
  *                     feature_name,
  *                 )
  *                 return             # <<<<<<<<<<<<<<
@@ -12188,7 +14594,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         __pyx_r = Py_None; __Pyx_INCREF(Py_None);
         goto __pyx_L8_try_return;
 
-        /* "src/device/daheng_device.py":392
+        /* "src/device/daheng_device.py":498
  *         feature_name = "SensorBitDepth"
  *         try:
  *             if not self._remote_feature.is_implemented(feature_name):             # <<<<<<<<<<<<<<
@@ -12197,14 +14603,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
 */
       }
 
-      /* "src/device/daheng_device.py":399
+      /* "src/device/daheng_device.py":505
  *                 return
  * 
  *             feature = self._remote_feature.get_enum_feature(feature_name)             # <<<<<<<<<<<<<<
  *             if self._remote_feature.is_writable(feature_name):
  *                 feature.set(12)
 */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 399, __pyx_L4_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 505, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_7);
       __pyx_t_10 = __pyx_t_7;
       __Pyx_INCREF(__pyx_t_10);
@@ -12214,20 +14620,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_enum_feature, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 399, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
       __pyx_v_feature = __pyx_t_1;
       __pyx_t_1 = 0;
 
-      /* "src/device/daheng_device.py":400
+      /* "src/device/daheng_device.py":506
  * 
  *             feature = self._remote_feature.get_enum_feature(feature_name)
  *             if self._remote_feature.is_writable(feature_name):             # <<<<<<<<<<<<<<
  *                 feature.set(12)
  * 
 */
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 400, __pyx_L4_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 506, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_7 = __pyx_t_10;
       __Pyx_INCREF(__pyx_t_7);
@@ -12237,14 +14643,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_writable, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 506, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 400, __pyx_L4_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 506, __pyx_L4_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       if (__pyx_t_9) {
 
-        /* "src/device/daheng_device.py":401
+        /* "src/device/daheng_device.py":507
  *             feature = self._remote_feature.get_enum_feature(feature_name)
  *             if self._remote_feature.is_writable(feature_name):
  *                 feature.set(12)             # <<<<<<<<<<<<<<
@@ -12258,12 +14664,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
           PyObject *__pyx_callargs[2] = {__pyx_t_10, __pyx_mstate_global->__pyx_int_12};
           __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_set, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 401, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 507, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":400
+        /* "src/device/daheng_device.py":506
  * 
  *             feature = self._remote_feature.get_enum_feature(feature_name)
  *             if self._remote_feature.is_writable(feature_name):             # <<<<<<<<<<<<<<
@@ -12272,7 +14678,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
 */
       }
 
-      /* "src/device/daheng_device.py":403
+      /* "src/device/daheng_device.py":509
  *                 feature.set(12)
  * 
  *             actual_depth, actual_symbolic = feature.get()             # <<<<<<<<<<<<<<
@@ -12286,7 +14692,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         PyObject *__pyx_callargs[2] = {__pyx_t_10, NULL};
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_8, (1-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 403, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 509, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
       if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
@@ -12295,7 +14701,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 403, __pyx_L4_error)
+          __PYX_ERR(0, 509, __pyx_L4_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -12305,22 +14711,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
           __Pyx_INCREF(__pyx_t_7);
         } else {
           __pyx_t_10 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 403, __pyx_L4_error)
+          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 509, __pyx_L4_error)
           __Pyx_XGOTREF(__pyx_t_10);
           __pyx_t_7 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 403, __pyx_L4_error)
+          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 509, __pyx_L4_error)
           __Pyx_XGOTREF(__pyx_t_7);
         }
         #else
-        __pyx_t_10 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 403, __pyx_L4_error)
+        __pyx_t_10 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 509, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_7 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 403, __pyx_L4_error)
+        __pyx_t_7 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 509, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_7);
         #endif
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_6 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 403, __pyx_L4_error)
+        __pyx_t_6 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 509, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __pyx_t_11 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_6);
@@ -12328,7 +14734,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         __Pyx_GOTREF(__pyx_t_10);
         index = 1; __pyx_t_7 = __pyx_t_11(__pyx_t_6); if (unlikely(!__pyx_t_7)) goto __pyx_L12_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_7);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_6), 2) < (0)) __PYX_ERR(0, 403, __pyx_L4_error)
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_6), 2) < (0)) __PYX_ERR(0, 509, __pyx_L4_error)
         __pyx_t_11 = NULL;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         goto __pyx_L13_unpacking_done;
@@ -12336,7 +14742,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __pyx_t_11 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 403, __pyx_L4_error)
+        __PYX_ERR(0, 509, __pyx_L4_error)
         __pyx_L13_unpacking_done:;
       }
       __pyx_v_actual_depth = __pyx_t_10;
@@ -12344,20 +14750,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
       __pyx_v_actual_symbolic = __pyx_t_7;
       __pyx_t_7 = 0;
 
-      /* "src/device/daheng_device.py":404
+      /* "src/device/daheng_device.py":510
  * 
  *             actual_depth, actual_symbolic = feature.get()
  *             if int(actual_depth) != 12:             # <<<<<<<<<<<<<<
  *                 raise RuntimeError(
  *                     f"Camera SensorBitDepth is {actual_symbolic} "
 */
-      __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v_actual_depth); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 404, __pyx_L4_error)
+      __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v_actual_depth); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 510, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_9 = (__Pyx_PyLong_BoolNeObjC(__pyx_t_1, __pyx_mstate_global->__pyx_int_12, 12, 0)); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 404, __pyx_L4_error)
+      __pyx_t_9 = (__Pyx_PyLong_BoolNeObjC(__pyx_t_1, __pyx_mstate_global->__pyx_int_12, 12, 0)); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 510, __pyx_L4_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       if (unlikely(__pyx_t_9)) {
 
-        /* "src/device/daheng_device.py":405
+        /* "src/device/daheng_device.py":511
  *             actual_depth, actual_symbolic = feature.get()
  *             if int(actual_depth) != 12:
  *                 raise RuntimeError(             # <<<<<<<<<<<<<<
@@ -12366,24 +14772,24 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
 */
         __pyx_t_7 = NULL;
 
-        /* "src/device/daheng_device.py":406
+        /* "src/device/daheng_device.py":512
  *             if int(actual_depth) != 12:
  *                 raise RuntimeError(
  *                     f"Camera SensorBitDepth is {actual_symbolic} "             # <<<<<<<<<<<<<<
  *                     f"({actual_depth}), expected 12-bit")
  *             logger.info("Sensor ADC bit depth set to 12-bit")
 */
-        __pyx_t_10 = __Pyx_PyObject_FormatSimple(__pyx_v_actual_symbolic, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 406, __pyx_L4_error)
+        __pyx_t_10 = __Pyx_PyObject_FormatSimple(__pyx_v_actual_symbolic, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 512, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_10);
 
-        /* "src/device/daheng_device.py":407
+        /* "src/device/daheng_device.py":513
  *                 raise RuntimeError(
  *                     f"Camera SensorBitDepth is {actual_symbolic} "
  *                     f"({actual_depth}), expected 12-bit")             # <<<<<<<<<<<<<<
  *             logger.info("Sensor ADC bit depth set to 12-bit")
  *         except Exception:
 */
-        __pyx_t_6 = __Pyx_PyObject_FormatSimple(__pyx_v_actual_depth, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 407, __pyx_L4_error)
+        __pyx_t_6 = __Pyx_PyObject_FormatSimple(__pyx_v_actual_depth, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 513, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_6);
         __pyx_t_12[0] = __pyx_mstate_global->__pyx_kp_u_Camera_SensorBitDepth_is;
         __pyx_t_12[1] = __pyx_t_10;
@@ -12391,7 +14797,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         __pyx_t_12[3] = __pyx_t_6;
         __pyx_t_12[4] = __pyx_mstate_global->__pyx_kp_u_expected_12_bit;
 
-        /* "src/device/daheng_device.py":406
+        /* "src/device/daheng_device.py":512
  *             if int(actual_depth) != 12:
  *                 raise RuntimeError(
  *                     f"Camera SensorBitDepth is {actual_symbolic} "             # <<<<<<<<<<<<<<
@@ -12399,7 +14805,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
  *             logger.info("Sensor ADC bit depth set to 12-bit")
 */
         __pyx_t_13 = __Pyx_PyUnicode_Join(__pyx_t_12, 5, 25 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_10) + 2 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_6) + 18, 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_10) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_6));
-        if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 406, __pyx_L4_error)
+        if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 512, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -12409,14 +14815,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
           __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_RuntimeError)), __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 405, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 511, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_Raise(__pyx_t_1, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __PYX_ERR(0, 405, __pyx_L4_error)
+        __PYX_ERR(0, 511, __pyx_L4_error)
 
-        /* "src/device/daheng_device.py":404
+        /* "src/device/daheng_device.py":510
  * 
  *             actual_depth, actual_symbolic = feature.get()
  *             if int(actual_depth) != 12:             # <<<<<<<<<<<<<<
@@ -12425,7 +14831,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
 */
       }
 
-      /* "src/device/daheng_device.py":408
+      /* "src/device/daheng_device.py":514
  *                     f"Camera SensorBitDepth is {actual_symbolic} "
  *                     f"({actual_depth}), expected 12-bit")
  *             logger.info("Sensor ADC bit depth set to 12-bit")             # <<<<<<<<<<<<<<
@@ -12433,9 +14839,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
  *             # A camera that exposes this node but cannot be confirmed at
 */
       __pyx_t_13 = NULL;
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 408, __pyx_L4_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 514, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 408, __pyx_L4_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_info); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 514, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_8 = 1;
@@ -12455,12 +14861,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
         __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_6, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 408, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 514, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "src/device/daheng_device.py":391
+      /* "src/device/daheng_device.py":497
  * 
  *         feature_name = "SensorBitDepth"
  *         try:             # <<<<<<<<<<<<<<
@@ -12479,7 +14885,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "src/device/daheng_device.py":409
+    /* "src/device/daheng_device.py":515
  *                     f"({actual_depth}), expected 12-bit")
  *             logger.info("Sensor ADC bit depth set to 12-bit")
  *         except Exception:             # <<<<<<<<<<<<<<
@@ -12489,12 +14895,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
     __pyx_t_14 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_14) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice._apply_sensor_bit_depth", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_13) < 0) __PYX_ERR(0, 409, __pyx_L6_except_error)
+      if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_13) < 0) __PYX_ERR(0, 515, __pyx_L6_except_error)
       __Pyx_XGOTREF(__pyx_t_1);
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_13);
 
-      /* "src/device/daheng_device.py":412
+      /* "src/device/daheng_device.py":518
  *             # A camera that exposes this node but cannot be confirmed at
  *             # 12-bit must not enter acquisition with an unknown ADC mode.
  *             raise             # <<<<<<<<<<<<<<
@@ -12506,11 +14912,11 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
       __Pyx_XGIVEREF(__pyx_t_13);
       __Pyx_ErrRestoreWithState(__pyx_t_1, __pyx_t_6, __pyx_t_13);
       __pyx_t_1 = 0;  __pyx_t_6 = 0;  __pyx_t_13 = 0; 
-      __PYX_ERR(0, 412, __pyx_L6_except_error)
+      __PYX_ERR(0, 518, __pyx_L6_except_error)
     }
     goto __pyx_L6_except_error;
 
-    /* "src/device/daheng_device.py":391
+    /* "src/device/daheng_device.py":497
  * 
  *         feature_name = "SensorBitDepth"
  *         try:             # <<<<<<<<<<<<<<
@@ -12532,7 +14938,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
     __pyx_L9_try_end:;
   }
 
-  /* "src/device/daheng_device.py":385
+  /* "src/device/daheng_device.py":491
  *         self._pixel_format = actual_format
  * 
  *     def _apply_sensor_bit_depth(self) -> None:             # <<<<<<<<<<<<<<
@@ -12561,7 +14967,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":414
+/* "src/device/daheng_device.py":520
  *             raise
  * 
  *     def get_pixel_format(self) -> str:             # <<<<<<<<<<<<<<
@@ -12570,16 +14976,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_32_apply_s
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_35get_pixel_format(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_43get_pixel_format(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_34get_pixel_format, "Return the camera's actual format when the device is connected.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_35get_pixel_format = {"get_pixel_format", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_35get_pixel_format, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_34get_pixel_format};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_35get_pixel_format(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_42get_pixel_format, "Return the camera's actual format when the device is connected.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_43get_pixel_format = {"get_pixel_format", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_43get_pixel_format, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_42get_pixel_format};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_43get_pixel_format(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -12609,32 +15015,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 414, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 520, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 414, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 520, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_pixel_format", 0) < (0)) __PYX_ERR(0, 414, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_pixel_format", 0) < (0)) __PYX_ERR(0, 520, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_pixel_format", 1, 1, 1, i); __PYX_ERR(0, 414, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_pixel_format", 1, 1, 1, i); __PYX_ERR(0, 520, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 414, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 520, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_pixel_format", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 414, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_pixel_format", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 520, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -12645,7 +15051,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixel_format(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_pixel_format(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -12655,7 +15061,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_pixel_format(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   CYTHON_UNUSED PyObject *__pyx_v__ = NULL;
   PyObject *__pyx_v_actual_format = NULL;
   PyObject *__pyx_v_e = NULL;
@@ -12688,20 +15094,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_pixel_format", 0);
 
-  /* "src/device/daheng_device.py":416
+  /* "src/device/daheng_device.py":522
  *     def get_pixel_format(self) -> str:
  *         """Return the camera's actual format when the device is connected."""
  *         if self._remote_feature is not None:             # <<<<<<<<<<<<<<
  *             try:
  *                 _, actual_format = (
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 416, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 522, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 != Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":417
+    /* "src/device/daheng_device.py":523
  *         """Return the camera's actual format when the device is connected."""
  *         if self._remote_feature is not None:
  *             try:             # <<<<<<<<<<<<<<
@@ -12717,14 +15123,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
       __Pyx_XGOTREF(__pyx_t_5);
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":419
+        /* "src/device/daheng_device.py":525
  *             try:
  *                 _, actual_format = (
  *                     self._remote_feature             # <<<<<<<<<<<<<<
  *                     .get_enum_feature("PixelFormat")
  *                     .get()
 */
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 419, __pyx_L4_error)
+        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 525, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_9);
         __pyx_t_8 = __pyx_t_9;
         __Pyx_INCREF(__pyx_t_8);
@@ -12734,7 +15140,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
           __pyx_t_7 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_enum_feature, __pyx_callargs+__pyx_t_10, (2-__pyx_t_10) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 420, __pyx_L4_error)
+          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 526, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_7);
         }
         __pyx_t_6 = __pyx_t_7;
@@ -12745,7 +15151,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
           __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_10, (1-__pyx_t_10) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 421, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 527, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
@@ -12754,7 +15160,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
           if (unlikely(size != 2)) {
             if (size > 2) __Pyx_RaiseTooManyValuesError(2);
             else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-            __PYX_ERR(0, 418, __pyx_L4_error)
+            __PYX_ERR(0, 524, __pyx_L4_error)
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
           if (likely(PyTuple_CheckExact(sequence))) {
@@ -12764,22 +15170,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
             __Pyx_INCREF(__pyx_t_6);
           } else {
             __pyx_t_7 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-            if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 418, __pyx_L4_error)
+            if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 524, __pyx_L4_error)
             __Pyx_XGOTREF(__pyx_t_7);
             __pyx_t_6 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-            if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 418, __pyx_L4_error)
+            if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 524, __pyx_L4_error)
             __Pyx_XGOTREF(__pyx_t_6);
           }
           #else
-          __pyx_t_7 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 418, __pyx_L4_error)
+          __pyx_t_7 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 524, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_7);
-          __pyx_t_6 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 418, __pyx_L4_error)
+          __pyx_t_6 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 524, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_6);
           #endif
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         } else {
           Py_ssize_t index = -1;
-          __pyx_t_9 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 418, __pyx_L4_error)
+          __pyx_t_9 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 524, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_9);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_t_11 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_9);
@@ -12787,7 +15193,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
           __Pyx_GOTREF(__pyx_t_7);
           index = 1; __pyx_t_6 = __pyx_t_11(__pyx_t_9); if (unlikely(!__pyx_t_6)) goto __pyx_L10_unpacking_failed;
           __Pyx_GOTREF(__pyx_t_6);
-          if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_9), 2) < (0)) __PYX_ERR(0, 418, __pyx_L4_error)
+          if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_9), 2) < (0)) __PYX_ERR(0, 524, __pyx_L4_error)
           __pyx_t_11 = NULL;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           goto __pyx_L11_unpacking_done;
@@ -12795,11 +15201,11 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __pyx_t_11 = NULL;
           if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-          __PYX_ERR(0, 418, __pyx_L4_error)
+          __PYX_ERR(0, 524, __pyx_L4_error)
           __pyx_L11_unpacking_done:;
         }
 
-        /* "src/device/daheng_device.py":418
+        /* "src/device/daheng_device.py":524
  *         if self._remote_feature is not None:
  *             try:
  *                 _, actual_format = (             # <<<<<<<<<<<<<<
@@ -12811,16 +15217,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
         __pyx_v_actual_format = __pyx_t_6;
         __pyx_t_6 = 0;
 
-        /* "src/device/daheng_device.py":423
+        /* "src/device/daheng_device.py":529
  *                     .get()
  *                 )
  *                 self._pixel_format = actual_format             # <<<<<<<<<<<<<<
  *             except Exception as e:
  *                 logger.debug("Could not read camera pixel format: %s", e)
 */
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format, __pyx_v_actual_format) < (0)) __PYX_ERR(0, 423, __pyx_L4_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format, __pyx_v_actual_format) < (0)) __PYX_ERR(0, 529, __pyx_L4_error)
 
-        /* "src/device/daheng_device.py":417
+        /* "src/device/daheng_device.py":523
  *         """Return the camera's actual format when the device is connected."""
  *         if self._remote_feature is not None:
  *             try:             # <<<<<<<<<<<<<<
@@ -12839,7 +15245,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-      /* "src/device/daheng_device.py":424
+      /* "src/device/daheng_device.py":530
  *                 )
  *                 self._pixel_format = actual_format
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -12849,7 +15255,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
       __pyx_t_12 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
       if (__pyx_t_12) {
         __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_pixel_format", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(0, 424, __pyx_L6_except_error)
+        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(0, 530, __pyx_L6_except_error)
         __Pyx_XGOTREF(__pyx_t_1);
         __Pyx_XGOTREF(__pyx_t_6);
         __Pyx_XGOTREF(__pyx_t_7);
@@ -12857,7 +15263,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
         __pyx_v_e = __pyx_t_6;
         /*try:*/ {
 
-          /* "src/device/daheng_device.py":425
+          /* "src/device/daheng_device.py":531
  *                 self._pixel_format = actual_format
  *             except Exception as e:
  *                 logger.debug("Could not read camera pixel format: %s", e)             # <<<<<<<<<<<<<<
@@ -12865,9 +15271,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
  * 
 */
           __pyx_t_8 = NULL;
-          __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 425, __pyx_L17_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 531, __pyx_L17_error)
           __Pyx_GOTREF(__pyx_t_13);
-          __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 425, __pyx_L17_error)
+          __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 531, __pyx_L17_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           __pyx_t_10 = 1;
@@ -12887,13 +15293,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
             __pyx_t_9 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_14, __pyx_callargs+__pyx_t_10, (3-__pyx_t_10) | (__pyx_t_10*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-            if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 425, __pyx_L17_error)
+            if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 531, __pyx_L17_error)
             __Pyx_GOTREF(__pyx_t_9);
           }
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         }
 
-        /* "src/device/daheng_device.py":424
+        /* "src/device/daheng_device.py":530
  *                 )
  *                 self._pixel_format = actual_format
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -12947,7 +15353,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
       }
       goto __pyx_L6_except_error;
 
-      /* "src/device/daheng_device.py":417
+      /* "src/device/daheng_device.py":523
  *         """Return the camera's actual format when the device is connected."""
  *         if self._remote_feature is not None:
  *             try:             # <<<<<<<<<<<<<<
@@ -12968,7 +15374,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
       __pyx_L9_try_end:;
     }
 
-    /* "src/device/daheng_device.py":416
+    /* "src/device/daheng_device.py":522
  *     def get_pixel_format(self) -> str:
  *         """Return the camera's actual format when the device is connected."""
  *         if self._remote_feature is not None:             # <<<<<<<<<<<<<<
@@ -12977,7 +15383,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
 */
   }
 
-  /* "src/device/daheng_device.py":426
+  /* "src/device/daheng_device.py":532
  *             except Exception as e:
  *                 logger.debug("Could not read camera pixel format: %s", e)
  *         return self._pixel_format             # <<<<<<<<<<<<<<
@@ -12985,14 +15391,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
  *     def get_frame_shape(self) -> tuple[int, int]:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 426, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_pixel_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 532, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (!(likely(PyUnicode_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None) || __Pyx_RaiseUnexpectedTypeError("str", __pyx_t_7))) __PYX_ERR(0, 426, __pyx_L1_error)
+  if (!(likely(PyUnicode_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None) || __Pyx_RaiseUnexpectedTypeError("str", __pyx_t_7))) __PYX_ERR(0, 532, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_7);
   __pyx_t_7 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":414
+  /* "src/device/daheng_device.py":520
  *             raise
  * 
  *     def get_pixel_format(self) -> str:             # <<<<<<<<<<<<<<
@@ -13020,7 +15426,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":428
+/* "src/device/daheng_device.py":534
  *         return self._pixel_format
  * 
  *     def get_frame_shape(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -13029,15 +15435,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_34get_pixe
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_37get_frame_shape(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_45get_frame_shape(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_37get_frame_shape = {"get_frame_shape", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_37get_frame_shape, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_37get_frame_shape(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_45get_frame_shape = {"get_frame_shape", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_45get_frame_shape, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_45get_frame_shape(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -13067,32 +15473,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 428, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 534, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 428, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 534, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_frame_shape", 0) < (0)) __PYX_ERR(0, 428, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_frame_shape", 0) < (0)) __PYX_ERR(0, 534, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_frame_shape", 1, 1, 1, i); __PYX_ERR(0, 428, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_frame_shape", 1, 1, 1, i); __PYX_ERR(0, 534, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 428, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 534, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_frame_shape", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 428, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_frame_shape", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 534, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -13103,7 +15509,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_frame_shape(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_44get_frame_shape(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -13113,7 +15519,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_frame_shape(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44get_frame_shape(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_v_e = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -13143,20 +15549,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_frame_shape", 0);
 
-  /* "src/device/daheng_device.py":429
+  /* "src/device/daheng_device.py":535
  * 
  *     def get_frame_shape(self) -> tuple[int, int]:
  *         if self._remote_feature is not None:             # <<<<<<<<<<<<<<
  *             try:
  *                 self._frame_shape = self._read_camera_frame_shape()
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 429, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 535, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 != Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":430
+    /* "src/device/daheng_device.py":536
  *     def get_frame_shape(self) -> tuple[int, int]:
  *         if self._remote_feature is not None:
  *             try:             # <<<<<<<<<<<<<<
@@ -13172,7 +15578,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
       __Pyx_XGOTREF(__pyx_t_5);
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":431
+        /* "src/device/daheng_device.py":537
  *         if self._remote_feature is not None:
  *             try:
  *                 self._frame_shape = self._read_camera_frame_shape()             # <<<<<<<<<<<<<<
@@ -13186,13 +15592,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
           PyObject *__pyx_callargs[2] = {__pyx_t_6, NULL};
           __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_read_camera_frame_shape, __pyx_callargs+__pyx_t_7, (1-__pyx_t_7) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 431, __pyx_L4_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L4_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_t_1) < (0)) __PYX_ERR(0, 431, __pyx_L4_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_t_1) < (0)) __PYX_ERR(0, 537, __pyx_L4_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "src/device/daheng_device.py":430
+        /* "src/device/daheng_device.py":536
  *     def get_frame_shape(self) -> tuple[int, int]:
  *         if self._remote_feature is not None:
  *             try:             # <<<<<<<<<<<<<<
@@ -13208,7 +15614,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-      /* "src/device/daheng_device.py":432
+      /* "src/device/daheng_device.py":538
  *             try:
  *                 self._frame_shape = self._read_camera_frame_shape()
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -13218,7 +15624,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
       __pyx_t_8 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
       if (__pyx_t_8) {
         __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_frame_shape", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_9) < 0) __PYX_ERR(0, 432, __pyx_L6_except_error)
+        if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_9) < 0) __PYX_ERR(0, 538, __pyx_L6_except_error)
         __Pyx_XGOTREF(__pyx_t_1);
         __Pyx_XGOTREF(__pyx_t_6);
         __Pyx_XGOTREF(__pyx_t_9);
@@ -13226,7 +15632,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
         __pyx_v_e = __pyx_t_6;
         /*try:*/ {
 
-          /* "src/device/daheng_device.py":433
+          /* "src/device/daheng_device.py":539
  *                 self._frame_shape = self._read_camera_frame_shape()
  *             except Exception as e:
  *                 logger.debug("Could not read camera frame shape: %s", e)             # <<<<<<<<<<<<<<
@@ -13234,9 +15640,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
  * 
 */
           __pyx_t_11 = NULL;
-          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 433, __pyx_L15_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 539, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_12);
-          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 433, __pyx_L15_error)
+          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 539, __pyx_L15_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __pyx_t_7 = 1;
@@ -13256,13 +15662,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
             __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_13, __pyx_callargs+__pyx_t_7, (3-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 433, __pyx_L15_error)
+            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 539, __pyx_L15_error)
             __Pyx_GOTREF(__pyx_t_10);
           }
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         }
 
-        /* "src/device/daheng_device.py":432
+        /* "src/device/daheng_device.py":538
  *             try:
  *                 self._frame_shape = self._read_camera_frame_shape()
  *             except Exception as e:             # <<<<<<<<<<<<<<
@@ -13316,7 +15722,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
       }
       goto __pyx_L6_except_error;
 
-      /* "src/device/daheng_device.py":430
+      /* "src/device/daheng_device.py":536
  *     def get_frame_shape(self) -> tuple[int, int]:
  *         if self._remote_feature is not None:
  *             try:             # <<<<<<<<<<<<<<
@@ -13337,7 +15743,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
       __pyx_L9_try_end:;
     }
 
-    /* "src/device/daheng_device.py":429
+    /* "src/device/daheng_device.py":535
  * 
  *     def get_frame_shape(self) -> tuple[int, int]:
  *         if self._remote_feature is not None:             # <<<<<<<<<<<<<<
@@ -13346,7 +15752,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
 */
   }
 
-  /* "src/device/daheng_device.py":434
+  /* "src/device/daheng_device.py":540
  *             except Exception as e:
  *                 logger.debug("Could not read camera frame shape: %s", e)
  *         return self._frame_shape             # <<<<<<<<<<<<<<
@@ -13354,14 +15760,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
  *     def get_exposure(self) -> float:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 434, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 540, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  if (!(likely(PyTuple_CheckExact(__pyx_t_9))||((__pyx_t_9) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_9))) __PYX_ERR(0, 434, __pyx_L1_error)
+  if (!(likely(PyTuple_CheckExact(__pyx_t_9))||((__pyx_t_9) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_9))) __PYX_ERR(0, 540, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_9);
   __pyx_t_9 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":428
+  /* "src/device/daheng_device.py":534
  *         return self._pixel_format
  * 
  *     def get_frame_shape(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -13387,7 +15793,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":436
+/* "src/device/daheng_device.py":542
  *         return self._frame_shape
  * 
  *     def get_exposure(self) -> float:             # <<<<<<<<<<<<<<
@@ -13396,15 +15802,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_36get_fram
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_39get_exposure(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_47get_exposure(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_39get_exposure = {"get_exposure", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_39get_exposure, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_39get_exposure(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_47get_exposure = {"get_exposure", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_47get_exposure, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_47get_exposure(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -13434,32 +15840,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 436, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 542, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 436, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 542, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_exposure", 0) < (0)) __PYX_ERR(0, 436, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_exposure", 0) < (0)) __PYX_ERR(0, 542, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_exposure", 1, 1, 1, i); __PYX_ERR(0, 436, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_exposure", 1, 1, 1, i); __PYX_ERR(0, 542, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 436, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 542, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_exposure", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 436, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_exposure", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 542, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -13470,7 +15876,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_38get_exposure(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_46get_exposure(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -13480,7 +15886,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_38get_exposure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_46get_exposure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -13489,7 +15895,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_38get_expo
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_exposure", 0);
 
-  /* "src/device/daheng_device.py":437
+  /* "src/device/daheng_device.py":543
  * 
  *     def get_exposure(self) -> float:
  *         return self._exposure_us             # <<<<<<<<<<<<<<
@@ -13497,13 +15903,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_38get_expo
  *     def get_gain(self) -> float:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_exposure_us); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 437, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_exposure_us); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 543, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":436
+  /* "src/device/daheng_device.py":542
  *         return self._frame_shape
  * 
  *     def get_exposure(self) -> float:             # <<<<<<<<<<<<<<
@@ -13522,7 +15928,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_38get_expo
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":439
+/* "src/device/daheng_device.py":545
  *         return self._exposure_us
  * 
  *     def get_gain(self) -> float:             # <<<<<<<<<<<<<<
@@ -13531,15 +15937,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_38get_expo
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_41get_gain(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_49get_gain(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_41get_gain = {"get_gain", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_41get_gain, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_41get_gain(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_49get_gain = {"get_gain", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_49get_gain, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_49get_gain(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -13569,32 +15975,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 439, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 545, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 439, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 545, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_gain", 0) < (0)) __PYX_ERR(0, 439, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_gain", 0) < (0)) __PYX_ERR(0, 545, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_gain", 1, 1, 1, i); __PYX_ERR(0, 439, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_gain", 1, 1, 1, i); __PYX_ERR(0, 545, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 439, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 545, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_gain", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 439, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_gain", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 545, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -13605,7 +16011,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_40get_gain(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_48get_gain(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -13615,7 +16021,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_40get_gain(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_48get_gain(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -13624,7 +16030,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_40get_gain
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_gain", 0);
 
-  /* "src/device/daheng_device.py":440
+  /* "src/device/daheng_device.py":546
  * 
  *     def get_gain(self) -> float:
  *         return self._gain_db             # <<<<<<<<<<<<<<
@@ -13632,13 +16038,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_40get_gain
  *     def get_temperature(self) -> float | None:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 440, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 546, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "src/device/daheng_device.py":439
+  /* "src/device/daheng_device.py":545
  *         return self._exposure_us
  * 
  *     def get_gain(self) -> float:             # <<<<<<<<<<<<<<
@@ -13657,7 +16063,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_40get_gain
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":442
+/* "src/device/daheng_device.py":548
  *         return self._gain_db
  * 
  *     def get_temperature(self) -> float | None:             # <<<<<<<<<<<<<<
@@ -13666,16 +16072,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_40get_gain
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_43get_temperature(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_51get_temperature(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_42get_temperature, "Read the camera temperature from the optional Daheng feature.\n\n        Not every camera model or firmware exposes ``DeviceTemperature``;\n        keep that case non-fatal so the rest of the device remains usable.\n        ");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_43get_temperature = {"get_temperature", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_43get_temperature, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_42get_temperature};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_43get_temperature(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_50get_temperature, "Read the camera temperature from the optional Daheng feature.\n\n        Not every camera model or firmware exposes ``DeviceTemperature``;\n        keep that case non-fatal so the rest of the device remains usable.\n        ");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_51get_temperature = {"get_temperature", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_51get_temperature, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_50get_temperature};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_51get_temperature(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -13705,32 +16111,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 442, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 548, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 442, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 548, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_temperature", 0) < (0)) __PYX_ERR(0, 442, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "get_temperature", 0) < (0)) __PYX_ERR(0, 548, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_temperature", 1, 1, 1, i); __PYX_ERR(0, 442, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("get_temperature", 1, 1, 1, i); __PYX_ERR(0, 548, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 442, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 548, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_temperature", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 442, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_temperature", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 548, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -13741,7 +16147,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temperature(__pyx_self, __pyx_v_self);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_50get_temperature(__pyx_self, __pyx_v_self);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -13751,7 +16157,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temperature(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_50get_temperature(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_v_feature_name = NULL;
   PyObject *__pyx_v_e = NULL;
   PyObject *__pyx_r = NULL;
@@ -13784,20 +16190,20 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_temperature", 0);
 
-  /* "src/device/daheng_device.py":448
+  /* "src/device/daheng_device.py":554
  *         keep that case non-fatal so the rest of the device remains usable.
  *         """
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
  *             return None
  * 
 */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 448, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 554, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 == Py_None);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "src/device/daheng_device.py":449
+    /* "src/device/daheng_device.py":555
  *         """
  *         if self._remote_feature is None:
  *             return None             # <<<<<<<<<<<<<<
@@ -13808,7 +16214,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
     __pyx_r = ((PyObject*)Py_None); __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "src/device/daheng_device.py":448
+    /* "src/device/daheng_device.py":554
  *         keep that case non-fatal so the rest of the device remains usable.
  *         """
  *         if self._remote_feature is None:             # <<<<<<<<<<<<<<
@@ -13817,7 +16223,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
 */
   }
 
-  /* "src/device/daheng_device.py":451
+  /* "src/device/daheng_device.py":557
  *             return None
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -13833,7 +16239,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
     __Pyx_XGOTREF(__pyx_t_5);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":452
+      /* "src/device/daheng_device.py":558
  * 
  *         try:
  *             feature_name = "DeviceTemperature"             # <<<<<<<<<<<<<<
@@ -13843,14 +16249,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
       __Pyx_INCREF(__pyx_mstate_global->__pyx_n_u_DeviceTemperature);
       __pyx_v_feature_name = __pyx_mstate_global->__pyx_n_u_DeviceTemperature;
 
-      /* "src/device/daheng_device.py":453
+      /* "src/device/daheng_device.py":559
  *         try:
  *             feature_name = "DeviceTemperature"
  *             if not self._remote_feature.is_implemented(feature_name):             # <<<<<<<<<<<<<<
  *                 return None
  *             if not self._remote_feature.is_readable(feature_name):
 */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 453, __pyx_L4_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 559, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_7);
       __pyx_t_6 = __pyx_t_7;
       __Pyx_INCREF(__pyx_t_6);
@@ -13860,15 +16266,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_implemented, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 453, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 559, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
-      __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 453, __pyx_L4_error)
+      __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 559, __pyx_L4_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_9 = (!__pyx_t_2);
       if (__pyx_t_9) {
 
-        /* "src/device/daheng_device.py":454
+        /* "src/device/daheng_device.py":560
  *             feature_name = "DeviceTemperature"
  *             if not self._remote_feature.is_implemented(feature_name):
  *                 return None             # <<<<<<<<<<<<<<
@@ -13879,7 +16285,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
         __pyx_r = ((PyObject*)Py_None); __Pyx_INCREF(Py_None);
         goto __pyx_L8_try_return;
 
-        /* "src/device/daheng_device.py":453
+        /* "src/device/daheng_device.py":559
  *         try:
  *             feature_name = "DeviceTemperature"
  *             if not self._remote_feature.is_implemented(feature_name):             # <<<<<<<<<<<<<<
@@ -13888,14 +16294,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
 */
       }
 
-      /* "src/device/daheng_device.py":455
+      /* "src/device/daheng_device.py":561
  *             if not self._remote_feature.is_implemented(feature_name):
  *                 return None
  *             if not self._remote_feature.is_readable(feature_name):             # <<<<<<<<<<<<<<
  *                 return None
  *             return float(self._remote_feature.get_float_feature(feature_name).get())
 */
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 455, __pyx_L4_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 561, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_6);
       __pyx_t_7 = __pyx_t_6;
       __Pyx_INCREF(__pyx_t_7);
@@ -13905,15 +16311,15 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_is_readable, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 455, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 561, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 455, __pyx_L4_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 561, __pyx_L4_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_2 = (!__pyx_t_9);
       if (__pyx_t_2) {
 
-        /* "src/device/daheng_device.py":456
+        /* "src/device/daheng_device.py":562
  *                 return None
  *             if not self._remote_feature.is_readable(feature_name):
  *                 return None             # <<<<<<<<<<<<<<
@@ -13924,7 +16330,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
         __pyx_r = ((PyObject*)Py_None); __Pyx_INCREF(Py_None);
         goto __pyx_L8_try_return;
 
-        /* "src/device/daheng_device.py":455
+        /* "src/device/daheng_device.py":561
  *             if not self._remote_feature.is_implemented(feature_name):
  *                 return None
  *             if not self._remote_feature.is_readable(feature_name):             # <<<<<<<<<<<<<<
@@ -13933,7 +16339,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
 */
       }
 
-      /* "src/device/daheng_device.py":457
+      /* "src/device/daheng_device.py":563
  *             if not self._remote_feature.is_readable(feature_name):
  *                 return None
  *             return float(self._remote_feature.get_float_feature(feature_name).get())             # <<<<<<<<<<<<<<
@@ -13941,7 +16347,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
  *             logger.debug("Could not read camera temperature: %s", e)
 */
       __Pyx_XDECREF(__pyx_r);
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 457, __pyx_L4_error)
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_remote_feature); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 563, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_10 = __pyx_t_11;
       __Pyx_INCREF(__pyx_t_10);
@@ -13951,7 +16357,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
         __pyx_t_7 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_float_feature, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 457, __pyx_L4_error)
+        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 563, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_7);
       }
       __pyx_t_6 = __pyx_t_7;
@@ -13962,18 +16368,18 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
         __pyx_t_1 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get, __pyx_callargs+__pyx_t_8, (1-__pyx_t_8) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 457, __pyx_L4_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 563, __pyx_L4_error)
         __Pyx_GOTREF(__pyx_t_1);
       }
-      __pyx_t_7 = __Pyx_PyNumber_Float(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 457, __pyx_L4_error)
+      __pyx_t_7 = __Pyx_PyNumber_Float(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 563, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (__Pyx_PyFloat_FromNumber(&__pyx_t_7, NULL, 0) < (0)) __PYX_ERR(0, 457, __pyx_L4_error)
+      if (__Pyx_PyFloat_FromNumber(&__pyx_t_7, NULL, 0) < (0)) __PYX_ERR(0, 563, __pyx_L4_error)
       __pyx_r = ((PyObject*)__pyx_t_7);
       __pyx_t_7 = 0;
       goto __pyx_L8_try_return;
 
-      /* "src/device/daheng_device.py":451
+      /* "src/device/daheng_device.py":557
  *             return None
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -13988,7 +16394,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "src/device/daheng_device.py":458
+    /* "src/device/daheng_device.py":564
  *                 return None
  *             return float(self._remote_feature.get_float_feature(feature_name).get())
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -13998,7 +16404,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
     __pyx_t_12 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_12) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice.get_temperature", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_7, &__pyx_t_1, &__pyx_t_6) < 0) __PYX_ERR(0, 458, __pyx_L6_except_error)
+      if (__Pyx_GetException(&__pyx_t_7, &__pyx_t_1, &__pyx_t_6) < 0) __PYX_ERR(0, 564, __pyx_L6_except_error)
       __Pyx_XGOTREF(__pyx_t_7);
       __Pyx_XGOTREF(__pyx_t_1);
       __Pyx_XGOTREF(__pyx_t_6);
@@ -14006,7 +16412,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
       __pyx_v_e = __pyx_t_1;
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":459
+        /* "src/device/daheng_device.py":565
  *             return float(self._remote_feature.get_float_feature(feature_name).get())
  *         except Exception as e:
  *             logger.debug("Could not read camera temperature: %s", e)             # <<<<<<<<<<<<<<
@@ -14014,9 +16420,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
  * 
 */
         __pyx_t_10 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 459, __pyx_L17_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 565, __pyx_L17_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 459, __pyx_L17_error)
+        __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_mstate_global->__pyx_n_u_debug); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 565, __pyx_L17_error)
         __Pyx_GOTREF(__pyx_t_14);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __pyx_t_8 = 1;
@@ -14036,12 +16442,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
           __pyx_t_11 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_14, __pyx_callargs+__pyx_t_8, (3-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 459, __pyx_L17_error)
+          if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 565, __pyx_L17_error)
           __Pyx_GOTREF(__pyx_t_11);
         }
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-        /* "src/device/daheng_device.py":460
+        /* "src/device/daheng_device.py":566
  *         except Exception as e:
  *             logger.debug("Could not read camera temperature: %s", e)
  *             return None             # <<<<<<<<<<<<<<
@@ -14056,7 +16462,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
         goto __pyx_L16_return;
       }
 
-      /* "src/device/daheng_device.py":458
+      /* "src/device/daheng_device.py":564
  *                 return None
  *             return float(self._remote_feature.get_float_feature(feature_name).get())
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -14109,7 +16515,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
     }
     goto __pyx_L6_except_error;
 
-    /* "src/device/daheng_device.py":451
+    /* "src/device/daheng_device.py":557
  *             return None
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -14136,7 +16542,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
     goto __pyx_L0;
   }
 
-  /* "src/device/daheng_device.py":442
+  /* "src/device/daheng_device.py":548
  *         return self._gain_db
  * 
  *     def get_temperature(self) -> float | None:             # <<<<<<<<<<<<<<
@@ -14163,7 +16569,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
   return __pyx_r;
 }
 
-/* "src/device/daheng_device.py":462
+/* "src/device/daheng_device.py":568
  *             return None
  * 
  *     def _capture_callback(self, raw_image) -> None:             # <<<<<<<<<<<<<<
@@ -14172,16 +16578,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_42get_temp
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_45_capture_callback(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_53_capture_callback(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_44_capture_callback, "SDK capture callback \342\200\224 extract raw mono numpy array and emit.");
-static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_45_capture_callback = {"_capture_callback", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_45_capture_callback, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_44_capture_callback};
-static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_45_capture_callback(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_3src_6device_13daheng_device_12DahengDevice_52_capture_callback, "SDK capture callback \342\200\224 extract raw mono numpy array and emit.");
+static PyMethodDef __pyx_mdef_3src_6device_13daheng_device_12DahengDevice_53_capture_callback = {"_capture_callback", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_3src_6device_13daheng_device_12DahengDevice_53_capture_callback, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_3src_6device_13daheng_device_12DahengDevice_52_capture_callback};
+static PyObject *__pyx_pw_3src_6device_13daheng_device_12DahengDevice_53_capture_callback(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -14212,39 +16618,39 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_self,&__pyx_mstate_global->__pyx_n_u_raw_image,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 462, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len < 0)) __PYX_ERR(0, 568, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 462, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 568, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 462, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 568, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_capture_callback", 0) < (0)) __PYX_ERR(0, 462, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "_capture_callback", 0) < (0)) __PYX_ERR(0, 568, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 2; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_capture_callback", 1, 2, 2, i); __PYX_ERR(0, 462, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("_capture_callback", 1, 2, 2, i); __PYX_ERR(0, 568, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 462, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 568, __pyx_L3_error)
       values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 462, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 568, __pyx_L3_error)
     }
     __pyx_v_self = values[0];
     __pyx_v_raw_image = values[1];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_capture_callback", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 462, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_capture_callback", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 568, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -14255,7 +16661,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture_callback(__pyx_self, __pyx_v_self, __pyx_v_raw_image);
+  __pyx_r = __pyx_pf_3src_6device_13daheng_device_12DahengDevice_52_capture_callback(__pyx_self, __pyx_v_self, __pyx_v_raw_image);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -14265,7 +16671,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture_callback(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_raw_image) {
+static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_52_capture_callback(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_raw_image) {
   PyObject *__pyx_v_height = NULL;
   PyObject *__pyx_v_width = NULL;
   PyObject *__pyx_v_pixel_format = NULL;
@@ -14310,7 +16716,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_capture_callback", 0);
 
-  /* "src/device/daheng_device.py":464
+  /* "src/device/daheng_device.py":570
  *     def _capture_callback(self, raw_image) -> None:
  *         """SDK capture callback  extract raw mono numpy array and emit."""
  *         if raw_image is None or not self._running:             # <<<<<<<<<<<<<<
@@ -14323,16 +16729,16 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 464, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 570, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 464, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 570, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_4 = (!__pyx_t_2);
   __pyx_t_1 = __pyx_t_4;
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "src/device/daheng_device.py":465
+    /* "src/device/daheng_device.py":571
  *         """SDK capture callback  extract raw mono numpy array and emit."""
  *         if raw_image is None or not self._running:
  *             return             # <<<<<<<<<<<<<<
@@ -14343,7 +16749,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "src/device/daheng_device.py":464
+    /* "src/device/daheng_device.py":570
  *     def _capture_callback(self, raw_image) -> None:
  *         """SDK capture callback  extract raw mono numpy array and emit."""
  *         if raw_image is None or not self._running:             # <<<<<<<<<<<<<<
@@ -14352,7 +16758,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
   }
 
-  /* "src/device/daheng_device.py":467
+  /* "src/device/daheng_device.py":573
  *             return
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -14368,7 +16774,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
     __Pyx_XGOTREF(__pyx_t_7);
     /*try:*/ {
 
-      /* "src/device/daheng_device.py":469
+      /* "src/device/daheng_device.py":575
  *         try:
  *             # Check frame status
  *             if raw_image.get_status() != 0:             # <<<<<<<<<<<<<<
@@ -14382,14 +16788,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         PyObject *__pyx_callargs[2] = {__pyx_t_8, NULL};
         __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_status, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 469, __pyx_L6_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 575, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
       }
-      __pyx_t_1 = (__Pyx_PyLong_BoolNeObjC(__pyx_t_3, __pyx_mstate_global->__pyx_int_0, 0, 0)); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 469, __pyx_L6_error)
+      __pyx_t_1 = (__Pyx_PyLong_BoolNeObjC(__pyx_t_3, __pyx_mstate_global->__pyx_int_0, 0, 0)); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 575, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       if (__pyx_t_1) {
 
-        /* "src/device/daheng_device.py":470
+        /* "src/device/daheng_device.py":576
  *             # Check frame status
  *             if raw_image.get_status() != 0:
  *                 logger.warning("Frame status error: %d", raw_image.get_status())             # <<<<<<<<<<<<<<
@@ -14397,9 +16803,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
  *                     self._trigger_cmd.send_command()
 */
         __pyx_t_8 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 470, __pyx_L6_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 576, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 470, __pyx_L6_error)
+        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 576, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __pyx_t_12 = __pyx_v_raw_image;
@@ -14409,7 +16815,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           PyObject *__pyx_callargs[2] = {__pyx_t_12, NULL};
           __pyx_t_10 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_status, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 470, __pyx_L6_error)
+          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 576, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_10);
         }
         __pyx_t_9 = 1;
@@ -14430,43 +16836,43 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-          if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 470, __pyx_L6_error)
+          if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 576, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_3);
         }
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "src/device/daheng_device.py":471
+        /* "src/device/daheng_device.py":577
  *             if raw_image.get_status() != 0:
  *                 logger.warning("Frame status error: %d", raw_image.get_status())
  *                 if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
  *                     self._trigger_cmd.send_command()
  *                 return
 */
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 471, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 577, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 471, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 577, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         if (__pyx_t_4) {
         } else {
           __pyx_t_1 = __pyx_t_4;
           goto __pyx_L14_bool_binop_done;
         }
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 471, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 577, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 471, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 577, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_1 = __pyx_t_4;
         __pyx_L14_bool_binop_done:;
         if (__pyx_t_1) {
 
-          /* "src/device/daheng_device.py":472
+          /* "src/device/daheng_device.py":578
  *                 logger.warning("Frame status error: %d", raw_image.get_status())
  *                 if self._running and self._trigger_cmd:
  *                     self._trigger_cmd.send_command()             # <<<<<<<<<<<<<<
  *                 return
  * 
 */
-          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 472, __pyx_L6_error)
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 578, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_10);
           __pyx_t_11 = __pyx_t_10;
           __Pyx_INCREF(__pyx_t_11);
@@ -14476,12 +16882,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
             __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_send_command, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 472, __pyx_L6_error)
+            if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 578, __pyx_L6_error)
             __Pyx_GOTREF(__pyx_t_3);
           }
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-          /* "src/device/daheng_device.py":471
+          /* "src/device/daheng_device.py":577
  *             if raw_image.get_status() != 0:
  *                 logger.warning("Frame status error: %d", raw_image.get_status())
  *                 if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
@@ -14490,7 +16896,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
         }
 
-        /* "src/device/daheng_device.py":473
+        /* "src/device/daheng_device.py":579
  *                 if self._running and self._trigger_cmd:
  *                     self._trigger_cmd.send_command()
  *                 return             # <<<<<<<<<<<<<<
@@ -14501,7 +16907,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __pyx_r = Py_None; __Pyx_INCREF(Py_None);
         goto __pyx_L10_try_return;
 
-        /* "src/device/daheng_device.py":469
+        /* "src/device/daheng_device.py":575
  *         try:
  *             # Check frame status
  *             if raw_image.get_status() != 0:             # <<<<<<<<<<<<<<
@@ -14510,7 +16916,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
       }
 
-      /* "src/device/daheng_device.py":476
+      /* "src/device/daheng_device.py":582
  * 
  *             # Get actual dimensions from frame
  *             height = raw_image.get_height()             # <<<<<<<<<<<<<<
@@ -14524,13 +16930,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         PyObject *__pyx_callargs[2] = {__pyx_t_10, NULL};
         __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_height, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 476, __pyx_L6_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 582, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
       }
       __pyx_v_height = __pyx_t_3;
       __pyx_t_3 = 0;
 
-      /* "src/device/daheng_device.py":477
+      /* "src/device/daheng_device.py":583
  *             # Get actual dimensions from frame
  *             height = raw_image.get_height()
  *             width = raw_image.get_width()             # <<<<<<<<<<<<<<
@@ -14544,13 +16950,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         PyObject *__pyx_callargs[2] = {__pyx_t_10, NULL};
         __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_width, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L6_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 583, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
       }
       __pyx_v_width = __pyx_t_3;
       __pyx_t_3 = 0;
 
-      /* "src/device/daheng_device.py":478
+      /* "src/device/daheng_device.py":584
  *             height = raw_image.get_height()
  *             width = raw_image.get_width()
  *             pixel_format = raw_image.get_pixel_format()             # <<<<<<<<<<<<<<
@@ -14564,31 +16970,31 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         PyObject *__pyx_callargs[2] = {__pyx_t_10, NULL};
         __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_pixel_format, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 478, __pyx_L6_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 584, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
       }
       __pyx_v_pixel_format = __pyx_t_3;
       __pyx_t_3 = 0;
 
-      /* "src/device/daheng_device.py":483
+      /* "src/device/daheng_device.py":589
  *             # format configured during initialize(), and packed formats need a
  *             # separate unpacking path that this raw-frame pipeline does not use.
  *             if pixel_format != GxPixelFormatEntry.MONO12:             # <<<<<<<<<<<<<<
  *                 logger.error(
  *                     "Unexpected camera pixel format %s; expected Mono12",
 */
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_GxPixelFormatEntry); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 483, __pyx_L6_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_GxPixelFormatEntry); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 589, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_MONO12); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 483, __pyx_L6_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_MONO12); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 589, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyObject_RichCompare(__pyx_v_pixel_format, __pyx_t_10, Py_NE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 483, __pyx_L6_error)
+      __pyx_t_3 = PyObject_RichCompare(__pyx_v_pixel_format, __pyx_t_10, Py_NE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 589, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 483, __pyx_L6_error)
+      __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 589, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       if (__pyx_t_1) {
 
-        /* "src/device/daheng_device.py":484
+        /* "src/device/daheng_device.py":590
  *             # separate unpacking path that this raw-frame pipeline does not use.
  *             if pixel_format != GxPixelFormatEntry.MONO12:
  *                 logger.error(             # <<<<<<<<<<<<<<
@@ -14596,13 +17002,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
  *                     pixel_format,
 */
         __pyx_t_10 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 484, __pyx_L6_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 590, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_11);
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 484, __pyx_L6_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 590, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-        /* "src/device/daheng_device.py":486
+        /* "src/device/daheng_device.py":592
  *                 logger.error(
  *                     "Unexpected camera pixel format %s; expected Mono12",
  *                     pixel_format,             # <<<<<<<<<<<<<<
@@ -14626,43 +17032,43 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_8, __pyx_callargs+__pyx_t_9, (3-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 484, __pyx_L6_error)
+          if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 590, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_3);
         }
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "src/device/daheng_device.py":488
+        /* "src/device/daheng_device.py":594
  *                     pixel_format,
  *                 )
  *                 if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
  *                     self._trigger_cmd.send_command()
  *                 return
 */
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 488, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 594, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 488, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 594, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         if (__pyx_t_4) {
         } else {
           __pyx_t_1 = __pyx_t_4;
           goto __pyx_L18_bool_binop_done;
         }
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 488, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 594, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 488, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 594, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_1 = __pyx_t_4;
         __pyx_L18_bool_binop_done:;
         if (__pyx_t_1) {
 
-          /* "src/device/daheng_device.py":489
+          /* "src/device/daheng_device.py":595
  *                 )
  *                 if self._running and self._trigger_cmd:
  *                     self._trigger_cmd.send_command()             # <<<<<<<<<<<<<<
  *                 return
  * 
 */
-          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 489, __pyx_L6_error)
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 595, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_10);
           __pyx_t_8 = __pyx_t_10;
           __Pyx_INCREF(__pyx_t_8);
@@ -14672,12 +17078,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
             __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_send_command, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 489, __pyx_L6_error)
+            if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 595, __pyx_L6_error)
             __Pyx_GOTREF(__pyx_t_3);
           }
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-          /* "src/device/daheng_device.py":488
+          /* "src/device/daheng_device.py":594
  *                     pixel_format,
  *                 )
  *                 if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
@@ -14686,7 +17092,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
         }
 
-        /* "src/device/daheng_device.py":490
+        /* "src/device/daheng_device.py":596
  *                 if self._running and self._trigger_cmd:
  *                     self._trigger_cmd.send_command()
  *                 return             # <<<<<<<<<<<<<<
@@ -14697,7 +17103,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __pyx_r = Py_None; __Pyx_INCREF(Py_None);
         goto __pyx_L10_try_return;
 
-        /* "src/device/daheng_device.py":483
+        /* "src/device/daheng_device.py":589
  *             # format configured during initialize(), and packed formats need a
  *             # separate unpacking path that this raw-frame pipeline does not use.
  *             if pixel_format != GxPixelFormatEntry.MONO12:             # <<<<<<<<<<<<<<
@@ -14706,7 +17112,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
       }
 
-      /* "src/device/daheng_device.py":492
+      /* "src/device/daheng_device.py":598
  *                 return
  * 
  *             numpy_array = raw_image.get_numpy_array()             # <<<<<<<<<<<<<<
@@ -14720,13 +17126,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         PyObject *__pyx_callargs[2] = {__pyx_t_10, NULL};
         __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_numpy_array, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 492, __pyx_L6_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 598, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
       }
       __pyx_v_numpy_array = __pyx_t_3;
       __pyx_t_3 = 0;
 
-      /* "src/device/daheng_device.py":493
+      /* "src/device/daheng_device.py":599
  * 
  *             numpy_array = raw_image.get_numpy_array()
  *             if numpy_array is None:             # <<<<<<<<<<<<<<
@@ -14736,7 +17142,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
       __pyx_t_1 = (__pyx_v_numpy_array == Py_None);
       if (__pyx_t_1) {
 
-        /* "src/device/daheng_device.py":494
+        /* "src/device/daheng_device.py":600
  *             numpy_array = raw_image.get_numpy_array()
  *             if numpy_array is None:
  *                 logger.warning("Failed to get numpy array for Mono12 frame")             # <<<<<<<<<<<<<<
@@ -14744,9 +17150,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
  *                     self._trigger_cmd.send_command()
 */
         __pyx_t_10 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 494, __pyx_L6_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 600, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 494, __pyx_L6_error)
+        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 600, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_t_9 = 1;
@@ -14766,43 +17172,43 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_11, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
           __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-          if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 494, __pyx_L6_error)
+          if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 600, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_3);
         }
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "src/device/daheng_device.py":495
+        /* "src/device/daheng_device.py":601
  *             if numpy_array is None:
  *                 logger.warning("Failed to get numpy array for Mono12 frame")
  *                 if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
  *                     self._trigger_cmd.send_command()
  *                 return
 */
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 495, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 601, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 495, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 601, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         if (__pyx_t_4) {
         } else {
           __pyx_t_1 = __pyx_t_4;
           goto __pyx_L22_bool_binop_done;
         }
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 495, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 601, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 495, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 601, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_1 = __pyx_t_4;
         __pyx_L22_bool_binop_done:;
         if (__pyx_t_1) {
 
-          /* "src/device/daheng_device.py":496
+          /* "src/device/daheng_device.py":602
  *                 logger.warning("Failed to get numpy array for Mono12 frame")
  *                 if self._running and self._trigger_cmd:
  *                     self._trigger_cmd.send_command()             # <<<<<<<<<<<<<<
  *                 return
  *             if numpy_array.size != height * width:
 */
-          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 496, __pyx_L6_error)
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 602, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_10);
           __pyx_t_11 = __pyx_t_10;
           __Pyx_INCREF(__pyx_t_11);
@@ -14812,12 +17218,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
             __pyx_t_3 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_send_command, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 496, __pyx_L6_error)
+            if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 602, __pyx_L6_error)
             __Pyx_GOTREF(__pyx_t_3);
           }
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-          /* "src/device/daheng_device.py":495
+          /* "src/device/daheng_device.py":601
  *             if numpy_array is None:
  *                 logger.warning("Failed to get numpy array for Mono12 frame")
  *                 if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
@@ -14826,7 +17232,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
         }
 
-        /* "src/device/daheng_device.py":497
+        /* "src/device/daheng_device.py":603
  *                 if self._running and self._trigger_cmd:
  *                     self._trigger_cmd.send_command()
  *                 return             # <<<<<<<<<<<<<<
@@ -14837,7 +17243,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __pyx_r = Py_None; __Pyx_INCREF(Py_None);
         goto __pyx_L10_try_return;
 
-        /* "src/device/daheng_device.py":493
+        /* "src/device/daheng_device.py":599
  * 
  *             numpy_array = raw_image.get_numpy_array()
  *             if numpy_array is None:             # <<<<<<<<<<<<<<
@@ -14846,25 +17252,25 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
       }
 
-      /* "src/device/daheng_device.py":498
+      /* "src/device/daheng_device.py":604
  *                     self._trigger_cmd.send_command()
  *                 return
  *             if numpy_array.size != height * width:             # <<<<<<<<<<<<<<
  *                 logger.error(
  *                     "Unexpected Mono12 buffer size: got %d samples, expected %d",
 */
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_numpy_array, __pyx_mstate_global->__pyx_n_u_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 498, __pyx_L6_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_numpy_array, __pyx_mstate_global->__pyx_n_u_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 604, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_10 = PyNumber_Multiply(__pyx_v_height, __pyx_v_width); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 498, __pyx_L6_error)
+      __pyx_t_10 = PyNumber_Multiply(__pyx_v_height, __pyx_v_width); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 604, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_11 = PyObject_RichCompare(__pyx_t_3, __pyx_t_10, Py_NE); __Pyx_XGOTREF(__pyx_t_11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 498, __pyx_L6_error)
+      __pyx_t_11 = PyObject_RichCompare(__pyx_t_3, __pyx_t_10, Py_NE); __Pyx_XGOTREF(__pyx_t_11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 604, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 498, __pyx_L6_error)
+      __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 604, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       if (__pyx_t_1) {
 
-        /* "src/device/daheng_device.py":499
+        /* "src/device/daheng_device.py":605
  *                 return
  *             if numpy_array.size != height * width:
  *                 logger.error(             # <<<<<<<<<<<<<<
@@ -14872,30 +17278,30 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
  *                     numpy_array.size,
 */
         __pyx_t_10 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 499, __pyx_L6_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 605, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 499, __pyx_L6_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 605, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "src/device/daheng_device.py":501
+        /* "src/device/daheng_device.py":607
  *                 logger.error(
  *                     "Unexpected Mono12 buffer size: got %d samples, expected %d",
  *                     numpy_array.size,             # <<<<<<<<<<<<<<
  *                     height * width,
  *                 )
 */
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_numpy_array, __pyx_mstate_global->__pyx_n_u_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 501, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_numpy_array, __pyx_mstate_global->__pyx_n_u_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 607, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
 
-        /* "src/device/daheng_device.py":502
+        /* "src/device/daheng_device.py":608
  *                     "Unexpected Mono12 buffer size: got %d samples, expected %d",
  *                     numpy_array.size,
  *                     height * width,             # <<<<<<<<<<<<<<
  *                 )
  *                 if self._running and self._trigger_cmd:
 */
-        __pyx_t_12 = PyNumber_Multiply(__pyx_v_height, __pyx_v_width); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 502, __pyx_L6_error)
+        __pyx_t_12 = PyNumber_Multiply(__pyx_v_height, __pyx_v_width); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 608, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_12);
         __pyx_t_9 = 1;
         #if CYTHON_UNPACK_METHODS
@@ -14916,43 +17322,43 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 499, __pyx_L6_error)
+          if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 605, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_11);
         }
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-        /* "src/device/daheng_device.py":504
+        /* "src/device/daheng_device.py":610
  *                     height * width,
  *                 )
  *                 if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
  *                     self._trigger_cmd.send_command()
  *                 return
 */
-        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 504, __pyx_L6_error)
+        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 610, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_11);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 504, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 610, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
         if (__pyx_t_4) {
         } else {
           __pyx_t_1 = __pyx_t_4;
           goto __pyx_L26_bool_binop_done;
         }
-        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 504, __pyx_L6_error)
+        __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 610, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_11);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 504, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 610, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
         __pyx_t_1 = __pyx_t_4;
         __pyx_L26_bool_binop_done:;
         if (__pyx_t_1) {
 
-          /* "src/device/daheng_device.py":505
+          /* "src/device/daheng_device.py":611
  *                 )
  *                 if self._running and self._trigger_cmd:
  *                     self._trigger_cmd.send_command()             # <<<<<<<<<<<<<<
  *                 return
  *             frame = numpy_array.reshape(height, width).astype(np.uint16, copy=False)
 */
-          __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 505, __pyx_L6_error)
+          __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 611, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_12);
           __pyx_t_8 = __pyx_t_12;
           __Pyx_INCREF(__pyx_t_8);
@@ -14962,12 +17368,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
             __pyx_t_11 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_send_command, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-            if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 505, __pyx_L6_error)
+            if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 611, __pyx_L6_error)
             __Pyx_GOTREF(__pyx_t_11);
           }
           __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-          /* "src/device/daheng_device.py":504
+          /* "src/device/daheng_device.py":610
  *                     height * width,
  *                 )
  *                 if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
@@ -14976,7 +17382,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
         }
 
-        /* "src/device/daheng_device.py":506
+        /* "src/device/daheng_device.py":612
  *                 if self._running and self._trigger_cmd:
  *                     self._trigger_cmd.send_command()
  *                 return             # <<<<<<<<<<<<<<
@@ -14987,7 +17393,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __pyx_r = Py_None; __Pyx_INCREF(Py_None);
         goto __pyx_L10_try_return;
 
-        /* "src/device/daheng_device.py":498
+        /* "src/device/daheng_device.py":604
  *                     self._trigger_cmd.send_command()
  *                 return
  *             if numpy_array.size != height * width:             # <<<<<<<<<<<<<<
@@ -14996,7 +17402,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
       }
 
-      /* "src/device/daheng_device.py":507
+      /* "src/device/daheng_device.py":613
  *                     self._trigger_cmd.send_command()
  *                 return
  *             frame = numpy_array.reshape(height, width).astype(np.uint16, copy=False)             # <<<<<<<<<<<<<<
@@ -15010,67 +17416,67 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         PyObject *__pyx_callargs[3] = {__pyx_t_3, __pyx_v_height, __pyx_v_width};
         __pyx_t_8 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_reshape, __pyx_callargs+__pyx_t_9, (3-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 507, __pyx_L6_error)
+        if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 613, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_8);
       }
       __pyx_t_12 = __pyx_t_8;
       __Pyx_INCREF(__pyx_t_12);
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 507, __pyx_L6_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 613, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_uint16); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 507, __pyx_L6_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_uint16); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 613, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_9 = 0;
       {
         PyObject *__pyx_callargs[2 + ((CYTHON_VECTORCALL) ? 1 : 0)] = {__pyx_t_12, __pyx_t_10};
-        __pyx_t_3 = __Pyx_MakeVectorcallBuilderKwds(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 507, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_MakeVectorcallBuilderKwds(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 613, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        if (__Pyx_VectorcallBuilder_AddArg(__pyx_mstate_global->__pyx_n_u_copy, Py_False, __pyx_t_3, __pyx_callargs+2, 0) < (0)) __PYX_ERR(0, 507, __pyx_L6_error)
+        if (__Pyx_VectorcallBuilder_AddArg(__pyx_mstate_global->__pyx_n_u_copy, Py_False, __pyx_t_3, __pyx_callargs+2, 0) < (0)) __PYX_ERR(0, 613, __pyx_L6_error)
         __pyx_t_11 = __Pyx_Object_VectorcallMethod_CallFromBuilder((PyObject*)__pyx_mstate_global->__pyx_n_u_astype, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET), __pyx_t_3);
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 507, __pyx_L6_error)
+        if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 613, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_11);
       }
       __pyx_v_frame = __pyx_t_11;
       __pyx_t_11 = 0;
 
-      /* "src/device/daheng_device.py":509
+      /* "src/device/daheng_device.py":615
  *             frame = numpy_array.reshape(height, width).astype(np.uint16, copy=False)
  * 
  *             frame_shape = (height, width)             # <<<<<<<<<<<<<<
  *             if frame_shape != self._frame_shape:
  *                 logger.warning(
 */
-      __pyx_t_11 = PyTuple_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 509, __pyx_L6_error)
+      __pyx_t_11 = PyTuple_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 615, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_INCREF(__pyx_v_height);
       __Pyx_GIVEREF(__pyx_v_height);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_v_height) != (0)) __PYX_ERR(0, 509, __pyx_L6_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_v_height) != (0)) __PYX_ERR(0, 615, __pyx_L6_error);
       __Pyx_INCREF(__pyx_v_width);
       __Pyx_GIVEREF(__pyx_v_width);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_v_width) != (0)) __PYX_ERR(0, 509, __pyx_L6_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_v_width) != (0)) __PYX_ERR(0, 615, __pyx_L6_error);
       __pyx_v_frame_shape = ((PyObject*)__pyx_t_11);
       __pyx_t_11 = 0;
 
-      /* "src/device/daheng_device.py":510
+      /* "src/device/daheng_device.py":616
  * 
  *             frame_shape = (height, width)
  *             if frame_shape != self._frame_shape:             # <<<<<<<<<<<<<<
  *                 logger.warning(
  *                     "Camera frame dimensions changed from %dx%d to %dx%d during acquisition",
 */
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 510, __pyx_L6_error)
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 616, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_8 = PyObject_RichCompare(__pyx_v_frame_shape, __pyx_t_11, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 510, __pyx_L6_error)
+      __pyx_t_8 = PyObject_RichCompare(__pyx_v_frame_shape, __pyx_t_11, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 616, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 510, __pyx_L6_error)
+      __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 616, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       if (__pyx_t_1) {
 
-        /* "src/device/daheng_device.py":511
+        /* "src/device/daheng_device.py":617
  *             frame_shape = (height, width)
  *             if frame_shape != self._frame_shape:
  *                 logger.warning(             # <<<<<<<<<<<<<<
@@ -15078,39 +17484,39 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
  *                     self._frame_shape[1],
 */
         __pyx_t_11 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 511, __pyx_L6_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 617, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 511, __pyx_L6_error)
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_warning); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 617, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "src/device/daheng_device.py":513
+        /* "src/device/daheng_device.py":619
  *                 logger.warning(
  *                     "Camera frame dimensions changed from %dx%d to %dx%d during acquisition",
  *                     self._frame_shape[1],             # <<<<<<<<<<<<<<
  *                     self._frame_shape[0],
  *                     width,
 */
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 513, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 619, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_12 = __Pyx_GetItemInt(__pyx_t_3, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 513, __pyx_L6_error)
+        __pyx_t_12 = __Pyx_GetItemInt(__pyx_t_3, 1, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 619, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "src/device/daheng_device.py":514
+        /* "src/device/daheng_device.py":620
  *                     "Camera frame dimensions changed from %dx%d to %dx%d during acquisition",
  *                     self._frame_shape[1],
  *                     self._frame_shape[0],             # <<<<<<<<<<<<<<
  *                     width,
  *                     height,
 */
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 514, __pyx_L6_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 620, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_13 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 514, __pyx_L6_error)
+        __pyx_t_13 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyLong_From_long, 0, 0, 1, 1, __Pyx_ReferenceSharing_OwnStrongReference); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 620, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "src/device/daheng_device.py":516
+        /* "src/device/daheng_device.py":622
  *                     self._frame_shape[0],
  *                     width,
  *                     height,             # <<<<<<<<<<<<<<
@@ -15136,21 +17542,21 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 511, __pyx_L6_error)
+          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 617, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_8);
         }
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-        /* "src/device/daheng_device.py":518
+        /* "src/device/daheng_device.py":624
  *                     height,
  *                 )
  *                 self._frame_shape = frame_shape             # <<<<<<<<<<<<<<
  * 
  *             binning_x, binning_y = self._binning
 */
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_v_frame_shape) < (0)) __PYX_ERR(0, 518, __pyx_L6_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_shape, __pyx_v_frame_shape) < (0)) __PYX_ERR(0, 624, __pyx_L6_error)
 
-        /* "src/device/daheng_device.py":510
+        /* "src/device/daheng_device.py":616
  * 
  *             frame_shape = (height, width)
  *             if frame_shape != self._frame_shape:             # <<<<<<<<<<<<<<
@@ -15159,14 +17565,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
       }
 
-      /* "src/device/daheng_device.py":520
+      /* "src/device/daheng_device.py":626
  *                 self._frame_shape = frame_shape
  * 
  *             binning_x, binning_y = self._binning             # <<<<<<<<<<<<<<
  *             original_rows, original_cols = SENSOR_FRAME_SHAPE
  *             metadata = {
 */
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 520, __pyx_L6_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_binning); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 626, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_8);
       if ((likely(PyTuple_CheckExact(__pyx_t_8))) || (PyList_CheckExact(__pyx_t_8))) {
         PyObject* sequence = __pyx_t_8;
@@ -15174,7 +17580,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 520, __pyx_L6_error)
+          __PYX_ERR(0, 626, __pyx_L6_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -15184,22 +17590,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __Pyx_INCREF(__pyx_t_13);
         } else {
           __pyx_t_10 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 520, __pyx_L6_error)
+          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 626, __pyx_L6_error)
           __Pyx_XGOTREF(__pyx_t_10);
           __pyx_t_13 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 520, __pyx_L6_error)
+          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 626, __pyx_L6_error)
           __Pyx_XGOTREF(__pyx_t_13);
         }
         #else
-        __pyx_t_10 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 520, __pyx_L6_error)
+        __pyx_t_10 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 626, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_13 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 520, __pyx_L6_error)
+        __pyx_t_13 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 626, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_13);
         #endif
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_12 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 520, __pyx_L6_error)
+        __pyx_t_12 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 626, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_t_14 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_12);
@@ -15207,7 +17613,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __Pyx_GOTREF(__pyx_t_10);
         index = 1; __pyx_t_13 = __pyx_t_14(__pyx_t_12); if (unlikely(!__pyx_t_13)) goto __pyx_L29_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_13);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_14(__pyx_t_12), 2) < (0)) __PYX_ERR(0, 520, __pyx_L6_error)
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_14(__pyx_t_12), 2) < (0)) __PYX_ERR(0, 626, __pyx_L6_error)
         __pyx_t_14 = NULL;
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         goto __pyx_L30_unpacking_done;
@@ -15215,7 +17621,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __pyx_t_14 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 520, __pyx_L6_error)
+        __PYX_ERR(0, 626, __pyx_L6_error)
         __pyx_L30_unpacking_done:;
       }
       __pyx_v_binning_x = __pyx_t_10;
@@ -15223,14 +17629,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
       __pyx_v_binning_y = __pyx_t_13;
       __pyx_t_13 = 0;
 
-      /* "src/device/daheng_device.py":521
+      /* "src/device/daheng_device.py":627
  * 
  *             binning_x, binning_y = self._binning
  *             original_rows, original_cols = SENSOR_FRAME_SHAPE             # <<<<<<<<<<<<<<
  *             metadata = {
  *                 "frame_id": raw_image.get_frame_id(),
 */
-      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_SENSOR_FRAME_SHAPE); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 521, __pyx_L6_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_SENSOR_FRAME_SHAPE); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 627, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_8);
       if ((likely(PyTuple_CheckExact(__pyx_t_8))) || (PyList_CheckExact(__pyx_t_8))) {
         PyObject* sequence = __pyx_t_8;
@@ -15238,7 +17644,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 521, __pyx_L6_error)
+          __PYX_ERR(0, 627, __pyx_L6_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -15248,22 +17654,22 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __Pyx_INCREF(__pyx_t_10);
         } else {
           __pyx_t_13 = __Pyx_PyList_GetItemRefFast(sequence, 0, __Pyx_ReferenceSharing_SharedReference);
-          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 521, __pyx_L6_error)
+          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 627, __pyx_L6_error)
           __Pyx_XGOTREF(__pyx_t_13);
           __pyx_t_10 = __Pyx_PyList_GetItemRefFast(sequence, 1, __Pyx_ReferenceSharing_SharedReference);
-          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 521, __pyx_L6_error)
+          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 627, __pyx_L6_error)
           __Pyx_XGOTREF(__pyx_t_10);
         }
         #else
-        __pyx_t_13 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 521, __pyx_L6_error)
+        __pyx_t_13 = __Pyx_PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 627, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_10 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 521, __pyx_L6_error)
+        __pyx_t_10 = __Pyx_PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 627, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_10);
         #endif
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_12 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 521, __pyx_L6_error)
+        __pyx_t_12 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 627, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_t_14 = (CYTHON_COMPILING_IN_LIMITED_API) ? PyIter_Next : __Pyx_PyObject_GetIterNextFunc(__pyx_t_12);
@@ -15271,7 +17677,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __Pyx_GOTREF(__pyx_t_13);
         index = 1; __pyx_t_10 = __pyx_t_14(__pyx_t_12); if (unlikely(!__pyx_t_10)) goto __pyx_L31_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_10);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_14(__pyx_t_12), 2) < (0)) __PYX_ERR(0, 521, __pyx_L6_error)
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_14(__pyx_t_12), 2) < (0)) __PYX_ERR(0, 627, __pyx_L6_error)
         __pyx_t_14 = NULL;
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         goto __pyx_L32_unpacking_done;
@@ -15279,7 +17685,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __pyx_t_14 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 521, __pyx_L6_error)
+        __PYX_ERR(0, 627, __pyx_L6_error)
         __pyx_L32_unpacking_done:;
       }
       __pyx_v_original_rows = __pyx_t_13;
@@ -15287,14 +17693,14 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
       __pyx_v_original_cols = __pyx_t_10;
       __pyx_t_10 = 0;
 
-      /* "src/device/daheng_device.py":523
+      /* "src/device/daheng_device.py":629
  *             original_rows, original_cols = SENSOR_FRAME_SHAPE
  *             metadata = {
  *                 "frame_id": raw_image.get_frame_id(),             # <<<<<<<<<<<<<<
  *                 "timestamp": time.time(),
  *                 "pixel_format": DEFAULT_PIXEL_FORMAT,
 */
-      __pyx_t_8 = __Pyx_PyDict_NewPresized(12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 523, __pyx_L6_error)
+      __pyx_t_8 = __Pyx_PyDict_NewPresized(12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 629, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_13 = __pyx_v_raw_image;
       __Pyx_INCREF(__pyx_t_13);
@@ -15303,13 +17709,13 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         PyObject *__pyx_callargs[2] = {__pyx_t_13, NULL};
         __pyx_t_10 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_get_frame_id, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-        if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 523, __pyx_L6_error)
+        if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 629, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_10);
       }
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_frame_id, __pyx_t_10) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_frame_id, __pyx_t_10) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-      /* "src/device/daheng_device.py":524
+      /* "src/device/daheng_device.py":630
  *             metadata = {
  *                 "frame_id": raw_image.get_frame_id(),
  *                 "timestamp": time.time(),             # <<<<<<<<<<<<<<
@@ -15317,9 +17723,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
  *                 "exposure_us": self._exposure_us,
 */
       __pyx_t_13 = NULL;
-      __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_time); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 524, __pyx_L6_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_time); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 630, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_time); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 524, __pyx_L6_error)
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_mstate_global->__pyx_n_u_time); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 630, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       __pyx_t_9 = 1;
@@ -15339,149 +17745,149 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_11, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-        if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 524, __pyx_L6_error)
+        if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 630, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_10);
       }
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_timestamp, __pyx_t_10) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_timestamp, __pyx_t_10) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-      /* "src/device/daheng_device.py":525
+      /* "src/device/daheng_device.py":631
  *                 "frame_id": raw_image.get_frame_id(),
  *                 "timestamp": time.time(),
  *                 "pixel_format": DEFAULT_PIXEL_FORMAT,             # <<<<<<<<<<<<<<
  *                 "exposure_us": self._exposure_us,
  *                 "gain_db": self._gain_db,
 */
-      __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 525, __pyx_L6_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_DEFAULT_PIXEL_FORMAT); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 631, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_10);
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_pixel_format_2, __pyx_t_10) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_pixel_format_2, __pyx_t_10) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-      /* "src/device/daheng_device.py":526
+      /* "src/device/daheng_device.py":632
  *                 "timestamp": time.time(),
  *                 "pixel_format": DEFAULT_PIXEL_FORMAT,
  *                 "exposure_us": self._exposure_us,             # <<<<<<<<<<<<<<
  *                 "gain_db": self._gain_db,
  *                 "width": width,
 */
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_exposure_us); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 526, __pyx_L6_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_exposure_us); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 632, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_10);
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_exposure_us_2, __pyx_t_10) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_exposure_us_2, __pyx_t_10) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-      /* "src/device/daheng_device.py":527
+      /* "src/device/daheng_device.py":633
  *                 "pixel_format": DEFAULT_PIXEL_FORMAT,
  *                 "exposure_us": self._exposure_us,
  *                 "gain_db": self._gain_db,             # <<<<<<<<<<<<<<
  *                 "width": width,
  *                 "height": height,
 */
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 527, __pyx_L6_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_gain_db); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 633, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_10);
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_gain_db_2, __pyx_t_10) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_gain_db_2, __pyx_t_10) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-      /* "src/device/daheng_device.py":528
+      /* "src/device/daheng_device.py":634
  *                 "exposure_us": self._exposure_us,
  *                 "gain_db": self._gain_db,
  *                 "width": width,             # <<<<<<<<<<<<<<
  *                 "height": height,
  *                 "binning_x": binning_x,
 */
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_width, __pyx_v_width) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_width, __pyx_v_width) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
 
-      /* "src/device/daheng_device.py":529
+      /* "src/device/daheng_device.py":635
  *                 "gain_db": self._gain_db,
  *                 "width": width,
  *                 "height": height,             # <<<<<<<<<<<<<<
  *                 "binning_x": binning_x,
  *                 "binning_y": binning_y,
 */
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_height, __pyx_v_height) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_height, __pyx_v_height) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
 
-      /* "src/device/daheng_device.py":530
+      /* "src/device/daheng_device.py":636
  *                 "width": width,
  *                 "height": height,
  *                 "binning_x": binning_x,             # <<<<<<<<<<<<<<
  *                 "binning_y": binning_y,
  *                 "binning": f"{binning_x}x{binning_y}",
 */
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_binning_x, __pyx_v_binning_x) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_binning_x, __pyx_v_binning_x) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
 
-      /* "src/device/daheng_device.py":531
+      /* "src/device/daheng_device.py":637
  *                 "height": height,
  *                 "binning_x": binning_x,
  *                 "binning_y": binning_y,             # <<<<<<<<<<<<<<
  *                 "binning": f"{binning_x}x{binning_y}",
  *                 "original_width": original_cols,
 */
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_binning_y, __pyx_v_binning_y) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_binning_y, __pyx_v_binning_y) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
 
-      /* "src/device/daheng_device.py":532
+      /* "src/device/daheng_device.py":638
  *                 "binning_x": binning_x,
  *                 "binning_y": binning_y,
  *                 "binning": f"{binning_x}x{binning_y}",             # <<<<<<<<<<<<<<
  *                 "original_width": original_cols,
  *                 "original_height": original_rows,
 */
-      __pyx_t_10 = __Pyx_PyObject_FormatSimple(__pyx_v_binning_x, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 532, __pyx_L6_error)
+      __pyx_t_10 = __Pyx_PyObject_FormatSimple(__pyx_v_binning_x, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 638, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_11 = __Pyx_PyObject_FormatSimple(__pyx_v_binning_y, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 532, __pyx_L6_error)
+      __pyx_t_11 = __Pyx_PyObject_FormatSimple(__pyx_v_binning_y, __pyx_mstate_global->__pyx_empty_unicode); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 638, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_15[0] = __pyx_t_10;
       __pyx_t_15[1] = __pyx_mstate_global->__pyx_n_u_x;
       __pyx_t_15[2] = __pyx_t_11;
       __pyx_t_13 = __Pyx_PyUnicode_Join(__pyx_t_15, 3, __Pyx_PyUnicode_GET_LENGTH(__pyx_t_10) + 1 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_11), 127 | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_10) | __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_11));
-      if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 532, __pyx_L6_error)
+      if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 638, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_13);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_binning_2, __pyx_t_13) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_binning_2, __pyx_t_13) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-      /* "src/device/daheng_device.py":533
+      /* "src/device/daheng_device.py":639
  *                 "binning_y": binning_y,
  *                 "binning": f"{binning_x}x{binning_y}",
  *                 "original_width": original_cols,             # <<<<<<<<<<<<<<
  *                 "original_height": original_rows,
  *             }
 */
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_original_width, __pyx_v_original_cols) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_original_width, __pyx_v_original_cols) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
 
-      /* "src/device/daheng_device.py":534
+      /* "src/device/daheng_device.py":640
  *                 "binning": f"{binning_x}x{binning_y}",
  *                 "original_width": original_cols,
  *                 "original_height": original_rows,             # <<<<<<<<<<<<<<
  *             }
  *             self._frame_id_counter += 1
 */
-      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_original_height, __pyx_v_original_rows) < (0)) __PYX_ERR(0, 523, __pyx_L6_error)
+      if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_original_height, __pyx_v_original_rows) < (0)) __PYX_ERR(0, 629, __pyx_L6_error)
       __pyx_v_metadata = ((PyObject*)__pyx_t_8);
       __pyx_t_8 = 0;
 
-      /* "src/device/daheng_device.py":536
+      /* "src/device/daheng_device.py":642
  *                 "original_height": original_rows,
  *             }
  *             self._frame_id_counter += 1             # <<<<<<<<<<<<<<
  * 
  *             self.frame_acquired.emit(frame, metadata)
 */
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_id_counter); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 536, __pyx_L6_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_id_counter); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 642, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_13 = __Pyx_PyLong_AddObjC(__pyx_t_8, __pyx_mstate_global->__pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 536, __pyx_L6_error)
+      __pyx_t_13 = __Pyx_PyLong_AddObjC(__pyx_t_8, __pyx_mstate_global->__pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 642, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_13);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_id_counter, __pyx_t_13) < (0)) __PYX_ERR(0, 536, __pyx_L6_error)
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_id_counter, __pyx_t_13) < (0)) __PYX_ERR(0, 642, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-      /* "src/device/daheng_device.py":538
+      /* "src/device/daheng_device.py":644
  *             self._frame_id_counter += 1
  * 
  *             self.frame_acquired.emit(frame, metadata)             # <<<<<<<<<<<<<<
  * 
  *             # Send next software trigger to continue the chain
 */
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_acquired); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 538, __pyx_L6_error)
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_frame_acquired); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 644, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_8 = __pyx_t_11;
       __Pyx_INCREF(__pyx_t_8);
@@ -15491,43 +17897,43 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         __pyx_t_13 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_emit, __pyx_callargs+__pyx_t_9, (3-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-        if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 538, __pyx_L6_error)
+        if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 644, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_13);
       }
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-      /* "src/device/daheng_device.py":541
+      /* "src/device/daheng_device.py":647
  * 
  *             # Send next software trigger to continue the chain
  *             if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
  *                 self._trigger_cmd.send_command()
  * 
 */
-      __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 541, __pyx_L6_error)
+      __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 647, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_13);
-      __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_13); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 541, __pyx_L6_error)
+      __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_13); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 647, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       if (__pyx_t_4) {
       } else {
         __pyx_t_1 = __pyx_t_4;
         goto __pyx_L34_bool_binop_done;
       }
-      __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 541, __pyx_L6_error)
+      __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 647, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_13);
-      __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_13); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 541, __pyx_L6_error)
+      __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_13); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 647, __pyx_L6_error)
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       __pyx_t_1 = __pyx_t_4;
       __pyx_L34_bool_binop_done:;
       if (__pyx_t_1) {
 
-        /* "src/device/daheng_device.py":542
+        /* "src/device/daheng_device.py":648
  *             # Send next software trigger to continue the chain
  *             if self._running and self._trigger_cmd:
  *                 self._trigger_cmd.send_command()             # <<<<<<<<<<<<<<
  * 
  *         except Exception as e:
 */
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 542, __pyx_L6_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 648, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_8);
         __pyx_t_11 = __pyx_t_8;
         __Pyx_INCREF(__pyx_t_11);
@@ -15537,12 +17943,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __pyx_t_13 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_send_command, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 542, __pyx_L6_error)
+          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 648, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_13);
         }
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-        /* "src/device/daheng_device.py":541
+        /* "src/device/daheng_device.py":647
  * 
  *             # Send next software trigger to continue the chain
  *             if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
@@ -15551,7 +17957,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
 */
       }
 
-      /* "src/device/daheng_device.py":467
+      /* "src/device/daheng_device.py":573
  *             return
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -15571,7 +17977,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "src/device/daheng_device.py":544
+    /* "src/device/daheng_device.py":650
  *                 self._trigger_cmd.send_command()
  * 
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -15581,7 +17987,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
     __pyx_t_16 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(((PyTypeObject*)PyExc_Exception))));
     if (__pyx_t_16) {
       __Pyx_AddTraceback("src.device.daheng_device.DahengDevice._capture_callback", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_13, &__pyx_t_8, &__pyx_t_11) < 0) __PYX_ERR(0, 544, __pyx_L8_except_error)
+      if (__Pyx_GetException(&__pyx_t_13, &__pyx_t_8, &__pyx_t_11) < 0) __PYX_ERR(0, 650, __pyx_L8_except_error)
       __Pyx_XGOTREF(__pyx_t_13);
       __Pyx_XGOTREF(__pyx_t_8);
       __Pyx_XGOTREF(__pyx_t_11);
@@ -15589,7 +17995,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
       __pyx_v_e = __pyx_t_8;
       /*try:*/ {
 
-        /* "src/device/daheng_device.py":545
+        /* "src/device/daheng_device.py":651
  * 
  *         except Exception as e:
  *             logger.error("Capture callback error: %s", e)             # <<<<<<<<<<<<<<
@@ -15597,9 +18003,9 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
  *                 self._trigger_cmd.send_command()
 */
         __pyx_t_12 = NULL;
-        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 545, __pyx_L41_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_logger); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 651, __pyx_L41_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 545, __pyx_L41_error)
+        __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_error); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 651, __pyx_L41_error)
         __Pyx_GOTREF(__pyx_t_17);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_9 = 1;
@@ -15619,40 +18025,40 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
           __pyx_t_10 = __Pyx_PyObject_FastCall((PyObject*)__pyx_t_17, __pyx_callargs+__pyx_t_9, (3-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
           __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 545, __pyx_L41_error)
+          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 651, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_10);
         }
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-        /* "src/device/daheng_device.py":546
+        /* "src/device/daheng_device.py":652
  *         except Exception as e:
  *             logger.error("Capture callback error: %s", e)
  *             if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
  *                 self._trigger_cmd.send_command()
 */
-        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 546, __pyx_L41_error)
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_running); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 652, __pyx_L41_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 546, __pyx_L41_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 652, __pyx_L41_error)
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         if (__pyx_t_4) {
         } else {
           __pyx_t_1 = __pyx_t_4;
           goto __pyx_L44_bool_binop_done;
         }
-        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 546, __pyx_L41_error)
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 652, __pyx_L41_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 546, __pyx_L41_error)
+        __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 652, __pyx_L41_error)
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __pyx_t_1 = __pyx_t_4;
         __pyx_L44_bool_binop_done:;
         if (__pyx_t_1) {
 
-          /* "src/device/daheng_device.py":547
+          /* "src/device/daheng_device.py":653
  *             logger.error("Capture callback error: %s", e)
  *             if self._running and self._trigger_cmd:
  *                 self._trigger_cmd.send_command()             # <<<<<<<<<<<<<<
 */
-          __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 547, __pyx_L41_error)
+          __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_mstate_global->__pyx_n_u_trigger_cmd); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 653, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_12);
           __pyx_t_17 = __pyx_t_12;
           __Pyx_INCREF(__pyx_t_17);
@@ -15662,12 +18068,12 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
             __pyx_t_10 = __Pyx_PyObject_FastCallMethod((PyObject*)__pyx_mstate_global->__pyx_n_u_send_command, __pyx_callargs+__pyx_t_9, (1-__pyx_t_9) | (1*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
             __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
             __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 547, __pyx_L41_error)
+            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 653, __pyx_L41_error)
             __Pyx_GOTREF(__pyx_t_10);
           }
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-          /* "src/device/daheng_device.py":546
+          /* "src/device/daheng_device.py":652
  *         except Exception as e:
  *             logger.error("Capture callback error: %s", e)
  *             if self._running and self._trigger_cmd:             # <<<<<<<<<<<<<<
@@ -15676,7 +18082,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
         }
       }
 
-      /* "src/device/daheng_device.py":544
+      /* "src/device/daheng_device.py":650
  *                 self._trigger_cmd.send_command()
  * 
  *         except Exception as e:             # <<<<<<<<<<<<<<
@@ -15730,7 +18136,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
     }
     goto __pyx_L8_except_error;
 
-    /* "src/device/daheng_device.py":467
+    /* "src/device/daheng_device.py":573
  *             return
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -15757,7 +18163,7 @@ static PyObject *__pyx_pf_3src_6device_13daheng_device_12DahengDevice_44_capture
     __pyx_L11_try_end:;
   }
 
-  /* "src/device/daheng_device.py":462
+  /* "src/device/daheng_device.py":568
  *             return None
  * 
  *     def _capture_callback(self, raw_image) -> None:             # <<<<<<<<<<<<<<
@@ -16020,15 +18426,15 @@ static int __Pyx_modinit_type_init_code(__pyx_mstatetype *__pyx_mstate) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   #if CYTHON_USE_TYPE_SPECS
-  __pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_3src_6device_13daheng_device___pyx_scope_struct__start_spec, NULL); if (unlikely(!__pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start)) __PYX_ERR(0, 150, __pyx_L1_error)
-  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_3src_6device_13daheng_device___pyx_scope_struct__start_spec, __pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start) < (0)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_3src_6device_13daheng_device___pyx_scope_struct__start_spec, NULL); if (unlikely(!__pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start)) __PYX_ERR(0, 160, __pyx_L1_error)
+  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_3src_6device_13daheng_device___pyx_scope_struct__start_spec, __pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start) < (0)) __PYX_ERR(0, 160, __pyx_L1_error)
   #else
   __pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start = &__pyx_type_3src_6device_13daheng_device___pyx_scope_struct__start;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
   #endif
   #if !CYTHON_USE_TYPE_SPECS
-  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start) < (0)) __PYX_ERR(0, 150, __pyx_L1_error)
+  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start) < (0)) __PYX_ERR(0, 160, __pyx_L1_error)
   #endif
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount((PyObject*)__pyx_mstate->__pyx_ptype_3src_6device_13daheng_device___pyx_scope_struct__start);
@@ -16614,33 +19020,33 @@ __Pyx_RefNannySetupContext("PyInit_daheng_device", 0);
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_9);
   #endif
   PyList_Append(__pyx_t_2, __pyx_t_9);
-  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_9, __pyx_mstate_global->__pyx_tuple[6]);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_9, __pyx_mstate_global->__pyx_tuple[7]);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_9, __pyx_t_8);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_init, __pyx_t_9) < (0)) __PYX_ERR(0, 63, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-  /* "src/device/daheng_device.py":85
+  /* "src/device/daheng_device.py":90
  *         self._last_error: str = ""
  * 
  *     def initialize(self) -> bool:             # <<<<<<<<<<<<<<
  *         try:
  *             self._last_error = ""
 */
-  __pyx_t_9 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 90, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  if (PyDict_SetItem(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_bool) < (0)) __PYX_ERR(0, 85, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_3initialize, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_initialize, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[4])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 85, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_bool) < (0)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_3initialize, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_initialize, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[4])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 90, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_8);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_8, __pyx_t_9);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_initialize, __pyx_t_8) < (0)) __PYX_ERR(0, 85, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_initialize, __pyx_t_8) < (0)) __PYX_ERR(0, 90, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-  /* "src/device/daheng_device.py":146
+  /* "src/device/daheng_device.py":156
  *             return False
  * 
  *     @property             # <<<<<<<<<<<<<<
@@ -16648,10 +19054,10 @@ __Pyx_RefNannySetupContext("PyInit_daheng_device", 0);
  *         return self._last_error
 */
   __pyx_t_9 = NULL;
-  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 156, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_str) < (0)) __PYX_ERR(0, 146, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_5last_error, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_last_error, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[5])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 146, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_str) < (0)) __PYX_ERR(0, 156, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_5last_error, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_last_error, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[5])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 156, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
@@ -16664,199 +19070,281 @@ __Pyx_RefNannySetupContext("PyInit_daheng_device", 0);
     __pyx_t_8 = __Pyx_PyObject_FastCall((PyObject*)__pyx_builtin_property, __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 146, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
   }
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_last_error_2, __pyx_t_8) < (0)) __PYX_ERR(0, 146, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_last_error_2, __pyx_t_8) < (0)) __PYX_ERR(0, 156, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-  /* "src/device/daheng_device.py":150
+  /* "src/device/daheng_device.py":160
  *         return self._last_error
  * 
  *     def start(self) -> None:             # <<<<<<<<<<<<<<
  *         if self._camera is None:
  *             logger.error("Cannot start  device not initialized")
 */
-  __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 150, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_7start, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_start, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[6])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 150, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 160, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_7start, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_start, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[6])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_8);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_start, __pyx_t_11) < (0)) __PYX_ERR(0, 150, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_start, __pyx_t_11) < (0)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":179
+  /* "src/device/daheng_device.py":189
  *         logger.info("DahengDevice acquisition started")
  * 
  *     def stop(self) -> None:             # <<<<<<<<<<<<<<
  *         self._running = False
  *         if self._camera:
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 179, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 189, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 179, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_9stop, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_stop, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[7])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 179, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 189, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_9stop, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_stop, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[7])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 189, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_8);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_8, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_stop, __pyx_t_8) < (0)) __PYX_ERR(0, 179, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_stop, __pyx_t_8) < (0)) __PYX_ERR(0, 189, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-  /* "src/device/daheng_device.py":189
+  /* "src/device/daheng_device.py":199
  *         logger.info("DahengDevice acquisition stopped")
  * 
  *     def close(self) -> None:             # <<<<<<<<<<<<<<
  *         self.stop()
  *         if self._camera:
 */
-  __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 189, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 199, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 189, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_11close, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_close, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[8])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 189, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 199, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_11close, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_close, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[8])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 199, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_8);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_close, __pyx_t_11) < (0)) __PYX_ERR(0, 189, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_close, __pyx_t_11) < (0)) __PYX_ERR(0, 199, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":200
+  /* "src/device/daheng_device.py":210
  *         logger.info("DahengDevice closed")
  * 
  *     def set_exposure(self, us: float) -> None:             # <<<<<<<<<<<<<<
  *         self._exposure_us = us
  *         if self._remote_feature:
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 210, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_us, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 200, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 200, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_13set_exposure, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_exposure, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[9])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_us, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 210, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 210, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_13set_exposure, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_exposure, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[9])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 210, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_8);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_8, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_exposure, __pyx_t_8) < (0)) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_exposure, __pyx_t_8) < (0)) __PYX_ERR(0, 210, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-  /* "src/device/daheng_device.py":209
+  /* "src/device/daheng_device.py":219
  *                 logger.error("Failed to set exposure: %s", e)
  * 
  *     def set_gain(self, db: float) -> None:             # <<<<<<<<<<<<<<
  *         self._gain_db = db
  *         if self._remote_feature:
 */
-  __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 209, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_db, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 209, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_15set_gain, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_gain, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[10])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 209, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_db, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 219, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 219, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_15set_gain, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_gain, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[10])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_8);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_gain, __pyx_t_11) < (0)) __PYX_ERR(0, 209, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_gain, __pyx_t_11) < (0)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":218
+  /* "src/device/daheng_device.py":228
  *                 logger.error("Failed to set gain: %s", e)
  * 
- *     def set_binning(self, x: int, y: int) -> None:             # <<<<<<<<<<<<<<
- *         """Set Daheng hardware binning while acquisition is stopped.
+ *     def set_frame_rate(self, fps: float) -> None:             # <<<<<<<<<<<<<<
+ *         """Set the target acquisition frame rate (fps) while acquisition is stopped.
  * 
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_x, __pyx_mstate_global->__pyx_n_u_int) < (0)) __PYX_ERR(0, 218, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_y, __pyx_mstate_global->__pyx_n_u_int) < (0)) __PYX_ERR(0, 218, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 218, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_17set_binning, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_binning, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[11])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 218, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_fps, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 228, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 228, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_17set_frame_rate, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_frame_rate, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[11])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_8);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_8, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_binning, __pyx_t_8) < (0)) __PYX_ERR(0, 218, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_frame_rate, __pyx_t_8) < (0)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-  /* "src/device/daheng_device.py":239
+  /* "src/device/daheng_device.py":251
+ *             raise
+ * 
+ *     def _apply_frame_rate(self, fps: float) -> None:             # <<<<<<<<<<<<<<
+ *         """Write the frame-rate nodes and cache the camera-reported valid range."""
+ *         if self._remote_feature is None:
+*/
+  __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_8);
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_fps, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_19_apply_frame_rate, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__apply_frame_rate, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[12])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
+  #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
+  PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
+  #endif
+  __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_8);
+  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_apply_frame_rate, __pyx_t_11) < (0)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+
+  /* "src/device/daheng_device.py":296
+ *         logger.info("Frame rate set to %.2f fps (range %.2f%.2f)", actual, *self._frame_rate_range)
+ * 
+ *     def get_frame_rate(self) -> float:             # <<<<<<<<<<<<<<
+ *         """Return the configured target frame rate, preferring the camera value."""
+ *         if self._remote_feature is not None:
+*/
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_21get_frame_rate, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_frame_rate, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[13])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_8);
+  #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
+  PyUnstable_Object_EnableDeferredRefcount(__pyx_t_8);
+  #endif
+  __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_8, __pyx_t_11);
+  __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_frame_rate, __pyx_t_8) < (0)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+
+  /* "src/device/daheng_device.py":308
+ *         return self._frame_rate_fps
+ * 
+ *     def get_frame_rate_range(self) -> tuple[float, float]:             # <<<<<<<<<<<<<<
+ *         """Return the camera's current valid frame-rate range in fps."""
+ *         if self._remote_feature is not None:
+*/
+  __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 308, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_8);
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_float_float) < (0)) __PYX_ERR(0, 308, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_23get_frame_rate_range, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_frame_rate_rang, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[14])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 308, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
+  #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
+  PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
+  #endif
+  __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_8);
+  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_frame_rate_range, __pyx_t_11) < (0)) __PYX_ERR(0, 308, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+
+  /* "src/device/daheng_device.py":324
+ *         return self._frame_rate_range
+ * 
+ *     def set_binning(self, x: int, y: int) -> None:             # <<<<<<<<<<<<<<
+ *         """Set Daheng hardware binning while acquisition is stopped.
+ * 
+*/
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 324, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_x, __pyx_mstate_global->__pyx_n_u_int) < (0)) __PYX_ERR(0, 324, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_y, __pyx_mstate_global->__pyx_n_u_int) < (0)) __PYX_ERR(0, 324, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 324, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_25set_binning, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_binning, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[15])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 324, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_8);
+  #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
+  PyUnstable_Object_EnableDeferredRefcount(__pyx_t_8);
+  #endif
+  __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_8, __pyx_t_11);
+  __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_binning, __pyx_t_8) < (0)) __PYX_ERR(0, 324, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+
+  /* "src/device/daheng_device.py":345
  *             raise
  * 
  *     def get_binning(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
  *         """Return the configured hardware ``(horizontal, vertical)`` binning."""
  *         if self._remote_feature is None:
 */
-  __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 239, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 345, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 239, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_19get_binning, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_binning, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[12])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 239, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_27get_binning, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_binning, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[16])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 345, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_8);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_binning, __pyx_t_11) < (0)) __PYX_ERR(0, 239, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_binning, __pyx_t_11) < (0)) __PYX_ERR(0, 345, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":264
+  /* "src/device/daheng_device.py":370
  *         return self._binning
  * 
  *     def get_supported_binning(self) -> tuple[tuple[int, int], ...]:             # <<<<<<<<<<<<<<
  *         """Return the binning modes supported by this MER3 camera model."""
  *         return SUPPORTED_BINNING
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_tuple_int_int) < (0)) __PYX_ERR(0, 264, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_21get_supported_binning, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_supported_binni, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[13])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 264, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_tuple_int_int) < (0)) __PYX_ERR(0, 370, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_29get_supported_binning, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_supported_binni, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[17])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_8);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_8, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_supported_binning, __pyx_t_8) < (0)) __PYX_ERR(0, 264, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_supported_binning, __pyx_t_8) < (0)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-  /* "src/device/daheng_device.py":268
+  /* "src/device/daheng_device.py":374
  *         return SUPPORTED_BINNING
  * 
  *     def _apply_binning(self, x: int, y: int) -> None:             # <<<<<<<<<<<<<<
  *         """Set/read back Daheng binning nodes and the resulting frame geometry."""
  *         binning = validate_binning(x, y)
 */
-  __pyx_t_8 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 268, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 374, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_x, __pyx_mstate_global->__pyx_n_u_int) < (0)) __PYX_ERR(0, 268, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_y, __pyx_mstate_global->__pyx_n_u_int) < (0)) __PYX_ERR(0, 268, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 268, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_23_apply_binning, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__apply_binning, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[14])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 268, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_x, __pyx_mstate_global->__pyx_n_u_int) < (0)) __PYX_ERR(0, 374, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_y, __pyx_mstate_global->__pyx_n_u_int) < (0)) __PYX_ERR(0, 374, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 374, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_31_apply_binning, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__apply_binning, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[18])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 374, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_8);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_apply_binning, __pyx_t_11) < (0)) __PYX_ERR(0, 268, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_apply_binning, __pyx_t_11) < (0)) __PYX_ERR(0, 374, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":332
+  /* "src/device/daheng_device.py":438
  *         )
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
@@ -16864,11 +19352,11 @@ __Pyx_RefNannySetupContext("PyInit_daheng_device", 0);
  *         binning: tuple[int, int],
 */
   __pyx_t_8 = NULL;
-  __pyx_t_9 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 332, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 438, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  if (PyDict_SetItem(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_binning_2, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 332, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 332, __pyx_L1_error)
-  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_25_default_frame_shape_for_binning, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_mstate_global->__pyx_n_u_DahengDevice__default_frame_shap, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[15])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 332, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_binning_2, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 438, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_9, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 438, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_33_default_frame_shape_for_binning, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_mstate_global->__pyx_n_u_DahengDevice__default_frame_shap, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[19])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 438, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_10);
@@ -16881,212 +19369,212 @@ __Pyx_RefNannySetupContext("PyInit_daheng_device", 0);
     __pyx_t_11 = __Pyx_PyObject_FastCall((PyObject*)__pyx_builtin_staticmethod, __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 332, __pyx_L1_error)
+    if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 438, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
   }
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_default_frame_shape_for_binning, __pyx_t_11) < (0)) __PYX_ERR(0, 332, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_default_frame_shape_for_binning, __pyx_t_11) < (0)) __PYX_ERR(0, 438, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":341
+  /* "src/device/daheng_device.py":447
  *         return (rows // binning_y, cols // binning_x)
  * 
  *     def _read_camera_frame_shape(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
  *         """Read and validate camera Width/Height after a feature update."""
  *         if self._remote_feature is None:
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 341, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 447, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 341, __pyx_L1_error)
-  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_27_read_camera_frame_shape, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__read_camera_frame, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[16])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 341, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 447, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_35_read_camera_frame_shape, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__read_camera_frame, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[20])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 447, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_10);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_10, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_read_camera_frame_shape, __pyx_t_10) < (0)) __PYX_ERR(0, 341, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_read_camera_frame_shape, __pyx_t_10) < (0)) __PYX_ERR(0, 447, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "src/device/daheng_device.py":354
+  /* "src/device/daheng_device.py":460
  *         return (height, width)
  * 
  *     def set_pixel_format(self, fmt: str) -> None:             # <<<<<<<<<<<<<<
  *         if fmt != DEFAULT_PIXEL_FORMAT:
  *             raise ValueError(
 */
-  __pyx_t_10 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 354, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 460, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_fmt, __pyx_mstate_global->__pyx_n_u_str) < (0)) __PYX_ERR(0, 354, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 354, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_29set_pixel_format, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_pixel_format, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[17])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 354, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_fmt, __pyx_mstate_global->__pyx_n_u_str) < (0)) __PYX_ERR(0, 460, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 460, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_37set_pixel_format, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_set_pixel_format, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[21])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 460, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_10);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_pixel_format, __pyx_t_11) < (0)) __PYX_ERR(0, 354, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_set_pixel_format, __pyx_t_11) < (0)) __PYX_ERR(0, 460, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":367
+  /* "src/device/daheng_device.py":473
  *             raise
  * 
  *     def _apply_pixel_format(self, fmt: str) -> None:             # <<<<<<<<<<<<<<
  *         """Set and read back the camera pixel format before acquisition."""
  *         if fmt != DEFAULT_PIXEL_FORMAT:
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 473, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_fmt, __pyx_mstate_global->__pyx_n_u_str) < (0)) __PYX_ERR(0, 367, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 367, __pyx_L1_error)
-  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_31_apply_pixel_format, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__apply_pixel_format, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[18])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 367, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_fmt, __pyx_mstate_global->__pyx_n_u_str) < (0)) __PYX_ERR(0, 473, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_39_apply_pixel_format, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__apply_pixel_format, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[22])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 473, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_10);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_10, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_apply_pixel_format, __pyx_t_10) < (0)) __PYX_ERR(0, 367, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_apply_pixel_format, __pyx_t_10) < (0)) __PYX_ERR(0, 473, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "src/device/daheng_device.py":385
+  /* "src/device/daheng_device.py":491
  *         self._pixel_format = actual_format
  * 
  *     def _apply_sensor_bit_depth(self) -> None:             # <<<<<<<<<<<<<<
  *         """Configure and verify the camera's 12-bit sensor ADC mode."""
  *         if self._remote_feature is None:
 */
-  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 385, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 491, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 385, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_33_apply_sensor_bit_depth, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__apply_sensor_bit_d, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[19])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 385, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 491, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_41_apply_sensor_bit_depth, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__apply_sensor_bit_d, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[23])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 491, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_10);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_apply_sensor_bit_depth, __pyx_t_11) < (0)) __PYX_ERR(0, 385, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_apply_sensor_bit_depth, __pyx_t_11) < (0)) __PYX_ERR(0, 491, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":414
+  /* "src/device/daheng_device.py":520
  *             raise
  * 
  *     def get_pixel_format(self) -> str:             # <<<<<<<<<<<<<<
  *         """Return the camera's actual format when the device is connected."""
  *         if self._remote_feature is not None:
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 414, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 520, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_str) < (0)) __PYX_ERR(0, 414, __pyx_L1_error)
-  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_35get_pixel_format, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_pixel_format, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[20])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 414, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_str) < (0)) __PYX_ERR(0, 520, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_43get_pixel_format, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_pixel_format, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[24])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 520, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_10);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_10, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_pixel_format, __pyx_t_10) < (0)) __PYX_ERR(0, 414, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_pixel_format, __pyx_t_10) < (0)) __PYX_ERR(0, 520, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "src/device/daheng_device.py":428
+  /* "src/device/daheng_device.py":534
  *         return self._pixel_format
  * 
  *     def get_frame_shape(self) -> tuple[int, int]:             # <<<<<<<<<<<<<<
  *         if self._remote_feature is not None:
  *             try:
 */
-  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 428, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 534, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 428, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_37get_frame_shape, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_frame_shape, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[21])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 428, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_tuple_int_int) < (0)) __PYX_ERR(0, 534, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_45get_frame_shape, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_frame_shape, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[25])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 534, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_10);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_frame_shape, __pyx_t_11) < (0)) __PYX_ERR(0, 428, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_frame_shape, __pyx_t_11) < (0)) __PYX_ERR(0, 534, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":436
+  /* "src/device/daheng_device.py":542
  *         return self._frame_shape
  * 
  *     def get_exposure(self) -> float:             # <<<<<<<<<<<<<<
  *         return self._exposure_us
  * 
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 436, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 542, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 436, __pyx_L1_error)
-  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_39get_exposure, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_exposure, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[22])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 436, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 542, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_47get_exposure, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_exposure, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[26])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 542, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_10);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_10, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_exposure, __pyx_t_10) < (0)) __PYX_ERR(0, 436, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_exposure, __pyx_t_10) < (0)) __PYX_ERR(0, 542, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "src/device/daheng_device.py":439
+  /* "src/device/daheng_device.py":545
  *         return self._exposure_us
  * 
  *     def get_gain(self) -> float:             # <<<<<<<<<<<<<<
  *         return self._gain_db
  * 
 */
-  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 439, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 545, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 439, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_41get_gain, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_gain, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[23])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 439, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_float) < (0)) __PYX_ERR(0, 545, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_49get_gain, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_gain, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[27])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 545, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_10);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_gain, __pyx_t_11) < (0)) __PYX_ERR(0, 439, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_gain, __pyx_t_11) < (0)) __PYX_ERR(0, 545, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "src/device/daheng_device.py":442
+  /* "src/device/daheng_device.py":548
  *         return self._gain_db
  * 
  *     def get_temperature(self) -> float | None:             # <<<<<<<<<<<<<<
  *         """Read the camera temperature from the optional Daheng feature.
  * 
 */
-  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 442, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 548, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_float_None) < (0)) __PYX_ERR(0, 442, __pyx_L1_error)
-  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_43get_temperature, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_temperature, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[24])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 442, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_11, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_kp_u_float_None) < (0)) __PYX_ERR(0, 548, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_51get_temperature, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice_get_temperature, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[28])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 548, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_10);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_10, __pyx_t_11);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_temperature, __pyx_t_10) < (0)) __PYX_ERR(0, 442, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_get_temperature, __pyx_t_10) < (0)) __PYX_ERR(0, 548, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "src/device/daheng_device.py":462
+  /* "src/device/daheng_device.py":568
  *             return None
  * 
  *     def _capture_callback(self, raw_image) -> None:             # <<<<<<<<<<<<<<
  *         """SDK capture callback  extract raw mono numpy array and emit."""
  *         if raw_image is None or not self._running:
 */
-  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 462, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 568, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 462, __pyx_L1_error)
-  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_45_capture_callback, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__capture_callback, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[25])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 462, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_None) < (0)) __PYX_ERR(0, 568, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_CyFunction_New(&__pyx_mdef_3src_6device_13daheng_device_12DahengDevice_53_capture_callback, 0, __pyx_mstate_global->__pyx_n_u_DahengDevice__capture_callback, NULL, __pyx_mstate_global->__pyx_n_u_src_device_daheng_device, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[29])); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 568, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_11);
   #endif
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_11, __pyx_t_10);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_capture_callback, __pyx_t_11) < (0)) __PYX_ERR(0, 462, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_capture_callback, __pyx_t_11) < (0)) __PYX_ERR(0, 568, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
   /* "src/device/daheng_device.py":56
@@ -17162,8 +19650,8 @@ __Pyx_RefNannySetupContext("PyInit_daheng_device", 0);
 
 static int __Pyx_InitCachedBuiltins(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
-  __pyx_builtin_property = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_property); if (!__pyx_builtin_property) __PYX_ERR(0, 146, __pyx_L1_error)
-  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_staticmethod); if (!__pyx_builtin_staticmethod) __PYX_ERR(0, 332, __pyx_L1_error)
+  __pyx_builtin_property = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_property); if (!__pyx_builtin_property) __PYX_ERR(0, 156, __pyx_L1_error)
+  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_staticmethod); if (!__pyx_builtin_staticmethod) __PYX_ERR(0, 438, __pyx_L1_error)
   __pyx_builtin_super = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_super); if (!__pyx_builtin_super) __PYX_ERR(0, 64, __pyx_L1_error)
 
   /* Cached unbound methods */
@@ -17184,71 +19672,82 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "src/device/daheng_device.py":79
+  /* "src/device/daheng_device.py":81
+ *         # from the camera's AcquisitionFrameRate node during initialize().
+ *         self._frame_rate_fps: float = 72.4
+ *         self._frame_rate_range: tuple[float, float] = (1.0, 72.4)             # <<<<<<<<<<<<<<
+ *         # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
+ *         # setting while disconnected so it is applied during initialize().
+*/
+  __pyx_mstate_global->__pyx_tuple[0] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_float_1_0, __pyx_mstate_global->__pyx_float_72_4); if (unlikely(!__pyx_mstate_global->__pyx_tuple[0])) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[0]);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[0]);
+
+  /* "src/device/daheng_device.py":84
  *         # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
  *         # setting while disconnected so it is applied during initialize().
  *         self._binning: tuple[int, int] = (1, 1)             # <<<<<<<<<<<<<<
  *         self._frame_shape: tuple[int, int] = SENSOR_FRAME_SHAPE
  *         self._running: bool = False
 */
-  __pyx_mstate_global->__pyx_tuple[0] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_int_1, __pyx_mstate_global->__pyx_int_1); if (unlikely(!__pyx_mstate_global->__pyx_tuple[0])) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[0]);
-  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[0]);
+  __pyx_mstate_global->__pyx_tuple[1] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_int_1, __pyx_mstate_global->__pyx_int_1); if (unlikely(!__pyx_mstate_global->__pyx_tuple[1])) __PYX_ERR(0, 84, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[1]);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[1]);
 
-  /* "src/device/daheng_device.py":95
+  /* "src/device/daheng_device.py":100
  *                     logger.error(self._last_error)
  *                     return False
  *                 self._sn = dev_info_list[0].get("sn", "")             # <<<<<<<<<<<<<<
  *                 logger.info("Auto-detected camera SN: %s", self._sn)
  * 
 */
-  __pyx_mstate_global->__pyx_tuple[1] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_n_u_sn_2, __pyx_mstate_global->__pyx_kp_u__2); if (unlikely(!__pyx_mstate_global->__pyx_tuple[1])) __PYX_ERR(0, 95, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[1]);
-  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[1]);
+  __pyx_mstate_global->__pyx_tuple[2] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_n_u_sn_2, __pyx_mstate_global->__pyx_kp_u__2); if (unlikely(!__pyx_mstate_global->__pyx_tuple[2])) __PYX_ERR(0, 100, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[2]);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[2]);
 
-  /* "src/device/daheng_device.py":236
+  /* "src/device/daheng_device.py":342
  *         except Exception as e:
  *             self._last_error = str(e)
  *             logger.error("Failed to set binning to %dx%d: %s", *binning, e)             # <<<<<<<<<<<<<<
  *             raise
  * 
 */
-  __pyx_mstate_global->__pyx_tuple[2] = PyTuple_Pack(1, __pyx_mstate_global->__pyx_kp_u_Failed_to_set_binning_to_dx_d_s); if (unlikely(!__pyx_mstate_global->__pyx_tuple[2])) __PYX_ERR(0, 236, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[2]);
-  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[2]);
+  __pyx_mstate_global->__pyx_tuple[3] = PyTuple_Pack(1, __pyx_mstate_global->__pyx_kp_u_Failed_to_set_binning_to_dx_d_s); if (unlikely(!__pyx_mstate_global->__pyx_tuple[3])) __PYX_ERR(0, 342, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[3]);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[3]);
 
-  /* "src/device/daheng_device.py":255
+  /* "src/device/daheng_device.py":361
  *                 self._binning = actual
  *             else:
  *                 logger.warning(             # <<<<<<<<<<<<<<
  *                     "Camera reported unsupported binning %dx%d; retaining %dx%d",
  *                     *actual,
 */
-  __pyx_mstate_global->__pyx_tuple[3] = PyTuple_Pack(1, __pyx_mstate_global->__pyx_kp_u_Camera_reported_unsupported_binn); if (unlikely(!__pyx_mstate_global->__pyx_tuple[3])) __PYX_ERR(0, 255, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[3]);
-  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[3]);
+  __pyx_mstate_global->__pyx_tuple[4] = PyTuple_Pack(1, __pyx_mstate_global->__pyx_kp_u_Camera_reported_unsupported_binn); if (unlikely(!__pyx_mstate_global->__pyx_tuple[4])) __PYX_ERR(0, 361, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[4]);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[4]);
 
-  /* "src/device/daheng_device.py":283
+  /* "src/device/daheng_device.py":389
  *             return
  * 
  *         feature_names = ("BinningHorizontal", "BinningVertical")             # <<<<<<<<<<<<<<
  *         features = []
  *         for feature_name in feature_names:
 */
-  __pyx_mstate_global->__pyx_tuple[4] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_n_u_BinningHorizontal, __pyx_mstate_global->__pyx_n_u_BinningVertical); if (unlikely(!__pyx_mstate_global->__pyx_tuple[4])) __PYX_ERR(0, 283, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[4]);
-  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[4]);
+  __pyx_mstate_global->__pyx_tuple[5] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_n_u_BinningHorizontal, __pyx_mstate_global->__pyx_n_u_BinningVertical); if (unlikely(!__pyx_mstate_global->__pyx_tuple[5])) __PYX_ERR(0, 389, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[5]);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[5]);
 
-  /* "src/device/daheng_device.py":325
+  /* "src/device/daheng_device.py":431
  * 
  *         rows, cols = self._frame_shape
  *         logger.info(             # <<<<<<<<<<<<<<
  *             "Hardware binning set to %dx%d; camera output is %dx%d",
  *             *self._binning,
 */
-  __pyx_mstate_global->__pyx_tuple[5] = PyTuple_Pack(1, __pyx_mstate_global->__pyx_kp_u_Hardware_binning_set_to_dx_d_cam); if (unlikely(!__pyx_mstate_global->__pyx_tuple[5])) __PYX_ERR(0, 325, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[5]);
-  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[5]);
+  __pyx_mstate_global->__pyx_tuple[6] = PyTuple_Pack(1, __pyx_mstate_global->__pyx_kp_u_Hardware_binning_set_to_dx_d_cam); if (unlikely(!__pyx_mstate_global->__pyx_tuple[6])) __PYX_ERR(0, 431, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[6]);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[6]);
 
   /* "src/device/daheng_device.py":63
  *     """
@@ -17257,13 +19756,13 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
  *         super().__init__(parent)
  *         _ensure_sdk()
 */
-  __pyx_mstate_global->__pyx_tuple[6] = PyTuple_Pack(2, ((PyObject*)__pyx_mstate_global->__pyx_kp_u__2), Py_None); if (unlikely(!__pyx_mstate_global->__pyx_tuple[6])) __PYX_ERR(0, 63, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[6]);
-  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[6]);
+  __pyx_mstate_global->__pyx_tuple[7] = PyTuple_Pack(2, ((PyObject*)__pyx_mstate_global->__pyx_kp_u__2), Py_None); if (unlikely(!__pyx_mstate_global->__pyx_tuple[7])) __PYX_ERR(0, 63, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[7]);
+  __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[7]);
   #if CYTHON_IMMORTAL_CONSTANTS
   {
     PyObject **table = __pyx_mstate->__pyx_tuple;
-    for (Py_ssize_t i=0; i<7; ++i) {
+    for (Py_ssize_t i=0; i<8; ++i) {
       #if PY_VERSION_HEX >= 0x030F0000
       PyUnstable_SetImmortal(table[i]);
       #elif CYTHON_COMPILING_IN_CPYTHON_FREETHREADING
@@ -17294,34 +19793,34 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
 static int __Pyx_InitConstants(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
   {
-    const struct { const unsigned int length: 10; } index[] = {{1},{27},{7},{25},{32},{70},{24},{29},{41},{58},{81},{60},{58},{39},{26},{55},{33},{37},{38},{37},{45},{32},{32},{19},{38},{59},{193},{24},{25},{24},{42},{34},{26},{22},{30},{22},{19},{53},{23},{4},{179},{22},{22},{14},{34},{26},{58},{50},{0},{2},{1},{19},{8},{7},{6},{18},{8},{24},{12},{2},{6},{9},{10},{12},{48},{14},{27},{15},{27},{17},{15},{20},{12},{21},{27},{32},{36},{30},{45},{37},{18},{24},{25},{28},{21},{29},{34},{28},{23},{23},{24},{25},{21},{29},{18},{36},{17},{15},{13},{17},{10},{12},{4},{18},{6},{6},{4},{2},{11},{11},{14},{20},{7},{18},{17},{14},{8},{11},{15},{13},{5},{1},{6},{12},{13},{15},{9},{12},{14},{19},{23},{6},{18},{8},{7},{9},{9},{4},{7},{7},{17},{18},{5},{12},{4},{4},{6},{12},{11},{2},{5},{32},{13},{7},{10},{15},{14},{7},{7},{1},{4},{11},{5},{12},{11},{7},{12},{13},{8},{8},{5},{3},{5},{14},{8},{17},{12},{11},{8},{8},{7},{3},{9},{11},{15},{19},{16},{12},{17},{12},{15},{8},{10},{15},{15},{16},{33},{10},{21},{15},{9},{2},{3},{5},{12},{6},{10},{4},{8},{10},{6},{3},{13},{14},{11},{11},{5},{8},{11},{10},{6},{7},{8},{13},{8},{10},{15},{8},{2},{5},{11},{17},{13},{15},{13},{14},{2},{6},{4},{12},{3},{13},{12},{3},{11},{16},{14},{8},{12},{9},{24},{25},{15},{7},{6},{14},{4},{8},{4},{12},{13},{3},{11},{12},{8},{12},{16},{10},{4},{5},{3},{2},{24},{27},{5},{12},{4},{3},{10},{9},{5},{3},{8},{4},{9},{12},{6},{27},{22},{2},{16},{6},{3},{8},{7},{5},{1},{1},{446},{122},{119},{161},{76},{59},{37},{430},{12},{93},{144},{74},{89},{69},{550},{12},{12},{149},{146},{74},{51},{10},{80},{12},{126},{75}};
-    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (3851 bytes) */
-const char* const cstring = "BZh91AY&SY\235;L\277\000\003\033\177\377\357\377\377\377\377\377\377\377\377\377\377\373\377\377\377\377\300@D@@@B@P@@@P\000@\000`\017]\364\207J\366\014\363\334\305\001u\003\242\335t\256\300\000\001\351\325WZh\225\340\006\274\360\r\010D4\321=LM\246B\237\250S\306\2154\324\330F(\332\247\224i\246O)\345?SMOS\324\332\2324y4\233D\310z\233D\303I\350\215\r\251\220jz\002\023I\250i\250e5=244\t\246\233M52`\230\000\000\000\214\323S\000\230\023&\000\006\243L\003T\364\323Q\002\000\000\000\000\310\000\032\000\000\000\320\000\000\000\000h4\000\000\022j\202&\252zf\204\237\251\r\003j4z\201\2404\r\000z\200\006\2002\014\200\r\001\223\020\001\240\323F\200\203\000\230\214\023&\020a10&\000\206\021\200\206\004\300\230L\021\200\000\t\241\204\304\323\002\004\211\004\0024\2314\310\020\023Sh\324\332OSji\345\r\232\223!\210\001\220\000\000\310\000\000\r\03244\030\231if\243\246\331*\331\225\036n\352p\247\353\017\333\367\345\234\311\374\363o\200\034\266_\033\025\030\0266Cq/fR\002^\322?\343\311\010\231\203VY\267\377\010\274\312EI\303#\234X\221Eb(()\"\220D\202\242\252\210\242\243\232\332Fm\005\322i\032\362e;\255\016\377\242\232\331\361\2205\rb.1B3\032\006\301\261\r\200\332Ch\033@0lm\226\010-(\005\211\200d*4\250P\231h\262\342S\302\222@a\002\347X\340^\004\313,\204\232I\245\212\014*\213\030\230\3046\206\304\r\202,m\003\032\030ZUX$t\225iB\226pp\034:j)cf\311\252\025eY\342\230\222\264eTB\200\031Duz\013\031\031h1\240\240\027\027\313\251J\022\352\335)2\001\216 \r\005\245\3730@\256\023l\251ki\214*U\006:4Q*h\264\307C\327}-\353\210\313\202+\240\304\020\332\361*'\274\007\020Jg\001\204P\r\026\224\013\301\265m\016\220,\265\200\305\024\272q\330C\316\300\224\221I\"+\"m\343\216\223\265e\034\255J\014\035\245:H9\227\355=\017\344\370\215\371\016a\001\373M\000\002s\335\225\2743\016Q@@\346r\216\234\2314\033\317\243!\267\217\260\200\262\031hk\204\372\362\003<yQ\342\237\300c\354\224\021U[\205:\375\035\237LA \212\232{\274\335\006Z\247\200\315gO\315\240xzd\263\317m\rW\242\360BBk\326)[\\_qm\277\302\316\270\017Q)\365\234\342""\020/\337\251\303\310\242>>\245\334\323C&b\023Q\002\316!\220.\025\340E@q\026\214\341\216\306\020\326F\316\343%\021,En\224e\024\251g\"ca\034~8\376\202\204\002:'P\037\240\034\240\355)\310\000r\307\362\345\016OT\226\352\245\002\310\014\306;\262\006\314}\331\2269V\207\265*\036}(\004\216\341e\327\347\222\321P\356/\360\332M\265\366\23066 \232\231\204\001\250\323\227\302\337mt\236\202.\233w[\247\321\351W\226\357Jdtd\220\311z\313\371\347zqF\346>(p\t\202F\367k\304\350\034I\\g=\327\315\246\360\245\245\330\037\214\315\356wm\244\000:~\240~\303\"\264`\204QdO\013n\246\352\336\024\217!\320\020x\323\266&<1H\266a\327\316\303#OX\333N\250\315\202vL\310\0252p\306\230Z\366\245\322\2541e\225y,\262\002+\035\361M\302 >\007S~\332\004\373\365\245i\277\314\360\017O\300\256\272\001\266)`,5\363=1\263o`\260\002\302\226\213\205\272\361:\235u\3428\334\275y\2756\307\332\313\276\323K\362\277\3169<\373&gx\355\243\\\366d\030a\334D\324Z\225BXs\300\333Vk]P\223\036\016\345z3h\326\222xS\373\215I\230\374\350c\0001\"\217\224\355\0015\267\250\265\027\n\363\253qtx\237p\237\002\263\235\371Y\255\024\340\032\r\004\010\244\254ff`\204`alQ\2500\306\361\266\304SV1\367\3620U\013s\277?S\212\234\005\232e^\207\243uT\024m\316\256\351\360\351\345\332j\224=.\274c\304\362U\301#GU\033\250\214\303\267\371\2200\021\027a\246\372IJ\204\324n<\376O6\255C>\334\263\234\023;>\007\303\0362\202\022F\362\256|\325\355\305\"E8\360\024\002\n\216\273\372\277\336\247M\307\003\216\r7\243rR{\3172D\215\021\204\247M~\2124\330L\304\253\003\271\215\273\222\2606\244H\016\242P\036\\C\330\302\307\210W\222%Z\217R\354.\302\033}\330\\\237.<\027\3575\223Q6\335\217H\364\373-\356\270\034\247\224U`\350\304\313\355!\207\301\255\245\343\014H\353i\206\246\333\300\260\300f\305\"\204\206\261\341\246\376;\306g?\nP\033\034\340\272\021\2063\221Q]\372\371#\241\226%\t\3433$\346\372$\311y\000\215\030\240!ETj\311\313\221\205vUK\0176\271r\264\2711p\327c\0162\363gH/\341\006a\307 \324E\3218\036jl\326Dd\271(U\3238\365k\261JZ\005K\332\215\003]F\364\317 \344\233\033A\220n8M""\313\326\235\022qJ\331\225\225*\300\2120Xl\021\330\263\304\241\300\255\342J4\265\2617\201]\014<\326U\224\303\325\221+!\301r\nO&\254qXM\354u\261{\032'\2314\205=\306\253\263\220C\240\302\336\257\230\215\305\004\360\014\201\255\363m\273\253TI\tI\341>\033r\031k-6Q\355\270\276\266G\t\336T\307\316\354\317r\366\032\002\205\360\014\304\276&\365\321\373\010%\231x\0329'=\002\334\230\334\253\253\210\320\272`\006\203/-\014\367\034)\331\001\177\333w\337!\354p\337/i\326\210\325b*\361\254fk\031\302,\001\2417\353Q\264\306\014\032\ta\305\264\360\3526\262E\241\247\325\220,+1S\000\370\325\353\0078\354\260y\n\352f+3\310\206r4\017\215C\265\226\316qm#\331\321*+\212&\003d\216E%7\320\255\203\311\355\036\021w\272\016\377E\021\331\314Z7\302\270\341b\225\026\350\2426)\215thP\325wFsE\366+RI\033\205\326\362\034%/zA\320rv\205w\267\263C\354[\242[w,\273\030\360p\026\\\023\224\201H\033\010\301\202\r\r\\\322\206\235\013`G\216y\035\273b\245\326\316\024\207\331uv\240\241Q\200\330B5s\007\037%\021A\257\252\340l\213$j#\236\324\275)\"\212\256\236\024\252\304\275\312T\241[.\346\266\325)\265\236\231\370\\QdP\301vU\207B\332\202\323\207\307\336\207\300\214\3250X\215\342\023L\277\t\016a\305\003Z\360\346=\034\007\021\221\304\322\002*8\360\253+)\370C\342A>i(6\245\0038g)\202\207\032\317 R\2331kU\321\254\257.\205\313\027\0106\006(\302\245-D6\224\252M\204\312H!\273\244E\n+f\025.\306(\003!\241W\333\002\256\022\275y\301@9\"N\0200R\002\221cD\336 !\030\261Z\252\t\004>{\310:\354\351\032\"2\332X\004 t\373\224\303\310zt\200\001\235\363g\325\276\241\207\\FY\305\304\204\006\203\300\244j\225\320V\025\236VCd\215\270a]\201!\273\320-\323\003\003%\302\340\3503\344\032Vz\315\372\255\370\2527[\034h\340\267L\273G{\370\004\253-\351\270i\021T\025`\214QVJ\227\256\213X\255\2557\020P\021\240m&0b \330\261\032\326\252\3177\317\016\2425\375>\207\313-\230\230)\246_\006\020\207\313\303m4\025\262D\033&NC\023@\305\336\244\2655\r\025\246\353\356)\230\257\001-\3141am\003\221\310\301\235\241\275\300\306W/\033\202r\262m<\334[8\227nZ\245\255\333""\\\264\206\242\361\300\024\241\221E1\235<\356\313\255\274\331\334\324\0079\250\026R]|79q\010\006yE!\032\301\340\007W|\221\270c\222\001F\376\235(`?\023\\\2722U\357\260\344\006\032\215\343\340\003\236\355zL\311R\030\021\2543\230\345\310\260\351\307\027$\"L\025\254W4\235\206\356VGH\003\322\032F\277$\340\251\\\334sI#I\312q\233\013A\355\265q4_\215\033\225R\332k\031\244\315=c;\034E\363FiL\325\264\362\330\323\002\376j\221\021\t\334^^\237wh\032\237l\266\247\033Li\221\001\014\030\275r\213\223n\026\013\261\264]\203F\245)q\260&jj\206\213\033\215\013'\236J\021F\233\016p\301g\244\265\024\253z\r\016F8\211\365\321ZP\257g%\270\300A\351\324\263L\021\224\n\346\2203\030\020\243\314\276\222\247\205\344R\013\030R-E\263\325;\033JU\201\214k\276\302NPMH2\263m\352\374\254\213`\271]\323\210=\022\010E\030\332@\304\223\0064P`t\233I,a\001kl\001\262b\2527\335`\3201\263\002\313j[qkC\225%4\244D\266ND\365E\245\343\313m\235$\273l\010\320\215\232_\002W\361\307\203\257\307:l\323\324<\333\215\230\364\231\3126]\232\311\201\300\0234\242F=\302wk6p\343%M[&\0208 \217\006\331U\373\254\352X.\206\230\305q,\005\2616V\020vp\023i\032\367\221\247H\260\303v\303#k8\227\036\017]6j\3469\322\323_\031\033&`\343\000\202\311\330q\3260\t\013\007UiT\265\3222\031\202E\3706\225\252\343\206\3121Q\026\336f\312Dv-\262 \0210\3054\330\236\261b\235\353\325#\260\320PY2\265\0202i\001\020e\t\014\031\254)\"J%(\212\312S\262<:V\r\246\206\014\032\323\020\201g\314\272\214\003\2733\217\212\0025\363\2072\245\r\301\000\231\203\201\026\n\305\200b\023\233\025\234\262\002\004\360\324\010\222'\220\310\340\201a\311\241\310\t\324\020\007\"\200Z\357\303\233\347\265\216h/\036\233\303\3062J\217,\"\2014\331\n\036\005\224\330\026\030\326\010z+\035\2248*\200\353^3\240d\333\350\320\n~\204\007$L\245\354\204n\252\250\322\332mCGV\23448\2702.\021\325\340w<m\207=\272\n;\n \226W\231%B\226\325\003\344h5in\375\244l\000\347\204Z\034\r@\246i\234\000\216F\325v\3407\nn\246\005\014\221\0145J\227z\235P\352\361\205\265U\215L\305\221\016/\244Hb\206P\216\356\270m\205\244""\334yT,\344.m\232\354\345|\331UjV\370\222\261\254B\264\205\274iCB\222\241\020\311\024K\006\331'\023\016H'h`\323{\220\n\274\356\356\214\253\220\232d\363\304\304h\334\0008G\000\232*\305\241X\342\203PX\313kYJ\025M\203\323\200\2252F\032jN\372\"p\341\331k0\263\014)Dw\264z\231\332\206\r\"\346a\306_\031\337\243zKz\336x\235\222r\335\275\037\347\002\356\036\332\343\242F$\246\264\347\300\327\266\274\364v\365v\264\365#7w\255\022\252*\2621\213\007\204\0234\220qH\370\257^\335\233\226\2541\303\227\207;\022\005\260\314\314\333B\322\350#I\244\323\332\271\007\203\243\236\373\263\000\200\322\227\216\323h\352\3666\366\315\347\t\262<\316g\305\"b\335\246V9\300o%\033\354\010\235\207\271\255\333\327\213\261\013\2143\236#%\231\000AI\271\330\3329G\375\253\365\310|J\200\374\354\217\302\237\2218\263\326#\267\241BOq\r\375i!P\237s\016\236\206\363\274\324\0164\201\306\330\331\217)\n\276\375\r\345\350\026`\320\323\032\t\376\0027\204Dw\344\217\202\321\373\373o\2723\365z\363\237\351\0178\364\340\027\324\302q|a\234\304\247HP\351f\366\241Z\275\306\373\351\344\037\037\341Y=9\330\2270\364\026\222upz\202\016\351 \340A\300\245\375~J\246=\265\323.\2501T\013\236\\\343Q\217G\204\363\302\203F\004n\260\034d9\200\276\014\255!\371\003\003-\206\214\255\252\330\373?m\0233$\265o@,o\036\316\211\220\376\207 \3430\240\237\351\257\357\366\350\2161\340K\306\257\227l\311\014\005\240K\351sdhy\000\tx\312\371\223\030\204]=\323+\251x\\N\360\n\270\025p\017\017\244vGi\020\214\177\226\005\355\256\205\343\017\000`-j+\227\224\214Z\271\376af\320\270\256SQ\246\336\261\377\330-\335F \010`]NF\300\271d9\223sf\321)\236\355\315\321\311\241f\326\260Q\220\265\334\314\331\331\331\341\263a0Z\003\327\240i\203Z\311\331\257\313\364suF}\317:\225\237\313n\265l\317\020:\275N_\203W3\3261L\361\214\375Q<\"3\2648\310\034C\341\031\345\025\361\204Q\304\374\273\005\276Z\007\314*\010\3065\301{\365\372a\372\230\204v#N\337\034\246SO\024N/\253DjQ\304\327\323\333\366>\377\2734\370\337\212\351\301\277\203\207\204\235\207\203+\260)u\317S\0051\336\244\365\021.""\024\253\010\225\t\236\346\224\033\034\307\t\244\023g\016\226\036\016~\224\251\313\222\223D\360\271m/\272\306x\020\243\034m\316\002%0*\331\304\007\342]F\333\032m\374\377Kf\264\271\254\027\310\327\327\361_\307\340K\223\326\365u\204\231\300I\251\001\007D\254`9\322\235\2512`\251u\002\r\313\3167\326\367\314\330\2325\265ub\351\320hj\351x\361\2508|\317\341\366t\346\354\264\303\202\020jHb9\220H\260H\265\233\2625\3162\265\006If\240\215\032\226\233\017\024\262l\313\205\266#|\263\010\336\034\201\232\203$\360\335A\022\211\003\004\343\034\226m\224\202\2577T\214@zdL\376bh3\262<^n\301\234\222H\270\220\252\024\321I\273\222kYf\010\241\306,\326\022\362\242\242Y\371\321w\010\301\326j\2027M\242\340ZY\024\n\262\227\005\227\224\301/[\245D\315\224X -(\254P\362\300wP\266\001/b\321P\237\356\325\021l\221mQx\2112\2553\021}\244\017Q\241\255\232\206\326R\317\207\"\341\372\270\306\311sq\367d3\213\255 \341?qw$S\205\t\t\323\264\313\360";
-    PyObject *data = __Pyx_DecompressString(cstring, 3851, 2);
+    const struct { const unsigned int length: 10; } index[] = {{1},{27},{7},{25},{47},{32},{60},{70},{24},{29},{41},{58},{81},{84},{60},{58},{39},{26},{55},{33},{36},{42},{37},{38},{37},{27},{45},{32},{32},{19},{38},{59},{193},{24},{25},{24},{42},{34},{26},{40},{22},{30},{33},{46},{22},{19},{53},{23},{4},{179},{22},{22},{14},{34},{26},{58},{50},{0},{2},{1},{19},{8},{7},{6},{18},{8},{24},{12},{2},{6},{9},{10},{12},{48},{14},{27},{19},{15},{27},{20},{24},{17},{15},{20},{12},{21},{27},{30},{32},{36},{30},{45},{37},{18},{24},{25},{27},{33},{28},{21},{29},{34},{28},{23},{23},{24},{25},{27},{21},{29},{18},{36},{17},{15},{13},{17},{10},{12},{4},{18},{6},{6},{4},{2},{11},{11},{14},{20},{7},{18},{17},{14},{8},{11},{15},{13},{5},{1},{6},{12},{13},{15},{9},{12},{14},{17},{19},{23},{6},{18},{8},{7},{9},{9},{4},{7},{7},{17},{18},{5},{12},{4},{4},{6},{12},{11},{2},{5},{32},{13},{7},{10},{15},{14},{7},{7},{1},{4},{11},{5},{12},{11},{7},{12},{13},{8},{8},{5},{3},{3},{5},{14},{8},{17},{15},{17},{12},{11},{8},{8},{7},{3},{9},{11},{15},{19},{16},{12},{17},{12},{14},{20},{15},{8},{10},{15},{15},{16},{9},{33},{10},{21},{15},{9},{2},{3},{5},{12},{6},{10},{4},{8},{10},{6},{3},{13},{14},{11},{11},{5},{8},{11},{10},{6},{7},{8},{3},{13},{8},{3},{9},{10},{15},{8},{2},{5},{11},{17},{13},{15},{13},{14},{2},{6},{4},{12},{3},{13},{12},{3},{11},{16},{14},{8},{12},{12},{9},{10},{9},{24},{25},{15},{7},{6},{14},{4},{8},{4},{12},{13},{3},{11},{12},{14},{8},{12},{16},{10},{4},{5},{3},{2},{24},{27},{5},{12},{4},{3},{10},{9},{5},{3},{8},{4},{9},{12},{6},{27},{22},{2},{16},{6},{3},{8},{7},{5},{1},{1},{446},{122},{119},{161},{76},{90},{59},{108},{37},{444},{12},{93},{144},{74},{89},{329},{110},{69},{550},{12},{12},{169},{146},{74},{51},{10},{80},{12},{126},{75}};
+    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (4243 bytes) */
+const char* const cstring = "BZh91AY&SYe\037 \265\000\003\303\377\377\357\377\377\377\377\377\377\377\377\377\377\373\377\377\377\377\300@L@@@B@P@@@P\000@\000`\021|>\243\323\333a\230\362\334\346\215h\216\3504\365v\346\324\344\240\032h5\327F\342\315:!\352\220\024\360\017\206\204\201\031\032\021\350\324\315\004\323S\323)\231\rS\3314h$\362\217P\314)\266\215)\372\215M1\032~\251\351\246\2406\211\2434\323M \036\204\022\2104&S!\251\222O\324\233Q\243\365 \336\251\221\240\r\000\032\000\000z\200\006@\000\000\r\244\r\000\001\246\200\204\211\251\251\351\251\243@\323'\224\364\232z\206\217H\007\251\350@\000\032\000h\000\032\000\000\320\006\206\200\004\232\221@\246\232M\223Db4\310\320\320\323\324\332\200\033\325=@\365\006@\006\2324d\001\243CM4\320\301\r42d\365\r\020`M0\232bbh\311\200&\000\232\014\004\323\000\004\311\200\000\021\20211\030\004\320\3042h\301\"Bh\t\240F @\214\t\036\231OBmM\r\212\001\240\000\000\000\000\000h\000\000\003\020d\314\307V\254\321\244\263vU\212\325\333\316!\374\023\371\351N\231\324\235Y\253\203\t\016\2230b\271lM\020\245)j\252\255\375Z\320-\376C\375s`K\231\214\305\210\266\313\254CXf\330\304\027\003!\254U\030\n\250\244E\005\005\222,\005\021\010\242\252\250\210\212\210\243\222\371\206>%F\202\363X\027\007\260\332\375\3670j\316\251\013A\250\327+\314\204-C\020\320Y\005\001b\311\026\021`\242\220A\021S\032\021r\240\026\246 \320*0(n\260\241x\263\232\231\215$\204`B]\013\034\013\301[B\333a\003\000h1\021\205DZ\322c\004\332\033\0046\204Z\330&\306\304\302\342\305PK\244\254\245\n\025\331\2617Z%\021\2636\256\255YKC4o\214\321`\216\314\252U\001\250hufr\305\027:\230fc\232\005yl\272\224T%\325\272Rd\t\216 F\202\322\375\230\tjhW\211\266:\226\334\310\204\306\026\226\240\313<\350\2253\274\2737\2636\254\251\255\020\277\027O\003\"\"\n\251\302d\010\331\210\214\257s\353xI\030\220\206\350\262\004m\346/\203P\3220\326\220\340\253\030^\231\304\234PFd\021\226\300\200\006N\332\0267\225t\236eh\345rP\261v\224\341\323A\320\277B=_\303\352~\327\370\251F~C{\354\214\2470BN\357\226\\\214\3516r\033\337;F\325z\310Zl\213\023\374""\177Sz\nW\005\235\235\314*\205\255\272\336:\376\205\277\t\016\032o}\303\327\037SG-\231TUT\232\247\305\312\300\251}\247\2461\271\235\375\301\217\026e_-\376R\373\222\013\r\261\314\341\261\304I^\227Uks\302y\352\321\325\276\231s\021\231's\026\370\262\271\036\357\317\010\243\344\200\350\333y\370\341\202\311j\302J%+\r\"\021\340K\250l\315\022\223d\020$^s\313\235W\022\367\n\371\3602a4\345\027N\371:;\"\\\274\2276\232#[Xkk\"(\004\005\206E:\247\200\244\353\035\220^\025\336\364\017;\273\027wgY)\324\243\034\334y\362\006\314q\360\214\307'e\017\365:\007\266T\240\022;\345n\277NKE\201\337\027\373g\366m&\332\372\254\033M\244\212\005\013\361\220\215f\222z\017u\311uhz\200]6\311\335n\237\014\326f\300\336\303\320\321\206\311x\322\\\331`mE}=TGj\215#\r\010\240\236\r\351\217\007\177\312\310\034\211\2302\340\022w\253\342\341\n\032\234\000\017\013\336\006\3600\204\004C\350\007\375\031\001h\310\205*X\322\202\314\344}3\324t>\316A\007\253\037X\331\250\352\245\333Gmw\313\226Z\226+\266ZX\303\300\302\340$\213\236\275j\317N\222\353\005\025\224%\21235;P\016\316\027z\023\2349\302,\206\310q+\310b\177.\024J&\256N\305\331\246\223A3\211@\240mryF\234\332\n\002Q\002\215p\373\256\206\347\023\032nD\317Zz\374=\021\331\236\336\016l\325\353\275\213\262u|\026\332\351\376\276\261\357n3\322\231\205\317=\022\306\252\353-28r/\342\3230\203U\363\326\021\003s8r\336zmh\207\"8\341a\310\317\2751\240BO\206\214:\261e\207\232\354\014)\316\t\020\250\277\342g3/\223O\222\206$\021\312(\025\242\375\3622\230)\204L\t\n\031\212\365\204\252\251\001,\010x\014XA\036\301\250V\252\223\304\327\366t\271\033!fh\277\253\311Fa\0335\224ILT]JB\001l+\020\323\221\333\360\231i\010\343\310q\034\273\276\262\300\314\007WR\206\032 Ya\257\347@\270 \007\003\014\353\243\363`\322T\225\2417\211\315\350\330\252g\2029\312\tb\316]\t\320\006^0'O$M)\241\274F\3663-\3439\016\024(\n\001\005X\221<r\370\361h6\330n\247q\232|\316{7/\033\256\354\014\274hm`\346\307{s\202\310\322\342\357\360\342\313\003\207\000\335\272\342\367;~}\317\237f7S\024XpE\223\013\253r\010\220""\006_\211\003r\235\205/L\\b\235T\277\022\024\323\326\356\263}\260\033\234[\t\302\033\321\267\276\215M\312b9\341K*\373\361W\250\251.\365\310q\000\230ea\211\340t\023\237\306\216fo\207\343\272\004I\335\223%\345\303\024bPmmL\272cN\250t::\264\317\017\322\343\221\320\006\232)d T\003!\312\260\343O\270\351T\370$l\210K\307\215o\233\033\rl\3346\202\313\006+J\206\0078A\220a\202\014\321\032g\004\206\036yz&\026q\001\327=\274\245\224\245\220*.\3732\3546\323CT\351\232\345\351F\271\313\"pX\305\223]zR\327vvYpB8i\177\000\215\307\211\2459\205\2614U\351\354\256r\023\240\201\334\221$F\\\246\014)J\213\240\006\037H\203K\234\246\221I+eBt\315\3419T\276u$\261\3574a\340\202\001\202\231\333\026\215\005\232$7\306\352\246\241\242\030\266<\247\252\371N\322\244%'\204\370\255\310e\254\231\265\025\323B\346\223\264\034t\215\273\275\232\343\257RsTD$(X\274\263\240\272\"\274\324\tk1\021\247\236s\322\203\2211\271Y\263\201\241uA\006\203/DL\365\333\223\254\005\377]\337|\207\265\303}\034n\312#UQc\306\310\322l\031\304\001\202\032Ho\355\321\264\301\244\301\240\221\201f\3563\305\250\343e\363\0306\257F\177j`\247d\300\246!\360l\362\203\244:\324z\005u4\n\272r!\234\243\001\267\310C\250\017\263\t\335)6\"\224\213\251\037\3379Q^Q0\033R9\224\211\266\370\351e\033\2341\325\001\306\343\240\033}\230\333x@\351\264\224X\206\226\251`\254\204\301\004\214nc\257j{\367\266\032\337X\324n\241\345JD\2229E\327\3578J^\310\203\306s\367Ew\233]\017\265n\211o\337\310\264v\262\331\260\266\360\234\244\222\2206\021\213\001\031\271\221\222\230\340\230\352\005:&\227}\216\260\0311\336\245\207v\341q\310i\230LB\003a$l\324\034\334\364\243\0065\364\\\003dVKZ\007\246qH\200\024Uu\330meb`\300U\212-u\332\332\371\305jk\365\373;\366\246K\\\271m)8\035\024/\036\234\003\243\324\321\260\331\036\353,\024\324\243\260\2576DU\242jX@\317\216k\203\010\245\306\324\035N\177/\226[3\356v\367\362\255\346*\255\306eg\276c\207\025\212%\313|\273\2027\347\016\361`\000\032\271\2435\260\253/\030\274ZV\327\263]\332\345\345l\0246\250\207\n\360.W \024\324\255\2249\001\322\030""\005'\014\024@8\224\274B\223e\271\300\302\022\203\200Q\312\001>\032\t9\276\347\376\303\301h\347J\320L\223\t2wB\227\006\210f7e\023\254\340\264e\226p\203\314\311Y\234D\345I@'h=\312\234\\S$\250E:@\013\355XG\rO q\324\255\355A\342 fx\224\215r\272\013!W\320\310l\221\307\206\026l\t\r\336$\254{\350\024Nn\204\261q\231\227i\253k\347\362]+\372d\215\263\303\251f\351\367%M1\303\234\211\316W\206\266\002*\202\254X\261\030\242\250\0260[b^\345\257y\262\202\300FA@D\022\024hMh\303a0\246\246\2217\020\356\364>\035\360y\":'\307\240\311M3\0302\201>\215\326\323IeI\035\250\221\272\204\24414\014\034\241#\277d\366\264(h\302\207.8\024\330\006\234P\222\345a\233\014\230Cl\330\326\240h\214v\241TQ\207;w\241{b\273\021\317\252\\w\253o--s\330\355\236Y\206\262\361\300\024\241\222\242\230\316\266\233\262\353\363\034^\r@u\026\240YIv0\340\345\270H\031\347\252B6\003\300\017/\204\221\274c\222\020\243\207Z\2240\037gd\274\231+=&\034\240\303Q\301=h:.\331\231\244\225!\201\033\003Ob\204O\231c\326\215\374\320\2114+\230\257i:\2349\331\030\364\300=\340\3226\371F\312\225\324\343\242I-'9\312q\026\203\334Z\267\264\257\306\215\312\304\215\306\321\231\232S\3323^\342\371\243H)\232\2163\321cL\013\371\354\"\"\023\270\274\275?4\355w\267\201\261\314\272\247+Li\221\001\014\030\277\211@\346\335\215E\330\334\203\260\263\326\022\227+A3[T4U\270\320\262zrP\2124\330t\203\004e\300\232\021e[\313\325\345\254\002\360\204b1\033fD\347\n\210\016\335bX8vP%s\000\031\214\000\021Rql\351\344x\234\326\310\240\302\261r<s\327\323\245\315\240\235`c\030\307\3510\223\224\023R\014o\273|\006\031\326-\202\351\220\314\252=\"\212\206\004P\202@\020F\030$\0205\312\000c\002\013F\330\003d\322\261\034.\252hLl\300\255\266\026\334Z\320\345IM)\021-\263\221=Qix\362\343\257LGy\240\215\010\333\233\326\202\376H\361\034<\2672\233s\352\236\326\343n=&s\014e\332C&\221\254&f\211\030\370\t\335\261m\342\306J\232\266\314 pA\036.9X\375~\233\n\213\310\323\030\256%\202[Sc\261\210\355\230\000\330\226\316\004g\232\0140\337\264\310\343f\340\344\301\354\246\335\\\003q\023\006""\330\2056\242U\\\360q(H\324\316\250<J\253\004\306@\306.\3103\005k\021~\r\240\271^q[\261\026@\254E\370\232\231H\216\275\325\3326\220mk\216\243\212\007\023oecdPU.e\251\2249\014\220\t\0232\262\323\t\021a\004\342J%\004\245*\022\224\353\022\361\346\260m40`\326q\002KN\260\334\010,D\t\336v\006|<\034V\236R\027%\230\253[;\005;p\351)\310\344\010BfN\004X\202\253 \320\023\233\025z$\026\025\350\220XU\225\355\316(0\270\363\223\300+\231\001F w_N\212\337\226\263\035(0\036w\207\230d\225\036F\021@\232l\205\017\005Zn\n\336\361\254\020\364;\253\351\310pU\231\016\243\360!C\335\206\236\302\261\010\237\341A$\213Yr\302\322\215\333\273\014\267e\3149P\327\035\0216\361\274\240&\274V\213eY\271a\267y\034\256\230\310\020\276\245\350\203\242F\214\341\254\250a\226}\214$i\005\265\346G\301\027!\200\256\275\327\2608\212\231\247\235\210f\225\317,D\274G(d|i\346kC^\244&\310\254\2723\2712**\220\271J\260(\002\220\250\207]\250\347\nU,<\025\016n\t\267\005\2707\213^T\210\2319\324RNI\204\251\0108\r(bR(D2DQ,\033d\334\221&\205\313\020\330\247h`\323{\340-\262\303n\323\013p*\257\302\331.\344\033\010i\r\362\330UG\275\250\317\202\331\013\307\265r\342F# \252\"\340\352\210)\220\260\316\244\357\242'\016\035\266\263\n\341\205(\214\274? \323j\0300W3\016B\370\323~\216\002\016\013\201\331\356\023S\236\376\010\377\030\027qw\227%\022UA\032\226\3603\357\236\034\r\205\235L\335p3s\202\324\226\024Udc\024\216e\0273#\241\357\231\356\037\027\027\027w\221l\313F]\006\355uI\013\214\326j7\321Z]\004i4\2559\334\203\323\361\364\362\302\375 \020\031\201\334`\332:\335~>\361\300\274\333\036\317\241\356\22107\347*\271\300p%\034*\021:\236u\227p[\373<H\\\201\250\246C$jPB\213\332\030\273MN?D\353\031\334\310O\235\212)\007\003#\364\247\271\320\237z\014\341\310\350T\250\007\026\251v\211\353\332\241.\023\236\223sGz\371:\370r\210NV\350;^\213%\233q\254h\332\202\354\0220FB\374R\266\260\251Me\250o\330~{\307\302\023\227\373\336\377\221\201\363T\340\321'1$\344\357\206u\022\215\261Gf\031\320P\006\245\036x\271\343\362\016=NU\210\013\345`0L\351^CQ\027cs""\240 \342$\034(>\213\027\267\017\233\302\321\243WJ\267z\"h\206^~\223d\375y/\200X\302\206>\001\316C\235\016\222\032\300\300\266\206\270\\/l0emV\307\220wO@\314\3113\363\317@,0\036\205\353\236t#\246T\363\322\305\177m\376I\253\224\345\316F\235\264\352\257\277\3412\230^\212\362\352\316^\t\342\363HQ\246\207\230\314\030*\006\373\210\314\265\343\231k\216\026\336\226\350oa\226\247\301>*\250\235S\315\032;\356\230\322\3212Q\003\001e\224Z\032!\024\245\324\024V9E\233CA\\\346\243K\373g\355\335\316\270\213\240\010`\\OV\222\355\001r\310s\034\\\271h\224\027?wn\317p\016d\263kiFf\000\345\026\267\262o^\275\307g57m\001\235\316\302\004U\335\253G\271j\307\256\351\364\354\214\333\236\230kf\256\177\255\274\333\026*V\362\203\257\2609\352m\354V\312?`\246\014\352TC\311\307\222T\314\375\232\003\314@\361\313X\255\rS\250\203\014\241\224\021\246\020\3007N\341\364\212\342\021\211`\214\313\337\271\327\022\316\263\344y\315I\300=fO\035!'\257\224\203G\200\307\313=\375\301\361\231\366\351K\227\356\325<\317\2650M\352M\353\"\014\033\334\\D\354\376\034\237\250b\357\375\t\363o\342\312?\027\330x\270i@H\236\226\022x\217<\317\271\2576\367\264\347\032M\350\274\376 \332y\253\366\376H\317\313v\266%\214Y\330o}\323\203\221E|\324drn8\322Y\201\204D\332\004\344N\335\025\006\014\3003\007\336\336\222O\021B\240\321\001K!\352\271'\332\302 (q\361\305\357\210\240;(\211\332\363H:#\343\220\306\214\355x\257\n\375d\010;\337\013l\350\325\367\337\017_\2227\267n\322\332\230\300\273\255\000\273\346\247\303'\253\346759>X\346\365<}}\214\210\323]\r;\263\016\305C\2600\356\335qg\341K\250\222\354\024E2\271\217wiX\332qk\313\335|\371QS\032\200\212\210\273\207;V\266zRd\000r<\225v\030XN.P\3137\221\t\2215\375\212\t\236\353\002`\342\247\023\004\320$\222\217\204\205Gp\345\030\234I&\326\247p\254\2203]\356\223\024U\030Y)\341G\032p\301\\CU\224N\251\274\340%\351\325\200\263\2060\013\267j\341ql-\205U\330\\(/J\316T\337\266\002e\303`\005\201r\363`\277;)\253\2217\311YJ\336\343\0265V\262\331\341\3553Z\026\214\223a\240\335\240\216a\013\2141\211\315\004d""\">n\301[yJm\214\262\031\314\350\266gK\331oO\260]\311\024\341BA\224|\202\324";
+    PyObject *data = __Pyx_DecompressString(cstring, 4243, 2);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (3835 bytes) */
-const char* const cstring = "x\332\225XMw\332\326\272\016+n\017I\240\001\007'u\3224r\343|6&\305v\223\264n\322C\342\317\323\33016mz\332\325\253\010$\260Z\220@\022\261\351\355\275\315\320C\r\316@C\r\0312\271k1d\335\221\207\0322d\235_\320\237p\236wo\t\013lz\326I\033\264\265?\337\217\347y\336\255\244\263\rK\237\223\025K)Z\212,\024\245\252bH\302\356\326\227\302-\363\005\177\361\037\273\212f\352\306s\325ZVj\326\236\240\232\301\200\254+\246\240\351\226\240\034\324tS\021\014\245\336P\rl\346\217\227\014<\005Y\255b\003U\327L\241\270'ie\214\227\014\275*\334\222\017n\311\202\245\373\r\271a\250ZY\220\212\330\303T-\314\367w1\224\237\271\211\005U\323h\312h\177M=P*BI7\252\222u<X\323\r\032T\265\267RE\225O\3322:\261\241\231\215\232\337\016Nb\226-a\216%\251\307\035/$\215\234\346\316\004\201\013\226\354\357\251\025%\354\005\305\313h\260\301%\301\264\364\332\320`I5L+\330P\327Jj\271a\374G{\372kMK2\254\360\224\245\301\352`[\211\037(a/\231'9\264\362\237\357\376!\310\312[\265\250\260\204\302[KE\334~U\340m\315\3426U*\005\251\370\213\240\030\206n\260\r\364FEf\323\rE\222\205m\251Y\321%y\027\213\204\273U\251\311F\n\212\260\246\226W|\217\356\235\262l\330\327\361\023x\002\315=\251\246\214\237\024\206\302\370Y\226R\255\341In\215L\322+\025\2019\311\3034\210a\243&K\026\233\274,\355)Zy\231\207*\234\022\026GE\376\223q\275V\033\031/V@\233\341\256A\344G\323u\372,\032\333\335zz\313|\020\330\372\224a\364\001\217\027\177\341K\205\315\225\235\205\271\314\302\023\374}\264\266\2609\267=\267\373zc'\010\312\276!\301>#}\376\274\200?+U\325\002\306\244}aS\327\364\314\274\2405\252\265\246 \031\206\3244\205\267\252$\274y\303N\020\231\217 \375\2337\230n\355)\206`\201\030\302\316\332s\266\321\2337\271\215\252TV0\254\027\210\260fZ\310\357)\202\202\003\210j,\241\310N\251Bc\302\236d\310\373\022\340\346{\223\346\326\020\344X\264(\031\034\247\024\023\336\317\"\313\220\316<a\003$H\204ZS\261\230\304\2443%\341\377\377\317\\\345iEO\031\003!\237\0103\201\253\314\257\343\231\264E\200\203@\255\350\214\341\031\212\177\342\311\2212\264\343d\357(RW9\274-\240""\322\034PL^\303\332!\037\344\347\353#\021\032\014s\255\362\263\2517\254Z\303\"\235`\375[\272\340\203\200\217\2338\271\241\241[S\266tK\241\224A:\233\326\036\327\026Y\251\250\005b\210Ri\302&C\205\316\372y\335^\331\236[|\262(H\232\354+\260)\230\215B\261\"\231&\252\201^\022\n\r\265b\301l\253YS\220\354\215\222\320\324\033\202\246p\337k\230\027^\000\304\370\036\002\024w\230$1\344\213X\016\357\356@\262\r\034\242\276Uh\365\252T1\225\264\2574\202\t\374S\224\204B\323R\314\355p\031\010\202b\346^1\324\t\277\t\344,/eBv\371\005\302g\301O*h\376\334\314\374\034\372\362{\360\037L\250\250E\316@\277\250\231\302\267\032r\314+\216\017\224B\243TB\\\270\031e\350\007L1\245j\255\242\200\216\203\311\267\344\320\312St\nF.\t\243[\337\375z\t\352a5\244\301,2K\226E\304G\221US*T\024E\243\337{\241\243\270\013BIa\3326x\252\274J\357\033\252E+J\010^\020\220rq\211Y\256\232|7\271\242\232\326\2172\022\376\323\022\327L&\207\267\314`\023^\352YQ\2544\t~\010\021\213\374*3\363)\267\337\204A\240i\232S\3254\212\017y\353\241\314P(\362\267t\255i5\020\255\037U\315z\000M\263~\342\257#\235\017\204t:\375\323s\016\367u\335P\177\3255K\252\370\035\337)\206\205\\U\226WV\263\337\276\314\213\333\033\337\257\274\024W_\355lf\363a\315\014\267\323\242H\n*\212\303\235\224\366\246\350\363\352\264!\2266\221'\344\264q\223\301\013;X\"\203\326\360\234\"\257\244bPI\207Ge\245$5*\226\310U\225\311\"\235t\2729\224\031\221c)\274`h\022+.C=\320\274S\267\243\376@\277N\014\214\333\236\306H\332Nt\216\r\022\r\016\356Xc\r\t\025\347\241\261\343\2227\324\r\031\201\361\244\227C\335\346\030W\315q\256\232\247\271c\376\231;\254\340\237\354I\177U\321\221a\363\031\032R\265 K\317F\346\3505\336\334\320 \252%\t\310d\257\233\222\2062i\360\227|(\010\007\337\321\005\026\327\357\240\250\345q\211\245\302\260v\020\"\336\212f\031\315uE-\357Y\233\257\266^e\346\211\335\257\264\320\245,4y\273\271\253\312\312\243t\316z\241\003\220\342v\363\000\177\227\301zqK9\260v\224\222/\233\273+[\273\257v\304\325\235\354\346\212\270\273\236\335^\331\375v{\373\325N~eY|\276\261\265""\265\261\2656\374u\260\253\227,\252NyC-\303\233M]\016\232##\273z\303(*\257U\331\332\023\271\320\361_N\034\277\315\243\356\277\230\315jA'Y\226e\310\261\251\227D\321/\027\360`\230\273\247\320u\014C\201\036\224)\311ljEUO\027u\003\205S\325\0243\330i\370!\036\004\215fA\327+E\261A\225' \342(\277\213\025\354\004\241\021-\003Y\346=\240$\373\361\025\260\250W\314\242^k\026Y\261\024q\311\224D\324[E\252\206\233\005Y)4\312\377N!\260#\016+\351\"I8\275\340z\303O\021QC\375\003\305*\207\331\310\233jh\264\247(\353EQT\350n&\"P\344\214)\377\302\3305`\215\3300CM\277\304\370\017\221v\t\267\203qS\024K\270\375\340\227jO\251j1\037\206/\220\374M\225\305A\243\210;\n8\022v8\354\273Xjh0\227\321V\224\013\301C\261\360\377K\235@\026\022<j\372y\242\370\260W\275\n\377q\036\267\221\251 b6\364\356{\312\204\220L\017\017\006v\216\250d \214\364\334c\204\244\026\nYx-\273z\212\354\3529\252\231\364n(U\324\371 gAD\361%g\341\023\205\351(\273(\236\252\250#\"J\257\373D\263\362\201X>(\037\250\265&\373I\343\027\210\342\026\356\r\252*C\220_\035\217%W\325L*\263\360A5\305\001K\320V\351\266\203ojv)ae\211n\021h\006\227\r\025\246\230\201\022\212\307j\035j\261T\321/\021\013\220D\032\361\247\212\217nvI\344M\306\007\261\252\313\r\202\021Z\206\216l\341jJ\330\022E\016_\255\306\342\032\n\256^S\264 \214\005\320_\203\2438\007rB\324\033\274\360(\014^\r}\377x\214\005O7k\320.\315\252\341\023\247\3065U\244{\237X+\r%o\250\255\327D\261f(\264\2225\336\252zc\240,\203w\006\232\232\001K\r\253)\212uh\035\367\006__\210/\3709\256\334#\271\2002\0102\252<\001~|\340\200\177|:^4\372\306esX\360\311S\321\377\247\004S\251\224\240\217r@\014\244\034\331'\250\342[\000\2450TS\303e4\250\234\242H-n\372h\341\304\273\257^\0244\023w\327\032r\201\377\214\242\177GL\017\335\014\303\375<yjP-Y\221%\370\253E\340bO\227\251\242B(\271V\212z\251\024\264\350\037t`x\023\000\301\347\001\360l\241p\322_\254\256\326\240\312\254\020\211\305\252\334\300\356\231G\rml@\371\367\277\210\267\000L$\"\r\223\375\333\022\215\370q\301{\003\200|[x\353\337JQ\361\250\237a\350\240\351M""\010n\264\025mG\372\321Io\362\023w\306]p\245^\364\302\341\342a\275\027\233\264\0378R/\221\374\343\374\231s\261\303E\357\242\340\236u3\275X\302\2169Y<\274\204\340Nx\263+\335\\W\352\305\342\375\350\2647\235na\375%;\323\213\306\274\330G4\355\342\241e/zW\356\270\277\267\245v\275\227\270lW\334\231^\352\021\275\365\217G\177kg\332Y\177\324\375\242\225m\345z\261\224\275\346d\234eO\370\314\373\354\257\335H7\331\217^s\026\235z/:\355\244\234\\/z\216\346d\355\035\333\302\27457\343fO\351\270l\027\235\244s\027\333\316\273\371\326T\253\330N\266\357vf:\363\235|7I\366\355\323\204\201aS\275\324e[\262\367\035\311\261\260\301Z+\323z\325\311tV\2733\335\305n\375\350\375#\351\250\376G\354L<\351\273\377\264\223\013Br1\361G\364L\374\203^\342C'\342L\222\2450\275\035i'O\351\211]\262\237\272\021:u\317\221\274\033\333\336vn8\262\021\026\322\017\016\313v\036\326\241\241 \252\261x/\236\264\223\364\214\305\275\211\0317\tS\206\222\203\330\367).\327\234\314\311\330_\261\353\275\023!g\235\227\354\317aa\312\273>\347\315}\335\251w\343Gy/\267\323\213^<\374\037\262h\322\276\355D\274\351\347\335\031v\2027q\2775\323'\234\204\316\305\236O:\221N\252\223\353G\023\366Y;c/{\037\336\365\356R\347\207\335T\027\371J\332\227\220\235\2747}\317\273\367E'\331\271G!%\274=\302\300s\244\341\n\337\314G\336\022\342\276\326\315t\263\264a\024\006L\334k%\207\217E\210\310~\362\370$\320\024\304\200\3629\325O$\373\300\201\354]\275\357\335\247]9.\275K7\335\257Z\365v\204\202@\210\311\366cW\275\253\017Zk\355\3056\213\224i\317\330\317\334Knv\000\217\207l~\n\207:\0212\364\026k \363\357#\363\336\004840\360/n\235\022\225 :\244\000\200^\352\226\233\003\277\250\335O\244<z\r\341\240\344d\275\353k\024\017\362$\303\262\333\033\335\013\253f\335e\357n\266\233\034]\272\n\026\362\245\357\262\375\344d\357\334\371>\230\370\025\321\205P\204\360'\354\367\354]\347\202\373y\353l\013\373\023=)p\t\373\242\023P\021\261L\200\306\367Z)o\356\251\3674\357\345\277%\007\2368\013\0163\374\"\354H]un\273\0217\005\353S\004\263\004\361\364i+\322\232l-\":\357\267%?""\370\336GK\235\305\016\266N\330\027\234E\357\306C\357!\354\356\316\222\\\000\3437\335E\367\300{\230#\240\371j\342\256\267^\002.I\342\021\010v\267\025\361[\263n\326\315Q\214\2230\326\240\263Y\300{\211\033\216\345\335\\\360\026^\000'[\336\316w\336w\257\007\247CcFy\366\203\367\303\217l\033\034\347\t\363\355\231\366\327dO\327:\312\014w?\356\314v\244\216\325\rug \034\351\356D7\333\315q{Y\2277\377\234\355P?V\304Eoq\375(r\004\314M\332w\230Rq\240@K)X\331^r\n\351\240\027La\204\365iF\2310!T\231\001\343\340\026c\334\273l\357\243\353\003d\314\"NY\256\323@(M\276\217\345\211\007\255\2547\267\201sYV\375\240\371g{\037\316\267g\333Ro\374Q\340\005\023\225\353N\356\004\265\355:\333s\332\271D\347\020\010\341e;\353}\276q\224:\312\365cWl\323\231\031\032X\243\220\022\351\2105\307\"\233\262_\272\000?\313\006qs\352roj\332I\366G\204\346YG\0328{\315\371\022^Dc\207/A\241\2406\305\203\303\250\216\354wd\250sf\220\367\205vf\224\034\217\333u\362\354{\367\373V\356\217\017\316\234\273\364'\345.z\346\334y\036 \203\03086`\177\355\236;J\262\220\241`\234f\240\275\356|\003\276\240\261\351\315\260:1\014\306\257\240C\\\330\355\2547\201\322Iq\377\022\024}\317\331\005\027\226[\274\006\234#n6\301\333\005\267\330J\016V\177\321\231\356~z\224#z.\332\277\202\022y\014\202\242q\367\247\366\014\371\001\340^\266\377\356\374\202nT\305\r\347\007\322\220k\316\027\336\354\347\355\034\212z<\001\317^x72\355\244\037\247@-\307\354\010ut\356\201mmVZ~c\232\300\255\201\310\214[DS\377\033\202q\326}\334\372\244\225\r\237t\003\313\240 \363\000\334\370\325)\373\033\347\300\255\343\226\362~\273\334\311u\n\210\372\324\221\324\207'O\334\201!2Pv\214*\266\201/\265~\203;\306\3443Kx\375\r\342C\341\360\256}\332bu5\361\221\263\301\017\275\356\344\335)\254aE\230\004\006\307$\370\305#1M \276\352\260Y9\377\207y@an\241\373\0232\344\246\013\350\203\200\267]\251\317\200\323\000\023_\267\262\224\222\004P\375%N \371$d\270\327)\357\303\360\177\334\366\353\364\350Do\342cg\300\214\330\307\216\354}\002\266\265s\336\304\025\373w\367\347v\324{\262\343""\355\354\366\242\361\303\035@&B7\007&0\261\3035\377Rv\003\250\376\270U'\274~C\225\223u\325\007\3675\377\331\247'\334\030\032\207o\360\340\\\334\213\335o\335l\345X\337\234\377dv\341y\333\345O\304\216\214\252sB4\235\263N@\034\20783D2\362p<\315^{\257\277g<\360\t\206\315\351\336\203Ki\374p\323\233fh\214\223;\353\366\337\034\211\031x\270\212\272M\266\037n:\327\311\240\001\311\230E\261\303\025;9\312\324\315\326\211K\031SD\252]\307\327\331\301NgH\265&.b\203\211)\3347\377\027.L\304\275\370u\347\277\274O\351\2324\361\227w\007L\234\243l\316\205C(\331\035\267N\231\256\277\213\364&\336\243\031\346\341\315C\270N\0334\234u\246\326\260j\311.\203\377\021B@\203\335\200_\240<_L \251^|\306\233a\252\021\247u\204>,F\366\t\221\201^\336q\017Z\365\376\330\342\320\033\322v\200\224\256\031\024\336I{\326\273|\333\273\r\360u\"\376n6U\031\357\3025\347\261;\313\245\362\031+\001\201X\342.\333\233\014\256\3730\307\233\270\341\374\212@\016\302u\232\\\377\336\225\217f\216\216\345\232\241}X\256\021\371\177\001\305\254D\013";
-    PyObject *data = __Pyx_DecompressString(cstring, 3835, 1);
+    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (4285 bytes) */
+const char* const cstring = "x\332\245XKs\333V\2266\313\262[\266\251\230\224)\333\362#\206l\311\226\037\242\233\222\374\210\025;M[\017\253c\311\242$\307\231\24420H\200\022\022\022 \001\320\0223\231\211\227Z\242jf\201%\226\\r3U\\\262f\245%\226\\\262\372\027\344'\364w\356\005H\220\242\234\352\232N\233\270\270\217s\317\343;\3379P2]\261\364\031Y\261\224\234\245\310BN**\206$l\255?\023\246\314W\374\305\177l)\232\251\033/UkQ)Y\273\202j\006\013\271\202T,\341l\336\300\273`H\226\202\241^\024\246\222\263y\301\322\3713_\n\304\311\272b\n\232n\t\312~I7q@)WT\003\347\217Y\2372\027\302\242q/[\250\030\nS\333(\252\232\"\373g\371>Y-BWU\327L!\267+i;L7RH\336\237\222\231Fl W\014U\333\021\244\034\3567U\013\373})\206\3623\367FV\3254\332\322?_R\367\225\202\220\327\215\242du\027K\272A\213\252\366Q*\250\362Q]\3727V4\263R\362\307\301ML\263\005\354\261$\265;\361J\322\310!\334\230 F\301\221\275]\265\240\204\255 \027\031\025\266\270 \230\226^\352Y\314\253\206i\r\024\030r\362\377G\246\256\345\325\035D\347_\321\323?kZ\222a\205\267,tN\007b%~\241\004Y2\307h\350\344?>\375\217 +\037\325\234\302\000\004\017Z*b\361+\341\243dq\235\n\205\254\224\373EP\014C7\230\000\275R\220\331vC\221daC\252\026tI\336\302!a\272(U\331JV\021V\324\235%\337\242\273\003\216\365\332z\374\206\256\217\377d\317\014\213\203A\361\3713i\346\256T\372\314\2460X\217\337e)\310a\334\t'\r\3304e\016TE/\024\004\346M\036\217N\260*%\331\267pQ\332U\264\235E\036\223p\354Y\300\024\3713\353z\251\324\267\236+\200\017z\247:!\356\307\305\340]\264\266\265\376|\312|\020\350\372\234%\330\003\356J\376\302\217\nkK\233s3\251\271\247\370\367xenmfcf\353\375\352f\340\257=C\202~F\362\354Y\001\377[*\252\026\271hOX\3235=5+h\225b\251*H\206!UM\341\243*\t\037>\260\033Df#\330\356\303\007B\301\256b\010\026\222P\330\\y\311\004}\370\220Y-J;\n\226\365,\261\215\231\024\266w\025A\301\005\304\023,\326\210I\276@k\302\256d\310{\022p\355[\223\344\332\020\266\231\267(\030<!\310'|\236y\226\245\024\263\204-\370\204*\230\212\305\031;\225\027\376\357\177\315e\036V\314\354`!d\023\301)0\225\331\325\335I\"\002\034""\004TKw\364\356\010(\374\350J\210\205B\265\343\350\276\035\020\344\321\331~\260/w\245\025+&\313d\\\0144|T\026\204\035`8\264\241c<\277R\230f\220g\357\377\370\364\337\364\270\313w\003\273V\305\354P\210\274\002Uz\\'\277|\335\027\230\3162\347w\037Dz\305*U,\342A6\277\256\013>\366\370\272\tC*\032\2465e]'\177\354R\271\251Z\273\234;e\245\240f)g\225B\025:\031*j\223\017\247\215\245\215\231\371\247\363\202\244\311~\3252\005\263\222E\2456MTW=/d+j\301\202\332V\265\244\000c\253y\241\252W\004M\341\256,a_\370\000\200\352[\010,\336a\224\313\022N\304qXw\007e\316\300%\360*\235^\226\n\246\222\364\231T0\221v\344%![\265\024s#\\:\003\247\230\231\267\014\354\302o\002\031\313;\r!\275\370\n\356\263`'\365\033\376\336\324\354\014\346\266wa?\022\260\240\346x\342\373M\204)\274\323\000-^\245}|f+\371<\374\302\325\240\220C\025\023\035KA\001\013t6O\311\241\223\003\230\223\265!\375\242\247\277Y\000iY\025\251\263\213\324\222e\021\376Qd\325\224\262\005E\321\350\367n\350*n\202\220W\030\333v\236*\357z\366\014\325\242\023y8/p\310N\216\203U5\2714\271\240\232\326\2172\002\376\323\002'h\306\302`i5\334:\261F\242P%\370\301E\314\363\313L\315\347\\\177\023\n\201\035\222\234!L#\367\220\217\036\312\014\205\"\177K\226\252V\005\336\372\221i\004\246\244\307O|J\3250\201\037\377\265o\362\201\220L&\177JwY\235\245\317&\000;hnM\227\225\227<[^\353\206\372\253\256YR\301\237\370N1,\204\272\260\270\264\234~\367f[\334X\375~\351\215\270\374vs-\275\035f\372\3608)\212\304\373\242\330;I\250\251\212~Z\016Z\342<Mi5h\225aB\344\321\036\264n2\354B\276%2\334\366\356\311\3616D\014\332\220\336UY\311K\225\202\345k\300\250\236n\032\254,\205]\344@\r\037\350\331\304\nf\317\014x|\2408\232\0178\371\310\3021\036\351]\022\031[\036\263\341\250j\264F\024~d\362X\007\323b\247a>\326\210P\037\323\263\326m\001z\246\301o0\234\210\274g\332<\306M\346qn2\217w\2239\310R\363s\226\262\336\350\350L\362\353\202\016\340\230/0\220\212YYz\321\267G/\361\341\252\206B\220\227\220\016\354uM\322\320Q\030\374e;\344\237\375\357\350C\005_tA\375\337\306\307\n\025\263\225""\375\020Y,i\226Q}\255\250;\273\326\332\333\365\267\251Yb\244\267Z\250Q\016m\336\250n\251\262\3628\231\261^\351\300\271\270Q\335\307\277E0\225\270\256\354[\233J\336\247\372\255\245\365\255\267\233\342\362fzmI\334z\235\336X\332z\267\261\361vs{iQ|\271\272\276\276\272\276\322\373\301\271\245\347-\252\250\333\206\272\003k\210-\374a\337\312\226^1r\312{U\266vEN\316\374\227\347\243?\346^\367_\314j1\253S)\221e\224\020S\317\213\242_\342`A/a\034\341\210\001\264p\014\023\000i\250\265\222Y\325r\252\236\314\351\006\252?>]\315@t\357C\334\017\006\325\254\256\027rb\205\312g\220\360\375<\222+@\022\350N\264\014\204\235\317 \365\331\217O\3439\275`\346\364R5\307*\276\210\006]\022\3214(R1<\314\312J\266\262\363gL\004\211\270,\257\213T\207\350\005\255!\277ED#\340_(\0269\356\372\336TC#\231\242\254\347DQ\241\276V\204\243\310\030S\376\205eb'\303\304\212\031\032\372u\322\177\210$%<\016\326MQ\314\243#\304/\325\251|\321B+\307\314\350\355\277\371\233*\213\235A\016\275\026\362&\034[\034=\302pa\237\204\335#\346+\032,b\251.\312\331\340\241X\370\377\033\235\200\031\342^\032\372\241$\027\262W\275\010\027A\037n\006#d\270\265\347\335w\006\343U\262.\274\030\330\321\313\312\2038\272\217\226\003&\246\347.Ks\032\241~\207\245\263\336_d\275\177?I\323{G\256\241\024\321\372\004\010\010\342\203\217w\013\037\213\214\301Y\357<\220\313\373\350\233^\367(\213w\366\305\235\375\235}\265Te?I\374\002\237\\\325\335N\247\300\360\350W\374.\331\253\232I\255\003\214QM\261\223s\030\253\324\000\026\025\215\365i\254\230Rc\205a\320\177\251P\305\014\210V\354\326\211\320\210E\225~)M\001pD\034\277\373\370Q@-\324:\363!%XQ\325\212\240,\221\203\037\303\na\024#CG\234\321\274\023pE\177Y+1\177\207\234\256\227\024-\360j\026\334\242\301n\\\013\362\242\274\356\274p\247t^\r}\257\273\306|\251\233%0\245f\225\360\355Y\342\014.Rg,\226\362=A\355\031\353%Q,\031\n\235d\203\217\252^\351\320V\347\235\201\251d@S\303\252\212b\031\314\312\255\341\251\304\241\300\306\032C~\000G|5#\032\340\206\343Z\032@\0019\202\314\354g\275\000m\201l\305\337\216\027\215""\3766\301\366\260P\221#D\377oM\246R\310\203\233\345 \343\000\020`\205\020\216\217)\324\345P\355\017\227\373\336\n\037\024uQ\244\021\267\263\277\246\343\335\347Q\362\260\211O\201\022\002\207\377\214\234\337r'{\032\355\360<\217\264\032\024rV\377)u\324\034\000\265\253\313T\354A\331\234\265E=\237\017F\3647E\230Q\005\232\240%r\301BM\247\1778],\241>\260\032)\346\212r\005\322S\217+\332\261\356\345\177\305\021\361\026 \217\270\252b\262?o\322\212\357%\274W\200\336\217\331\217~\227\216bL\363\014p\373UoHp\207k\303\365H{x\324\033\275\351N\270s\256\324\032>w0\177PnEG\355\007\216\324\212\305\3778{\342L\364`\336;/\270'\335T+\032\263\243N\032\017/&\270C\336\344R3\323\224Z\321\221\366\360\2707\236\254\341\374\005;\325\032\216z\321k\264\355\374\201e\317{\227\356\270\277\327\245z\271\025\273h\027\334\211V\3421\275\265\273\253\277\325S\365\264\277\352~UK\3272\255h\302^qR\316\242'\374\325\373\353\337\232\221f\274=|\325\231w\312\255\341q'\341dZ\303ghO\332\336\264-\354[qSnz\300\304E;\347\304\235i\210\235u\267kc\265\\=^\237nL4f\033\333\3158\351\267G\033:\212\215\265\022\027m\311\336s$\307\202\200\225Z\252\366\266\221j,7'\232\363\315\362\341\351C\351\260\374G\364\304H\3347\377y#\023\270\344|\354\217\341\023#_\264b\227\235\2103J\232B\365z\244\036\0370\023\275`?w#t\353\256#y76\274\215L\257g#\314\245_\034\354\330\333\320\016\003\005^\215\216\264F\342v\234\236\321\021oh\302\215C\225\236\340\300\367m\362\313U'u\324\367\227\354r\353\210\313\331\344\005\373\0214Lx\327g\274\231o\032\345\346\310\341\266\227\331l\r\237?\370O\322h\324\276\355D\274\361\227\315\tv\2037t\2576\321&\234\204\356\205\314\247\215H#\321\310\264\207c\366I;e/z\227\247\275i\232\274\334L4\021\257\270}\001\321\331\366\306\357zw\277j\304\033w\311\245\204\267\307Xx\2110\\\342\302|\344-\300\357+\315T3M\002\207\241\300\320\335Z\274\367Z\270\210\364'\213\217\002M\201\017(\236c\355X\274\r\034\310\336\225{\336=\222\312q\351]\270\345~]+\327#\344\004BL\272\035\275\342]yP[\251\317\327\231\247L{\302~\341^p\323\035x<d\373\023\270\324\211\220""\242Sl\200\310\237F\344\275!\344PG\301\277\270e\nT\214\322!\001\000\264\022Sn\006\371E\343v,\341\321k\010\007y'\355]_!\177\220%)\312\315\310\000Y!\023\023\227\275\313\367k\217\240\317\345k\336\265\007\336\203\027\r\311\373\346;\357\273\037\274\037~l\367I^\242\000\370\222\201\233V\277d\3503\351.z\323\351f\274_\251e\344wp\364\246{\257\226\376\343\213\023g\316\023 \3554g\013\370\211\234q\217v\263L=J\"\303'\316\234e\320&\232Iu\220\025\263\317;&\233\t@\266\324|w\010i#\237\322\355\370h\353\314\3316\370\344kJz\312\005\330\020\263O\331[\3169\367Q\355d\r\n\021\311P\370IP@(@D\014dt\267\226\360f\236{\317\267\275\355w\344\272\247\316\234\303\334\177\0366'\2568\267\335\210\233@\014\022\224,1b\233\347\265Hm\2646\217\030\237\256K>\204\274k\013\215\371\006D\307\354s\316\274w\343\241\367\020>jN\022\351\301\234[\356\274\273\357=\314P\272\370\234\350\276\256\275\001\350\311f\242\211\351Z\304\037M\272i7CH\211CY\203\356f\260i\305n8\226wk\316\233{\005\264\257{\233\010\341\373\316\355`\312~\266\240\37021\270\316\023f\353\023\365oH\237\246u\230\352\235~\322\230lH\r\253\231\002\207\3234\371~\336-w7\245@\206\311\346P3\335\314p\355\331\2247\373\222\311+wY~\336\233\177}\0309D\036\215\332w\030\373r\360#\264\344\272t+>\206\340\320K\274\315I\350\330\000\303H\306\"\237\322\255k\327;\300\232\204\327\216\240\251\025{PK{3\253\270\227\305\330w\241\177\267wy\266>Y\227>\203%\344:#\312\353N\346\010]\331e&s\334\271@\367\020\374ae=\355=Z=L\034f\332\321K\266\351L\364,\254\220\203\211H\210\t\272\205#a\277A\246\362\330\020\337\214]l\215\215;\361v\037y\"9;\306^u\236\301\212\341\350\301\033\320B\220*#\301eT\033\367\0322*N\252\203\202\271z\252?-\237\324\313d\331\367\356\367\265\014e\344\205\317\224p?\373\030\354\342\237q\330\337\232g\016\343\314eS\356\017\265r\257\323\030\3329\351R\304\351\207\004\243\374p.\375\006\210K\205q\001(\204\3160Q7\234\337kRm@\031\342\225\377Y-\214\303\372\275\306\"\257\373\347\202;8_s\303\234_\251\034\200\272\275\253\367\275\373(\304\344a\026\322k\244<\023t\333UP\301\377\016\217V\233""\247\320\251\374\214B;\240\262=m\234k\246\310\254E\224\3011\210.S\265\032C#\360\033%\014kgn8\254V\315\035H\210|\3269\345l:\314\305\323\004\223\270o0/\324^b\261\271\312J\2507t\333\225\376\204\306\307\372\371\373\203\367Aj\263\222q\031\310u~\006+\305C\303~j\377\3660\325A\026z\227A\270\262_;\337\342n\014\326\274\t\326\262\3642\312\327(\211\\u;\355\r\241\213#\225\237\201gO9[ \264\305\032oG\316\020\301VA\276sn\256\026\357\234\376\2521\336\274\177\230av\331\277\202\327\266\261\010\375G\334\237\352\344\033\342\233\213\366\2779\277`\032\r\332\252\363\003\371\341\252\363\2257\371\250\236!n\212!\032\257\274\033\251z\334\267*(\334\307HD\241v\356\2022\353\254\313\371\215\021;\327\00619\356\020m\375\017\260\376I\367I\355f-\035\276\211b\21320\013\2368\376t\302\376\326\331w\313h\230O\327w\200\266,\222e\354Pj\303\222\247nG\021\031\344\320%\003&\300\257\372\376\200\033\306\352m\232h\206#,z\025(\256\261\026/v\315Y\345\227^w\266\3351\234a\375 U\t\\\023\343=pl\234\270\347\212\303ve\374\037f\001\271\271\206\351\233\244\010\222\257\315\363@j\263|\257\200@\337\243\204\237&\247[\3663\334@5\220\220\341^\247\270\367&\306\223\272\237\253\375\033\275\241/\235\016\241E\277td\357&H\262\236\361\206.\331\277\273?\327\207\275\247\233\336\346Vkx\344`\023\220\211P\023\313\352B\364`\305\377>\270\0012\372\262F\311u\360\255\035\3121\377\323\301\177\266\351I\034\022^\207mD=#^\3646\321\035f\236\324+\r\262\212\346\356\325n\3252lv\306\1772]\243\335\335\360')Z\346IRuN:\001\007:D\177=|IV\037\317\230\357\275\367\337\263\334\360\223\016\302\251-\3077\323\310\301\2327\316\020:B&\276\266\377\356HL\301\203e\264\225d\317\301\232s\235\024\352$\036\323(z\260d\307\373\263w\255v\344\233\201\0257jJ\272_[\035I'\250\000\r\235\207\200\2411|\016\375\027L\030\032\361F\256;\377\356\335\247.~\350/\237\366Y\235\035f{\316\035\200:\356\270e\212~\371S\2445t\212v\230\007\267\016`:\t\2508\257Y\341\205V\013\366\0168!B\250\250\260\017\264W\350\273\316\307\020hod\302\233`L2B\347\010\2218\014D\020J\003\202\272\343\356\373ue`\235o\365W""\034\352U\311\275\243\366\244w\361\266w\033\200lD|i\254\375\364\316]u\236\270\223\274\352\275`\325<\250{\370\324j\215\006_\243P\307\033\272A5\243\353\256A\225\367\367\246|8q\330\255\274,\003z\t\027\236\377'\005p_\341";
+    PyObject *data = __Pyx_DecompressString(cstring, 4285, 1);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #else /* compression: none (8208 bytes) */
-const char* const bytes = ".Auto-detected camera SN: %sCamera Camera SensorBitDepth is Camera does not expose required Camera frame dimensions changed from %dx%d to %dx%d during acquisitionCamera rejected binning Camera rejected pixel format Camera reported invalid frame dimensions Camera reported unsupported binning %dx%d; retaining %dx%dCannot change camera binning while acquisition is running; stop acquisition firstCannot configure camera binning while acquisition is runningCannot start acquisition; binning configuration failed: %sCannot start \342\200\224 device not initializedCapture callback error: %sCould not read PayloadSize (may not be GigE camera): %sCould not read camera binning: %sCould not read camera frame shape: %sCould not read camera pixel format: %sCould not read camera temperature: %sCould not roll back failed binning update: %sDahengDevice acquisition startedDahengDevice acquisition stoppedDahengDevice closedDahengDevice initialization failed: %sDahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%dDaheng MER3-138-136G3M-P-SWIR camera wrapper.\n\n    Emits raw Mono12 numpy arrays via ``frame_acquired`` rather than RGB\n    ``QImage`` objects. The emitted shape reflects hardware binning.\n    Error closing device: %sError stopping camera: %sExposure set to %.1f \302\265sFailed to get numpy array for Mono12 frameFailed to set binning to %dx%d: %sFailed to set exposure: %sFailed to set gain: %sFailed to set pixel format: %sFrame status error: %dGain set to %.1f dBHardware binning set to %dx%d; camera output is %dx%dNo Daheng cameras foundNoneNote that Cython is deliberately stricter than PEP-484 and rejects subclasses of builtin types. If you need to pass subclasses then set the 'annotation_typing' directive to False.Payload size: %d bytesPixel format set to %sQObject | NoneSensor ADC bit depth set to 12-bitThis application requires Unexpected Mono12 buffer size: got %d samples, expected %dUnexpected camera pixel format %s; expected Mono12 (?; actual format is add_notedi""sableenable), expected 12-bit feature feature is not writablefloat | Nonegc; got isenabledlist[dict]; read back %s is not exposed; relying on PixelFormat=Mono12specdev.devicesrc/device/daheng_device.pytuple[int, int]tuple[tuple[int, int], ...]BinningHorizontalBinningVerticalDEFAULT_PIXEL_FORMATDahengDeviceDahengDevice.__init__DahengDevice._apply_binningDahengDevice._apply_pixel_formatDahengDevice._apply_sensor_bit_depthDahengDevice._capture_callbackDahengDevice._default_frame_shape_for_binningDahengDevice._read_camera_frame_shapeDahengDevice.closeDahengDevice.get_binningDahengDevice.get_exposureDahengDevice.get_frame_shapeDahengDevice.get_gainDahengDevice.get_pixel_formatDahengDevice.get_supported_binningDahengDevice.get_temperatureDahengDevice.initializeDahengDevice.last_errorDahengDevice.set_binningDahengDevice.set_exposureDahengDevice.set_gainDahengDevice.set_pixel_formatDahengDevice.startDahengDevice.start.<locals>.<lambda>DahengDevice.stopDeviceInterfaceDeviceManagerDeviceTemperatureDxValidBitExposureTimeGainGxPixelFormatEntryHeightMONO12NoneOnPayloadSizePixelFormatPySide6.QtCore__Pyx_PyDict_NextRefQObjectSENSOR_FRAME_SHAPESUPPORTED_BINNINGSensorBitDepthSoftwareTriggerModeTriggerSoftwareTriggerSourceWidth_actualactual_depthactual_formatactual_symbolicaddressof__annotate___apply_binning_apply_pixel_format_apply_sensor_bit_depthastypeasyncio.coroutines_binningbinningbinning_xbinning_yboolc_ubyte_camera_capture_callbackcline_in_tracebackcloseclose_devicecolscopyctypes_data_streamdata_streamdbdebug_default_frame_shape_for_binningdev_info_listdev_numdevice_dir_device_managerdevice_managerdirname__doc__eemit_ensure_sdkerror_exposure_usexposure_usfeaturefeature_namefeature_namesfeatures__file__floatfmtframeframe_acquiredframe_id_frame_id_counter_frame_shapeframe_shape__func___gain_dbgain_dbgetgetLoggerget_binningget_camera_listget_command_featureget_enum_featureget_exposureget_float_featureget_frame_idget_frame_shapeget_gainget_heightget_int_featureget_numpy_arrayget_""pixel_formatget_remote_device_feature_controlget_statusget_supported_binningget_temperatureget_widthgx_gxgxipygxipy.gxidefheighthorizontalinfo__init__initializeinsertint_is_coroutineis_implementedis_readableis_writableitems<lambda>_last_errorlast_errorloggerlogging__main____metaclass__metadata__module____mro_entries____name__npnumpynumpy_arrayopen_device_by_snoriginal_colsoriginal_heightoriginal_rowsoriginal_widthosparentpathpayload_size_pf_pixel_formatpixel_formatpop__prepare__previous_binningprevious_shapeproperty__qualname__raw_image_read_camera_frame_shaperegister_capture_callback_remote_featurereshapereturnrollback_errorrows_runningselfsend_commandserial_numbersetset_binningset_exposureset_gain__set_name__set_pixel_formatsetdefaultsizesleep_snsnsrc.device.daheng_devicesrc.device.device_interfacestartstaticmethodstopstrstream_offstream_onsupersys__test__timetimestamp_trigger_cmduint16unregister_capture_callbackupdate_all_device_listusvalidate_binningvalues_vbverticalwarningwidthxy\320\004 \240\010\250\010\260\001\340\010\022\320\022\"\240!\2403\240a\330\010\013\2104\210q\330\014\022\220,\230a\330\020\021\360\n\000\t\014\2104\320\017 \240\003\2401\330\014\020\220\014\230A\330\014\020\320\020 \240\004\320$E\300Q\300a\330\014\r\340\010\031\320\031.\250a\330\010\023\2201\330\010\014\320\014\034\230A\330\014\017\210t\2204\320\027'\240\177\260a\260q\330\020\026\220l\240!\330\0246\260a\260q\340\014\017\210t\2204\320\027'\240|\2601\260A\330\020\026\220l\240!\2409\250A\250Q\330\014\024\220G\2301\230D\320 0\3200@\300\001\300\021\340\010\033\2304\230q\330\010\031\230\024\230Q\330\010\t\330\014\024\220A\220R\220t\2301\230G\2401\240A\330\014\024\220A\220R\220t\2301\230G\2401\240A\330\014\026\220c\230\021\230(\240!\2402\240T\250\025\250c\260\021\260(\270!\2702\270T\300\021\330\014\017\210w\220c\230\021\330\020\026\220l\240!\330\024\025\330\024\026\220a\220w\230a\230t\2401\240G\2501\250O\2701\270F\300!\3004\300q\310\006\310a\310q\360\014\000\r\021\320\020 \240\004\320$=\270Q""\330\014\020\220\014\230A\330\017\020\360\010\000\r\016\330\020\030\230\001\230\022\2304\230q\320 0\260\001\260\021\330\020\030\230\001\230\022\2304\230q\320 0\260\001\260\021\330\014\023\220=\240\001\330\020\026\220h\230a\320\037P\320PQ\330\014\020\220\014\230A\330\014\020\320\020 \240\001\330\014\r\340\010\016\210g\220T\230\021\330\010\016\210e\2201\330\014\r\330\r\021\220\021\330\014\r\330\014\r\320\004!\240\021\360\014\000\t\014\2104\320\017 \240\003\2401\330\014\023\2201\340\010\t\330\014\033\2301\330\014\017\210t\2204\320\027'\240\177\260a\260q\330\020\027\220q\330\014\017\210t\2204\320\027'\240|\2601\260A\330\020\027\220q\330\014\023\2205\230\001\230\024\320\035-\320-?\270q\300\r\310T\320QR\330\010\017\210}\230A\330\014\022\220&\230\001\320\031B\300!\330\014\023\2201\320\004*\250!\340\010\013\2104\320\017 \240\003\2401\330\014\023\2204\320\0278\270\001\270\024\270Q\340\010\020\220\003\2201\220D\320\030(\320(8\270\001\270\030\300\024\300Q\330\010\021\220\023\220A\220T\320\031)\320)9\270\021\270)\3004\300q\330\010\013\2106\220\023\220B\220c\230\027\240\003\2401\330\014\022\220,\230a\330\020;\2701\270G\3001\300A\340\010\020\220\010\230\001\320\004)\250\021\340\010\013\2104\320\017 \240\003\2401\330\014\r\340\010\027\220q\330\010\t\330\014\017\210t\2204\320\027'\240\177\260a\260q\330\020\026\220e\2301\330\024\025\330\024\025\340\020\021\340\014\026\220d\320\032*\320*;\2701\270A\330\014\017\210t\320\023#\240<\250q\260\001\330\020\027\220t\2301\230A\340\014\032\320\032,\250G\2604\260q\330\014\017\210s\220!\220>\240\023\240A\330\020\026\220l\240!\330\024/\250q\260\001\330\024\027\220q\230\001\330\014\022\220%\220q\230\001\330\017\020\360\006\000\r\016\320\004\"\240!\340\010\013\2104\320\017 \240\007\240q\330\014\r\330\020\023\2201\330\024\030\230\001\330\024%\240Q\240a\330\024\030\230\001\340\020\024\320\024%\240Q\330\014\023\220=\240\001\330\020\026\220f\230A\320\035G\300q\330\010\017\210t\2201\320\004!\240\021\330\010\013\2104\320\017 \240\007\240q\330\014\r\330""\020\024\320\024$\240D\320(A\300\021\330\014\023\220=\240\001\330\020\026\220f\230A\320\035F\300a\330\010\017\210t\2201\200A\340\021\022\330\t\n\340\010\023\220<\230q\330\010\016\210g\220Q\330\010\020\220\005\220S\230\013\2405\250\003\2501\320\004\034\230A\330\010\t\330\014\020\220\017\230q\340\014\017\210t\2204\220q\330\020\031\320\031)\250\024\320-=\320=T\320TU\330\020\023\2208\2303\230a\330\024\030\230\017\240q\330\024\032\230&\240\001\240\024\240Q\330\024\033\2301\330\020\024\220G\230=\250\001\250\022\2504\250q\260\006\260a\330\020\026\220e\2301\320\034;\2704\270q\340\014\020\220\013\2304\320\037/\320/A\300\021\300$\300a\330\014\020\320\020#\2404\240x\320/Q\320QR\330\014\020\320\020 \240\004\240H\250L\270\001\270\021\360\010\000\r\021\320\020(\250\001\360\010\000\r\021\320\020$\240A\240Q\360\006\000\r\021\220\017\230r\240\024\240Q\360\006\000\r\016\330\020\037\230t\320#3\3203C\3001\300N\320RV\320VW\330\020\026\220e\2301\320\0346\260a\330\014\023\220=\240\001\330\020\026\220h\230a\320\037Z\320Z[\360\006\000\r\021\320\020 \320 2\260!\260?\300$\300a\300t\3101\360\006\000\r\021\320\020 \320 2\260!\2607\270$\270a\270t\3001\360\006\000\r\021\320\020 \320 1\260\021\260.\300\004\300A\300Q\330\014\020\320\020 \320 1\260\021\3202B\300$\300a\300q\330\014\020\320\020 \240\004\320$4\3204H\310\001\310\021\340\014\022\220'\230\024\230Q\330\014\022\220%\220q\330\020\021\330\020\024\220A\330\021\025\220Q\330\020\021\330\020\021\340\014\023\2201\340\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031C\3001\330\014\023\2201\200A\330\034\035\330\010\017\210t\2201\320\004$\240H\250A\330\010\013\2104\210s\220!\330\014\022\220*\230A\330\020,\250A\320-I\310\021\340\010\t\330\014\020\320\020$\240A\240Q\330\014\022\220%\220q\320\0302\260$\260a\330\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031;\2701\330\014\r\320\004\035\230Q\340\010\013\2104\320\017 \240\003\2401\330\014\023\2204\220q\340\010\t\330\014\031\230\023""\230A\330\020\024\320\024$\320$4\260A\3205I\310\024\310Q\340\014\027\220s\230!\330\020\024\320\024$\320$4\260A\3205G\300t\3101\340\014\026\220l\240!\330\014\017\210w\220c\230\021\330\020\024\220L\240\001\340\020\026\220h\230a\330\024\025\330\025\026\330\025\031\230\021\340\010\017\210}\230A\330\014\022\220&\230\001\320\031>\270a\330\010\017\210t\2201\320\004\033\230:\240Q\330\010\014\210L\230\001\330\010\013\2104\210q\330\014\r\330\020\024\320\024$\320$6\260a\260w\270d\300!\3001\330\020\026\220e\2301\320\0343\2601\330\014\023\220=\240\001\330\020\026\220f\230A\320\0357\260q\320\004\035\230X\240X\250Q\360\016\000\t\023\320\022\"\240!\2403\240a\330\010\013\2104\210q\330\014\022\220,\230a\330\020\021\360\010\000\t\n\330\014\020\220\017\230r\240\021\330\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031@\300\t\310\021\330\014\r\320\004\026\220a\330\010\014\210L\230\001\330\010\013\2104\210q\330\014\r\330\020\024\220H\230K\240q\330\020\024\220M\320!=\270Q\330\014\023\220=\240\001\330\020\026\220h\230a\320\037<\270A\330\010\016\210e\2201\220A\320\004.\250a\340\010\013\210:\220S\230\005\230S\240\004\240D\250\001\330\014\r\340\010\t\340\014\017\210y\230\013\2403\240c\250\021\330\020\026\220h\230a\320\0379\270\031\300+\310Q\330\020\023\2204\220z\240\024\240T\250\021\330\024\030\230\r\240]\260!\330\020\021\360\006\000\r\026\220Y\230k\250\021\330\014\024\220I\230Z\240q\330\014\033\2309\320$5\260Q\360\n\000\r\020\210}\230C\320\0371\260\021\330\020\026\220f\230A\330\024\025\330\024\025\340\020\023\2204\220z\240\024\240T\250\021\330\024\030\230\r\240]\260!\330\020\021\340\014\032\230)\320#3\2601\330\014\017\210|\2303\230a\330\020\026\220h\230a\230q\330\020\023\2204\220z\240\024\240T\250\021\330\024\030\230\r\240]\260!\330\020\021\330\014\017\210{\230&\240\003\2407\250\"\250A\330\020\026\220f\230A\330\024\025\330\024\037\230q\330\024\033\2302\230Q\340\020\023\2204\220z\240\024\240T\250\021\330\024\030\230\r\240]\260!\330\020\021\330\014\024\220K""\230x\240q\250\010\260\006\260g\270Q\270b\300\t\310\025\310a\340\014\033\2308\2401\330\014\017\210|\2303\230d\240!\330\020\026\220h\230a\330\024\025\330\024\030\230\r\240Q\240a\330\024\030\230\r\240Q\240a\330\024\025\330\024\025\340\020\024\320\024$\240A\340\014\027\220|\2404\240q\330\014\033\320\033+\2501\330\014\r\330\020\034\230I\240]\260!\330\020\035\230T\240\025\240a\330\020 \240\001\330\020\037\230t\2401\330\020\033\2304\230q\330\020\031\230\021\330\020\032\230!\330\020\035\230Q\330\020\035\230Q\330\020\033\2302\230Q\230k\250\021\250!\330\020\"\240!\330\020#\2401\340\014\020\320\020&\240a\340\014\020\220\017\230u\240A\240W\250A\360\006\000\r\020\210t\220:\230T\240\024\240Q\330\020\024\220M\240\035\250a\340\010\017\210}\230A\330\014\022\220&\230\001\320\0317\260q\330\014\017\210t\220:\230T\240\024\240Q\330\020\024\220M\240\035\250a\320\004\036\230a\330\010\017\210t\2201\320\014\036\230d\320\"4\260A\260Q\320\004\027\220\177\240j\260\010\3208R\320RS\330\010\r\210R\210y\230\001\230\021\330\010\023\2201\340\010\014\210G\2201\330\010\014\320\014\037\230r\240\036\250q\330\010\014\210K\220q\330\010\014\320\014\037\230q\330\010\014\320\014\034\230A\330\010\014\320\014\034\230A\340\010\014\320\014#\2401\330\010\014\320\014\037\230q\330\010\014\320\014\"\240!\360\006\000\t\r\320\014*\250#\250Q\330\010\014\320\014-\250Q\330\010\014\320\014\036\230a\330\010\014\320\014&\240a\330\010\014\320\014 \240\001\320\004\027\220q\330\010\013\2104\210y\230\003\2301\330\014\022\220&\230\001\230\021\330\014\r\360\010\000\t\n\330\014\020\220\017\230r\240\024\240Q\330\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031W\320WX\330\014\r\340\010\014\210L\230\001\330\010\014\320\014!\240\021\360\n\000\t\r\210M\320\0313\2601\330\014\r\330\010\014\210H\220J\230a\360\006\000\t\r\210F\220!\2201\330\010\014\210M\230\035\240a\330\010\016\210e\2201\220A\320\004\027\220q\330\010\014\210E\220\021\330\010\013\2104\210q\330\014\r\330\020\024\220H\230M\250\021\330\014""\023\220=\240\001\330\020\026\220h\230a\320\037;\2701\330\014\020\220\013\2301\330\010\014\320\014\034\230A\330\010\016\210e\2201\220A\320\000\031\230\021\340\004\017\210q\330\004\025\220R\220~\240Q\330\004\r\320\r\035\230^\320+B\300!\330\004\007\200x\210s\220!\330\010\017\210q\330\004\013\2101\320\004'\240q\340\010\017\210q\200\001\330\004\005\330\004\007\200s\210#\210Q\330\010\025\220R\220u\230H\240A\240Q\330\010\013\210;\220g\230S\240\001\330\014\017\210u\220G\2301\230C\230q\340\017\020\330\010\r\320\r!\320!<\270A\330\010\r\210Q\330\010\035\230Q\330\010\025\220Q\320\004\032\230!\330\010\017\210t\2201\320\004'\240x\250q\340\010\013\2104\210s\220!\330\014\022\220*\230A\330\020,\250A\320-I\310\021\330\010\013\2104\320\017 \240\003\2401\330\014\020\320\020!\240\021\330\014\r\340\010\022\220$\320\026&\320&7\260q\270\001\330\010\017\210t\2201\220A\330\010\013\320\013\033\2307\240$\240a\330\010\013\210>\230\023\230A\330\014\022\220,\230a\330\0200\260\001\330\022\023\2201\330\010\014\320\014\035\230Q\320\004\037\230z\250\021\330\010\014\320\014\034\230A\330\010\013\2104\210q\330\014\r\330\020\024\320\024$\320$6\260a\260\177\300d\310!\3101\330\020\026\220e\2301\320\0347\260q\330\014\023\220=\240\001\330\020\026\220f\230A\320\035;\2701";
+    #else /* compression: none (9629 bytes) */
+const char* const bytes = ".Auto-detected camera SN: %sCamera Camera SensorBitDepth is Camera clamped frame rate from %.2f to %.2f fpsCamera does not expose required Camera does not expose %s; frame rate is exposure-determinedCamera frame dimensions changed from %dx%d to %dx%d during acquisitionCamera rejected binning Camera rejected pixel format Camera reported invalid frame dimensions Camera reported unsupported binning %dx%d; retaining %dx%dCannot change camera binning while acquisition is running; stop acquisition firstCannot change camera frame rate while acquisition is running; stop acquisition firstCannot configure camera binning while acquisition is runningCannot start acquisition; binning configuration failed: %sCannot start \342\200\224 device not initializedCapture callback error: %sCould not read PayloadSize (may not be GigE camera): %sCould not read camera binning: %sCould not read camera frame rate: %sCould not read camera frame-rate range: %sCould not read camera frame shape: %sCould not read camera pixel format: %sCould not read camera temperature: %sCould not read %s range: %sCould not roll back failed binning update: %sDahengDevice acquisition startedDahengDevice acquisition stoppedDahengDevice closedDahengDevice initialization failed: %sDahengDevice initialized: SN=%s, binning=%dx%d, frame=%dx%dDaheng MER3-138-136G3M-P-SWIR camera wrapper.\n\n    Emits raw Mono12 numpy arrays via ``frame_acquired`` rather than RGB\n    ``QImage`` objects. The emitted shape reflects hardware binning.\n    Error closing device: %sError stopping camera: %sExposure set to %.1f \302\265sFailed to get numpy array for Mono12 frameFailed to set binning to %dx%d: %sFailed to set exposure: %sFailed to set frame rate to %.2f fps: %sFailed to set gain: %sFailed to set pixel format: %sFrame rate must be positive; got Frame rate set to %.2f fps (range %.2f\342\200\223%.2f)Frame status error: %dGain set to %.1f dBHardware binning set to %dx%d; camera output is %dx%dNo Daheng cameras foundNoneNote that Cyt""hon is deliberately stricter than PEP-484 and rejects subclasses of builtin types. If you need to pass subclasses then set the 'annotation_typing' directive to False.Payload size: %d bytesPixel format set to %sQObject | NoneSensor ADC bit depth set to 12-bitThis application requires Unexpected Mono12 buffer size: got %d samples, expected %dUnexpected camera pixel format %s; expected Mono12 (?; actual format is add_notedisableenable), expected 12-bit feature feature is not writablefloat | Nonegc; got isenabledlist[dict]; read back %s is not exposed; relying on PixelFormat=Mono12specdev.devicesrc/device/daheng_device.pytuple[float, float]tuple[int, int]tuple[tuple[int, int], ...]AcquisitionFrameRateAcquisitionFrameRateModeBinningHorizontalBinningVerticalDEFAULT_PIXEL_FORMATDahengDeviceDahengDevice.__init__DahengDevice._apply_binningDahengDevice._apply_frame_rateDahengDevice._apply_pixel_formatDahengDevice._apply_sensor_bit_depthDahengDevice._capture_callbackDahengDevice._default_frame_shape_for_binningDahengDevice._read_camera_frame_shapeDahengDevice.closeDahengDevice.get_binningDahengDevice.get_exposureDahengDevice.get_frame_rateDahengDevice.get_frame_rate_rangeDahengDevice.get_frame_shapeDahengDevice.get_gainDahengDevice.get_pixel_formatDahengDevice.get_supported_binningDahengDevice.get_temperatureDahengDevice.initializeDahengDevice.last_errorDahengDevice.set_binningDahengDevice.set_exposureDahengDevice.set_frame_rateDahengDevice.set_gainDahengDevice.set_pixel_formatDahengDevice.startDahengDevice.start.<locals>.<lambda>DahengDevice.stopDeviceInterfaceDeviceManagerDeviceTemperatureDxValidBitExposureTimeGainGxPixelFormatEntryHeightMONO12NoneOnPayloadSizePixelFormatPySide6.QtCore__Pyx_PyDict_NextRefQObjectSENSOR_FRAME_SHAPESUPPORTED_BINNINGSensorBitDepthSoftwareTriggerModeTriggerSoftwareTriggerSourceWidth_actualactual_depthactual_formatactual_symbolicaddressof__annotate___apply_binning_apply_frame_rate_apply_pixel_format_apply_sensor_bit_depthastypeasyncio.coroutines_b""inningbinningbinning_xbinning_yboolc_ubyte_camera_capture_callbackcline_in_tracebackcloseclose_devicecolscopyctypes_data_streamdata_streamdbdebug_default_frame_shape_for_binningdev_info_listdev_numdevice_dir_device_managerdevice_managerdirname__doc__eemit_ensure_sdkerror_exposure_usexposure_usfeaturefeature_namefeature_namesfeatures__file__floatfmtfpsframeframe_acquiredframe_id_frame_id_counter_frame_rate_fps_frame_rate_range_frame_shapeframe_shape__func___gain_dbgain_dbgetgetLoggerget_binningget_camera_listget_command_featureget_enum_featureget_exposureget_float_featureget_frame_idget_frame_rateget_frame_rate_rangeget_frame_shapeget_gainget_heightget_int_featureget_numpy_arrayget_pixel_formatget_rangeget_remote_device_feature_controlget_statusget_supported_binningget_temperatureget_widthgx_gxgxipygxipy.gxidefheighthorizontalinfo__init__initializeinsertint_is_coroutineis_implementedis_readableis_writableitems<lambda>_last_errorlast_errorloggerlogging__main__max__metaclass__metadataminmode_name__module____mro_entries____name__npnumpynumpy_arrayopen_device_by_snoriginal_colsoriginal_heightoriginal_rowsoriginal_widthosparentpathpayload_size_pf_pixel_formatpixel_formatpop__prepare__previous_binningprevious_shapeproperty__qualname__rate_featurerate_namerate_rangeraw_image_read_camera_frame_shaperegister_capture_callback_remote_featurereshapereturnrollback_errorrows_runningselfsend_commandserial_numbersetset_binningset_exposureset_frame_rateset_gain__set_name__set_pixel_formatsetdefaultsizesleep_snsnsrc.device.daheng_devicesrc.device.device_interfacestartstaticmethodstopstrstream_offstream_onsupersys__test__timetimestamp_trigger_cmduint16unregister_capture_callbackupdate_all_device_listusvalidate_binningvalues_vbverticalwarningwidthxy\320\004 \240\010\250\010\260\001\340\010\022\320\022\"\240!\2403\240a\330\010\013\2104\210q\330\014\022\220,\230a\330\020\021\360\n\000\t\014\2104\320\017 \240\003\2401\330\014\020\220\014\230A\330\014\020\320\020 \240\004\320$E\300Q\300a""\330\014\r\340\010\031\320\031.\250a\330\010\023\2201\330\010\014\320\014\034\230A\330\014\017\210t\2204\320\027'\240\177\260a\260q\330\020\026\220l\240!\330\0246\260a\260q\340\014\017\210t\2204\320\027'\240|\2601\260A\330\020\026\220l\240!\2409\250A\250Q\330\014\024\220G\2301\230D\320 0\3200@\300\001\300\021\340\010\033\2304\230q\330\010\031\230\024\230Q\330\010\t\330\014\024\220A\220R\220t\2301\230G\2401\240A\330\014\024\220A\220R\220t\2301\230G\2401\240A\330\014\026\220c\230\021\230(\240!\2402\240T\250\025\250c\260\021\260(\270!\2702\270T\300\021\330\014\017\210w\220c\230\021\330\020\026\220l\240!\330\024\025\330\024\026\220a\220w\230a\230t\2401\240G\2501\250O\2701\270F\300!\3004\300q\310\006\310a\310q\360\014\000\r\021\320\020 \240\004\320$=\270Q\330\014\020\220\014\230A\330\017\020\360\010\000\r\016\330\020\030\230\001\230\022\2304\230q\320 0\260\001\260\021\330\020\030\230\001\230\022\2304\230q\320 0\260\001\260\021\330\014\023\220=\240\001\330\020\026\220h\230a\320\037P\320PQ\330\014\020\220\014\230A\330\014\020\320\020 \240\001\330\014\r\340\010\016\210g\220T\230\021\330\010\016\210e\2201\330\014\r\330\r\021\220\021\330\014\r\330\014\r\320\004!\240\021\360\014\000\t\014\2104\320\017 \240\003\2401\330\014\023\2201\340\010\t\330\014\033\2301\330\014\017\210t\2204\320\027'\240\177\260a\260q\330\020\027\220q\330\014\017\210t\2204\320\027'\240|\2601\260A\330\020\027\220q\330\014\023\2205\230\001\230\024\320\035-\320-?\270q\300\r\310T\320QR\330\010\017\210}\230A\330\014\022\220&\230\001\320\031B\300!\330\014\023\2201\320\004*\250!\340\010\013\2104\320\017 \240\003\2401\330\014\023\2204\320\0278\270\001\270\024\270Q\340\010\020\220\003\2201\220D\320\030(\320(8\270\001\270\030\300\024\300Q\330\010\021\220\023\220A\220T\320\031)\320)9\270\021\270)\3004\300q\330\010\013\2106\220\023\220B\220c\230\027\240\003\2401\330\014\022\220,\230a\330\020;\2701\270G\3001\300A\340\010\020\220\010\230\001\320\004)\250\021\340\010\013\2104\320\017 \240\003\2401\330\014\r\340\010\027""\220q\330\010\t\330\014\017\210t\2204\320\027'\240\177\260a\260q\330\020\026\220e\2301\330\024\025\330\024\025\340\020\021\340\014\026\220d\320\032*\320*;\2701\270A\330\014\017\210t\320\023#\240<\250q\260\001\330\020\027\220t\2301\230A\340\014\032\320\032,\250G\2604\260q\330\014\017\210s\220!\220>\240\023\240A\330\020\026\220l\240!\330\024/\250q\260\001\330\024\027\220q\230\001\330\014\022\220%\220q\230\001\330\017\020\360\006\000\r\016\320\004\"\240!\340\010\013\2104\320\017 \240\007\240q\330\014\r\330\020\023\2201\330\024\030\230\001\330\024%\240Q\240a\330\024\030\230\001\340\020\024\320\024%\240Q\330\014\023\220=\240\001\330\020\026\220f\230A\320\035G\300q\330\010\017\210t\2201\320\004 \240\001\340\010\013\2104\320\017 \240\007\240q\330\014\r\330\020\023\2204\320\027'\240\177\260a\260q\330\024\030\320\030+\2505\260\001\330\030\034\320\034,\320,>\270a\320?V\320VZ\320Z[\340\014\023\220=\240\001\330\020\026\220f\230A\320\035E\300Q\330\010\017\210t\2201\320\004!\240\021\330\010\013\2104\320\017 \240\007\240q\330\014\r\330\020\024\320\024$\240D\320(A\300\021\330\014\023\220=\240\001\330\020\026\220f\230A\320\035F\300a\330\010\017\210t\2201\320\004\"\240*\250A\360\016\000\t\017\210e\2201\220A\330\010\013\2104\210s\220!\330\014\022\220*\230A\320\035@\300\001\300\021\330\010\013\2104\210q\330\014\022\220,\230a\330\020\021\360\010\000\t\n\330\014\020\320\020\"\240!\2401\330\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031E\300U\310!\330\014\r\200A\340\021\022\330\t\n\340\010\023\220<\230q\330\010\016\210g\220Q\330\010\020\220\005\220S\230\013\2405\250\003\2501\320\004\034\230A\330\010\t\330\014\020\220\017\230q\340\014\017\210t\2204\220q\330\020\031\320\031)\250\024\320-=\320=T\320TU\330\020\023\2208\2303\230a\330\024\030\230\017\240q\330\024\032\230&\240\001\240\024\240Q\330\024\033\2301\330\020\024\220G\230=\250\001\250\022\2504\250q\260\006\260a\330\020\026\220e\2301\320\034;\2704\270q\340\014\020\220\013\2304\320\037/\320/A\300""\021\300$\300a\330\014\020\320\020#\2404\240x\320/Q\320QR\330\014\020\320\020 \240\004\240H\250L\270\001\270\021\360\010\000\r\021\320\020(\250\001\360\010\000\r\021\320\020$\240A\240Q\360\006\000\r\021\220\017\230r\240\024\240Q\360\006\000\r\016\330\020\037\230t\320#3\3203C\3001\300N\320RV\320VW\330\020\026\220e\2301\320\0346\260a\330\014\023\220=\240\001\330\020\026\220h\230a\320\037Z\320Z[\360\006\000\r\021\320\020 \320 2\260!\260?\300$\300a\300t\3101\360\006\000\r\021\320\020 \320 2\260!\2607\270$\270a\270t\3001\360\n\000\r\021\320\020\"\240!\2404\240q\360\006\000\r\021\320\020 \320 1\260\021\260.\300\004\300A\300Q\330\014\020\320\020 \320 1\260\021\3202B\300$\300a\300q\330\014\020\320\020 \240\004\320$4\3204H\310\001\310\021\340\014\022\220'\230\024\230Q\330\014\022\220%\220q\330\020\021\330\020\024\220A\330\021\025\220Q\330\020\021\330\020\021\340\014\023\2201\340\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031C\3001\330\014\023\2201\200A\330\034\035\330\010\017\210t\2201\320\004$\240H\250A\330\010\013\2104\210s\220!\330\014\022\220*\230A\330\020,\250A\320-I\310\021\340\010\t\330\014\020\320\020$\240A\240Q\330\014\022\220%\220q\320\0302\260$\260a\330\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031;\2701\330\014\r\320\004\035\230Q\340\010\013\2104\320\017 \240\003\2401\330\014\023\2204\220q\340\010\t\330\014\031\230\023\230A\330\020\024\320\024$\320$4\260A\3205I\310\024\310Q\340\014\027\220s\230!\330\020\024\320\024$\320$4\260A\3205G\300t\3101\340\014\026\220l\240!\330\014\017\210w\220c\230\021\330\020\024\220L\240\001\340\020\026\220h\230a\330\024\025\330\025\026\330\025\031\230\021\340\010\017\210}\230A\330\014\022\220&\230\001\320\031>\270a\330\010\017\210t\2201\320\004\033\230:\240Q\330\010\014\210L\230\001\330\010\013\2104\210q\330\014\r\330\020\024\320\024$\320$6\260a\260w\270d\300!\3001\330\020\026\220e\2301\320\0343\2601\330\014\023\220=\240\001\330\020\026\220f\230A\320\0357""\260q\320\004\035\230X\240X\250Q\360\016\000\t\023\320\022\"\240!\2403\240a\330\010\013\2104\210q\330\014\022\220,\230a\330\020\021\360\010\000\t\n\330\014\020\220\017\230r\240\021\330\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031@\300\t\310\021\330\014\r\320\004%\240Z\250q\340\010\013\2104\320\017 \240\003\2401\330\014\020\320\020#\2401\330\014\r\340\010\024\220A\330\010\024\220A\360\010\000\t\014\2104\210t\320\023#\240?\260!\2601\330\014\022\220%\220q\330\020\021\330\020\021\340\014\020\320\020#\2401\330\014\r\340\010\013\2104\320\017\037\230\177\250a\250q\330\014\017\210t\2204\320\027'\240|\2601\260A\330\020\026\220l\240!\240:\250Q\330\014\020\320\020 \320 1\260\021\260*\270D\300\001\300\021\340\010\013\2104\210t\320\023#\240<\250q\260\001\330\014\022\220,\230a\230z\250\021\340\010\027\220t\320\033+\320+=\270Q\270a\330\010\t\330\014\031\230\034\240Z\250q\330\014\020\320\020&\240e\2501\250J\260a\260y\300\005\300Q\300j\320PQ\320QR\330\010\017\210}\230A\330\014\022\220&\230\001\320\0318\270\013\3001\340\010\024\220D\230\001\230\025\230a\230q\330\010\021\220\025\220a\220|\2404\240q\330\010\014\320\014\037\230q\330\010\013\2103\210a\210w\220b\230\005\230R\230q\330\014\022\220(\230!\330\020\021\330\020\021\330\020\021\340\010\016\210e\2201\320\024D\300I\310T\320QR\320\004&\240a\340\010\013\2104\320\017 \240\007\240q\330\014\r\330\020\023\2204\320\027'\240\177\260a\260q\330\024\025\330\030\034\320\034,\320,>\270a\320?V\320V`\320`a\340\024\030\230\001\330\030\035\230Q\230j\250\001\250\021\330\030\035\230Q\230j\250\001\250\021\340\014\023\220=\240\001\330\020\026\220f\230A\320\035K\3101\330\010\017\210t\2201\320\004\026\220a\330\010\014\210L\230\001\330\010\013\2104\210q\330\014\r\330\020\024\220H\230K\240q\330\020\024\220M\320!=\270Q\330\014\023\220=\240\001\330\020\026\220h\230a\320\037<\270A\330\010\016\210e\2201\220A\320\004.\250a\340\010\013\210:\220S\230\005\230S\240\004\240D\250\001\330\014\r\340\010\t\340\014\017\210y\230""\013\2403\240c\250\021\330\020\026\220h\230a\320\0379\270\031\300+\310Q\330\020\023\2204\220z\240\024\240T\250\021\330\024\030\230\r\240]\260!\330\020\021\360\006\000\r\026\220Y\230k\250\021\330\014\024\220I\230Z\240q\330\014\033\2309\320$5\260Q\360\n\000\r\020\210}\230C\320\0371\260\021\330\020\026\220f\230A\330\024\025\330\024\025\340\020\023\2204\220z\240\024\240T\250\021\330\024\030\230\r\240]\260!\330\020\021\340\014\032\230)\320#3\2601\330\014\017\210|\2303\230a\330\020\026\220h\230a\230q\330\020\023\2204\220z\240\024\240T\250\021\330\024\030\230\r\240]\260!\330\020\021\330\014\017\210{\230&\240\003\2407\250\"\250A\330\020\026\220f\230A\330\024\025\330\024\037\230q\330\024\033\2302\230Q\340\020\023\2204\220z\240\024\240T\250\021\330\024\030\230\r\240]\260!\330\020\021\330\014\024\220K\230x\240q\250\010\260\006\260g\270Q\270b\300\t\310\025\310a\340\014\033\2308\2401\330\014\017\210|\2303\230d\240!\330\020\026\220h\230a\330\024\025\330\024\030\230\r\240Q\240a\330\024\030\230\r\240Q\240a\330\024\025\330\024\025\340\020\024\320\024$\240A\340\014\027\220|\2404\240q\330\014\033\320\033+\2501\330\014\r\330\020\034\230I\240]\260!\330\020\035\230T\240\025\240a\330\020 \240\001\330\020\037\230t\2401\330\020\033\2304\230q\330\020\031\230\021\330\020\032\230!\330\020\035\230Q\330\020\035\230Q\330\020\033\2302\230Q\230k\250\021\250!\330\020\"\240!\330\020#\2401\340\014\020\320\020&\240a\340\014\020\220\017\230u\240A\240W\250A\360\006\000\r\020\210t\220:\230T\240\024\240Q\330\020\024\220M\240\035\250a\340\010\017\210}\230A\330\014\022\220&\230\001\320\0317\260q\330\014\017\210t\220:\230T\240\024\240Q\330\020\024\220M\240\035\250a\320\004\036\230a\330\010\017\210t\2201\320\014\036\230d\320\"4\260A\260Q\320\004\027\220\177\240j\260\010\3208R\320RS\330\010\r\210R\210y\230\001\230\021\330\010\023\2201\340\010\014\210G\2201\330\010\014\320\014\037\230r\240\036\250q\330\010\014\210K\220q\330\010\014\320\014\037\230q\330\010\014\320\014\034\230A\330\010\014\320\014\034\230A\340""\010\014\320\014#\2401\330\010\014\320\014\037\230q\330\010\014\320\014\"\240!\360\010\000\t\r\320\014&\240a\330\010\014\320\0147\260u\270A\360\006\000\t\r\320\014*\250#\250Q\330\010\014\320\014-\250Q\330\010\014\320\014\036\230a\330\010\014\320\014&\240a\330\010\014\320\014 \240\001\320\004\027\220q\330\010\013\2104\210y\230\003\2301\330\014\022\220&\230\001\230\021\330\014\r\360\010\000\t\n\330\014\020\220\017\230r\240\024\240Q\330\010\017\210}\230A\330\014\020\220\017\230s\240!\2401\330\014\022\220&\230\001\320\031W\320WX\330\014\r\340\010\014\210L\230\001\330\010\014\320\014!\240\021\360\n\000\t\r\210M\320\0313\2601\330\014\r\330\010\014\210H\220J\230a\360\006\000\t\r\210F\220!\2201\330\010\014\210M\230\035\240a\330\010\016\210e\2201\220A\320\004\027\220q\330\010\014\210E\220\021\330\010\013\2104\210q\330\014\r\330\020\024\220H\230M\250\021\330\014\023\220=\240\001\330\020\026\220h\230a\320\037;\2701\330\014\020\220\013\2301\330\010\014\320\014\034\230A\330\010\016\210e\2201\220A\320\000\031\230\021\340\004\017\210q\330\004\025\220R\220~\240Q\330\004\r\320\r\035\230^\320+B\300!\330\004\007\200x\210s\220!\330\010\017\210q\330\004\013\2101\320\004'\240q\340\010\017\210q\200\001\330\004\005\330\004\007\200s\210#\210Q\330\010\025\220R\220u\230H\240A\240Q\330\010\013\210;\220g\230S\240\001\330\014\017\210u\220G\2301\230C\230q\340\017\020\330\010\r\320\r!\320!<\270A\330\010\r\210Q\330\010\035\230Q\330\010\025\220Q\320\004\032\230!\330\010\017\210t\2201\320\004'\240x\250q\340\010\013\2104\210s\220!\330\014\022\220*\230A\330\020,\250A\320-I\310\021\330\010\013\2104\320\017 \240\003\2401\330\014\020\320\020!\240\021\330\014\r\340\010\022\220$\320\026&\320&7\260q\270\001\330\010\017\210t\2201\220A\330\010\013\320\013\033\2307\240$\240a\330\010\013\210>\230\023\230A\330\014\022\220,\230a\330\0200\260\001\330\022\023\2201\330\010\014\320\014\035\230Q\320\004\037\230z\250\021\330\010\014\320\014\034\230A\330\010\013\2104\210q\330\014\r\330\020\024\320\024$\320$6\260a\260""\177\300d\310!\3101\330\020\026\220e\2301\320\0347\260q\330\014\023\220=\240\001\330\020\026\220f\230A\320\035;\2701";
     PyObject *data = NULL;
     CYTHON_UNUSED_VAR(__Pyx_DecompressString);
     #endif
     PyObject **stringtab = __pyx_mstate->__pyx_string_tab;
     Py_ssize_t pos = 0;
-    for (int i = 0; i < 298; i++) {
+    for (int i = 0; i < 328; i++) {
       Py_ssize_t bytes_length = index[i].length;
       PyObject *string = PyUnicode_DecodeUTF8(bytes + pos, bytes_length, NULL);
-      if (likely(string) && i >= 69) PyUnicode_InternInPlace(&string);
+      if (likely(string) && i >= 79) PyUnicode_InternInPlace(&string);
       if (unlikely(!string)) {
         Py_XDECREF(data);
         __PYX_ERR(0, 1, __pyx_L1_error)
@@ -17329,7 +19828,7 @@ const char* const bytes = ".Auto-detected camera SN: %sCamera Camera SensorBitDe
       stringtab[i] = string;
       pos += bytes_length;
     }
-    for (int i = 298; i < 324; i++) {
+    for (int i = 328; i < 358; i++) {
       Py_ssize_t bytes_length = index[i].length;
       PyObject *string = PyBytes_FromStringAndSize(bytes + pos, bytes_length);
       stringtab[i] = string;
@@ -17340,15 +19839,15 @@ const char* const bytes = ".Auto-detected camera SN: %sCamera Camera SensorBitDe
       }
     }
     Py_XDECREF(data);
-    for (Py_ssize_t i = 0; i < 324; i++) {
+    for (Py_ssize_t i = 0; i < 358; i++) {
       if (unlikely(PyObject_Hash(stringtab[i]) == -1)) {
         __PYX_ERR(0, 1, __pyx_L1_error)
       }
     }
     #if CYTHON_IMMORTAL_CONSTANTS
     {
-      PyObject **table = stringtab + 298;
-      for (Py_ssize_t i=0; i<26; ++i) {
+      PyObject **table = stringtab + 328;
+      for (Py_ssize_t i=0; i<30; ++i) {
         #if PY_VERSION_HEX >= 0x030F0000
         PyUnstable_SetImmortal(table[i]);
         #elif CYTHON_COMPILING_IN_CPYTHON_FREETHREADING
@@ -17371,14 +19870,14 @@ const char* const bytes = ".Auto-detected camera SN: %sCamera Camera SensorBitDe
   }
   {
     PyObject **numbertab = __pyx_mstate->__pyx_number_tab;
-    double const c_constants[] = {0.0,0.1,10000.0};
-    for (int i = 0; i < 3; i++) {
+    double const c_constants[] = {0.0,0.1,1.0,72.4,10000.0};
+    for (int i = 0; i < 5; i++) {
       numbertab[i] = PyFloat_FromDouble(c_constants[i]);
       if (unlikely(!numbertab[i])) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   {
-    PyObject **numbertab = __pyx_mstate->__pyx_number_tab + 3;
+    PyObject **numbertab = __pyx_mstate->__pyx_number_tab + 5;
     int8_t const cint_constants_1[] = {0,1,12};
     for (int i = 0; i < 3; i++) {
       numbertab[i] = PyLong_FromLong(cint_constants_1[i - 0]);
@@ -17388,7 +19887,7 @@ const char* const bytes = ".Auto-detected camera SN: %sCamera Camera SensorBitDe
   #if CYTHON_IMMORTAL_CONSTANTS
   {
     PyObject **table = __pyx_mstate->__pyx_number_tab;
-    for (Py_ssize_t i=0; i<6; ++i) {
+    for (Py_ssize_t i=0; i<8; ++i) {
       #if PY_VERSION_HEX >= 0x030F0000
       PyUnstable_SetImmortal(table[i]);
       #elif CYTHON_COMPILING_IN_CPYTHON_FREETHREADING
@@ -17419,7 +19918,7 @@ typedef struct {
     unsigned int num_kwonly_args : 1;
     unsigned int nlocals : 4;
     unsigned int flags : 10;
-    unsigned int first_line : 9;
+    unsigned int first_line : 10;
 } __Pyx_PyCode_New_function_description;
 /* NewCodeObj.proto */
 static PyObject* __Pyx_PyCode_New(
@@ -17436,7 +19935,7 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
   PyObject* tuple_dedup_map = PyDict_New();
   if (unlikely(!tuple_dedup_map)) return -1;
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 171};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 181};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_raw_image};
     __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_lambda, __pyx_mstate->__pyx_kp_b_iso88591_d_4AQ, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
   }
@@ -17456,114 +19955,134 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
     __pyx_mstate_global->__pyx_codeobj_tab[3] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_init, __pyx_mstate->__pyx_kp_b_iso88591_j_8RRS_Ry_1_G1_r_q_Kq_q_A_A_1_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[3])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 7, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 85};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 7, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 90};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_dev_num, __pyx_mstate->__pyx_n_u_dev_info_list, __pyx_mstate->__pyx_n_u_payload_size, __pyx_mstate->__pyx_n_u_e, __pyx_mstate->__pyx_n_u_rows, __pyx_mstate->__pyx_n_u_cols};
     __pyx_mstate_global->__pyx_codeobj_tab[4] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_initialize, __pyx_mstate->__pyx_kp_b_iso88591_A_q_t4q_TTU_83a_q_Q_1_G_4q_a_e1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[4])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 146};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 156};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
     __pyx_mstate_global->__pyx_codeobj_tab[5] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_last_error_2, __pyx_mstate->__pyx_kp_b_iso88591_A_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[5])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 150};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 160};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_e};
     __pyx_mstate_global->__pyx_codeobj_tab[6] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_start, __pyx_mstate->__pyx_kp_b_iso88591_q_4y_1_r_Q_A_s_1_WWX_L_M_31_HJa, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[6])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 179};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 189};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_e};
     __pyx_mstate_global->__pyx_codeobj_tab[7] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_stop, __pyx_mstate->__pyx_kp_b_iso88591_a_L_4q_HKq_M_Q_ha_A_e1A, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[7])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 189};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 199};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_e};
     __pyx_mstate_global->__pyx_codeobj_tab[8] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_close, __pyx_mstate->__pyx_kp_b_iso88591_q_E_4q_HM_ha_1_1_A_e1A, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[8])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 200};
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 210};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_us, __pyx_mstate->__pyx_n_u_e};
     __pyx_mstate_global->__pyx_codeobj_tab[9] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_set_exposure, __pyx_mstate->__pyx_kp_b_iso88591_z_A_4q_6a_d_1_e1_7q_fA_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[9])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 209};
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 219};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_db, __pyx_mstate->__pyx_n_u_e};
     __pyx_mstate_global->__pyx_codeobj_tab[10] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_set_gain, __pyx_mstate->__pyx_kp_b_iso88591_Q_L_4q_6awd_1_e1_31_fA_7q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[10])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {3, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 218};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_x, __pyx_mstate->__pyx_n_u_y, __pyx_mstate->__pyx_n_u_binning_2, __pyx_mstate->__pyx_n_u_e};
-    __pyx_mstate_global->__pyx_codeobj_tab[11] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_set_binning, __pyx_mstate->__pyx_kp_b_iso88591_XXQ_3a_4q_a_r_A_s_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[11])) goto bad;
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 228};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_fps, __pyx_mstate->__pyx_n_u_e};
+    __pyx_mstate_global->__pyx_codeobj_tab[11] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_set_frame_rate, __pyx_mstate->__pyx_kp_b_iso88591_A_e1A_4s_A_4q_a_1_A_s_1_EU, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[11])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 239};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_horizontal, __pyx_mstate->__pyx_n_u_vertical, __pyx_mstate->__pyx_n_u_actual, __pyx_mstate->__pyx_n_u_e};
-    __pyx_mstate_global->__pyx_codeobj_tab[12] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_binning, __pyx_mstate->__pyx_kp_b_iso88591_Q_4_1_4q_A_4A5I_Q_s_4A5Gt1_l_wc, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[12])) goto bad;
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 8, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 251};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_fps, __pyx_mstate->__pyx_n_u_mode_name, __pyx_mstate->__pyx_n_u_rate_name, __pyx_mstate->__pyx_n_u_rate_feature, __pyx_mstate->__pyx_n_u_rate_range, __pyx_mstate->__pyx_n_u_e, __pyx_mstate->__pyx_n_u_actual};
+    __pyx_mstate_global->__pyx_codeobj_tab[12] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_apply_frame_rate, __pyx_mstate->__pyx_kp_b_iso88591_Zq_4_1_1_A_A_4t_1_q_1_4_aq_t4_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[12])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 264};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
-    __pyx_mstate_global->__pyx_codeobj_tab[13] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_supported_binning, __pyx_mstate->__pyx_kp_b_iso88591_q_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[13])) goto bad;
-  }
-  {
-    const __Pyx_PyCode_New_function_description descr = {3, 0, 0, 13, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 268};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_x, __pyx_mstate->__pyx_n_u_y, __pyx_mstate->__pyx_n_u_binning_2, __pyx_mstate->__pyx_n_u_feature_names, __pyx_mstate->__pyx_n_u_features, __pyx_mstate->__pyx_n_u_feature_name, __pyx_mstate->__pyx_n_u_previous_binning, __pyx_mstate->__pyx_n_u_previous_shape, __pyx_mstate->__pyx_n_u_actual, __pyx_mstate->__pyx_n_u_rollback_error, __pyx_mstate->__pyx_n_u_rows, __pyx_mstate->__pyx_n_u_cols};
-    __pyx_mstate_global->__pyx_codeobj_tab[14] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_apply_binning, __pyx_mstate->__pyx_kp_b_iso88591_3a_4q_a_4_1_A_EQa_a_1_A_t4_aq_l, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[14])) goto bad;
-  }
-  {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 332};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_binning_2, __pyx_mstate->__pyx_n_u_binning_x, __pyx_mstate->__pyx_n_u_binning_y, __pyx_mstate->__pyx_n_u_rows, __pyx_mstate->__pyx_n_u_cols};
-    __pyx_mstate_global->__pyx_codeobj_tab[15] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_default_frame_shape_for_binning, __pyx_mstate->__pyx_kp_b_iso88591_A_q_gQ_S_5_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[15])) goto bad;
-  }
-  {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 341};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_width, __pyx_mstate->__pyx_n_u_height};
-    __pyx_mstate_global->__pyx_codeobj_tab[16] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_read_camera_frame_shape, __pyx_mstate->__pyx_kp_b_iso88591_4_1_4_8_Q_1D_8_Q_AT_9_4q_6_Bc_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[16])) goto bad;
-  }
-  {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 354};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_fmt, __pyx_mstate->__pyx_n_u_e};
-    __pyx_mstate_global->__pyx_codeobj_tab[17] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_set_pixel_format, __pyx_mstate->__pyx_kp_b_iso88591_HA_4s_A_A_I_AQ_q_2_a_A_s_1_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[17])) goto bad;
-  }
-  {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 367};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_fmt, __pyx_mstate->__pyx_n_u_feature_2, __pyx_mstate->__pyx_n_u__5, __pyx_mstate->__pyx_n_u_actual_format};
-    __pyx_mstate_global->__pyx_codeobj_tab[18] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_apply_pixel_format, __pyx_mstate->__pyx_kp_b_iso88591_xq_4s_A_A_I_4_1_7q_t1A_7_a_A_a, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[18])) goto bad;
-  }
-  {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 385};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_feature_name, __pyx_mstate->__pyx_n_u_feature_2, __pyx_mstate->__pyx_n_u_actual_depth, __pyx_mstate->__pyx_n_u_actual_symbolic};
-    __pyx_mstate_global->__pyx_codeobj_tab[19] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_apply_sensor_bit_depth, __pyx_mstate->__pyx_kp_b_iso88591_4_1_q_t4_aq_e1_d_1A_t_q_t1A_G4q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[19])) goto bad;
-  }
-  {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 4, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 414};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u__5, __pyx_mstate->__pyx_n_u_actual_format, __pyx_mstate->__pyx_n_u_e};
-    __pyx_mstate_global->__pyx_codeobj_tab[20] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_pixel_format, __pyx_mstate->__pyx_kp_b_iso88591_4_q_1_Qa_Q_fA_Gq_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[20])) goto bad;
-  }
-  {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 428};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 296};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_e};
-    __pyx_mstate_global->__pyx_codeobj_tab[21] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_frame_shape, __pyx_mstate->__pyx_kp_b_iso88591_4_q_D_A_fA_Fa_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[21])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[13] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_frame_rate, __pyx_mstate->__pyx_kp_b_iso88591_4_q_4_aq_5_a_VVZZ_fA_EQ_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[13])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 436};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 308};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_rate_range, __pyx_mstate->__pyx_n_u_e};
+    __pyx_mstate_global->__pyx_codeobj_tab[14] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_frame_rate_range, __pyx_mstate->__pyx_kp_b_iso88591_a_4_q_4_aq_a_VV_a_Qj_Qj_fA_K1_t, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[14])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {3, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 324};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_x, __pyx_mstate->__pyx_n_u_y, __pyx_mstate->__pyx_n_u_binning_2, __pyx_mstate->__pyx_n_u_e};
+    __pyx_mstate_global->__pyx_codeobj_tab[15] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_set_binning, __pyx_mstate->__pyx_kp_b_iso88591_XXQ_3a_4q_a_r_A_s_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[15])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 345};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_horizontal, __pyx_mstate->__pyx_n_u_vertical, __pyx_mstate->__pyx_n_u_actual, __pyx_mstate->__pyx_n_u_e};
+    __pyx_mstate_global->__pyx_codeobj_tab[16] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_binning, __pyx_mstate->__pyx_kp_b_iso88591_Q_4_1_4q_A_4A5I_Q_s_4A5Gt1_l_wc, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[16])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 370};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
-    __pyx_mstate_global->__pyx_codeobj_tab[22] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_exposure, __pyx_mstate->__pyx_kp_b_iso88591_a_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[22])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[17] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_supported_binning, __pyx_mstate->__pyx_kp_b_iso88591_q_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[17])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 439};
+    const __Pyx_PyCode_New_function_description descr = {3, 0, 0, 13, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 374};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_x, __pyx_mstate->__pyx_n_u_y, __pyx_mstate->__pyx_n_u_binning_2, __pyx_mstate->__pyx_n_u_feature_names, __pyx_mstate->__pyx_n_u_features, __pyx_mstate->__pyx_n_u_feature_name, __pyx_mstate->__pyx_n_u_previous_binning, __pyx_mstate->__pyx_n_u_previous_shape, __pyx_mstate->__pyx_n_u_actual, __pyx_mstate->__pyx_n_u_rollback_error, __pyx_mstate->__pyx_n_u_rows, __pyx_mstate->__pyx_n_u_cols};
+    __pyx_mstate_global->__pyx_codeobj_tab[18] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_apply_binning, __pyx_mstate->__pyx_kp_b_iso88591_3a_4q_a_4_1_A_EQa_a_1_A_t4_aq_l, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[18])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 438};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_binning_2, __pyx_mstate->__pyx_n_u_binning_x, __pyx_mstate->__pyx_n_u_binning_y, __pyx_mstate->__pyx_n_u_rows, __pyx_mstate->__pyx_n_u_cols};
+    __pyx_mstate_global->__pyx_codeobj_tab[19] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_default_frame_shape_for_binning, __pyx_mstate->__pyx_kp_b_iso88591_A_q_gQ_S_5_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[19])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 447};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_width, __pyx_mstate->__pyx_n_u_height};
+    __pyx_mstate_global->__pyx_codeobj_tab[20] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_read_camera_frame_shape, __pyx_mstate->__pyx_kp_b_iso88591_4_1_4_8_Q_1D_8_Q_AT_9_4q_6_Bc_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[20])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 460};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_fmt, __pyx_mstate->__pyx_n_u_e};
+    __pyx_mstate_global->__pyx_codeobj_tab[21] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_set_pixel_format, __pyx_mstate->__pyx_kp_b_iso88591_HA_4s_A_A_I_AQ_q_2_a_A_s_1_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[21])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 473};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_fmt, __pyx_mstate->__pyx_n_u_feature_2, __pyx_mstate->__pyx_n_u__5, __pyx_mstate->__pyx_n_u_actual_format};
+    __pyx_mstate_global->__pyx_codeobj_tab[22] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_apply_pixel_format, __pyx_mstate->__pyx_kp_b_iso88591_xq_4s_A_A_I_4_1_7q_t1A_7_a_A_a, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[22])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 491};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_feature_name, __pyx_mstate->__pyx_n_u_feature_2, __pyx_mstate->__pyx_n_u_actual_depth, __pyx_mstate->__pyx_n_u_actual_symbolic};
+    __pyx_mstate_global->__pyx_codeobj_tab[23] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_apply_sensor_bit_depth, __pyx_mstate->__pyx_kp_b_iso88591_4_1_q_t4_aq_e1_d_1A_t_q_t1A_G4q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[23])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 4, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 520};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u__5, __pyx_mstate->__pyx_n_u_actual_format, __pyx_mstate->__pyx_n_u_e};
+    __pyx_mstate_global->__pyx_codeobj_tab[24] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_pixel_format, __pyx_mstate->__pyx_kp_b_iso88591_4_q_1_Qa_Q_fA_Gq_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[24])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 534};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_e};
+    __pyx_mstate_global->__pyx_codeobj_tab[25] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_frame_shape, __pyx_mstate->__pyx_kp_b_iso88591_4_q_D_A_fA_Fa_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[25])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 542};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
-    __pyx_mstate_global->__pyx_codeobj_tab[23] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_gain, __pyx_mstate->__pyx_kp_b_iso88591_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[23])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[26] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_exposure, __pyx_mstate->__pyx_kp_b_iso88591_a_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[26])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 442};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 545};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
+    __pyx_mstate_global->__pyx_codeobj_tab[27] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_gain, __pyx_mstate->__pyx_kp_b_iso88591_t1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[27])) goto bad;
+  }
+  {
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 548};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_feature_name, __pyx_mstate->__pyx_n_u_e};
-    __pyx_mstate_global->__pyx_codeobj_tab[24] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_temperature, __pyx_mstate->__pyx_kp_b_iso88591_4_1_1_1_t4_aq_q_t4_1A_q_5_q_TQR, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[24])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[28] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_get_temperature, __pyx_mstate->__pyx_kp_b_iso88591_4_1_1_1_t4_aq_q_t4_1A_q_5_q_TQR, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[28])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 14, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 462};
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 14, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 568};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_raw_image, __pyx_mstate->__pyx_n_u_height, __pyx_mstate->__pyx_n_u_width, __pyx_mstate->__pyx_n_u_pixel_format_2, __pyx_mstate->__pyx_n_u_numpy_array, __pyx_mstate->__pyx_n_u_frame, __pyx_mstate->__pyx_n_u_frame_shape_2, __pyx_mstate->__pyx_n_u_binning_x, __pyx_mstate->__pyx_n_u_binning_y, __pyx_mstate->__pyx_n_u_original_rows, __pyx_mstate->__pyx_n_u_original_cols, __pyx_mstate->__pyx_n_u_metadata, __pyx_mstate->__pyx_n_u_e};
-    __pyx_mstate_global->__pyx_codeobj_tab[25] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_capture_callback, __pyx_mstate->__pyx_kp_b_iso88591_a_S_S_D_y_3c_ha_9_Q_4z_T_Yk_IZq, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[25])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[29] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_device_daheng_device_py, __pyx_mstate->__pyx_n_u_capture_callback, __pyx_mstate->__pyx_kp_b_iso88591_a_S_S_D_y_3c_ha_9_Q_4z_T_Yk_IZq, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[29])) goto bad;
   }
   Py_DECREF(tuple_dedup_map);
   return 0;
@@ -21244,46 +23763,6 @@ static PyObject *__Pyx_CyFunction_New(PyMethodDef *ml, int flags, PyObject* qual
     return op;
 }
 
-/* pybuiltin_invalid (used by pyint_simplify) */
-static void __Pyx_PyBuiltin_Invalid(PyObject *obj, const char *type_name, const char *argname) {
-    __Pyx_TypeName obj_type_name = __Pyx_PyType_GetFullyQualifiedName(Py_TYPE(obj));
-    if (argname) {
-        PyErr_Format(PyExc_TypeError,
-            "Argument '%.200s' has incorrect type (expected %.200s, got " __Pyx_FMT_TYPENAME ")",
-            argname, type_name, obj_type_name
-        );
-    } else {
-        PyErr_Format(PyExc_TypeError,
-            "Expected %.200s, got " __Pyx_FMT_TYPENAME,
-            type_name, obj_type_name
-        );
-    }
-    __Pyx_DECREF_TypeName(obj_type_name);
-}
-
-/* pyint_simplify */
-static CYTHON_INLINE int __Pyx_PyInt_FromNumber(PyObject **number_var, const char *argname, int accept_none) {
-    PyObject *number = *number_var;
-    if (likely((accept_none && number == Py_None) || PyLong_CheckExact(number))) {
-        return 0;
-    }
-    PyObject *int_object;
-    if (likely(PyNumber_Check(number))) {
-        int_object = PyNumber_Long(number);
-        if (unlikely(!int_object)) goto bad;
-    } else {
-        __Pyx_PyBuiltin_Invalid(number, "int", argname);
-        goto bad;
-    }
-    *number_var = int_object;
-    Py_DECREF(number);
-    return 0;
-bad:
-    *number_var = NULL;
-    Py_DECREF(number);
-    return -1;
-}
-
 /* RaiseException */
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause) {
     PyObject* owned_instance = NULL;
@@ -21392,13 +23871,6 @@ bad:
     return;
 }
 
-/* PyUnicode_Unicode */
-static CYTHON_INLINE PyObject* __Pyx_PyUnicode_Unicode(PyObject *obj) {
-    if (unlikely(obj == Py_None))
-        obj = __pyx_mstate_global->__pyx_kp_u_None;
-    return __Pyx_NewRef(obj);
-}
-
 /* JoinPyUnicode */
 static PyObject* __Pyx_PyUnicode_Join(PyObject** values, Py_ssize_t value_count, Py_ssize_t result_ulength,
                                       Py_UCS4 max_char) {
@@ -21475,67 +23947,6 @@ bad:
     Py_DECREF(value_tuple);
     return result;
 #endif
-}
-
-/* PyLongCompare */
-static CYTHON_INLINE int __Pyx_PyLong_BoolNeObjC(PyObject *op1, PyObject *op2, long intval, long inplace) {
-    CYTHON_MAYBE_UNUSED_VAR(intval);
-    CYTHON_UNUSED_VAR(inplace);
-    if (op1 == op2) {
-        return 0;
-    }
-    #if CYTHON_USE_PYLONG_INTERNALS
-    if (likely(PyLong_CheckExact(op1))) {
-        int unequal;
-        unsigned long uintval;
-        Py_ssize_t size = __Pyx_PyLong_DigitCount(op1);
-        const digit* digits = __Pyx_PyLong_Digits(op1);
-        if (intval == 0) {
-            return (__Pyx_PyLong_IsZero(op1) != 1);
-        } else if (intval < 0) {
-            if (__Pyx_PyLong_IsNonNeg(op1))
-                return 1;
-            intval = -intval;
-        } else {
-            if (__Pyx_PyLong_IsNeg(op1))
-                return 1;
-        }
-        uintval = (unsigned long) intval;
-#if PyLong_SHIFT * 4 < SIZEOF_LONG*8
-        if (uintval >> (PyLong_SHIFT * 4)) {
-            unequal = (size != 5) || (digits[0] != (uintval & (unsigned long) PyLong_MASK))
-                 | (digits[1] != ((uintval >> (1 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[2] != ((uintval >> (2 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[3] != ((uintval >> (3 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[4] != ((uintval >> (4 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK));
-        } else
-#endif
-#if PyLong_SHIFT * 3 < SIZEOF_LONG*8
-        if (uintval >> (PyLong_SHIFT * 3)) {
-            unequal = (size != 4) || (digits[0] != (uintval & (unsigned long) PyLong_MASK))
-                 | (digits[1] != ((uintval >> (1 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[2] != ((uintval >> (2 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[3] != ((uintval >> (3 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK));
-        } else
-#endif
-#if PyLong_SHIFT * 2 < SIZEOF_LONG*8
-        if (uintval >> (PyLong_SHIFT * 2)) {
-            unequal = (size != 3) || (digits[0] != (uintval & (unsigned long) PyLong_MASK))
-                 | (digits[1] != ((uintval >> (1 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[2] != ((uintval >> (2 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK));
-        } else
-#endif
-#if PyLong_SHIFT * 1 < SIZEOF_LONG*8
-        if (uintval >> (PyLong_SHIFT * 1)) {
-            unequal = (size != 2) || (digits[0] != (uintval & (unsigned long) PyLong_MASK))
-                 | (digits[1] != ((uintval >> (1 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK));
-        } else
-#endif
-            unequal = (size != 1) || (((unsigned long) digits[0]) != (uintval & (unsigned long) PyLong_MASK));
-        return (unequal != 0);
-    }
-    #endif
-    if (PyFloat_CheckExact(op1)) {
-        const long b = intval;
-        double a = __Pyx_PyFloat_AS_DOUBLE(op1);
-        return ((double)a != (double)b);
-    }
-    return __Pyx_PyObject_IsTrueAndDecref(
-        PyObject_RichCompare(op1, op2, Py_NE));
 }
 
 /* pybytes_as_double (used by pynumber_float) */
@@ -21675,6 +24086,173 @@ static CYTHON_INLINE PyObject* __Pyx__PyNumber_Float(PyObject* obj) {
 no_error:
 #endif
     return PyFloat_FromDouble(val);
+}
+
+/* DictGetItem */
+#if !CYTHON_COMPILING_IN_PYPY
+static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key) {
+    PyObject *value;
+    if (unlikely(__Pyx_PyDict_GetItemRef(d, key, &value) == 0)) { // no value, no error
+        if (unlikely(PyTuple_Check(key))) {
+            PyObject* args = PyTuple_Pack(1, key);
+            if (likely(args)) {
+                PyErr_SetObject(PyExc_KeyError, args);
+                Py_DECREF(args);
+            }
+        } else {
+            PyErr_SetObject(PyExc_KeyError, key);
+        }
+    }
+    return value;
+}
+#endif
+
+/* pyobject_as_double */
+static double __Pyx__PyObject_AsDouble(PyObject* obj) {
+    if (PyUnicode_CheckExact(obj)) {
+        return __Pyx_PyUnicode_AsDouble(obj);
+    } else if (PyBytes_CheckExact(obj)) {
+        return __Pyx_PyBytes_AsDouble(obj);
+    } else if (PyByteArray_CheckExact(obj)) {
+        return __Pyx_PyByteArray_AsDouble(obj);
+    } else {
+        PyObject* float_value;
+#if !CYTHON_USE_TYPE_SLOTS
+        float_value = PyNumber_Float(obj);  if ((0)) goto bad;
+        (void)__Pyx_PyObject_CallOneArg;
+#else
+        PyNumberMethods *nb = Py_TYPE(obj)->tp_as_number;
+        if (likely(nb) && likely(nb->nb_float)) {
+            float_value = nb->nb_float(obj);
+            if (likely(float_value) && unlikely(!PyFloat_Check(float_value))) {
+                __Pyx_TypeName float_value_type_name = __Pyx_PyType_GetFullyQualifiedName(Py_TYPE(float_value));
+                PyErr_Format(PyExc_TypeError,
+                    "__float__ returned non-float (type " __Pyx_FMT_TYPENAME ")",
+                    float_value_type_name);
+                __Pyx_DECREF_TypeName(float_value_type_name);
+                Py_DECREF(float_value);
+                goto bad;
+            }
+        } else {
+            float_value = __Pyx_PyObject_CallOneArg((PyObject*)&PyFloat_Type, obj);
+        }
+#endif
+        if (likely(float_value)) {
+            double value = __Pyx_PyFloat_AS_DOUBLE(float_value);
+            Py_DECREF(float_value);
+            return value;
+        }
+    }
+bad:
+    return (double)-1;
+}
+
+/* pybuiltin_invalid (used by pyint_simplify) */
+static void __Pyx_PyBuiltin_Invalid(PyObject *obj, const char *type_name, const char *argname) {
+    __Pyx_TypeName obj_type_name = __Pyx_PyType_GetFullyQualifiedName(Py_TYPE(obj));
+    if (argname) {
+        PyErr_Format(PyExc_TypeError,
+            "Argument '%.200s' has incorrect type (expected %.200s, got " __Pyx_FMT_TYPENAME ")",
+            argname, type_name, obj_type_name
+        );
+    } else {
+        PyErr_Format(PyExc_TypeError,
+            "Expected %.200s, got " __Pyx_FMT_TYPENAME,
+            type_name, obj_type_name
+        );
+    }
+    __Pyx_DECREF_TypeName(obj_type_name);
+}
+
+/* pyint_simplify */
+static CYTHON_INLINE int __Pyx_PyInt_FromNumber(PyObject **number_var, const char *argname, int accept_none) {
+    PyObject *number = *number_var;
+    if (likely((accept_none && number == Py_None) || PyLong_CheckExact(number))) {
+        return 0;
+    }
+    PyObject *int_object;
+    if (likely(PyNumber_Check(number))) {
+        int_object = PyNumber_Long(number);
+        if (unlikely(!int_object)) goto bad;
+    } else {
+        __Pyx_PyBuiltin_Invalid(number, "int", argname);
+        goto bad;
+    }
+    *number_var = int_object;
+    Py_DECREF(number);
+    return 0;
+bad:
+    *number_var = NULL;
+    Py_DECREF(number);
+    return -1;
+}
+
+/* PyUnicode_Unicode */
+static CYTHON_INLINE PyObject* __Pyx_PyUnicode_Unicode(PyObject *obj) {
+    if (unlikely(obj == Py_None))
+        obj = __pyx_mstate_global->__pyx_kp_u_None;
+    return __Pyx_NewRef(obj);
+}
+
+/* PyLongCompare */
+static CYTHON_INLINE int __Pyx_PyLong_BoolNeObjC(PyObject *op1, PyObject *op2, long intval, long inplace) {
+    CYTHON_MAYBE_UNUSED_VAR(intval);
+    CYTHON_UNUSED_VAR(inplace);
+    if (op1 == op2) {
+        return 0;
+    }
+    #if CYTHON_USE_PYLONG_INTERNALS
+    if (likely(PyLong_CheckExact(op1))) {
+        int unequal;
+        unsigned long uintval;
+        Py_ssize_t size = __Pyx_PyLong_DigitCount(op1);
+        const digit* digits = __Pyx_PyLong_Digits(op1);
+        if (intval == 0) {
+            return (__Pyx_PyLong_IsZero(op1) != 1);
+        } else if (intval < 0) {
+            if (__Pyx_PyLong_IsNonNeg(op1))
+                return 1;
+            intval = -intval;
+        } else {
+            if (__Pyx_PyLong_IsNeg(op1))
+                return 1;
+        }
+        uintval = (unsigned long) intval;
+#if PyLong_SHIFT * 4 < SIZEOF_LONG*8
+        if (uintval >> (PyLong_SHIFT * 4)) {
+            unequal = (size != 5) || (digits[0] != (uintval & (unsigned long) PyLong_MASK))
+                 | (digits[1] != ((uintval >> (1 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[2] != ((uintval >> (2 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[3] != ((uintval >> (3 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[4] != ((uintval >> (4 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK));
+        } else
+#endif
+#if PyLong_SHIFT * 3 < SIZEOF_LONG*8
+        if (uintval >> (PyLong_SHIFT * 3)) {
+            unequal = (size != 4) || (digits[0] != (uintval & (unsigned long) PyLong_MASK))
+                 | (digits[1] != ((uintval >> (1 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[2] != ((uintval >> (2 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[3] != ((uintval >> (3 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK));
+        } else
+#endif
+#if PyLong_SHIFT * 2 < SIZEOF_LONG*8
+        if (uintval >> (PyLong_SHIFT * 2)) {
+            unequal = (size != 3) || (digits[0] != (uintval & (unsigned long) PyLong_MASK))
+                 | (digits[1] != ((uintval >> (1 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK)) | (digits[2] != ((uintval >> (2 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK));
+        } else
+#endif
+#if PyLong_SHIFT * 1 < SIZEOF_LONG*8
+        if (uintval >> (PyLong_SHIFT * 1)) {
+            unequal = (size != 2) || (digits[0] != (uintval & (unsigned long) PyLong_MASK))
+                 | (digits[1] != ((uintval >> (1 * PyLong_SHIFT)) & (unsigned long) PyLong_MASK));
+        } else
+#endif
+            unequal = (size != 1) || (((unsigned long) digits[0]) != (uintval & (unsigned long) PyLong_MASK));
+        return (unequal != 0);
+    }
+    #endif
+    if (PyFloat_CheckExact(op1)) {
+        const long b = intval;
+        double a = __Pyx_PyFloat_AS_DOUBLE(op1);
+        return ((double)a != (double)b);
+    }
+    return __Pyx_PyObject_IsTrueAndDecref(
+        PyObject_RichCompare(op1, op2, Py_NE));
 }
 
 /* pyfloat_simplify */
