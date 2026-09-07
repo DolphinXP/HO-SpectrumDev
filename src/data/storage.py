@@ -16,6 +16,7 @@ from pathlib import Path
 import numpy as np
 
 from src.data.envi_writer import EnviWriter
+from src.data.param_logger import CsvParamLogger
 from src.data.raw_writer import RawWriter
 
 logger = logging.getLogger("specdev.storage")
@@ -49,6 +50,7 @@ class StorageManager:
     def __init__(self, max_pending_frames: int = 32) -> None:
         self._envi_writer: EnviWriter | None = None
         self._raw_writer: RawWriter | None = None
+        self._param_logger: CsvParamLogger | None = None
         self._max_pending_frames = max_pending_frames
         self._write_queue: queue.Queue[np.ndarray | object] = queue.Queue(
             maxsize=max_pending_frames
@@ -83,6 +85,11 @@ class StorageManager:
         """Number of frames discarded because the async queue was full."""
         return self._dropped_frames
 
+    @property
+    def param_logger(self) -> CsvParamLogger | None:
+        """The active per-second parameter CSV logger, or ``None``."""
+        return self._param_logger
+
     # ------------------------------------------------------------------
     # Start / stop
     # ------------------------------------------------------------------
@@ -116,6 +123,7 @@ class StorageManager:
         writer = EnviWriter()
         writer.open(path, pixel_format, metadata=metadata)
         self._envi_writer = writer
+        self._maybe_start_param_logger(path, metadata)
         self._ensure_writer_thread()
         logger.info("ENVI recording started: %s", path)
 
@@ -155,6 +163,7 @@ class StorageManager:
             write_binary=write_binary,
         )
         self._raw_writer = writer
+        self._maybe_start_param_logger(path, metadata)
         self._ensure_writer_thread()
         logger.info("Raw recording started: %s", path)
 
@@ -188,6 +197,13 @@ class StorageManager:
         self._stop_writer_thread()
         self._raise_writer_error()
 
+        if self._param_logger is not None:
+            try:
+                self._param_logger.stop()
+            except Exception:
+                logger.exception("Error stopping parameter CSV logger")
+            self._param_logger = None
+
         if self._envi_writer is not None:
             try:
                 self._envi_writer.close()
@@ -213,6 +229,29 @@ class StorageManager:
     # ------------------------------------------------------------------
     # Internal
     # ------------------------------------------------------------------
+
+    def _maybe_start_param_logger(self, path: str, metadata: dict | None) -> None:
+        """Start the per-second parameter CSV logger for this session.
+
+        The sampler is embedded in the recording ``metadata`` under the
+        ``param_sampler`` key (a zero-argument callable returning the latest
+        device parameters).  Sessions without a sampler — unit tests, replay
+        exports — skip CSV logging transparently.
+        """
+        if self._param_logger is not None:
+            return  # already running for this session (ENVI + raw share it)
+
+        sampler = (metadata or {}).get("param_sampler")
+        if not callable(sampler):
+            return
+
+        logger_name = f"CsvParamLogger-{id(self):x}"
+        try:
+            self._param_logger = CsvParamLogger(path, sampler, logger_name=logger_name)
+            self._param_logger.start()
+        except Exception:
+            logger.exception("Failed to start parameter CSV logger; continuing without it")
+            self._param_logger = None
 
     def _ensure_writer_thread(self) -> None:
         if self._writer_thread is not None and self._writer_thread.is_alive():

@@ -806,6 +806,44 @@ class MainWindow(QMainWindow):
             self._status_nuc.setText("NUC: 错误")
             self._status_nuc.setStyleSheet("color: #e74c3c; font-weight: bold;")
 
+    def _device_param_sampler(self) -> dict:
+        """Sample current device parameters for the recording CSV log.
+
+        Runs on the storage logger thread; every read is individually guarded
+        so a disconnected or busy device degrades to an empty cell instead of
+        killing the logging thread.
+        """
+        params: dict = {}
+
+        try:
+            params["exposure_us"] = self._device.get_exposure()
+        except Exception as exc:
+            logger.debug("CSV sampler: exposure unavailable: %s", exc)
+
+        try:
+            params["frame_rate_fps"] = self._device.get_frame_rate()
+        except Exception as exc:
+            logger.debug("CSV sampler: frame rate unavailable: %s", exc)
+
+        try:
+            params["gain_db"] = self._device.get_gain()
+        except Exception as exc:
+            logger.debug("CSV sampler: gain unavailable: %s", exc)
+
+        try:
+            params["adc_bit_depth"] = int(self._device.get_pixel_format()[4:])
+        except Exception as exc:
+            logger.debug("CSV sampler: ADC bit depth unavailable: %s", exc)
+
+        try:
+            temperature = self._device.get_temperature()
+            if temperature is not None:
+                params["temperature_c"] = temperature
+        except Exception as exc:
+            logger.debug("CSV sampler: temperature unavailable: %s", exc)
+
+        return params
+
     def _recording_metadata(self, pixel_format: str) -> dict:
         """Build immutable recording provenance for the active camera mode."""
         rows, cols = self._device.get_frame_shape()
@@ -821,6 +859,7 @@ class MainWindow(QMainWindow):
             "original_height": 1024,
             "exposure_us": self._device.get_exposure(),
             "gain_db": self._device.get_gain(),
+            "param_sampler": self._device_param_sampler,
         }
 
     def _on_start_save(self) -> None:
