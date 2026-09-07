@@ -28,6 +28,7 @@ class DeviceControlPanel(QWidget):
     stop_requested = Signal()
     exposure_changed = Signal(float)
     gain_changed = Signal(float)
+    frame_rate_changed = Signal(float)
     pixel_format_changed = Signal(str)
     binning_changed = Signal(int, int)  # X(horizontal), Y(vertical)
 
@@ -84,6 +85,20 @@ class DeviceControlPanel(QWidget):
         self._spin_gain.setKeyboardTracking(False)
         self._spin_gain.valueChanged.connect(self._on_gain_changed)
         row = self._add_param(param_layout, row, "增益 (dB):", self._spin_gain)
+
+        self._spin_frame_rate = QDoubleSpinBox()
+        self._spin_frame_rate.setRange(1.0, 72.4)
+        self._spin_frame_rate.setDecimals(2)
+        self._spin_frame_rate.setSingleStep(1.0)
+        self._spin_frame_rate.setValue(72.4)
+        self._spin_frame_rate.setSuffix(" fps")
+        self._spin_frame_rate.setKeyboardTracking(False)
+        self._spin_frame_rate.setToolTip(
+            "目标采集帧率。仅在停止采集且未回放时可更改；"
+            "实际生效范围由相机根据曝光、Binning 与像素格式决定。"
+        )
+        self._spin_frame_rate.valueChanged.connect(self._on_frame_rate_changed)
+        row = self._add_param(param_layout, row, "帧率 (fps):", self._spin_frame_rate)
 
         self._combo_pixel_format = QComboBox()
         self._combo_pixel_format.addItem(DEFAULT_PIXEL_FORMAT)
@@ -143,6 +158,11 @@ class DeviceControlPanel(QWidget):
         self._spin_gain.setValue(gain)
         self._spin_gain.blockSignals(False)
 
+        frame_rate = self._config.get_float("frame_rate_fps", 72.4)
+        self._spin_frame_rate.blockSignals(True)
+        self._spin_frame_rate.setValue(frame_rate)
+        self._spin_frame_rate.blockSignals(False)
+
         self._combo_pixel_format.blockSignals(True)
         self._combo_pixel_format.setCurrentText(DEFAULT_PIXEL_FORMAT)
         self._combo_pixel_format.blockSignals(False)
@@ -159,6 +179,7 @@ class DeviceControlPanel(QWidget):
     def _save_settings(self) -> None:
         self._config.set("exposure_us", self._spin_exposure.value())
         self._config.set("gain_db", self._spin_gain.value())
+        self._config.set("frame_rate_fps", self._spin_frame_rate.value())
         self._config.set("pixel_format", self._combo_pixel_format.currentText())
         bx, by = self.current_binning()
         self._saved_binning = (bx, by)
@@ -188,6 +209,18 @@ class DeviceControlPanel(QWidget):
         self._combo_pixel_format.setCurrentText(DEFAULT_PIXEL_FORMAT)
         self._combo_pixel_format.blockSignals(False)
         self._update_adc_label(DEFAULT_PIXEL_FORMAT)
+
+        # Frame-rate range and current value come from the device so the UI
+        # reflects firmware limits (exposure/binning/pixel-format dependent).
+        try:
+            rate_min, rate_max = device.get_frame_rate_range()
+            self._spin_frame_rate.blockSignals(True)
+            self._spin_frame_rate.setRange(rate_min, rate_max)
+            self._spin_frame_rate.setValue(device.get_frame_rate())
+            self._spin_frame_rate.blockSignals(False)
+        except Exception as exc:
+            logger.debug("Could not sync frame rate from device: %s", exc)
+
         self._update_enabled_state()
 
     def update_frame_shape(self, shape: tuple[int, int]) -> None:
@@ -259,6 +292,7 @@ class DeviceControlPanel(QWidget):
         self._btn_stop.setEnabled(self._running and not self._replaying)
         self._spin_exposure.setEnabled(not self._replaying)
         self._spin_gain.setEnabled(not self._replaying)
+        self._spin_frame_rate.setEnabled(editable)
         self._combo_pixel_format.setEnabled(False)
         self._combo_binning.setEnabled(editable and self._combo_binning.count() > 1)
 
@@ -274,6 +308,10 @@ class DeviceControlPanel(QWidget):
 
     def _on_gain_changed(self, value: float) -> None:
         self.gain_changed.emit(value)
+        self._save_settings()
+
+    def _on_frame_rate_changed(self, value: float) -> None:
+        self.frame_rate_changed.emit(value)
         self._save_settings()
 
     def _on_pixel_format_changed(self, fmt: str) -> None:

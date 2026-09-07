@@ -74,6 +74,11 @@ class DahengDevice(DeviceInterface):
         self._exposure_us: float = 10000.0
         self._gain_db: float = 0.0
         self._pixel_format: str = DEFAULT_PIXEL_FORMAT
+        # Target acquisition frame rate (fps) and camera-reported valid range.
+        # The range defaults to the MER3 full-frame capability and is refined
+        # from the camera's AcquisitionFrameRate node during initialize().
+        self._frame_rate_fps: float = 72.4
+        self._frame_rate_range: tuple[float, float] = (1.0, 72.4)
         # (X, Y): X bins image columns, Y bins image rows.  Keep the desired
         # setting while disconnected so it is applied during initialize().
         self._binning: tuple[int, int] = (1, 1)
@@ -122,6 +127,11 @@ class DahengDevice(DeviceInterface):
 
             # Set gain
             self._remote_feature.get_float_feature("Gain").set(self._gain_db)
+
+            # Frame-rate control is configured while acquisition is stopped.
+            # The camera's valid range depends on exposure, binning and pixel
+            # format, so it is read back here after those nodes are applied.
+            self._apply_frame_rate(self._frame_rate_fps)
 
             # Software trigger mode
             self._remote_feature.get_enum_feature("TriggerMode").set("On")
@@ -214,6 +224,102 @@ class DahengDevice(DeviceInterface):
                 logger.info("Gain set to %.1f dB", db)
             except Exception as e:
                 logger.error("Failed to set gain: %s", e)
+
+    def set_frame_rate(self, fps: float) -> None:
+        """Set the target acquisition frame rate (fps) while acquisition is stopped.
+
+        The desired value is cached so it can be applied during ``initialize()``;
+        with a connected camera it is written immediately to the GenICam
+        ``AcquisitionFrameRate`` node after enabling ``AcquisitionFrameRateMode``.
+        """
+        fps = float(fps)
+        if fps <= 0:
+            raise ValueError(f"Frame rate must be positive; got {fps}")
+        if self._running:
+            raise RuntimeError(
+                "Cannot change camera frame rate while acquisition is running; "
+                "stop acquisition first"
+            )
+
+        try:
+            self._apply_frame_rate(fps)
+        except Exception as e:
+            self._last_error = str(e)
+            logger.error("Failed to set frame rate to %.2f fps: %s", fps, e)
+            raise
+
+    def _apply_frame_rate(self, fps: float) -> None:
+        """Write the frame-rate nodes and cache the camera-reported valid range."""
+        if self._remote_feature is None:
+            self._frame_rate_fps = fps
+            return
+
+        mode_name = "AcquisitionFrameRateMode"
+        rate_name = "AcquisitionFrameRate"
+
+        # Some firmware hides frame-rate control entirely; fall back to the
+        # exposure-determined rate in that case rather than failing initialize().
+        if not self._remote_feature.is_implemented(rate_name):
+            logger.info(
+                "Camera does not expose %s; frame rate is exposure-determined",
+                rate_name,
+            )
+            self._frame_rate_fps = fps
+            return
+
+        if self._remote_feature.is_implemented(mode_name):
+            if not self._remote_feature.is_writable(mode_name):
+                raise RuntimeError(f"Camera {mode_name} feature is not writable")
+            self._remote_feature.get_enum_feature(mode_name).set("On")
+
+        if not self._remote_feature.is_writable(rate_name):
+            raise RuntimeError(f"Camera {rate_name} feature is not writable")
+
+        rate_feature = self._remote_feature.get_float_feature(rate_name)
+        try:
+            rate_range = rate_feature.get_range()
+            self._frame_rate_range = (float(rate_range["min"]), float(rate_range["max"]))
+        except Exception as e:
+            logger.debug("Could not read %s range: %s", rate_name, e)
+
+        rate_feature.set(float(fps))
+        actual = float(rate_feature.get())
+        self._frame_rate_fps = actual
+        if abs(actual - fps) > 0.01:
+            logger.warning(
+                "Camera clamped frame rate from %.2f to %.2f fps",
+                fps,
+                actual,
+            )
+        logger.info("Frame rate set to %.2f fps (range %.2f–%.2f)", actual, *self._frame_rate_range)
+
+    def get_frame_rate(self) -> float:
+        """Return the configured target frame rate, preferring the camera value."""
+        if self._remote_feature is not None:
+            try:
+                if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+                    self._frame_rate_fps = float(
+                        self._remote_feature.get_float_feature("AcquisitionFrameRate").get()
+                    )
+            except Exception as e:
+                logger.debug("Could not read camera frame rate: %s", e)
+        return self._frame_rate_fps
+
+    def get_frame_rate_range(self) -> tuple[float, float]:
+        """Return the camera's current valid frame-rate range in fps."""
+        if self._remote_feature is not None:
+            try:
+                if self._remote_feature.is_implemented("AcquisitionFrameRate"):
+                    rate_range = (
+                        self._remote_feature.get_float_feature("AcquisitionFrameRate").get_range()
+                    )
+                    self._frame_rate_range = (
+                        float(rate_range["min"]),
+                        float(rate_range["max"]),
+                    )
+            except Exception as e:
+                logger.debug("Could not read camera frame-rate range: %s", e)
+        return self._frame_rate_range
 
     def set_binning(self, x: int, y: int) -> None:
         """Set Daheng hardware binning while acquisition is stopped.

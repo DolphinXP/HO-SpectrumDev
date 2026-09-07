@@ -89,6 +89,21 @@ class DeviceInterface(QObject, metaclass=_DeviceMeta):
         ...
 
     @abstractmethod
+    def set_frame_rate(self, fps: float) -> None:
+        """Set the target acquisition frame rate in frames per second."""
+        ...
+
+    @abstractmethod
+    def get_frame_rate(self) -> float:
+        """Return the configured target acquisition frame rate in fps."""
+        ...
+
+    @abstractmethod
+    def get_frame_rate_range(self) -> tuple[float, float]:
+        """Return the supported acquisition frame-rate range as ``(min, max)`` fps."""
+        ...
+
+    @abstractmethod
     def get_frame_shape(self) -> tuple[int, int]:
         """Return the current frame shape as ``(rows, cols)``."""
         ...

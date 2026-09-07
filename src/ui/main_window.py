@@ -446,6 +446,7 @@ class MainWindow(QMainWindow):
         self._device_control.stop_requested.connect(self._on_stop)
         self._device_control.exposure_changed.connect(self._on_exposure_changed)
         self._device_control.gain_changed.connect(self._on_gain_changed)
+        self._device_control.frame_rate_changed.connect(self._on_frame_rate_changed)
         self._device_control.pixel_format_changed.connect(self._on_pixel_format_changed)
         self._device_control.binning_changed.connect(self._on_binning_changed)
         self._on_binning_changed(*self._device_control.current_binning())
@@ -644,6 +645,21 @@ class MainWindow(QMainWindow):
         """Apply gain change to device."""
         self._device.set_gain(value)
         logger.info("Gain set to %.1f dB", value)
+
+    def _on_frame_rate_changed(self, value: float) -> None:
+        """Apply frame-rate change to device (only when acquisition is stopped)."""
+        if self._running:
+            logger.warning("Cannot change frame rate while acquisition is running")
+            return
+        try:
+            self._device.set_frame_rate(value)
+            actual = self._device.get_frame_rate()
+            logger.info("Frame rate set to %.2f fps", actual)
+        except Exception as exc:
+            logger.exception("Failed to set frame rate to %.2f fps", value)
+            QMessageBox.critical(self, "帧率设置失败", f"无法设置采集帧率：{exc}")
+            # Re-sync the spinbox with the device's last known good value.
+            self._device_control.sync_from_device(self._device)
 
     def _on_pixel_format_changed(self, fmt: str) -> None:
         """Apply pixel format change to device (only when stopped)."""

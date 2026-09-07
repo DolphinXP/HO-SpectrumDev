@@ -30,6 +30,32 @@ class TestMockDevice:
         assert dev.get_exposure() == 10000.0
         assert dev.get_gain() == 0.0
         assert dev.get_pixel_format() == "Mono12"
+        assert dev.get_frame_rate() == 120.0
+
+    def test_set_frame_rate(self, app):
+        dev = MockDevice()
+        dev.set_frame_rate(30.0)
+        assert dev.get_frame_rate() == 30.0
+
+    def test_frame_rate_range(self, app):
+        dev = MockDevice()
+        rate_min, rate_max = dev.get_frame_rate_range()
+        assert rate_min < rate_max
+        assert rate_min <= dev.get_frame_rate() <= rate_max
+
+    def test_set_frame_rate_invalid(self, app):
+        dev = MockDevice()
+        with pytest.raises(ValueError, match="positive"):
+            dev.set_frame_rate(0.0)
+        with pytest.raises(ValueError, match="positive"):
+            dev.set_frame_rate(-10.0)
+
+    def test_frame_rate_change_while_running_is_rejected(self, app):
+        dev = MockDevice()
+        dev.start()
+        with pytest.raises(RuntimeError, match="frame rate"):
+            dev.set_frame_rate(30.0)
+        dev.stop()
 
     def test_set_exposure(self, app):
         dev = MockDevice()

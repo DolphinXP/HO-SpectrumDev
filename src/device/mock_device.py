@@ -33,7 +33,9 @@ class MockDevice(DeviceInterface):
         self._binning: tuple[int, int] = (1, 1)
         self._running: bool = False
         self._frame_id: int = 0
-        self._target_interval_s: float = 1.0 / 120.0
+        self._frame_rate_fps: float = 120.0
+        self._frame_rate_range: tuple[float, float] = (1.0, 200.0)
+        self._target_interval_s: float = 1.0 / self._frame_rate_fps
         self._state_lock = threading.Lock()
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
@@ -134,6 +136,28 @@ class MockDevice(DeviceInterface):
             self._pixel_format = fmt
             self._template_dirty = True
         logger.info("MockDevice pixel format set to %s", fmt)
+
+    def set_frame_rate(self, fps: float) -> None:
+        """Set the mock emission rate; mirrors the real camera's stopped-only rule."""
+        fps = float(fps)
+        if fps <= 0:
+            raise ValueError(f"Frame rate must be positive; got {fps}")
+        with self._state_lock:
+            if self._running:
+                raise RuntimeError(
+                    "Cannot change frame rate while acquisition is running; "
+                    "stop acquisition first"
+                )
+            self._frame_rate_fps = fps
+            self._target_interval_s = 1.0 / fps
+        logger.info("MockDevice frame rate set to %.2f fps", fps)
+
+    def get_frame_rate(self) -> float:
+        with self._state_lock:
+            return self._frame_rate_fps
+
+    def get_frame_rate_range(self) -> tuple[float, float]:
+        return self._frame_rate_range
 
     def set_binning(self, x: int, y: int) -> None:
         """Simulate camera hardware binning by averaging native pixel blocks.
