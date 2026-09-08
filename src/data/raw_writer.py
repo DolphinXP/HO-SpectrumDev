@@ -18,6 +18,10 @@ _DTYPE_MAP: dict[str, str] = {
     "Mono12": "uint16",
 }
 
+# Metadata keys handled by the storage layer itself; they are callables or
+# runtime plumbing and must not be serialized into the JSON sidecar.
+_NON_SIDECAR_METADATA_KEYS = frozenset({"param_sampler", "frame_id_provider"})
+
 
 class RawWriter:
     """Write same-shape camera frames as a binary stream with JSON metadata."""
@@ -69,7 +73,11 @@ class RawWriter:
 
         self._pixel_format = pixel_format
         self._np_dtype = np.dtype(_DTYPE_MAP[pixel_format])
-        self._metadata = dict(metadata or {})
+        self._metadata = {
+            k: v
+            for k, v in (metadata or {}).items()
+            if k not in _NON_SIDECAR_METADATA_KEYS
+        }
         self._frame_count = 0
         self._bytes_written = 0
         self._width = int(self._metadata.get("width", 0) or 0)

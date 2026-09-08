@@ -19,6 +19,10 @@ _ENVI_DTYPE_MAP: dict[str, tuple[int, np.dtype]] = {
     "Mono12": (12, np.dtype(np.uint16)),
 }
 
+# Metadata keys handled by the storage layer itself; they are callables or
+# runtime plumbing and must not be serialized into the ENVI header.
+_NON_HEADER_METADATA_KEYS = frozenset({"param_sampler", "frame_id_provider"})
+
 
 class EnviWriter:
     """Write same-shape camera frames in ENVI BIL format.
@@ -78,7 +82,11 @@ class EnviWriter:
 
         self._pixel_format = pixel_format
         self._envi_dtype_code, self._np_dtype = _ENVI_DTYPE_MAP[pixel_format]
-        self._metadata = dict(metadata or {})
+        self._metadata = {
+            k: v
+            for k, v in (metadata or {}).items()
+            if k not in _NON_HEADER_METADATA_KEYS
+        }
         self._lines_written = 0
         self._bytes_written = 0
         self._open_time = datetime.now()

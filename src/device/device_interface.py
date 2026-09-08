@@ -118,6 +118,24 @@ class DeviceInterface(QObject, metaclass=_DeviceMeta):
         """Return current gain in dB."""
         ...
 
+    def get_actual_exposure(self) -> float:
+        """Return the exposure time the camera is actually using, in µs.
+
+        Implementations with hardware access read back the device's
+        ``ExposureTime`` node; others fall back to the configured value
+        reported by :meth:`get_exposure`.
+        """
+        return self.get_exposure()
+
+    def get_actual_gain(self) -> float:
+        """Return the gain the camera is actually using, in dB.
+
+        Implementations with hardware access read back the device's ``Gain``
+        node; others fall back to the configured value reported by
+        :meth:`get_gain`.
+        """
+        return self.get_gain()
+
     @abstractmethod
     def get_pixel_format(self) -> str:
         """Return current pixel format string."""
@@ -137,9 +155,11 @@ class DeviceInterface(QObject, metaclass=_DeviceMeta):
         return ((1, 1),)
 
     def get_temperature(self) -> float | None:
-        """Return camera temperature in degrees Celsius when available.
+        """Return the sensor (detector) temperature in °C when available.
 
-        Temperature is an optional device feature. Devices that do not expose
-        it should return ``None`` rather than raising an exception.
+        Devices that expose several measurement locations (e.g. Daheng's
+        ``DeviceTemperatureSelector`` with ``Sensor``/``Mainboard``) must
+        select the sensor location before reading.  Devices that do not
+        expose temperature at all should return ``None`` rather than raising.
         """
         return None

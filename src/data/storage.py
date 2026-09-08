@@ -51,6 +51,8 @@ class StorageManager:
         self._envi_writer: EnviWriter | None = None
         self._raw_writer: RawWriter | None = None
         self._param_logger: CsvParamLogger | None = None
+        self._last_frame_id: int | None = None
+        self._frame_id_baseline: int | None = None
         self._max_pending_frames = max_pending_frames
         self._write_queue: queue.Queue[np.ndarray | object] = queue.Queue(
             maxsize=max_pending_frames
@@ -181,6 +183,7 @@ class StorageManager:
         if not self.is_recording:
             return
         self._raise_writer_error()
+        self._track_frame_id(metadata)
         try:
             self._write_queue.put_nowait(frame.copy())
         except queue.Full:
@@ -245,13 +248,78 @@ class StorageManager:
         if not callable(sampler):
             return
 
+        # Seed the frame counter so a device ID that arrived between the
+        # writers opening and this point is not counted as a recording frame.
+        self._seed_frame_counter(metadata)
+
         logger_name = f"CsvParamLogger-{id(self):x}"
         try:
-            self._param_logger = CsvParamLogger(path, sampler, logger_name=logger_name)
+            self._param_logger = CsvParamLogger(
+                path, self._wrap_sampler(sampler), logger_name=logger_name
+            )
             self._param_logger.start()
         except Exception:
             logger.exception("Failed to start parameter CSV logger; continuing without it")
             self._param_logger = None
+
+    # ------------------------------------------------------------------
+    # Frame-ID tracking (feeds the CSV 帧ID增量 column)
+    # ------------------------------------------------------------------
+
+    def _seed_frame_counter(self, metadata: dict | None) -> None:
+        """Reset tracking state and anchor the baseline to pre-start frames.
+
+        Acquisition may already be running when recording starts; the
+        ``frame_id_provider`` callable embedded in the recording metadata
+        reports the latest received frame ID so only frames delivered *after*
+        this point count toward ``帧ID增量``.
+        """
+        self._last_frame_id = None
+        self._frame_id_baseline = None
+        provider = (metadata or {}).get("frame_id_provider")
+        if callable(provider):
+            try:
+                current = provider()
+            except Exception:
+                logger.exception("Frame-ID provider failed while seeding baseline")
+                return
+            if isinstance(current, (int, np.integer)):
+                self._last_frame_id = int(current)
+                self._frame_id_baseline = int(current)
+
+    def _track_frame_id(self, metadata: dict | None) -> None:
+        """Update the latest received camera frame ID from frame metadata."""
+        frame_id = (metadata or {}).get("frame_id")
+        if not isinstance(frame_id, (int, np.integer)):
+            return
+        frame_id = int(frame_id)
+        if self._last_frame_id is None:
+            self._last_frame_id = frame_id
+            if self._frame_id_baseline is None:
+                self._frame_id_baseline = frame_id
+        else:
+            self._last_frame_id = frame_id
+
+    def _wrap_sampler(self, sampler):
+        """Attach the cumulative received-frame count to each sampled row.
+
+        ``frame_id_delta`` is the number of frames received since storage
+        started (0 before the first frame); :class:`CsvParamLogger` converts
+        it into a per-sample increment.  Frames received after the logging
+        thread's final row are outside the CSV's scope.
+        """
+
+        def wrapped() -> dict:
+            params = dict(sampler())
+            last = self._last_frame_id
+            baseline = self._frame_id_baseline
+            if last is None or baseline is None:
+                params["frame_id_delta"] = 0
+            else:
+                params["frame_id_delta"] = max(0, last - baseline)
+            return params
+
+        return wrapped
 
     def _ensure_writer_thread(self) -> None:
         if self._writer_thread is not None and self._writer_thread.is_alive():

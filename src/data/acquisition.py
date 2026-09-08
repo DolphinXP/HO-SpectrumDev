@@ -100,6 +100,17 @@ class AcquisitionWorker(QThread):
     def storage(self, mgr: StorageManager | None) -> None:
         self._storage = mgr
 
+    def get_last_frame_id(self) -> int | None:
+        """Return the latest received camera frame ID, or ``None`` if none yet.
+
+        Read by the main window to seed the storage CSV's frame-ID baseline
+        when recording starts.  Updated on the worker thread and read from
+        the UI/logger threads; a single int read is atomic under CPython, so
+        no locking is needed.
+        """
+        last = self._last_frame_id
+        return last if last >= 0 else None
+
     def set_line_scan_mode(self, enabled: bool, indices: list[int] | None = None) -> None:
         """Configure the line scan extraction mode."""
         with self._line_scan_lock:

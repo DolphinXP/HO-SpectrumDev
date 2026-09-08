@@ -545,24 +545,73 @@ class DahengDevice(DeviceInterface):
     def get_gain(self) -> float:
         return self._gain_db
 
-    def get_temperature(self) -> float | None:
-        """Read the camera temperature from the optional Daheng feature.
+    def get_actual_exposure(self) -> float:
+        """Read back the camera's live ``ExposureTime`` node, in µs."""
+        if self._remote_feature is not None:
+            try:
+                self._exposure_us = float(
+                    self._remote_feature.get_float_feature("ExposureTime").get()
+                )
+            except Exception as e:
+                logger.debug("Could not read camera exposure: %s", e)
+        return self._exposure_us
 
-        Not every camera model or firmware exposes ``DeviceTemperature``;
-        keep that case non-fatal so the rest of the device remains usable.
+    def get_actual_gain(self) -> float:
+        """Read back the camera's live ``Gain`` node, in dB."""
+        if self._remote_feature is not None:
+            try:
+                self._gain_db = float(
+                    self._remote_feature.get_float_feature("Gain").get()
+                )
+            except Exception as e:
+                logger.debug("Could not read camera gain: %s", e)
+        return self._gain_db
+
+    def get_temperature(self) -> float | None:
+        """Read the *sensor* (detector) temperature, not the mainboard's.
+
+        The Daheng ``DeviceTemperature`` feature measures the location chosen
+        by ``DeviceTemperatureSelector`` (``Sensor`` / ``Mainboard`` — see
+        ``GxDeviceTemperatureSelectorEntry`` in gxidef).  Without selecting
+        first, the camera reports whichever location its selector currently
+        points at — often the mainboard — so the selector is explicitly set
+        to ``Sensor`` before each read.  Cameras that expose only one
+        location (selector not implemented or read-only) fall back to reading
+        ``DeviceTemperature`` directly.
         """
         if self._remote_feature is None:
             return None
 
         try:
-            feature_name = "DeviceTemperature"
-            if not self._remote_feature.is_implemented(feature_name):
+            if not self._remote_feature.is_implemented("DeviceTemperature"):
                 return None
-            if not self._remote_feature.is_readable(feature_name):
+            if not self._remote_feature.is_readable("DeviceTemperature"):
                 return None
-            return float(self._remote_feature.get_float_feature(feature_name).get())
+
+            selector_name = "DeviceTemperatureSelector"
+            if self._remote_feature.is_implemented(selector_name):
+                try:
+                    selector = self._remote_feature.get_enum_feature(selector_name)
+                    _, current = selector.get()
+                    if current != "Sensor":
+                        if self._remote_feature.is_writable(selector_name):
+                            selector.set("Sensor")
+                        else:
+                            logger.debug(
+                                "%s is read-only at '%s'; reading that location",
+                                selector_name,
+                                current,
+                            )
+                except Exception as e:
+                    logger.debug(
+                        "Could not select Sensor temperature location: %s", e
+                    )
+
+            return float(
+                self._remote_feature.get_float_feature("DeviceTemperature").get()
+            )
         except Exception as e:
-            logger.debug("Could not read camera temperature: %s", e)
+            logger.debug("Could not read sensor temperature: %s", e)
             return None
 
     def _capture_callback(self, raw_image) -> None:

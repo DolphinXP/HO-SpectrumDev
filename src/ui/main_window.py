@@ -137,6 +137,7 @@ class MainWindow(QMainWindow):
         self._active_frame_shape: tuple[int, int] = device.get_frame_shape()
         self._running: bool = False
         self._replaying: bool = False
+        self._latest_stats: dict = {}
         self._line_scan_active: bool = False
 
         # Replay worker
@@ -532,6 +533,7 @@ class MainWindow(QMainWindow):
 
     # --------------------------------------------------------------- slots
     def _on_stats_updated(self, stats: dict) -> None:
+        self._latest_stats = stats
         self._stats_panel.update_stats(stats)
 
     def _on_pixel_selected(self, x: int, y: int) -> None:
@@ -811,22 +813,25 @@ class MainWindow(QMainWindow):
 
         Runs on the storage logger thread; every read is individually guarded
         so a disconnected or busy device degrades to an empty cell instead of
-        killing the logging thread.
+        killing the logging thread.  Exposure, gain, frame rate and sensor
+        temperature are live physical read-backs from the camera, and the
+        frame rate is the *measured* throughput from the acquisition worker
+        rather than the configured target.
         """
         params: dict = {}
 
         try:
-            params["exposure_us"] = self._device.get_exposure()
+            params["exposure_us"] = self._device.get_actual_exposure()
         except Exception as exc:
             logger.debug("CSV sampler: exposure unavailable: %s", exc)
 
         try:
-            params["frame_rate_fps"] = self._device.get_frame_rate()
+            params["frame_rate_fps"] = round(self._latest_stats.get("fps", 0.0), 2)
         except Exception as exc:
             logger.debug("CSV sampler: frame rate unavailable: %s", exc)
 
         try:
-            params["gain_db"] = self._device.get_gain()
+            params["gain_db"] = self._device.get_actual_gain()
         except Exception as exc:
             logger.debug("CSV sampler: gain unavailable: %s", exc)
 
@@ -860,7 +865,17 @@ class MainWindow(QMainWindow):
             "exposure_us": self._device.get_exposure(),
             "gain_db": self._device.get_gain(),
             "param_sampler": self._device_param_sampler,
+            "frame_id_provider": self._latest_frame_id,
         }
+
+    def _latest_frame_id(self) -> int | None:
+        """Return the most recent camera frame ID received by the worker.
+
+        Used by :class:`StorageManager` to anchor the CSV ``帧ID增量``
+        baseline to the moment recording starts, so frames that arrived
+        before 开始存储 are not counted.
+        """
+        return self._acquisition.get_last_frame_id()
 
     def _on_start_save(self) -> None:
         """Show storage dialog and start recording to disk."""

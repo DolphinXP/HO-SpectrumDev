@@ -23,10 +23,11 @@ _HEADER = (
     "时间戳",
     "录制时长 (s)",
     "曝光时间 (µs)",
-    "帧率 (fps)",
+    "实测帧率 (fps)",
     "增益 (dB)",
     "ADC 位深 (bit)",
     "探测器温度 (°C)",
+    "帧ID增量",
 )
 
 
@@ -39,8 +40,12 @@ class CsvParamLogger:
         Base file path (extension is replaced with ``.csv``).
     sampler : callable
         Zero-argument callable returning a mapping with keys
-        ``exposure_us``, ``frame_rate_fps``, ``gain_db``, ``adc_bit_depth``
-        and ``temperature_c``.  Missing keys are logged as empty cells.
+        ``exposure_us``, ``frame_rate_fps``, ``gain_db``, ``adc_bit_depth``,
+        ``temperature_c`` and ``frame_id_delta``.  The first six are written
+        verbatim into the row; ``frame_id_delta`` must be the *cumulative*
+        number of frames received since the recording started and the logger
+        converts it into a per-sample increment.  Missing keys are logged as
+        empty cells.
     interval_s : float
         Sampling period in seconds (default 1.0).
     """
@@ -65,6 +70,7 @@ class CsvParamLogger:
         self._stop_event = threading.Event()
         self._start_monotonic: float = 0.0
         self._rows_written: int = 0
+        self._last_frame_id_delta: float | None = None
 
     @property
     def csv_path(self) -> Path:
@@ -87,6 +93,7 @@ class CsvParamLogger:
         self._file.flush()
 
         self._rows_written = 0
+        self._last_frame_id_delta = None
         self._stop_event.clear()
         self._start_monotonic = time.perf_counter()
         self._thread = threading.Thread(
@@ -158,6 +165,7 @@ class CsvParamLogger:
             params.get("gain_db", ""),
             params.get("adc_bit_depth", ""),
             params.get("temperature_c", ""),
+            self._frame_id_increment(params),
         ]
         try:
             self._writer.writerow(row)
@@ -168,3 +176,21 @@ class CsvParamLogger:
                 self._file.flush()
         except Exception:
             logger.exception("Failed to write parameter CSV row")
+
+    def _frame_id_increment(self, params: dict) -> object:
+        """Convert the sampler's cumulative frame count to a per-sample delta.
+
+        The sampler reports how many frames have been received since the
+        recording started (``frame_id_delta``).  The CSV column shows the
+        increment since the previous row, so steady-state operation reads as
+        "frames per interval" while the sum of the column still reconstructs
+        the total received since storage started.
+        """
+        cumulative = params.get("frame_id_delta")
+        if not isinstance(cumulative, (int, float)):
+            return ""
+        increment: object = ""
+        if self._last_frame_id_delta is not None:
+            increment = int(cumulative - self._last_frame_id_delta)
+        self._last_frame_id_delta = float(cumulative)
+        return increment
